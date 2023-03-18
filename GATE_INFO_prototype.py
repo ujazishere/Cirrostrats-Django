@@ -14,9 +14,9 @@ latest_time = now.strftime('%H:%M')
 latest_date = now.strftime('%b %d, %Y')
 print(f'Date: {latest_date}', '\n' f'Time: {latest_time}')
 
-now.strftime('%Y%m%d')
+raw_date = now.strftime('%Y%m%d')
 
-response = requests.get('https://www.airport-ewr.com/newark-departures')
+response = requests.get('https://www.airport-ewr.com/newark-departures?tp=6')
 soup = bs4(response.content, 'html.parser')
 
 # the index [1:] strips away the first itme in list that is unwanted.
