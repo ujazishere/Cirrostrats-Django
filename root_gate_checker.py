@@ -6,9 +6,6 @@ import pytz
 import pickle
 
 
-# gate = 'C101'
-
-
 class Gate_checker:
     def __init__(self, gate=None):
         self.gate = gate
@@ -94,13 +91,3 @@ class Gate_checker:
         else:
             print('Nothing to show. Come back later.')
 
-
-Gate_checker().get_UA_flight_nums()
-Gate_checker().multiple_thread()
-
-while True:
-    gate = input('What gate?')
-    if gate:
-        Gate_checker(gate).ewr_UA_gate()
-    else:
-        break
