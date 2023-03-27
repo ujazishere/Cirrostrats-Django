@@ -77,7 +77,7 @@ class Gate_checker:
         
         executor(united_flts)
         # re-feeding troubled flights back into the executor
-        for i in range(5):
+        for i in range(1):
             if troubled:
                 executor(troubled)
                 
