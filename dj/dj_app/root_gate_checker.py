@@ -8,7 +8,7 @@ import pickle
 # TODO: need to be able to receive alerts for any ground stop or delays there might be at any particular airport in the National Airspace System
 # TODO: Include description and documentation for others to read and make changed to it
 
-''' get_UA_flight_nums is used multiple times which might not be necessary'''
+''' departures_EWR_UA is used multiple times which might not be necessary it Only needs to run once unless a flight is added into the system'''
 class Gate_checker:
     def __init__(self, gate=None):
         self.gate = gate
@@ -21,21 +21,25 @@ class Gate_checker:
         # TODO: web splits time in 3 or so parts which makes it harder to pick appropriate information about flights
         #  from different times of the date
 
-    def get_UA_flight_nums(self):
+    def date_time(self):
+        return (self.latest_date_viewable, self.latest_time)
+    
+    def departures_EWR_UA(self):
         response = requests.get(self.EWR_deps_url)
         soup = bs4(response.content, 'html.parser')
-        raw_bs4_flight_nums = soup.find_all('div', class_="flight-col flight-col__flight")[1:]
+        raw_bs4_all_EWR_deps = soup.find_all('div', class_="flight-col flight-col__flight")[1:]
         # TODO: raw_bs4_html_ele contains delay info. Get delayed flight numbers
         # raw_bs4_html_ele = soup.find_all('div', class_="flight-row")[1:]
-        flight_nums = []
-        for index in range(len(raw_bs4_flight_nums)):
-            for i in raw_bs4_flight_nums[index]:
-                if i != '\n':
-                    flight_nums.append(i.text)
 
-        united_flights = []
-        [united_flights.append(i) for i in flight_nums if 'UA' in i]
-        print(f'total flights {len(flight_nums)} of which UA flights: {len(united_flights)}')
+        all_EWR_deps = []
+        for index in range(len(raw_bs4_all_EWR_deps)):
+            for i in raw_bs4_all_EWR_deps[index]:
+                if i != '\n':
+                    all_EWR_deps.append(i.text)
+
+        # extracting all united flights and putting them all in list
+        united_flights =[each for each in all_EWR_deps if 'UA' in each]
+        print(f'total flights {len(all_EWR_deps)} of which UA flights: {len(united_flights)}')
         return united_flights
 
     def pick_flight_data(self, flt_num):
@@ -57,7 +61,7 @@ class Gate_checker:
     def multiple_thread(self):
         # TODO: add argument to add both UA flights and troubled in there to scrape then remove ones that are done from the troubled
         
-        united_flts = self.get_UA_flight_nums()
+        united_flts = self.departures_EWR_UA()
         master = {}
         troubled = set()
         
@@ -75,20 +79,23 @@ class Gate_checker:
                         troubled.add(flt_num)
             print('troubled:', len(troubled))
         
+        
         executor(united_flts)
-        # re-feeding troubled flights back into the executor
+        
+        # feeding troubled flights into the executor using for loop for a few times to minimize errors. 
+        # In a while loop a troubled item may not convert creating endless loop. Hence a for loop(max 5 attempts to minimize excessive waits)
         for i in range(1):
             if troubled:
                 executor(troubled)
                 
-                # if master keys are not in troubled set then making a new master dictionary. Essentially doing the job of removing troubled items from master
-                # master = {k:v for k,v in master.items() if not k in troubled}
-                
-                # if troubled items are not in master making a new troubled set. Essentially doing the job of removing master keys from troubled set
+                #Following code essentially removes troubled items that are already in the master.
+                # logic: if troubled items are not in master make a new troubled set. Essentially doing the job of removing master keys from troubled set
                 troubled = {x for x in troubled if x not in master}
-                print(f'{i}th- troubled len:', len(troubled) )
+                
+                # Here we check how many times we've looped so far and how many troubled items are still remaining.
+                print(f'{i}th trial- troubled len:', len(troubled) )
             else:
-                print('breaking since troubled is probably empty')
+                # breaking since troubled is probably empty
                 break
 
         print(f'Troubled: {len(troubled)}, Master : {len(master)}')

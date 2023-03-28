@@ -3,16 +3,25 @@
 {% block content %}
   <h1>United flights at EWR</h1>
   {% if flights %}
-    <ul>
+    <table>
+      <thead>
+        <tr>
+          <th>Flight</th>
+          <th>Scheduled</th>
+          <th>Actual</th>
+        </tr>
+      </thead>
+      <tbody>
       {% for flight in flights %}
-        <li>
-          Gate {{ flight.gate}}
-          Flight {{ flight.flight_number }}
-          Scheduled: {{ flight.scheduled }}
-          Actual: {{ flight.actual }}
-        </li>
+        <h3> {{ flight.gate }}</h3>
+        <tr>
+          <td>{{ flight.flight_number }}</td>
+          <td>{{ flight.scheduled }}</td>
+          <td>{{ flight.actual }}</td>
+        </tr>
       {% endfor %}
-    </ul>
+      </tbody>
+    </table>
   {% else %}
     <p>No flights found.</p>
   {% endif %}
