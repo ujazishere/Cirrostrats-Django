@@ -25,13 +25,15 @@ class GateCheckerThread(threading.Thread):
 gc_thread = GateCheckerThread()
 gc_thread.start()
 
-
+# Deploy the ability to chat and store queries.
 def flight_info(request):
+    # Homepage first skips the POST 
     if request.method == "POST":
         gate = request.POST.get('gate','')
         if gate:
             # gc = Gate_checker(gate)
             # gc.multiple_thread()
+            gate = gate.upper()
             print('Getting gate:', gate)
 
             # Dictionary format a list with one or many dictionaries each dictionary containing 4 items:gate,flight,scheduled, actual
@@ -39,6 +41,8 @@ def flight_info(request):
             gate = flights[0]['gate']
             
             return render(request, 'flight_info.html',{'flights': flights})
+        else:
+            return render(request, 'flight_info.html')
     else:
-        return render(request, 'flight_info.html', {'loading': True})
+        return render(request, 'home.html', {'loading': True})
 
