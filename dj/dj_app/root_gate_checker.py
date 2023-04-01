@@ -26,7 +26,7 @@ class Gate_checker:
         self.gate = gate
         eastern = pytz.timezone('US/eastern')
         now = datetime.now(eastern)
-        self.latest_time = now.strftime('%H:%M:%S')
+        self.latest_time = now.strftime("%#I:%M%p, %b %d.")
         self.latest_date_raw = now.strftime('%Y%m%d')
         self.latest_date_viewable = now.strftime('%b %d, %Y')
         self.EWR_deps_url = 'https://www.airport-ewr.com/newark-departures'
@@ -174,12 +174,27 @@ class Gate_checker:
         flights = []
         for flight_num, (gate, scheduled, actual) in master.items():
             if f'{self.gate}' in gate:
+                
+                # Converting date and time string to tthe datetime.datetime class object 
+                    # for sorting purpose only 
+                scheduled = datetime.strptime(scheduled, "%I:%M%p, %b%d") if scheduled else None
+                actual = datetime.strptime(actual, "%I:%M%p, %b%d") if actual else None
+
                 flights.append({
                     'gate': gate,
                     'flight_number': flight_num,
                     'scheduled': scheduled,
                     'actual': actual,
                 })
+        flights = sorted(flights, key=lambda x:x['scheduled'])
+
+        # Convereting it back to string for it to be show in a viewable format.
+            # browser craps out when it sees class object 
+        for dictionries in flights:
+            dictionries['scheduled'] = dictionries['scheduled'].strftime("%#I:%M%p, %b%d")
+            dictionries['actual'] = dictionries['actual'].strftime("%#I:%M%p, %b%d")
+
+        print('new', flights[0]['scheduled'])
         return flights
-            
-            
+
+# Gate_checker.ewr_UA_gate
