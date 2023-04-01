@@ -29,7 +29,9 @@ class Gate_checker:
         self.latest_time = now.strftime("%#I:%M%p, %b %d.")
         self.latest_date_raw = now.strftime('%Y%m%d')
         self.latest_date_viewable = now.strftime('%b %d, %Y')
-        self.EWR_deps_url = 'https://www.airport-ewr.com/newark-departures'
+        evening = '?tp=6'
+        # evening = ''
+        self.EWR_deps_url = f'https://www.airport-ewr.com/newark-departures{evening}'
         self.troubled = set()
 
         # TODO: web splits time in 3 parts.
@@ -126,6 +128,42 @@ class Gate_checker:
             pickle.dump(master, f)
 
 
+    def tro(self):
+
+        # TODO: Seperate for loop move it outside of the multiple_thread scope and give it it's own function troubled.
+        # Reopening master to check troubled flights within it.
+        
+        # TODO:There is a probelm with opening the master_UA.pkl file as is.
+            # Troubled items will already be in this master from old data so they wont be checked and updated
+            # one way to fix it is to check date and time and overwrite the old one with the latest one
+        with open('master_UA.pkl', 'rb') as f:
+            master = pickle.load(f)
+        
+        # feeding self.troubled into the executor using for loop for a few times to restrict infinite troubles, if any. 
+        # In a while loop a troubled item may not convert creating endless loop. Hence a for loop(max 5 attempts to minimize excessive waits)
+        for i in range(2):
+            if self.troubled:
+                self.executor(self.troubled)
+                
+
+
+                #Following code essentially removes troubled items that are already in the master.
+                # logic: if troubled items are not in master make a new troubled set with those. Essentially doing the job of removing master keys from troubled set
+                # self.troubled = {each for each in self.troubled if each not in master}
+                
+                # Here we check how many times we've looped so far and how many troubled items are still remaining.
+                print(f'{i}th trial- troubled len:', len(self.troubled) )
+            elif not self.troubled:
+                # breaking since troubled is probably empty
+                break
+
+
+        # for flight_num, (gates, scheduled, actual) in master.items():
+            # print(flight_num, gates, scheduled, actual)
+        
+        print(f'Troubled: {len(self.troubled)}, Master : {len(master)}', self.date_time())
+
+
     def multiple_thread(self):
         # This funciton gets all the departure flight numbers through self.departures_EWR_UA()
             # feeds it into the executor for multithreading to extract gate and time for individual flight.
@@ -139,33 +177,11 @@ class Gate_checker:
         
         # dump master_UA.pkl with flight, gate and time info using ThreadPoolExecutor
         self.executor(departures_EWR_UA)
-        
-        # TODO: Seperate for loop move it outside of the multiple_thread scope and give it it's own function troubled.
-        # Reopening master to check troubled flights within it.
-        with open('master_UA.pkl', 'rb') as f:
-            master = pickle.load(f)
-        
-        # feeding self.troubled into the executor using for loop for a few times to restrict infinite troubles, if any. 
-        # In a while loop a troubled item may not convert creating endless loop. Hence a for loop(max 5 attempts to minimize excessive waits)
-        for i in range(2):
-            if self.troubled:
-                self.executor(self.troubled)
-                
-                #Following code essentially removes troubled items that are already in the master.
-                # logic: if troubled items are not in master make a new troubled set with those. Essentially doing the job of removing master keys from troubled set
-                troubled = {each for each in self.troubled if each not in master}
-                
-                # Here we check how many times we've looped so far and how many troubled items are still remaining.
-                print(f'{i}th trial- troubled len:', len(troubled) )
-            else:
-                # breaking since troubled is probably empty
-                break
 
-
-        for flight_num, (gates, scheduled, actual) in master.items():
-            print(flight_num, gates, scheduled, actual)
+        # Redo the troubled flights
+        if self.troubled:
+            self.tro()
         
-        print(f'Troubled: {len(self.troubled)}, Master : {len(master)}', self.date_time())
        
 
     def ewr_UA_gate(self):
@@ -186,15 +202,17 @@ class Gate_checker:
                     'scheduled': scheduled,
                     'actual': actual,
                 })
-        flights = sorted(flights, key=lambda x:x['scheduled'])
+
+        # Sorts the data by 'scheduled' in descending order to get the latest date and time to the top
+        flights = sorted(flights, key=lambda x:x['scheduled'], reverse=True)
 
         # Convereting it back to string for it to be show in a viewable format.
-            # browser craps out when it sees class object 
+            # browser craps out when it sees class object since earlier 'scheduled' item is a class object and not a string
         for dictionries in flights:
             dictionries['scheduled'] = dictionries['scheduled'].strftime("%#I:%M%p, %b%d")
             dictionries['actual'] = dictionries['actual'].strftime("%#I:%M%p, %b%d")
-
         print('new', flights[0]['scheduled'])
+
         return flights
 
 # Gate_checker.ewr_UA_gate
