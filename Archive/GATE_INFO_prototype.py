@@ -1,6 +1,9 @@
-from Weather_work.root_gate_checker import Gate_checker
 
-Gate_checker().get_UA_flight_nums()
+from root_gate_checker import Gate_checker
+import os
+import django
+
+# Gate_checker().get_UA_flight_nums()
 Gate_checker().multiple_thread()
 
 while True:

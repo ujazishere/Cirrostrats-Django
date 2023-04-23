@@ -1,11 +1,15 @@
 {% extends "dj_app/base.html" %}
 
 {% block content %}
-  <h1>United flights at EWR</h1>
+  <h3>United flights Departures at EWR</h3>
+  {% if gate %}
+    <h3>Results for {{gate}}</h3>
+  {% endif %}
   {% if flights %}
     <table>
       <thead>
         <tr>
+          <th>Gate</th>
           <th>Flight</th>
           <th>Scheduled</th>
           <th>Actual</th>
@@ -13,8 +17,9 @@
       </thead>
       <tbody>
       {% for flight in flights %}
-        <h3> {{ flight.gate }}</h3>
+        <!-- <h3> {{ flight.gate }}</h3> -->
         <tr>
+          <td>{{ flight.gate }}</td>
           <td>{{ flight.flight_number }}</td>
           <td>{{ flight.scheduled }}</td>
           <td>{{ flight.actual }}</td>
@@ -23,12 +28,12 @@
       </tbody>
     </table>
   {% else %}
-    <p>No flights found.</p>
+    <p>No flights found for {{gate}}.</p>
   {% endif %}
   <form method="post">
     {% csrf_token %}
-    <label for="gate">Gate:</label>
-    <input type="text" name="gate" id="gate">
+    <label for="query">Query:</label>
+    <input type="text" name="query" id="query">
     <button type="submit">Search</button>
   </form>
 {% endblock %}

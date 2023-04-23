@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup as bs4
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
 from datetime import datetime
 import pickle
 from time import sleep
@@ -9,15 +10,16 @@ import re
 
 logging.basicConfig(filename='debug.log', level=logging.INFO)
 
-# TODO: Focus on readibility and simplicity. Use inheritance
+# TODO: Focus on readibility and simplicity. Use inheritance and models for database management.
 
 # TODO: Include description and documentation for others to read and make changes to it
 # TODO: Include: search  by flight number, for Metar, TAF
-# TODO: need to be able to receive alerts:
-        # for any ground stop or delays there might be at any particular airport in the National Airspace System
+# TODO: need to be able to receive alerts if the weather deteriorates:
+        # Account for any ground stop or delays there might be at any particular airport in the National Airspace System
 
 # Ideas:
-# TODO: Have a way to store all queries made on web and analyse them later for optimization.
+# TODO: Have a way to store all queries made on web and analyse them later for optimization. 
+           # record and analyze innteractions on the web to imporve efficiency
 # TODO: the ability to chat and store queries. Essentially as an AI chatbot.
             # Include pertinent weather info based on flight number: Metar, TAF
                 # Highlight weather minimums for alternate requirements;(1-2-3 rule per ETA)
@@ -33,17 +35,17 @@ class Gate_checker(Gate_root):
         # super method inherits all of the instance variables of the Gate_root class.
         super().__init__()
         
-        # set up troubled here so that it can be accessed locally
+        # troubled is setup here so that it can be accessed locally
         self.troubled = set()
-        self.master_local = {}
+        self.master_local = []
 
 
-    def departures_EWR_UA(self):
+    def departures_ewr_UA(self):
         # returns list of all united flights as UA**** each
         # Here we extract raw united flight number departures from airport-ewr.com
         
-        # morning = '?tp=6'
-        morning = ''
+        morning = '?tp=6'
+        # morning = ''
         EWR_deps_url = f'https://www.airport-ewr.com/newark-departures{morning}'
 
         # TODO: web splits time in 3 parts.
@@ -84,45 +86,21 @@ class Gate_checker(Gate_root):
 
         scheduled = scd[2].replace('\xa0', '')
         actual = scd[3].replace('\xa0', '')
-        terminal = scd[4]
+        gate = scd[4]
         
-        # this format doesn't seem very efficient since final output is a list with dictionaries.        
-        return {flt_num: [terminal, scheduled, actual]}
-        print(1)
+        return {flt_num: [gate, scheduled, actual]}
         # This is a format that resembles more to the format in the final output.
-        # return {'flight_num': flt_num, 'terminal': terminal, 'schefuled': scheduled, 'actual': actual}
+        # return {'flight_num': flt_num, 'gate': gate, 'scheduled': scheduled, 'actual': actual}
         
-    # TODO: Needs work haventbeen used: 
-    def exec(self, i):
+    # TODO: Extract this blueprint for future use.
+    # executor blueprint. In this case input 1 takes in flight numbers and `multithreaders` can be item that needs to be multithreaded.
+        # this will take in all the flight numbers at once and perform web scrape(`pick_flight_data()`) on all of them simultaneously
+    def exec(self, input1, multithreader):
         
-        with ThreadPoolExecutor(max_workers=500) as executor:
-            futures = {executor.submit(self.pick_flight_data, flt_num): flt_num for flt_num in
-                        i}
-            
-            # Still dont understand this `as_completed` sorcery, but it works. Thanks to ChatGPT
-            for future in as_completed(futures):
-                flt_num = futures[future]
-                try:
-                    result = future.result()
-                    self.master_local.update(result)
-                except Exception as e:
-                    # print(f"Error scraping {flt_num}: {e}")
-                    self.troubled.add(flt_num)
-
-
-    def executor(self, united_flights):
-        
-        # takes in individual `united_flights` from departures_EWR_UA() and later `troubled`
-        # gets fed into self.pick_flight_data using ThreadPool workers for multi threading.
-       
-        # TODO:There is a probelm with opening the master_UA.pkl file as is.
-            # Troubled items will already be in this master from old data so they wont be checked and updated
-            # one way to fix it is to check date and time and overwrite the old one with the latest one
-        master = self.load_master()
-
-        # note the code nested within the `with` statement. It terminates outside of the nest.
-        # That is the sole purpose of `with statement`. It calls the file and closes it.
-            # VVI!!! The dictionary `futures` .value() is the flight number and  key is the memory location of the thread
+        completed = {}
+        troubled = set()
+        exec_output = dict({'completed':  completed, 'troubled': troubled})
+            # VVI!!! The dictionary `futures` .value() is the flight number and  key is the the memory location of return from pick_flight_data()
             # Used in list comprehension for loop with multiple keys and values in the dictionary. for example:
             # {
                 # <Future at 0x7f08f203ec10 state=running>: 'UA123',
@@ -130,27 +108,20 @@ class Gate_checker(Gate_root):
                 # <Future at 0x7f08f203ed10 state=running>: 'DL789'
                         # }
         with ThreadPoolExecutor(max_workers=500) as executor:
-            futures = {executor.submit(self.pick_flight_data, flt_num): flt_num for flt_num in
-                        united_flights}
+            futures = {executor.submit(multithreader, flt_num): flt_num for flt_num in
+                        input1}
             
             # Still dont understand this `as_completed` sorcery, but it works. Thanks to ChatGPT
             for future in as_completed(futures):
                 flt_num = futures[future]
                 try:
                     result = future.result()
-                    self.master_local.update(result)
+                    completed.update(result)
                 except Exception as e:
                     # print(f"Error scraping {flt_num}: {e}")
-                    self.troubled.add(flt_num)
+                    troubled.add(flt_num)
         
-        # Created master_local for troubled items to be checked for and not be removed unncessarily like before.
-        master.update(self.master_local)
-
-        print('troubled:', len(self.troubled), self.troubled)
-
-        # Dumping master dict into the root folder in order to be accessed by ewr_UA_gate func later on.
-        with open('master_UA.pkl', 'wb') as f:
-            pickle.dump(master, f)
+        return exec_output
 
 
     def tro(self):
@@ -169,7 +140,7 @@ class Gate_checker(Gate_root):
         for i in range(3):
             if self.troubled:
                 sleep(3)
-                self.executor(self.troubled)
+                self.exec(self.troubled, self.pick_flight_data())
                 
                 #Following code essentially removes troubled items that are already in the master.
                 # logic: if troubled items are not in master make a new troubled set with those. Essentially doing the job of removing master keys from troubled set
@@ -189,9 +160,10 @@ class Gate_checker(Gate_root):
 
 
     def temp_fix_to_remove_old_flights(self):
-        with open('master_UA.pkl', 'rb') as f:
-            master = pickle.load(f)
-
+        
+        # might want to remove this method. It is destructive. Or just get rid of flights from 2 days ago rather than just 1 day since midnight is too close to previous day.
+        
+        master = self.load_master()
         to_remove = []
 
         for flight_num, (gate, scheduled, actual) in master.items():
@@ -209,20 +181,33 @@ class Gate_checker(Gate_root):
 
 
     def activator(self):
-        # This funciton gets all the departure flight numbers through self.departures_EWR_UA()
-            # feeds it into the executor for multithreading to extract gate and time for individual flight.
-            # executor then extracts successfully done ones in master_UA.pkl
-                # others get addded to self.troubled
-            # We then loop through self.troubled feeding it back into the executor to repeat process.
+        
+        # This is where the structure needs to be fixed before it enters master.pkl. This is the source of information
         
         # remove old flights from master from before today
         # self.temp_fix_to_remove_old_flights()
 
-        # Extract all United flight numbers in list form
-        departures_EWR_UA = self.departures_EWR_UA()
+        # Extract all United flight numbers in list form through departures_ewr_UA()
+        departures_ewr_UA = self.departures_ewr_UA()
+        ex = self.exec(departures_ewr_UA, self.pick_flight_data)
         
-        # dump master_UA.pkl with flight, gate and time info using ThreadPoolExecutor
-        self.executor(departures_EWR_UA)
+        # Cant decide if master should be called or kept empty. When kept empty it saves disk space. When called it keeps track of old information.
+        # master = self.load_master()
+        master = {}
+        master.update(ex['completed'])
+        self.troubled.update(ex['troubled'])
+        
+       
+        # TODO:There is a probelm with opening the master_UA.pkl file as is.
+            # Troubled items will already be in this master from old data so they wont be checked and updated
+            # one way to fix it is to check date and time and overwrite the old one with the latest one
+        # Created master_local for troubled items to be checked for and not be removed unncessarily like before.
+
+        print('troubled:', len(self.troubled), self.troubled)
+
+        # Dumping master dict into the root folder in order to be accessed by ewr_UA_gate func later on.
+        with open('master_UA.pkl', 'wb') as f:
+            pickle.dump(master, f) 
 
         # Redo the troubled flights
         if self.troubled:
@@ -232,14 +217,15 @@ class Gate_checker(Gate_root):
     def structured_flights(self):
         master = self.load_master()
         structured_flights = []
-        outlaws = []
+        reliable_outlaws = []
+        unreliable_outlaws = []
         # issue: too many values to unpack. Solution: unpack keys and values, use regex to make sure flight number matches.
         for flight_num, values in master.items():
             
             # Regex that matches 2 uppercase alphabets followed by digits between 4 and 4.
             reliable_flt_num = re.match(r'[A-Z]{2}\d{2,4}', flight_num)
 
-            # if flight number is reliable and the associated values is exactly 3 then:
+            # if flight number is reliable and the associated values is exactly 3(i.e gate, schd, act) then:
             if reliable_flt_num and len(values) == 3:
                 
                 # its important that these values are nested in here since if the flight number is reliable these 3 values will exist.
@@ -258,18 +244,22 @@ class Gate_checker(Gate_root):
                     })
                 else:
                     # TODO: Have to deal with these outlaws and feed it back into the system
-                    print(f"OUTLAWS","gate =", gate,"flt=", flight_num,"sch=", scheduled, 'ach=', actual)
-                    outlaws.append({
+                    reliable_outlaws.append({
                         'flight_number': flight_num,
                         'gate': gate,
                         'scheduled': scheduled,
                         'actual': actual,
                     })
             else:
-                print('OUTLAWS flight num =',flight_num,"values=", values)
+                unreliable_outlaws.append(dict({"flight_number": flight_num, "values": values}))
                     
-                    
-        logging.info(f'{self.date_time()}, {outlaws}')
+        outlaws = dict({
+            self.date_time() : []
+        })
+        
+        # Better if the file is read, extracted and appended to extracted as a new file.
+        with open('outlaws.pkl', 'wb') as f:
+            pickle.dump(outlaws, f)
         return structured_flights
                 
 
@@ -301,4 +291,14 @@ class Gate_checker(Gate_root):
         return flights
 
 
+class GateCheckerThread(threading.Thread):
+    def __init__(self):
+        super().__init__()
+        self.gc = Gate_checker()
+
+    
+    # run method is the inherited. It gets called as
+    def run(self):
+        self.gc.activator()
+    
 # flights = Gate_checker('').ewr_UA_gate()

@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup as bs4
 from time import sleep
 import threading
+import django
 
 response = requests.get('https://www.airport-ewr.com/newark-departures')
 soup = bs4(response.content, 'html.parser')
