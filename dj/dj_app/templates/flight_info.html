@@ -3,7 +3,7 @@
 {% block content %}
   <h3>United flights Departures at EWR</h3>
   {% if gate %}
-    <h3>Results for {{gate}}</h3>
+    <h4>Results for {{gate}} at {{current_time}}</h4>
   {% endif %}
   {% if flights %}
     <table>

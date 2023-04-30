@@ -1,12 +1,11 @@
 import requests
 from bs4 import BeautifulSoup as bs4
 
+# This is a prototype. Trying to move the departures EWR UA into its own file.
+
 class Req:
     def __init__(self) -> None:
         pass
-        evening = '?tp=6'
-        # evening = ''
-        self.EWR_deps_url = f'https://www.airport-ewr.com/newark-departures{evening}'
 
     def request(self, url):
         response = requests.get(url)
@@ -32,3 +31,9 @@ def departures_EWR_UA():
         for i in raw_bs4_all_EWR_deps[index]:
             if i != '\n':
                 all_EWR_deps.append(i.text)
+
+
+    # extracting all united flights and putting them all in list to return it in the function.
+    united_flights =[each for each in all_EWR_deps if 'UA' in each]
+    print(f'total flights {len(all_EWR_deps)} of which UA flights: {len(united_flights)}')
+    return united_flights

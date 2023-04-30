@@ -53,11 +53,11 @@ def flight_info(request,gate):
     # Dictionary format a list with one or many dictionaries each dictionary containing 4 items:gate,flight,scheduled,actual
 
     flights = Gate_checker().ewr_UA_gate(gate)
-    
+    current_time = Gate_checker().date_time
     # showing info if the info is found else it falls back to `No flights found for {{gate}}`on flight_info.html
     if flights: 
-        print(flights)
-        return render(request, 'flight_info.html',{'flights': flights, 'gate': gate})
+        # print(flights)
+        return render(request, 'flight_info.html',{'flights': flights, 'gate': gate, 'current_time': current_time})
     else:
         return render(request, 'flight_info.html', {'gate': gate})
 
@@ -71,6 +71,12 @@ def metar_display(request,weather_query):
     print(weather)
     return render(request, 'metar_info.html', {'airport': airport, 'weather': weather})
 
-
+def flight_deets(request, query):
+    flt_num = query
+    
+    # find departure and destination of this particular flight from the web.
+    
+    
+    
 def about(request):
     return render(request, 'home.html')
