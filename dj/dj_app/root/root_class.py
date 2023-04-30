@@ -20,7 +20,7 @@ class Gate_root:
     def date_time(self):
         # TODO: This one has not been used much yet.
                     # but need to be able to show on the web date and time the information was updated.
-        return f'{self.latest_date_viewable}, {self.latest_time}'
+        return f'{self.latest_time}'
     
 
     def request(self, url, timeout=None):
@@ -39,3 +39,34 @@ class Gate_root:
     def dt_conversion(self, data):
         # converts date and time string into a class object 
         return datetime.strptime(data, "%I:%M%p, %b%d")
+
+    
+    def departures_ewr_UA(self):
+        # returns list of all united flights as UA**** each
+        # Here we extract raw united flight number departures from airport-ewr.com
+        
+        morning = '?tp=6'
+        # morning = ''
+        EWR_deps_url = f'https://www.airport-ewr.com/newark-departures{morning}'
+
+        # TODO: web splits time in 3 parts.
+                # Makes it harder to pick appropriate information about flights
+                # from different times of the date
+
+        
+        soup = self.request(EWR_deps_url)
+        raw_bs4_all_EWR_deps = soup.find_all('div', class_="flight-col flight-col__flight")[1:]
+        # TODO: raw_bs4_html_ele contains delay info. Get delayed flight numbers
+        # raw_bs4_html_ele = soup.find_all('div', class_="flight-row")[1:]
+
+        #  This code pulls out all the flight numbers departing out of EWR
+        all_EWR_deps = []
+        for index in range(len(raw_bs4_all_EWR_deps)):
+            for i in raw_bs4_all_EWR_deps[index]:
+                if i != '\n':
+                    all_EWR_deps.append(i.text)
+
+        # extracting all united flights and putting them all in list to return it in the function.
+        united_flights =[each for each in all_EWR_deps if 'UA' in each]
+        print(f'total flights {len(all_EWR_deps)} of which UA flights: {len(united_flights)}')
+        return united_flights

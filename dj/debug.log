@@ -4367,3 +4367,428 @@ Traceback (most recent call last):
                     ~~~~~~~~~~~~~~^^^
 IndexError: list index out of range
 INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+WARNING:django.request:Not Found: /favicon.ico
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py changed, reloading.
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 44, in parse_query
+    return metar_display(request, weather_query)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 67, in metar_display
+    weather = weather.scrape(weather_query)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\MET_TAF_parse.py", line 29, in scrape
+    metar_raw = str(list(code_tag)[0].text)
+                    ~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 41, in parse_query
+    return flight_info(request,gate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 55, in flight_info
+    flights = Gate_checker().ewr_UA_gate(gate)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 244, in ewr_UA_gate
+    structured_flights = self.structured_flights()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 205, in structured_flights
+    if "Terminal" in gate and self.dt_conversion(scheduled) and self.dt_conversion(actual):
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py", line 41, in dt_conversion
+    return datetime.strptime(data, "%I:%M%p, %b%d")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'Not Available' does not match format '%I:%M%p, %b%d'
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 41, in parse_query
+    return flight_info(request,gate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 55, in flight_info
+    flights = Gate_checker().ewr_UA_gate(gate)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 244, in ewr_UA_gate
+    structured_flights = self.structured_flights()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 205, in structured_flights
+    if "Terminal" in gate and self.dt_conversion(scheduled) and self.dt_conversion(actual):
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py", line 41, in dt_conversion
+    return datetime.strptime(data, "%I:%M%p, %b%d")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'Not Available' does not match format '%I:%M%p, %b%d'
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 41, in parse_query
+    return flight_info(request,gate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 55, in flight_info
+    flights = Gate_checker().ewr_UA_gate(gate)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 244, in ewr_UA_gate
+    structured_flights = self.structured_flights()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 205, in structured_flights
+    if "Terminal" in gate and self.dt_conversion(scheduled) and self.dt_conversion(actual):
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py", line 41, in dt_conversion
+    return datetime.strptime(data, "%I:%M%p, %b%d")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'Not Available' does not match format '%I:%M%p, %b%d'
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 41, in parse_query
+    return flight_info(request,gate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 55, in flight_info
+    flights = Gate_checker().ewr_UA_gate(gate)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 245, in ewr_UA_gate
+    structured_flights = self.structured_flights()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 205, in structured_flights
+    print(self.dt_conversion(scheduled))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py", line 41, in dt_conversion
+    return datetime.strptime(data, "%I:%M%p, %b%d")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'Not Available' does not match format '%I:%M%p, %b%d'
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 41, in parse_query
+    return flight_info(request,gate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 55, in flight_info
+    flights = Gate_checker().ewr_UA_gate(gate)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 245, in ewr_UA_gate
+    structured_flights = self.structured_flights()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 205, in structured_flights
+    print(self.dt_conversion(actual))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py", line 41, in dt_conversion
+    return datetime.strptime(data, "%I:%M%p, %b%d")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'TerminalC - C71Z' does not match format '%I:%M%p, %b%d'
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 41, in parse_query
+    return flight_info(request,gate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 55, in flight_info
+    flights = Gate_checker().ewr_UA_gate(gate)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 246, in ewr_UA_gate
+    structured_flights = self.structured_flights()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 205, in structured_flights
+    print(self.dt_conversion(actual))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py", line 41, in dt_conversion
+    return datetime.strptime(data, "%I:%M%p, %b%d")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'TerminalC - C71Z' does not match format '%I:%M%p, %b%d'
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 41, in parse_query
+    return flight_info(request,gate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 55, in flight_info
+    flights = Gate_checker().ewr_UA_gate(gate)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 246, in ewr_UA_gate
+    structured_flights = self.structured_flights()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 205, in structured_flights
+    print(self.dt_conversion(scheduled))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py", line 41, in dt_conversion
+    return datetime.strptime(data, "%I:%M%p, %b%d")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'Not Available' does not match format '%I:%M%p, %b%d'
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 41, in parse_query
+    return flight_info(request,gate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 55, in flight_info
+    flights = Gate_checker().ewr_UA_gate(gate)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 246, in ewr_UA_gate
+    structured_flights = self.structured_flights()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 205, in structured_flights
+    if "Terminal" in gate and self.dt_conversion(scheduled) and self.dt_conversion(actual):
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py", line 41, in dt_conversion
+    return datetime.strptime(data, "%I:%M%p, %b%d")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'Not Available' does not match format '%I:%M%p, %b%d'
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 41, in parse_query
+    return flight_info(request,gate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 55, in flight_info
+    flights = Gate_checker().ewr_UA_gate(gate)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 246, in ewr_UA_gate
+    structured_flights = self.structured_flights()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 205, in structured_flights
+    if "Terminal" in gate and self.dt_conversion(scheduled) and self.dt_conversion(actual):
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py", line 41, in dt_conversion
+    return datetime.strptime(data, "%I:%M%p, %b%d")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'Not Available' does not match format '%I:%M%p, %b%d'
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 41, in parse_query
+    return flight_info(request,gate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 55, in flight_info
+    flights = Gate_checker().ewr_UA_gate(gate)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 246, in ewr_UA_gate
+    structured_flights = self.structured_flights()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 205, in structured_flights
+    if "Terminal" in gate and self.dt_conversion(scheduled) and self.dt_conversion(actual):
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py", line 41, in dt_conversion
+    return datetime.strptime(data, "%I:%M%p, %b%d")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'Not Available' does not match format '%I:%M%p, %b%d'
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 41, in parse_query
+    return flight_info(request,gate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 55, in flight_info
+    flights = Gate_checker().ewr_UA_gate(gate)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 246, in ewr_UA_gate
+    structured_flights = self.structured_flights()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py", line 205, in structured_flights
+    if "Terminal" in gate and self.dt_conversion(scheduled) and self.dt_conversion(actual):
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\root_class.py", line 41, in dt_conversion
+    return datetime.strptime(data, "%I:%M%p, %b%d")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\AppData\Local\Programs\Python\Python311\Lib\_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'Not Available' does not match format '%I:%M%p, %b%d'
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.
+ERROR:django.request:Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\exception.py", line 56, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\Ww_venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 27, in home
+    return parse_query(request)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 44, in parse_query
+    return metar_display(request, weather_query)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\views.py", line 67, in metar_display
+    weather = weather.scrape(weather_query)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root\MET_TAF_parse.py", line 29, in scrape
+    metar_raw = str(list(code_tag)[0].text)
+                    ~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+INFO:django.utils.autoreload:C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\dj_app\root_gate_checker.py changed, reloading.

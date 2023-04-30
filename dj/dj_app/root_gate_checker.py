@@ -40,37 +40,6 @@ class Gate_checker(Gate_root):
         self.master_local = []
 
 
-    def departures_ewr_UA(self):
-        # returns list of all united flights as UA**** each
-        # Here we extract raw united flight number departures from airport-ewr.com
-        
-        morning = '?tp=6'
-        # morning = ''
-        EWR_deps_url = f'https://www.airport-ewr.com/newark-departures{morning}'
-
-        # TODO: web splits time in 3 parts.
-                # Makes it harder to pick appropriate information about flights
-                # from different times of the date
-
-        
-        soup = self.request(EWR_deps_url)
-        raw_bs4_all_EWR_deps = soup.find_all('div', class_="flight-col flight-col__flight")[1:]
-        # TODO: raw_bs4_html_ele contains delay info. Get delayed flight numbers
-        # raw_bs4_html_ele = soup.find_all('div', class_="flight-row")[1:]
-
-        #  This code pulls out all the flight numbers departing out of EWR
-        all_EWR_deps = []
-        for index in range(len(raw_bs4_all_EWR_deps)):
-            for i in raw_bs4_all_EWR_deps[index]:
-                if i != '\n':
-                    all_EWR_deps.append(i.text)
-
-        # extracting all united flights and putting them all in list to return it in the function.
-        united_flights =[each for each in all_EWR_deps if 'UA' in each]
-        print(f'total flights {len(all_EWR_deps)} of which UA flights: {len(united_flights)}')
-        return united_flights
-
-
     def pick_flight_data(self, flt_num):
         
         # refer to self.executor() first, then come back here since this function is called by the exector
@@ -140,7 +109,7 @@ class Gate_checker(Gate_root):
         for i in range(3):
             if self.troubled:
                 sleep(3)
-                self.exec(self.troubled, self.pick_flight_data())
+                self.exec(self.troubled, self.pick_flight_data)
                 
                 #Following code essentially removes troubled items that are already in the master.
                 # logic: if troubled items are not in master make a new troubled set with those. Essentially doing the job of removing master keys from troubled set
@@ -217,23 +186,25 @@ class Gate_checker(Gate_root):
     def structured_flights(self):
         master = self.load_master()
         structured_flights = []
-        reliable_outlaws = []
-        unreliable_outlaws = []
+        outlaws_reliable = []
+        outlaws_unreliable = []
         # issue: too many values to unpack. Solution: unpack keys and values, use regex to make sure flight number matches.
         for flight_num, values in master.items():
             
-            # Regex that matches 2 uppercase alphabets followed by digits between 4 and 4.
+            # Regex that matches 2 uppercase alphabets followed by digits between 2 and 4.
             reliable_flt_num = re.match(r'[A-Z]{2}\d{2,4}', flight_num)
 
-            # if flight number is reliable and the associated values is exactly 3(i.e gate, schd, act) then:
+            # if flight number is reliable and the associated values is exactly 3(i.e gate, schd, act) then;
+                # else outlaws_unreliable
             if reliable_flt_num and len(values) == 3:
                 
                 # its important that these values are nested in here since if the flight number is reliable these 3 values will exist.
                 gate = values[0]
                 scheduled = values[1]
                 actual = values[2]
-                
-                if "Terminal" in gate and self.dt_conversion(scheduled) and self.dt_conversion(actual):
+                # Right this 'not available' might not be the most reliable way to check for reliable data.
+                    # Earlier I user if self.dt_conversion(scheduled) and actual but it spat out nasty errors so wont be using it.
+                if "Terminal" in gate and scheduled!= 'Not Available' and actual!= 'Not Available':
                     scheduled = self.dt_conversion(scheduled)
                     actual = self.dt_conversion(actual)
                     structured_flights.append({
@@ -243,23 +214,33 @@ class Gate_checker(Gate_root):
                         'actual': actual,
                     })
                 else:
-                    # TODO: Have to deal with these outlaws and feed it back into the system
-                    reliable_outlaws.append({
+                    # TODO: Have to deal with these outlaws and feed it back into the system.
+                        # Sometimes gate goes into scheduled or actual. Beware of that kind of data.
+                    outlaws_reliable.append({
                         'flight_number': flight_num,
                         'gate': gate,
                         'scheduled': scheduled,
                         'actual': actual,
                     })
+                    print('outlaws_reliable', 'gt', gate,  scheduled, actual)
+            
             else:
-                unreliable_outlaws.append(dict({"flight_number": flight_num, "values": values}))
-                    
+                outlaws_unreliable.append(dict({"flight_number": flight_num, "values": values}))
+                print('unreliable outlaws', outlaws_unreliable)
+        
+        
         outlaws = dict({
-            self.date_time() : []
+            self.date_time() : [dict({'reliable_outlaws':outlaws_reliable,'unreliable_outlaws':outlaws_unreliable})]
         })
+        
+        with open('outlaws.pkl', 'rb') as f:
+            outlaws_read = pickle.load(f)
+        
+        outlaws_read.update(outlaws)    #calling outlaws and updating it, then dumping it again to previous old data.
         
         # Better if the file is read, extracted and appended to extracted as a new file.
         with open('outlaws.pkl', 'wb') as f:
-            pickle.dump(outlaws, f)
+            pickle.dump(outlaws_read, f)
         return structured_flights
                 
 
@@ -285,8 +266,8 @@ class Gate_checker(Gate_root):
         # Converting it back to string for it to show in a viewable format otherwise
             # browser craps out when it sees class object for date since earlier 'scheduled' item is a class object and not a string
         for dictionries in flights:
-            dictionries['scheduled'] = dictionries['scheduled'].strftime("%#I:%M%p, %b%d")
-            dictionries['actual'] = dictionries['actual'].strftime("%#I:%M%p, %b%d")
+            dictionries['scheduled'] = dictionries['scheduled'].strftime("%#H:%M, %b%d")
+            dictionries['actual'] = dictionries['actual'].strftime("%#H:%M, %b%d")
         
         return flights
 
