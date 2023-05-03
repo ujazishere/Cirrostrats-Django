@@ -26,7 +26,7 @@ def home(request):
         # if query.upper() in:
         return parse_query(request)
     else:
-        return render(request, 'home.html', {'loading': True})
+        return render(request, 'home.html')
 
 
 def parse_query(request):
@@ -34,8 +34,8 @@ def parse_query(request):
     query = request.POST.get('query','').upper()
     
     # Here add `and` to include digits for gate information. Maybe use unique values of gate for display.for eachgate in all unique gates if query in eachgate..
-
-    if len(query) <= 4:
+    flights = Gate_checker().departures_ewr_UA()
+    if len(query) <= 2:
         # in this section query becomes gate and is fed into flight_into.
         gate = query
         return flight_info(request,gate)
@@ -43,9 +43,10 @@ def parse_query(request):
         weather_query = query
         return metar_display(request, weather_query)
     else:
-        print(query)
-        return flight_info(request, query)
-
+        for flt in flights:
+            if query in flt:
+                return flight_deets(request, query,flt)
+                break
 
 def flight_info(request,gate):
     print('Getting flight infor for gate:', gate)
@@ -71,8 +72,10 @@ def metar_display(request,weather_query):
     print(weather)
     return render(request, 'metar_info.html', {'airport': airport, 'weather': weather})
 
-def flight_deets(request, query):
+def flight_deets(request, query, flt):
     flt_num = query
+    return render(request, 'flight_deet.html', {'flt_num': flt_num, 'flt':flt})
+    
     
     # find departure and destination of this particular flight from the web.
     
