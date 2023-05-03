@@ -1,0 +1,30 @@
+{% extends "dj_app/base.html" %}
+
+{% block content %}
+  <h3>United details for {{flt}} and {{flt_num}}</h3>
+    <h4>Results for {{flt_num}} at {{current_time}}</h4>
+  {% if flt_num %}
+    <table>
+      <thead>
+        <tr>
+          <th>Departure</th>
+          <th>Destination</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ flight.gate }}</td>
+          <td>{{ flight.flight_number }}</td>
+        </tr>
+      </tbody>
+    </table>
+  {% else %}
+    <p>No details found for {{flt_num}}.</p>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <label for="query">Query:</label>
+    <input type="text" name="query" id="query">
+    <button type="submit">Search</button>
+  </form>
+{% endblock %}
