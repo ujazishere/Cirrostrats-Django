@@ -8,10 +8,11 @@
   {% if gate %}
     <h4>Results for {{gate}} at {{current_time}}</h4>
   {% endif %}
-  {% if flights %}
+  {% if gate_data_table %}
     <table>
       <thead>
         <tr>
+          
           <th>Gate</th>
           <th>Flight</th>
           <th>Scheduled</th>
@@ -19,7 +20,8 @@
         </tr>
       </thead>
       <tbody>
-      {% for flight in flights %}
+      {% for flight in gate_data_table %}
+        <!-- <h3> {{ flight.gate }}</h3> -->
         <tr>
           <td>{{ flight.gate }}</td>
           <td>{{ flight.flight_number }}</td>
@@ -31,9 +33,15 @@
     </table>
   {% else %}
     <p>No flights found for {{gate}}.</p>
-    <p>No flights found for {{gate}}.</p>    
+    <p>
+           <p>Try `w kewr` for weather in newark: metar and taf;</p>
+           <p>`i 4425` for metar and taf for departure and destination of flight UA4425</p>
+           <p>`c` for all Terminal C departures; </p>
+           <p>`c71` for all C71 departures. Includes C71T, C71V, C71W, C71X, C71Y, C71</p>
+           <p>`A` for for all Terminal A departures </p>
   {% endif %}
-  <form method="post" class="search-form">
+
+  <form method="post">
     {% csrf_token %}
     <label for="query"></label>
     <input type="text" name="query" id="query">

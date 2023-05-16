@@ -12,7 +12,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
   </head>
   <body>
-    <p>Search Your Gate/Weather Here:</p>
+    <h3>Check Weather, Gate And Flight Information</h3>
+    <p> NOTE: Gate Queries Are Currently Only Available for United Flights in Newark.</p>
     {% csrf_token %}
     <form method="post" class="search-form">
         {% csrf_token %}

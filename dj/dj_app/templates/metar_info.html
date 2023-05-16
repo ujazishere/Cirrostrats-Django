@@ -18,7 +18,8 @@
     </tbody>
   </table>
   {% else %}
-    <p>No weather found for {{airport}}.</p>
+    <p>No weather informamtion found for {{airport}}. Try `w kewr`</p>
+
   {% endif %}
   {% csrf_token %}
   <form method="post" class="search-form">

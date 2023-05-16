@@ -19,15 +19,26 @@ class Weather_display:
         TAF =  'on'
         
         awc_web = f"https://aviationweather.gov/metar/data?ids={airport_id}&format=raw&hours=0&taf={TAF}&layout=on"
-        print(awc_web)
         response = requests.get(awc_web)
         soup = bs4(response.content, 'html.parser')
         code_tag = soup.find_all('code')
         
         # code_tag is bs4 element with meter and taf in it. converted it to list then [0]th item is metar in bs4 that is
         # converted whole of it to str which is then split and converted to list
-        metar_raw = str(list(code_tag)[0].text)
-        taf_raw = str(list(code_tag)[1].text)
+
+        metar_index = 0
+        taf_index = 1
+        
+        metar_and_taf_in_bs4_list = list(code_tag)
+        
+        if metar_index < len(metar_and_taf_in_bs4_list):
+            metar_raw = str(list(code_tag)[0].text)
+            taf_raw = str(list(code_tag)[1].text)
+        else:
+            metar_raw = ''
+            taf_raw = ''
+            
+        
         
         # split returns into list form for further processing.
         # metar = metar_raw.split()
