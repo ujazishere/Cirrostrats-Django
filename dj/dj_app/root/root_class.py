@@ -47,8 +47,8 @@ class Root_class():
         # returns list of all united flights as UA**** each
         # Here we extract raw united flight number departures from airport-ewr.com
         
-        morning = '?tp=6'
-        # morning = ''
+        # morning = '?tp=6'
+        morning = ''
         EWR_deps_url = f'https://www.airport-ewr.com/newark-departures{morning}'
 
         # TODO: web splits time in 3 parts.
