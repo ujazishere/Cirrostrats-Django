@@ -1,6 +1,9 @@
 {% extends "dj_app/base.html" %}
 
+{% load static %}
+
 {% block content %}
+  <link rel="stylesheet" type="text/css" href="{% static 'flight_info.css' %}">
   <h3>United flights Departures at EWR</h3>
   {% if gate %}
     <h4>Results for {{gate}} at {{current_time}}</h4>
@@ -40,8 +43,8 @@
 
   <form method="post">
     {% csrf_token %}
-    <label for="query">Query:</label>
+    <label for="query"></label>
     <input type="text" name="query" id="query">
     <button type="submit">Search</button>
-  </form>
+</form>
 {% endblock %}
