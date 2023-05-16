@@ -89,21 +89,32 @@ def flight_deets(request, flight_query ):
     # pull weather for a partifular flight number. 
     dep_des = Pull_dep_des()
     dep_des = dep_des.pull(flight_query)
-    departure = f'K{list(dep_des.values())[0][0]}'      # 3 letter airport identifier turned into 4 letter icao identifier
-    destination = f'K{list(dep_des.values())[0][1]}' 
+    
+    if dep_des: 
+        departure = f'K{list(dep_des.values())[0][0]}'      # Turning a 3 letter airport identifier into 4 letter ICAO identifier
+        destination = f'K{list(dep_des.values())[0][1]}' 
+    else:
+        departure = ''
+        destination = ''
+        
+        
     def weather_req(airport):
         weather = Weather_display()
         weather = weather.scrape(airport)
         return weather
-    dep_weather = weather_req(departure)
-    dest_weather = weather_req(destination)
-    bulk_flight_deets = {'flight_query': flight_query, 
-                         'dep_des': dep_des,
-                         'current_time': current_time,
-                         'dep_weather': dep_weather,
-                         'dest_weather': dest_weather       
-                            }
-    return render(request, 'flight_deet.html', bulk_flight_deets )
+    
+    if departure and destination:
+        dep_weather = weather_req(departure)
+        dest_weather = weather_req(destination)
+        bulk_flight_deets = {'flight_query': flight_query, 
+                            'dep_des': dep_des,
+                            'current_time': current_time,
+                            'dep_weather': dep_weather,
+                            'dest_weather': dest_weather       
+                                }
+        return render(request, 'flight_deet.html', bulk_flight_deets )
+    else:
+        return render(request, 'flight_deet.html', {'flight_query': flight_query} )
     
     # find departure and destination of this particular flight from the web.
     

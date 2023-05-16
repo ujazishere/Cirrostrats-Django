@@ -19,21 +19,26 @@ class Pull_dep_des(Root_class):
         flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt=EWR"
         print(1)
         response = requests.get(flight_view)
-        print(2, response)
-        soup = bs4(response.content, 'html.parser')
-        print(flight_view)
-        scripts = soup.find_all('script')
+        print(2, type(response))
+        try :
+            soup = bs4(response.content, 'html.parser')
+            scripts = soup.find_all('script')       # scripts is a section in the html that contains departure and destination airports 
+            for script in scripts:
+                # looks up text 'var sdepapt' which is associated with departure airport.
+                    # then splits all lines into list form then just splits the departure and destination in string form (")
+                # TODO: It is important to get airport names along with identifiers to seperate international flights for metar view.
+                if 'var sdepapt' in script.get_text():
+                    departure = script.get_text().split('\n')[1].split('\"')[1]
+                    destination = script.get_text().split('\n')[2].split('\"')[1]
+            print(3)
+            return dict({flt_num: [departure, destination]})
+        except :
+            empty_soup = {} 
+            print(4)
+            return empty_soup
         # typically 9th index of scripts is where departure and destination is.
             # try print(scripts[9].get_text()) for string version for parsing
         
-        for script in scripts:
-            # looks up text 'var sdepapt' which is associated with departure airport.
-                # then splits all lines into list form then just splits the departure and destination in string form (")
-            # TODO: It is important to get airport names along with identifiers to seperate international flights for metar view.
-            if 'var sdepapt' in script.get_text():
-                departure = script.get_text().split('\n')[1].split('\"')[1]
-                destination = script.get_text().split('\n')[2].split('\"')[1]
-        return dict({flt_num: [departure, destination]})
         # print(departure, destination)
 
 
