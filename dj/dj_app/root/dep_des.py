@@ -2,6 +2,16 @@ import requests
 from bs4 import BeautifulSoup as bs4
 from .root_class import Root_class
 
+class Pull_dep_des:
+    def __init__(self) -> None:
+        pass
+    
+    def pull_flights(self):
+        
+        # add url
+        response = requests.get('url')
+        soup = bs4(response.content, 'html.parser')
+
 
 class Pull_dep_des(Root_class):
     def __init__(self) -> None:
