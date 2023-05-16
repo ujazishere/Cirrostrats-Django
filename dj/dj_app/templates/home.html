@@ -1,13 +1,26 @@
-
 {% extends "dj_app/base.html" %}
 
+{% load static %}
+
 {% block content %}
-<h3>Gate information for United flights at EWR</h3>
-<form method="post">
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LETSLFYSAFE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+  </head>
+  <body>
+    <p>Search Your Gate/Weather Here:</p>
     {% csrf_token %}
-    <label for="query">Query:</label>
-    <input type="text" name="query" id="query">
-    <button type="submit">Search</button>
-</form>
+    <form method="post" class="search-form">
+        {% csrf_token %}
+        <label for="query"></label>
+        <input type="text" name="query" id="query">
+        <button type="submit">Search</button>
+    </form>
+  </body>
+</html>
 
 {% endblock %}

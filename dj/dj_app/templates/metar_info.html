@@ -1,6 +1,10 @@
 {% extends "dj_app/base.html" %}
 
+{% load static %}
+
 {% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'metar_info.css' %}">
   <h3> Weather for {{airport}}</h3>
   {% if weather %}
   <table>
@@ -16,10 +20,10 @@
   {% else %}
     <p>No weather found for {{airport}}.</p>
   {% endif %}
-  <form method="post">
-    {% csrf_token %}
-    <label for="query">Query:</label>
+  {% csrf_token %}
+  <form method="post" class="search-form">
+    <label for="query"></label>
     <input type="text" name="query" id="query">
     <button type="submit">Search</button>
-  </form>
+</form>
 {% endblock %}
