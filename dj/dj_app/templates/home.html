@@ -2,7 +2,8 @@
 {% extends "dj_app/base.html" %}
 
 {% block content %}
-<h3>Gate information for United flights at EWR</h3>
+<h3>Check Weather, Gate And Flight Information</h3>
+<p>***Currently Gate Queries Only Return Values For United Flights in EWR***</p>
 <form method="post">
     {% csrf_token %}
     <label for="query">Query:</label>

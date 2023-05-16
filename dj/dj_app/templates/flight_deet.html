@@ -1,9 +1,9 @@
 {% extends "dj_app/base.html" %}
 
 {% block content %}
-  <h3>United details for {{flt}} and {{flt_num}}</h3>
-    <h4>Results for {{flt_num}} at {{current_time}}</h4>
-  {% if flt_num %}
+  <h3>United Flight Information</h3>
+    <h4>Results for {{flight_query}} at {{current_time}}</h4>
+  {% if flight_query %}
     <table>
       <thead>
         <tr>
@@ -13,13 +13,35 @@
       </thead>
       <tbody>
         <tr>
-          <td>{{ flight.gate }}</td>
-          <td>{{ flight.flight_number }}</td>
+          {% for flight_num, dep_des_list in dep_des.items %}
+          <td>{{ dep_des_list.0 }}</td>
+          <td>{{ dep_des_list.1 }}</td>
+          {% endfor %}
         </tr>
       </tbody>
     </table>
+    <table>
+      <tbody>
+        {% for type, juice  in dep_weather.items %}
+          <tr>
+            <th>{{ type }}</th>
+            <td>{{ juice   }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        {% for type, juice  in dest_weather.items %}
+          <tr>
+            <th>{{ type }}</th>
+            <td>{{ juice   }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
-    <p>No details found for {{flt_num}}.</p>
+    <p>No details found for {{flight_query}}.</p>
   {% endif %}
   <form method="post">
     {% csrf_token %}
