@@ -1,6 +1,9 @@
 {% extends "dj_app/base.html" %}
 
+{% load static %}
+
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'flight_deet.css' %}">
   <h3>United details for {{flt}} and {{flt_num}}</h3>
     <h4>Results for {{flt_num}} at {{current_time}}</h4>
   {% if flt_num %}
@@ -21,10 +24,10 @@
   {% else %}
     <p>No details found for {{flt_num}}.</p>
   {% endif %}
-  <form method="post">
+  <form method="post" class="search-form">
     {% csrf_token %}
-    <label for="query">Query:</label>
+    <label for="query"></label>
     <input type="text" name="query" id="query">
     <button type="submit">Search</button>
-  </form>
+</form>
 {% endblock %}

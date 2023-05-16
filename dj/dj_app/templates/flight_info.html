@@ -1,6 +1,9 @@
 {% extends "dj_app/base.html" %}
 
+{% load static %}
+
 {% block content %}
+  <link rel="stylesheet" type="text/css" href="{% static 'flight_info.css' %}">
   <h3>United flights Departures at EWR</h3>
   {% if gate %}
     <h4>Results for {{gate}} at {{current_time}}</h4>
@@ -17,7 +20,6 @@
       </thead>
       <tbody>
       {% for flight in flights %}
-        <!-- <h3> {{ flight.gate }}</h3> -->
         <tr>
           <td>{{ flight.gate }}</td>
           <td>{{ flight.flight_number }}</td>
@@ -29,11 +31,12 @@
     </table>
   {% else %}
     <p>No flights found for {{gate}}.</p>
+    <p>No flights found for {{gate}}.</p>    
   {% endif %}
-  <form method="post">
+  <form method="post" class="search-form">
     {% csrf_token %}
-    <label for="query">Query:</label>
+    <label for="query"></label>
     <input type="text" name="query" id="query">
     <button type="submit">Search</button>
-  </form>
+</form>
 {% endblock %}
