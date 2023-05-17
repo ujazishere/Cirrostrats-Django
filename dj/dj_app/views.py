@@ -40,11 +40,13 @@ def parse_query(request, main_query):
             return gate_info(request, gate_query)
     
     if len(query_in_list_form) > 1:
-        if query_in_list_form[0] == 'w':
+        first_letter = query_in_list_form[0].upper()        # Making it uppercase for compatibility issues and error handling
+        if first_letter == 'W':
             weather_query_airport  = query_in_list_form[1]
-            weather_query_airport = weather_query_airport.upper()       # making query uppercase for it to be compatible
+            weather_query_airport = weather_query_airport.upper()       # Making query uppercase for it to be compatible
             return metar_display(request, weather_query_airport)
-        if query_in_list_form[0] == 'i':
+        
+        if first_letter == 'I':        
             flight_query = query_in_list_form[1]
             return flight_deets(request, flight_query)
 
