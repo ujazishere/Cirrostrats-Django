@@ -1,11 +1,18 @@
 body {
-  background-color: #c7c4c4; /* color */
+  background-color: #e0dbdb; /* color */
   margin: 0;
   padding: 0;
 }
 
 h1 {
   font-size: 10;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 50px;
+}
+
+h3 {
+  font-size: 8;
   font-weight: bold;
   text-align: center;
   margin-top: 50px;

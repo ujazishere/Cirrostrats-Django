@@ -1,5 +1,5 @@
 body {
-  background-color: #c7c4c4; /* color */
+  background-color: #e0dbdb; /* color */
   margin: 0;
   padding: 0;
 }
@@ -23,17 +23,6 @@ p {
   font-weight: bold;
   text-align: center;
   margin-top: 30px;
-}
-
-/* Search form styles */
-.search-form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  border: black;
-  border-radius: 5px;
-
 }
 
 /* Search form styles */

@@ -60,7 +60,6 @@ tbody tr:nth-child(even) {
   margin-top: 20px;
   border: black;
   border-radius: 5px;
-  margin-bottom: 50px;
 
 }
 
@@ -71,7 +70,6 @@ tbody tr:nth-child(even) {
   border: 2px solid black;
   border-radius: 5px;
   margin-right: 10px;
-  margin-bottom: 50px;
 }
 
 .search-form button {
@@ -81,7 +79,6 @@ tbody tr:nth-child(even) {
   background-color: #000000;
   color: #ffffff;
   cursor: pointer;
-  margin-bottom: 50px;
 }
 
 /* Media queries for responsiveness */
