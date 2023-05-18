@@ -40,11 +40,11 @@
            <p>`c71` for all C71 departures. Includes C71T, C71V, C71W, C71X, C71Y, C71</p>
            <p>`A` for for all Terminal A departures </p>
   {% endif %}
-
-  <form method="post">
-    {% csrf_token %}
-    <label for="query"></label>
-    <input type="text" name="query" id="query">
-    <button type="submit">Search</button>
-</form>
+  {% csrf_token %}
+  <form method="post" class="search-form">
+      {% csrf_token %}
+      <label for="query"></label>
+      <input type="text" name="query" id="query">
+      <button type="submit">Search</button>
+  </form>
 {% endblock %}

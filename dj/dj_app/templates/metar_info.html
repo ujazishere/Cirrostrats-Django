@@ -22,9 +22,10 @@
 
   {% endif %}
   {% csrf_token %}
-  <form method="post" class="search-form">
-    <label for="query"></label>
-    <input type="text" name="query" id="query">
-    <button type="submit">Search</button>
-</form>
+    <form method="post" class="search-form">
+        {% csrf_token %}
+        <label for="query"></label>
+        <input type="text" name="query" id="query">
+        <button type="submit">Search</button>
+    </form>
 {% endblock %}
