@@ -1,3 +1,2 @@
-
-# from flt_deet import airports
-# print(len(airports))
+# fr'Om flt_deet imp'Ort airp'Orts
+# print(len(airp'Orts))
