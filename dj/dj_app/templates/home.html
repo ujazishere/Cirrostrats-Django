@@ -21,6 +21,28 @@
         <input type="text" name="query" id="query">
         <button type="submit">Search</button>
     </form>
+    <p>
+      Available Queries:
+      <br>
+      <strong>Gate in EWR:</strong> eg. C71, C, A, B, x(C71X), v(C71V), etc.
+      <br>
+      <strong>metar:</strong> eg. met kbos, met kewr, kewr met, kiad met, etc
+      <br>
+      <strong>United flight number out of EWR to get departure, destination, and weather at both:</strong>
+      <br>
+      eg: i 4431, i 4425, i 4387, etc
+      <br><br>
+      <strong>Examples:</strong>
+      <br>
+      <em>Empty Query:</em> - empty query returns all gates
+      <br>
+      <em>c71x:</em> - returns all flights' scheduled times from this gate. Gives their scheduled time of departure and actual.
+      <br>
+      <em>met kewr:</em> - returns METAR and TAF of the airport in question
+      <br>
+      <em>4425:</em> - returns the departure airport, arrival airport, METAR, and TAF at both departure and arrival airport
+    </p>
+    
   </body>
 </html>
 
