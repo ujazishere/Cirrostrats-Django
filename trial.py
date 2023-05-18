@@ -1,4 +1,4 @@
-import pickle
+'''import pickle
 
 with open('METAR_stack.pkl', 'rb') as f:
     met = pickle.load(f)
@@ -16,3 +16,15 @@ print(len(wague_items))
 # print((all_metar_list[:2]))
 print(all_metar_list[0][1][-1])
 print(all_metar_list[0][3])
+
+'''
+import pickle
+import os
+print(os.getcwd())
+
+
+
+with open('dj/queries.pkl', 'rb') as f:
+    x = pickle.load(f)
+
+print(x)

@@ -3,6 +3,7 @@ from .root_gate_checker import Gate_checker, Gate_scrape_thread
 from .root.MET_TAF_parse import Weather_display
 from .root.dep_des import Pull_dep_des
 from .root.flt_deet import airports
+import pickle
 
 
 '''
@@ -21,6 +22,11 @@ def home(request):
     # Homepage first skips a "POST", goes to else and returns home.html since the query is not submitted yet.
     if request.method == "POST":
         main_query = request.POST.get('query','')
+        with open('queries.pkl', 'wb') as f:
+            queries = dict({current_time(): main_query})
+            print(queries)
+            pickle.dump(queries, f)
+            
         return parse_query(request, main_query)
     else:
         return render(request, 'home.html')
@@ -126,12 +132,11 @@ def metar_display(request,weather_query):
     weather_query = weather_query.strip()       # remove leading and trailing spaces. Seems precautionary.
     weather = Weather_display()
     
-    # TODO: Figure out how to account for errors and queries that are not found.
+    # TODO: quert `met kewr` still gives error. Figure out how to account for errors and queries that are not found.
     weather = weather.scrape(weather_query)
-    print('test1')
+    
     airport = weather_query[-4:]
-    print(airport)
-    print(weather)
+
     return render(request, 'metar_info.html', {'airport': airport, 'weather': weather})
 
     

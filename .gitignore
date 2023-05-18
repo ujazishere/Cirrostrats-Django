@@ -1,7 +1,17 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+dj/dj_app/migrations/__pycache__
 *.py[cod]
 *$py.class
+.idea/
+.vscode/
+base_pem.pem
+hoq
+q
+tatus
+base.ppk
+dj/master_UA.pkl
+dj/outlaws.pkpl
 
 # C extensions
 *.so
