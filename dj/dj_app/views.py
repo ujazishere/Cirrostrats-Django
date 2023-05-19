@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .root_gate_checker import Gate_checker, Gate_scrape_thread
+from .root.root_gate_checker import Gate_checker, Gate_scrape_thread
 from .root.MET_TAF_parse import Weather_display
-from .root.dep_des import Pull_dep_des
+from .root.dep_des import Pull_flight_info
 from .root.flt_deet import airports
 import pickle
 
@@ -11,6 +11,7 @@ views.py runs as soon as the base web is requested. Hence, GateCheckerThread() i
 It will then run 
 '''
 run_lengthy_web_scrape = False
+
 if run_lengthy_web_scrape:
     gc_thread = Gate_scrape_thread()
     gc_thread.start()
@@ -22,29 +23,34 @@ def home(request):
     # Homepage first skips a "POST", goes to else and returns home.html since the query is not submitted yet.
     if request.method == "POST":
         main_query = request.POST.get('query','')
+        
+        # opening queries, updating it and extracting it again.
+        with open('queries.pkl', 'rb') as f:
+            queries = pickle.load(f)           # queries.pkl is a dictionary with time as keys and queries as values.
+            queries.update(dict({current_time(): main_query}))
         with open('queries.pkl', 'wb') as f:
-            queries = dict({current_time(): main_query})
-            print(queries)
             pickle.dump(queries, f)
             
         return parse_query(request, main_query)
+
     else:
         return render(request, 'home.html')
 
 
 def parse_query(request, main_query):
-    
+    main_query = main_query
+    query_in_list_form = []     # Global variable since it is used outside of the if statement in case it was not triggered. purpose: Handeling Error
+                                    # if .split() method is used outside here it can return since empty strings cannot be split.
+                                    
     if main_query == '':        # query is empty then return all gates
         return gate_info(request, main_query='')
-    query_in_list_form = []     # Global variable since it is used outside of the if statement in case it was not triggered. purpose: Handeling Error
     if main_query != '':        # if query is not empty it splits it into list form
         query_in_list_form = main_query.split()
-        if len(query_in_list_form) == 1:
+        if len(query_in_list_form) == 1:            # If query is only one word or item  
 
-            # When the length of query_in_list_form is only 1 it returns gates table.
+            # When the length of query_in_list_form is only 1 it returns gates table for that particular query.
             gate_query = query_in_list_form[0]
-            return gate_info(request, gate_query)
-    
+            return gate_info(request, main_query=gate_query)
     if len(query_in_list_form) > 1:
         first_letter = query_in_list_form[0].upper()        # Making it uppercase for compatibility issues and error handling
         if first_letter == 'W':
@@ -55,7 +61,10 @@ def parse_query(request, main_query):
         if first_letter == 'I':        
             flight_query = query_in_list_form[1]
             return flight_deets(request, flight_query)
-
+        
+        else:       # If the query is not recognized:
+            print(5)
+            return gate_info(request, main_query=main_query)
             '''
             florida_airports = airports['Florida'][1]
             for each_airport in florida_airports:
@@ -95,8 +104,8 @@ def gate_info(request,main_query):
 
 def flight_deets(request, flight_query ):
     # pull weather for a partifular flight number. 
-    dep_des = Pull_dep_des()
-    dep_des = dep_des.pull(flight_query)
+    flt_info = Pull_flight_info()
+    dep_des = flt_info.pull_dep_des(flight_query)
     
     if dep_des: 
         departure = f'K{list(dep_des.values())[0][0]}'      # Turning a 3 letter airport identifier into 4 letter ICAO identifier

@@ -1,23 +1,13 @@
 import requests
 from bs4 import BeautifulSoup as bs4
-from .root_class import Root_class
-
-class Pull_dep_des:
-    def __init__(self) -> None:
-        pass
-    
-    def pull_flights(self):
-        
-        # add url
-        response = requests.get('url')
-        soup = bs4(response.content, 'html.parser')
+from root_class import Root_class
 
 
-class Pull_dep_des(Root_class):
+class Pull_flight_info(Root_class):
     def __init__(self) -> None:
         super().__init__()
 
-    def pull(self, flight_query):
+    def pull_dep_des(self, flight_query):
         flt_num = flight_query
 
         # date format in the url is YYYYMMDD. For testing, you can find flt_nums on https://www.airport-ewr.com/newark-departures
@@ -48,4 +38,20 @@ class Pull_dep_des(Root_class):
         # print(departure, destination)
 
 
-# url = Pull_dep_des().pull('492')
+    def pull_route(self, flight_query):
+        # Much unfinished work here! Cant seem to get how to extract the clearance route from flightaware,
+        
+        flt_num = flight_query
+
+        flight_aware = f"https://flightaware.com/live/flight/UAL{flt_num}"
+        response = requests.get(flight_aware)
+        try :
+            soup = bs4(response.content, 'html.parser')
+            # data_tag= soup.find_all('flightPageData')
+            data_tag= soup.find_all("div", class_="flightpagedata")
+        except :
+            empty_soup = {} 
+            return empty_soup
+        # print(data_tag)
+        print(soup.get_text())
+

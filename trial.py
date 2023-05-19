@@ -27,4 +27,6 @@ print(os.getcwd())
 with open('dj/queries.pkl', 'rb') as f:
     x = pickle.load(f)
 
-print(x)
+for a, b in x.items():
+    print(a, b)
+
