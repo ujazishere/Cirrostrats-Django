@@ -47,7 +47,8 @@ class Root_class():
         # returns list of all united flights as UA**** each
         # Here we extract raw united flight number departures from airport-ewr.com
         
-        # morning = '?tp=6'
+        # morning = '?tp=6'         # When its late in night and you want to run lengthy scrape it wont work since
+                                        # there are no flights. Use this morning to pull early morning flights instead
         morning = ''
         EWR_deps_url = f'https://www.airport-ewr.com/newark-departures{morning}'
 
