@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup as bs4
-from root_class import Root_class
+from .root_class import Root_class
 
 
 class Pull_flight_info(Root_class):
