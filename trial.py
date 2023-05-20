@@ -31,17 +31,3 @@ for a, b in x.items():
     pass
     # print(a, b)
 
-import requests
-
-url = "https://aeroapi.flightaware.com/aeroapi"
-
-headers = {"Authorization": "qPRqXI2e1puzGQaGLaU387h33BImo8AA"}
-params = {"flight_number": "", 
-          "date": ""}
-
-response = requests.get(url, headers=headers, params=params)
-print(response.url)
-print(response.status_code)
-if response.status_code==200:
-    data = response.json()
-    print(data)
