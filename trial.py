@@ -20,7 +20,7 @@ print(all_metar_list[0][3])
 '''
 import pickle
 import os
-print(os.getcwd())
+# print(os.getcwd())
 
 
 
@@ -28,5 +28,20 @@ with open('dj/queries.pkl', 'rb') as f:
     x = pickle.load(f)
 
 for a, b in x.items():
-    print(a, b)
+    pass
+    # print(a, b)
 
+import requests
+
+url = "https://aeroapi.flightaware.com/aeroapi"
+
+headers = {"Authorization": "qPRqXI2e1puzGQaGLaU387h33BImo8AA"}
+params = {"flight_number": "", 
+          "date": ""}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.url)
+print(response.status_code)
+if response.status_code==200:
+    data = response.json()
+    print(data)
