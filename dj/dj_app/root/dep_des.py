@@ -38,7 +38,7 @@ class Pull_flight_info(Root_class):
         # print(departure, destination)
 
 
-    def pull_route(self, flight_query):
+    def pull_route(self, flight_query):     # Still under construction. Difficult to work with API. Attempting AeroAPI
         # Much unfinished work here! Cant seem to get how to extract the clearance route from flightaware,
         
         flt_num = flight_query
@@ -54,4 +54,18 @@ class Pull_flight_info(Root_class):
             return empty_soup
         # print(data_tag)
         print(soup.get_text())
+        
+        # Seperate trial with the API. 
+        url = "https://aeroapi.flightaware.com/aeroapi"
+
+        headers = {"Authorization": "qPRqXI2e1puzGQaGLaU387h33BImo8AA"}
+        params = {"flight_number": "", 
+                "date": ""}
+
+        response = requests.get(url, headers=headers, params=params)
+        print(response.url)
+        print(response.status_code)
+        if response.status_code==200:
+            data = response.json()
+            print(data)
 

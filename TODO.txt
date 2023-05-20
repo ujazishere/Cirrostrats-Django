@@ -1,19 +1,26 @@
 Practice readibility and simplicity. Include description and documentation for others to read and make changes to it
 
-account for errors on all queries: 
-    state: No information found for *query*. 
-           Try `w kewr` for weather in newark: metar and taf;
-           `i 4425` for metar and taf for departure and destination of flight UA4425
-           `c` for all Terminal C departures; 
-           `c71` for all C71 departures. Includes C71V, C71X, C71Y, C71, etc
-           `A` for for all Terminal A departures
-Move root_gate_checker to root folder.
+Fix exponentially destructive while loop in the Gate_Scrape_Thread.
 
-Seperate functions that scrape for gate into a seperate Gate_scrape class within gate_scrape.py
-    call root_class within it and call Gate_scrape class within root_gate_checker's class
-    This will a 3 fold inheritance 
+Change queries pickle to csv or txt file
+
+Account for reliable and unreliable outlaws at source rather than scheduled flights
+Highlight weather minimums for alternate requirements;(1-2-3 rule per ETA)
+Highlight Icing conditions in blue; LIFR in pink 
+include gate in this packet
+include IFR routing through flight aware. 
+associate flight numbers in gates table to their dedicated information for departure, destination and weather
 
 Use models for database management.
+
+Use Flightaware API to extract clearance and route.
+
+When User first accesses the web the date and time of the latest master should be displayed 
+
+need to be able to receive alerts if the weather deteriorates:
+    Account for any ground stop or delays there might be at any particular airport in the National Airspace System
+
+add delay information and color code it
 
 setup latest changes page. Include updates with dates and description. 
 Fix Gate_Scrape Scrape uppercase. It is unusual.
@@ -27,35 +34,20 @@ Add menu section:
 Deploy the ability to chat. Store all queries with time stamp for later analyses.
     Compare and assess similar frequent queries, account for typo. 
     Take query and if return cannot be formulated let the client know:
-        "Apologies, your query "query" cannot be processed at this time.
+        "Unable to process your search at this time.
         It has been added to our resolutions list for further attention with absolute dedication."
-        **option** Add Feedback
-
-When User first accesses the web the date and time of the latest master should be displayed 
-
-Functionality to predict in dropdown in search similar to google - indexing.
-    search should initiate right away for flight num, airport or gate
-
-add delay information and color code it
+        **option** Add Feedback to go with it
 
 add ability to see raw metar or simplified one with only pertinant information.
 
-Big bug when extracting info from other sources. the data can be messy.
-
-need to be able to receive alerts if the weather deteriorates:
-    Account for any ground stop or delays there might be at any particular airport in the National Airspace System
-
-Account for reliable and unreliable outlaws
-Highlight weather minimums for alternate requirements;(1-2-3 rule per ETA)
-Highlight Icing conditions in blue; LIFR in pink 
-include gate in this packet
-include IFR routing through flight aware. 
-associate flight numbers in gates table to their dedicated information for departure, destination and weather
-
-query types:
-weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf', 'weather', 'metar', 'metar ']
+Big bug when extracting info from other sources. the data can be messy and unreiable. Create redundency
 
 airport name, gate and flight # can be partial/absolute.
+    Essentially a functionality to predict in dropdown in search similar to google - indexing.
+    search should initiate right away for flight num, airport or gate
+
+Add these query words and functionality to chat :
+weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf', 'weather', 'metar', 'metar ']
 
 "{gate} for {partial/complete airport ID/name}" = "{gate} {airport}"
 "{gate} for {partial/complete airport name}" = "{gate} {airport}"   
