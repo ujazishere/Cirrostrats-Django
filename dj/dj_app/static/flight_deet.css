@@ -1,5 +1,5 @@
 body {
-    background-color: #c7c4c4; /* color */
+    background-color: #fbf2e7; /* color */
     margin: 0;
     padding: 0;
   }
@@ -43,17 +43,17 @@ body {
   padding: 10px;
   width: 300px;
   border: none;
-  border: 2px solid black;
+  border: 1px solid black;
   border-radius: 5px;
   margin-right: 10px;
 }
 
 .search-form button {
   padding: 10px;
-  border: none;
+  border: 1px solid black;
   border-radius: 5px;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #ECF9FF;
+  color: #000000;
   cursor: pointer;
 }
 
