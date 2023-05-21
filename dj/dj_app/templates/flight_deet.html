@@ -3,42 +3,46 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'flight_deet.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'flight_deet.css' %}">
   <h3>United Flight Information</h3>
-    <h4>Results for UA{{flight_query}} at {{current_time}}</h4>
+  <h4>Results for UA{{flight_query}} at {{current_time}}</h4>
   {% if dep_des %}
-    <table>
+    <table class="comparison-table">
       <thead>
         <tr>
           <th>Departure</th>
-          <th>Destination</th>
+          {% for type, juice in dep_weather.items %}
+            <th>{{ type }}</th>
+          {% endfor %}
         </tr>
       </thead>
       <tbody>
-        <tr>
-          {% for flight_num, dep_des_list in dep_des.items %}
-          <td>{{ dep_des_list.0 }}</td>
-          <td>{{ dep_des_list.1 }}</td>
-          {% endfor %}
-        </tr>
-      </tbody>
-    </table>
-    <table>
-      <tbody>
-        {% for type, juice  in dep_weather.items %}
+        {% for flight_num, dep_des_list in dep_des.items %}
           <tr>
-            <th>{{ type }}</th>
-            <td>{{ juice   }}</td>
+            <td>{{ dep_des_list.0 }}</td>
+            {% for type, juice in dep_weather.items %}
+              <td>{{ juice }}</td>
+            {% endfor %}
           </tr>
         {% endfor %}
       </tbody>
     </table>
-    <table>
-      <tbody>
-        {% for type, juice  in dest_weather.items %}
-          <tr>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Destination</th>
+          {% for type, juice in dest_weather.items %}
             <th>{{ type }}</th>
-            <td>{{ juice   }}</td>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for flight_num, dep_des_list in dep_des.items %}
+          <tr>
+            <td>{{ dep_des_list.1 }}</td>
+            {% for type, juice in dest_weather.items %}
+              <td>{{ juice }}</td>
+            {% endfor %}
           </tr>
         {% endfor %}
       </tbody>
@@ -47,10 +51,12 @@
     <p>No details found for {{flight_query}}.</p>
   {% endif %}
   {% csrf_token %}
+  <div class="search-form-wrapper">
     <form method="post" class="search-form">
-        {% csrf_token %}
-        <label for="query"></label>
-        <input type="text" name="query" id="query">
-        <button type="submit">Search</button>
+      {% csrf_token %}
+      <label for="query"></label>
+      <input type="text" name="query" id="query">
+      <button type="submit">Search</button>
     </form>
+  </div>
 {% endblock %}
