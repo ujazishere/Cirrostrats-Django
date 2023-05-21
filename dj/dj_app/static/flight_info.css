@@ -1,5 +1,5 @@
 body {
-  background-color: #c7c4c4; /* color */
+  background-color: #fbf2e7; /* color */
   margin: 0;
   padding: 0;
 }
@@ -33,8 +33,8 @@ table {
   border-collapse: collapse;
   width: 80%;
   max-width: 800px;
-  background-color: #A5BCC8;
-  border: 1px solid #ddd;
+  background-color: #FFFBEB;
+  border: 1px solid #FFFBEB;
 }
 
 th, td {
@@ -44,12 +44,12 @@ th, td {
 }
 
 thead {
-  background-color: #bae4fa;
-  color: #333;
+  background-color: #f4e4d998;
+  color: #000000;
 }
 
 tbody tr:nth-child(even) {
-  background-color: #ffffff;
+  background-color: #ECF9FF;
 }
 
 /* Search form styles */
@@ -67,17 +67,17 @@ tbody tr:nth-child(even) {
   padding: 10px;
   width: 300px;
   border: none;
-  border: 2px solid black;
+  border: 1px solid black;
   border-radius: 5px;
   margin-right: 10px;
 }
 
 .search-form button {
   padding: 10px;
-  border: none;
+  border: 1px solid black;
   border-radius: 5px;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #ECF9FF;
+  color: #000000;
   cursor: pointer;
 }
 
