@@ -10,8 +10,8 @@ hoq
 q
 tatus
 base.ppk
-dj/master_UA.pkl
-dj/outlaws.pkl
+# dj/master_UA.pkl
+# dj/outlaws.pkl
 
 # C extensions
 *.so
