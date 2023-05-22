@@ -112,11 +112,11 @@ class Gate_scrape_thread(threading.Thread):
     # run method is the inherited. It gets called as
     def run(self):
         current_time = Gate_Scrape().date_time
-        self.gc.activator()
-        # while True:
+        # self.gc.activator()
+        while True:
             # print(current_time)
-            # self.gc.activator()
-            # time.sleep(60)        # This infinite loop is exponentially destructive. It runs as soon as the web is loaded
+            self.gc.activator()
+            time.sleep(600)        # This infinite loop is exponentially destructive. It runs as soon as the web is loaded
                                         # while it has a memory location it runs again when query is requested and makes 
                                             # another unnecessary memory location    
 # flights = Gate_checker('').ewr_UA_gate()
