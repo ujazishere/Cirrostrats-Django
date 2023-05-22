@@ -1,6 +1,15 @@
 Practice readibility and simplicity. Include description and documentation for others to read and make changes to it
 
-Fix exponentially destructive while loop in the Gate_Scrape_Thread.
+**IS:   fix and cleanup description in examples on homepage.
+        make search bar static and minimal.
+
+Weather:
+    TAF can be out of index. remove TAF if unavailable. Redirect to no found page if no weather found.
+    for example `w kcdw` returns error since index is out range probably because of no TAF.
+
+Fix exponentially destructive while loop in the Gate_Scrape_Thread within root_gate_checker.py
+
+Use models and sql for database management.
 
 Change queries pickle to csv or txt file
 
@@ -11,11 +20,15 @@ include gate in this packet
 include IFR routing through flight aware. 
 associate flight numbers in gates table to their dedicated information for departure, destination and weather
 
-Use models for database management.
-
 Use Flightaware API to extract clearance and route.
 
 When User first accesses the web the date and time of the latest master should be displayed 
+
+Add menu section:
+    List all gates, 
+    Analyses, statistics and misery map using delay graph.
+        e.g: Kudos to gate C101 for most ontime departures. 
+            Worst gate for delays(show sorted values)   
 
 need to be able to receive alerts if the weather deteriorates:
     Account for any ground stop or delays there might be at any particular airport in the National Airspace System
@@ -24,12 +37,6 @@ add delay information and color code it
 
 setup latest changes page. Include updates with dates and description. 
 Fix Gate_Scrape Scrape uppercase. It is unusual.
-
-Add menu section:
-    List all gates, 
-    Analyses, statistics and misery map using delay graph.
-        e.g: Kudos to gate C101 for most ontime departures. 
-            Worst gate for delays(show sorted values)   
 
 Deploy the ability to chat. Store all queries with time stamp for later analyses.
     Compare and assess similar frequent queries, account for typo. 
