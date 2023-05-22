@@ -1,25 +1,27 @@
 body {
-  background-color: #fbf2e7; /* color */
+  background-color: #fbf2e7;
   margin: 0;
   padding: 0;
 }
 
 h1 {
-  font-size: 10;
+  font-size: 100;
   font-weight: bold;
   text-align: center;
   margin-top: 50px;
 }
 
-h3 {font-size: 20;
-    font-weight: bold;
-    text-align: center;
-  }
+h3 {
+  font-size: 20;
+  font-weight: bold;
+  text-align: center;
+}
 
-  h4 {font-size: 10;
-    font-weight: bold;
-    text-align: center;
-  }
+h4 {
+  font-size: 20;
+  font-weight: bold;
+  text-align: center;
+}
 
 p {
   font-size: 24px;
@@ -33,11 +35,12 @@ table {
   border-collapse: collapse;
   width: 80%;
   max-width: 800px;
-  background-color: #FFFBEB;
-  border: 1px solid #FFFBEB;
+  background-color: #fffbeb;
+  border: 1px solid #fffbeb;
 }
 
-th, td {
+th,
+td {
   padding: 10px;
   text-align: left;
   border: 1px solid #000000;
@@ -49,18 +52,25 @@ thead {
 }
 
 tbody tr:nth-child(even) {
-  background-color: #ECF9FF;
+  background-color: #ecf9ff;
 }
 
 /* Search form styles */
+.search-form-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background-color: #fbf2e7;
+  border: 1px solid black;
+  padding: 10px;
+}
+
 .search-form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  border: black;
-  border-radius: 5px;
-
 }
 
 .search-form input[type="text"] {
@@ -76,7 +86,7 @@ tbody tr:nth-child(even) {
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #ECF9FF;
+  background-color: #ecf9ff;
   color: #000000;
   cursor: pointer;
 }
