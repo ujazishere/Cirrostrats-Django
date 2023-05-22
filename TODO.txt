@@ -2,23 +2,34 @@ Practice readibility and simplicity. Include description and documentation for o
 
 **IS:   fix and cleanup description in examples on homepage.
         make search bar static and minimal.
+        mobile site layout should be presented when requested a mobile site.
 
-Weather:
-    TAF can be out of index. remove TAF if unavailable. Redirect to no found page if no weather found.
-    for example `w kcdw` returns error since index is out range probably because of no TAF.
 
-Fix exponentially destructive while loop in the Gate_Scrape_Thread within root_gate_checker.py
+UV:    Weather:
+        TAF can be out of index. remove TAF if unavailable. Redirect to no found page if no weather found.
+        for example `w kcdw` returns error since index is out range probably because of TAF is not available for it.
 
-Use models and sql for database management.
+        Fix exponentially destructive while loop in the Gate_Scrape_Thread within root_gate_checker.py
 
-Change queries pickle to csv or txt file
+        Use models and sql for database management.
 
-Account for reliable and unreliable outlaws at source rather than scheduled flights
-Highlight weather minimums for alternate requirements;(1-2-3 rule per ETA)
-Highlight Icing conditions in blue; LIFR in pink 
-include gate in this packet
-include IFR routing through flight aware. 
-associate flight numbers in gates table to their dedicated information for departure, destination and weather
+        Change queries pickle to csv or txt file to be able to view it better
+
+        move reliable structured data operation into activator().
+    	treat unreliable flights at source before it is dumped as master.pkl to keep master pikle clean.
+
+        Account for reliable and unreliable outlaws at source rather than scheduled flights
+
+examine metar and TAF for parsing
+
+flight deet packet:
+    include zulu time top right corner with seconds.
+    include zulu departure and arrival times
+    Highlight weather minimums for alternate requirements;(1-2-3 rule per ETA)
+    Highlight Icing conditions in blue; LIFR in pink 
+    include gate in this packet of information
+    include IFR routing through flight aware if able
+    associate flight numbers in gates table to their dedicated information for departure, destination and weather
 
 Use Flightaware API to extract clearance and route.
 
