@@ -53,7 +53,7 @@ class Gate_Scrape(Root_class):
                 # <Future at 0x7f08f203ec90 state=running>: 'AA456',
                 # <Future at 0x7f08f203ed10 state=running>: 'DL789'
                         # }
-        with ThreadPoolExecutor(max_workers=500) as executor:
+        with ThreadPoolExecutor(max_workers=350) as executor:
             futures = {executor.submit(multithreader, flt_num): flt_num for flt_num in
                         input1}
             
