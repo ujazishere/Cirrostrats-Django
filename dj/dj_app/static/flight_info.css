@@ -31,12 +31,13 @@ p {
 }
 
 table {
-  margin: 0 auto !important;
+  margin: 0 auto;
   border-collapse: collapse;
   width: 80%;
   max-width: 800px;
   background-color: #fffbeb;
   border: 1px solid #fffbeb;
+  margin-bottom: 100px;
 }
 
 th,
@@ -62,9 +63,10 @@ tbody tr:nth-child(even) {
   left: 0;
   width: 100%;
   z-index: 100;
-  background-color: #fbf2e7;
-  border: 1px solid black;
+  background-color: rgba(251, 242, 231, 0.0); /* Use rgba color with an alpha value for transparency */  
+  border: 0px solid black;
   padding: 10px;
+  margin-bottom: 20px; /* Add margin-bottom to create space for the table */
 }
 
 .search-form {
@@ -117,5 +119,13 @@ tbody tr:nth-child(even) {
 
   .search-form input[type="text"] {
     width: 150px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  /* Other styles... */
+  
+  .search-form-wrapper {
+    margin-bottom: 10px; /* Adjust margin-bottom for smaller screens */
   }
 }
