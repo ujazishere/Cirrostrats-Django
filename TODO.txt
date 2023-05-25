@@ -1,26 +1,46 @@
 Practice readibility and simplicity. Include description and documentation for others to read and make changes to it
 
-**IS:   fix and cleanup description in examples on homepage.
+**IS:   
         make search bar static and minimal.
+        When searching random stuff the `try example` sectino is stuck to the left. Align it to center like home.html
         mobile site layout should be presented when requested a mobile site.
+        weather table extends to the edge lines on the sides. restrict them to a few inches away from the edge
 
 
-UV:    Weather:
-        TAF can be out of index. remove TAF if unavailable. Redirect to no found page if no weather found.
-        for example `w kcdw` returns error since index is out range probably because of TAF is not available for it.
+**UV:   
+        DONE! fix and cleanup description in examples on homepage.
+        weather:
+            DONE! TAF can be out of index. remove TAF if unavailable. Redirect to no found page if no weather found.
+                for example `w kcdw` returns error since index is out range probably because of TAF is not available for it.
 
-        Fix exponentially destructive while loop in the Gate_Scrape_Thread within root_gate_checker.py
+            seperate end point TAF by "   " and replace it with new line to make it viewable.
+    
+        Done! Major time issue fixes. 
 
+        Partially Done! Fix exponentially destructive while loop in the Gate_Scrape_Thread within root_gate_checker.py
+
+        Be more descriptive on description. Include Use cases: the `w` switch and the `i` switch
+        'If you request a gate in Newark it gives you all he scheduled departures at that gate.
+            for example `C71X` will show you list of all scheduled departures at C71X. 
+            you can also just search 'X` and it will attempt to find gates with that letter. `C71` will return flight scheduled at all C71 gates that includes the V W X Y Z gates.
+        Only scrape actual times more frequently and from different web.
+        Scrape scheduled times less frequently as mostly static.
+        
+        Add all past queries in the web itself in a menu section so it is easily accessible. Include Feedback form.
         Use models and sql for database management.
 
         Change queries pickle to csv or txt file to be able to view it better
 
         move reliable structured data operation into activator().
     	treat unreliable flights at source before it is dumped as master.pkl to keep master pikle clean.
-
         Account for reliable and unreliable outlaws at source rather than scheduled flights
 
-examine metar and TAF for parsing
+        add activator() scrape to include data from few hours later
+
+        Add source information 
+
+
+examine metar and TAF for parsing and color coding IFR and LIFR ceilings, Visibility, freezing conditions and runway condition codes.
 
 flight deet packet:
     include zulu time top right corner with seconds.

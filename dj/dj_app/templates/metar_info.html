@@ -9,10 +9,10 @@
   {% if weather %}
   <table>
     <tbody>
-      {% for type, juice  in weather.items %}
+      {% for title, raw_data  in weather.items %}
         <tr>
-          <th>{{ type }}</th>
-          <td>{{ juice   }}</td>
+          <th>{{ title }}</th>
+          <td>{{ raw_data }}</td>
         </tr>
       {% endfor %}
     </tbody>

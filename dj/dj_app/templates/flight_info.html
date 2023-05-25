@@ -12,7 +12,7 @@
       <button type="submit">Search</button>
     </form>
   </div>
-  <h3>United flights Departures at EWR</h3>
+  <h3>United Departures at EWR</h3>
   {% if gate %}
     <h4>Results for {{gate}} at {{current_time}}</h4>
   {% endif %}
@@ -39,13 +39,19 @@
       </tbody>
     </table>
   {% else %}
-    <p>No flights found for {{gate}}.</p>
-    <p>
-      <p>Try `w kewr` for weather in Newark: metar and taf;</p>
-      <p>`i 4425` for metar and taf for departure and destination of flight UA4425</p>
-      <p>`c` for all Terminal C departures;</p>
-      <p>`c71` for all C71 departures. Includes C71T, C71V, C71W, C71X, C71Y, C71</p>
-      <p>`A` for for all Terminal A departures </p>
-    </p>
+  <body>
+    <h3>No Results for {{gate}}.</h3>
+    <p1>
+      <strong>Try the following Examples:</strong>
+      <br><br>
+      <em>C71X</em>: Lists all scheduled departures from the requested gate. You can just search for `X` in this case.
+      <br><br>
+      <em>i 4425:</em> Returns METAR, and TAF at both departure and arrival airports for the given flight number. Use the `i` switch followed by the flight number
+      <br><br>
+      <em>w KEWR:</em> Returns the latest METAR and TAF for the given airport. Use the `w` switch followed by the 4 letter ICAO identifier of the airport. 
+      <br><br>
+      Empty search returns information on all gates for United flights in KEWR.
+    </p1>
+  </body>
   {% endif %}
 {% endblock %}

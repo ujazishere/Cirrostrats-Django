@@ -22,14 +22,15 @@
     </form>
     <h3> Note: Gate Queries Are Currently Only Available for United Flights in Newark.</h3>
     <p>
-      <strong>Examples:</strong>
+      <strong>Try the following Examples:</strong>
       <br><br>
-      <em>C71X</em>: returns all flights' scheduled times from this gate. Gives their scheduled time of departure and actual.
+      <em>C71X</em>: Lists all scheduled departures from the requested gate. You can just search for `X` in this case.
       <br><br>
-      <em>i 4425:</em> - returns the departure airport, arrival airport, METAR, and TAF at both departure and arrival airport.
+      <em>i 4425:</em> Returns METAR, and TAF at both departure and arrival airports for the given flight number. Use the `i` switch followed by the flight number
       <br><br>
-      <em>w kewr:</em> - returns METAR and TAF of the airport in question
-      Empty Query: empty query returns all gates.
+      <em>w KEWR:</em> Returns the latest METAR and TAF for the given airport. Use the `w` switch followed by the 4 letter ICAO identifier of the airport.
+      <br><br>
+      Empty search returns information on all gates for United flights in KEWR.
     </p>
   </body>
 </html>

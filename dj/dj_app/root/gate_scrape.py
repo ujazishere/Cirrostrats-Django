@@ -3,6 +3,8 @@ from .root_class import Root_class
 import time
 from datetime import datetime
 import pickle
+import pytz
+
 
 class Gate_Scrape(Root_class):
     def __init__(self) -> None:
@@ -19,7 +21,10 @@ class Gate_Scrape(Root_class):
         # returns a dict with value of list that contains 3 items. Refer to the `return` item
         airline_code = flt_num[:2]      # first 2 characters of airline code eg. UA, DL
         flight_number_without_airline_code = flt_num[2:]
-        raw_date = self.latest_date_raw
+        
+        eastern = pytz.timezone('US/eastern')
+        now = datetime.now(eastern)
+        raw_date = now.strftime('%Y%m%d')           # formaatted as YYYYMMDD
         
         flight_view = f"https://www.flightview.com/flight-tracker/{airline_code}/{flight_number_without_airline_code}?date={raw_date}&depapt=EWR"
         soup2 = self.request(flight_view, timeout=5)
@@ -139,12 +144,13 @@ class Gate_Scrape(Root_class):
             # pickle.dump(departures_ewr_UA, f)
         
         ex = self.exec(departures_ewr_UA, self.pick_flight_data)
-        
+        completed_flights = ex['completed']
+        troubled_flights = ex['troubled']
         # Cant decide if master should be called or kept empty. When kept empty it saves disk space. When called it keeps track of old information.
         # master = self.load_master()
         master = {}
-        master.update(ex['completed'])
-        self.troubled.update(ex['troubled'])
+        master.update(completed_flights)
+        self.troubled.update(troubled_flights)
         
        
         # TODO:There is a probelm with opening the master_UA.pkl file as is.
