@@ -4,6 +4,8 @@ from time import sleep
 from .root_class import Root_class
 from .gate_scrape import Gate_Scrape
 import time
+from datetime import datetime
+import pytz
 import re
 
 
@@ -56,12 +58,12 @@ class Gate_checker(Root_class):
                         'scheduled': scheduled,
                         'actual': actual,
                     })
-                    print('outlaws_reliable', 'gt', gate,  scheduled, actual)
             
             else:
                 outlaws_unreliable.append(dict({"flight_number": flight_num, "values": values}))
-                print('unreliable outlaws', outlaws_unreliable)
         
+        # print('outlaws_reliable', 'gt', gate,  scheduled, actual)
+        print('outlaws_reliable and outlaws_unreliable:', len(outlaws_reliable), len(outlaws_unreliable))
         
         outlaws = dict({
             self.date_time() : [dict({'reliable_outlaws':outlaws_reliable,'unreliable_outlaws':outlaws_unreliable})]
@@ -111,12 +113,15 @@ class Gate_scrape_thread(threading.Thread):
     
     # run method is the inherited. It gets called as
     def run(self):
-        current_time = Gate_Scrape().date_time
+        
         # self.gc.activator()
         while True:
-            # print(current_time)
             self.gc.activator()
-            time.sleep(600)        # This infinite loop is exponentially destructive. It runs as soon as the web is loaded
-                                        # while it has a memory location it runs again when query is requested and makes 
-                                            # another unnecessary memory location    
+            
+            eastern = pytz.timezone('US/eastern')           # Time stamp is local to this Loop. Avoid moving it around
+            now = datetime.now(eastern)
+            latest_time = now.strftime("%#I:%M%p, %b %d.")
+            print('Pulled Gate Scrape at:', latest_time)
+            
+            time.sleep(600)        # TODO: Requires stops between 11:55pm and 4am while also pulling flights from morning once.
 # flights = Gate_checker('').ewr_UA_gate()

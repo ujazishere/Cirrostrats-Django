@@ -14,7 +14,6 @@ class Weather_display:
     def scrape(self, query=None):
         
         # Find ways to convert raw query input into identifiable airport ID
-        print('query', query)
         airport_id = query
         TAF =  'on'
         
@@ -23,28 +22,48 @@ class Weather_display:
         soup = bs4(response.content, 'html.parser')
         code_tag = soup.find_all('code')
         
-        # code_tag is bs4 element with meter and taf in it. converted it to list then [0]th item is metar in bs4 that is
-        # converted whole of it to str which is then split and converted to list
+        # code_tag is bs4 element with meter and taf in it. 
 
         metar_index = 0
         taf_index = 1
         
-        metar_and_taf_in_bs4_list = list(code_tag)
-        
-        if metar_index < len(metar_and_taf_in_bs4_list):
+        metar_and_taf_in_bs4_list = list(code_tag)      # This list has 2 items. A metar and a TAF.
+        print(len(metar_and_taf_in_bs4_list))
+        if len(metar_and_taf_in_bs4_list) == 2:         # If both metar and TAF are available
+            metar_raw = str(list(code_tag)[metar_index].text)
+            taf_raw = str(list(code_tag)[taf_index].text)
+            
+            print(taf_raw.replace("   ", "/n"))             # TODO: Fix the nwe line problem in TAF 
+            taf_raw = taf_raw.replace("FM", "\nFrom")
+            
+            # taf_raw = taf_raw.replace("   ", "/n")        #.replace() does not work in Django. Works outside.
+        elif len(metar_and_taf_in_bs4_list) == 1:       # if only METAR is available which is the first and only item
+            metar_raw = str(list(code_tag)[metar_index].text)
+            taf_raw = 'NA'
+        else:                                           # if neither are available
+            metar_raw = 'NA'
+            taf_raw = 'NA'
+        '''
+        if metar_and_taf_in_bs4_list[0] and metar_and_taf_in_bs4_list[1]:
+            metar_raw = str(list(code_tag)[metar_index].text)
+            taf_raw = str(list(code_tag)[taf_index].text)
+            
+            
+        elif metar_and_taf_in_bs4_list[0] and not metar_and_taf_in_bs4_list[1]:
             metar_raw = str(list(code_tag)[0].text)
-            taf_raw = str(list(code_tag)[1].text)
-        else:
-            metar_raw = ''
             taf_raw = ''
             
-        
+        else:          # Checking if the bs4 element even contains anything
+            metar_raw = ''
+            taf_raw = ''
+'''        
         
         # split returns into list form for further processing.
         # metar = metar_raw.split()
         # taf = taf_raw.split()
-    
+        # print((taf_raw))
         return dict({'metar': metar_raw, 'taf': taf_raw})
+
     
 
 # weather_display = Weather_display()

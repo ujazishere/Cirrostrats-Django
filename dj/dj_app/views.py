@@ -16,7 +16,7 @@ if run_lengthy_web_scrape:
     gc_thread = Gate_scrape_thread()
     gc_thread.start()
 
-current_time = Gate_checker().date_time
+current_time = Gate_checker().date_time()
 
 def home(request):
     
@@ -27,7 +27,7 @@ def home(request):
         # opening queries, updating it and extracting it again.
         with open('queries.pkl', 'rb') as f:
             queries = pickle.load(f)           # queries.pkl is a dictionary with time as keys and queries as values.
-            queries.update(dict({current_time(): main_query}))
+            queries.update(dict({current_time: main_query}))
         with open('queries.pkl', 'wb') as f:
             pickle.dump(queries, f)
             
@@ -63,7 +63,6 @@ def parse_query(request, main_query):
             return flight_deets(request, flight_query)
         
         else:       # If the query is not recognized:
-            print(5)
             return gate_info(request, main_query=main_query)
             '''
             florida_airports = airports['Florida'][1]
@@ -91,7 +90,7 @@ def gate_info(request,main_query):
     # Dictionary format a list with one or many dictionaries each dictionary containing 4 items:gate,flight,scheduled,actual
 
     current_time = Gate_checker().date_time()
-    print(1, current_time)
+    print('Gate checked at :', current_time)
     gate_data_table = Gate_checker().ewr_UA_gate(gate)
     
     # showing info if the info is found else it falls back to `No flights found for {{gate}}`on flight_info.html
@@ -139,13 +138,11 @@ def flight_deets(request, flight_query ):
 def metar_display(request,weather_query):
     
     weather_query = weather_query.strip()       # remove leading and trailing spaces. Seems precautionary.
-    weather = Weather_display()
+    airport = weather_query[-4:]
     
-    # TODO: quert `met kewr` still gives error. Figure out how to account for errors and queries that are not found.
+    weather = Weather_display()
     weather = weather.scrape(weather_query)
     
-    airport = weather_query[-4:]
-
     return render(request, 'metar_info.html', {'airport': airport, 'weather': weather})
 
     

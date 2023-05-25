@@ -22,7 +22,10 @@ class Root_class():
     def date_time(self):
         # TODO: This one has not been used much yet.
                     # but need to be able to show on the web date and time the information was updated.
-        return self.latest_time
+        eastern = pytz.timezone('US/eastern')
+        now = datetime.now(eastern)
+        latest_time = now.strftime("%#I:%M%p, %b %d.")
+        return latest_time
     
 
     def request(self, url, timeout=None):
