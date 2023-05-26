@@ -1,10 +1,10 @@
 Practice readibility and simplicity. Include description and documentation for others to read and make changes to it
 
 **IS:   
-        make search bar static and minimal.
-        When searching random stuff the `try example` sectino is stuck to the left. Align it to center like home.html
-        mobile site layout should be presented when requested a mobile site.
-        weather table extends to the edge lines on the sides. restrict them to a few inches away from the edge
+        make search bar static and minimal- done 
+        When searching random stuff the `try example` sectino is stuck to the left. Align it to center like home.html - done
+        mobile site layout should be presented when requested a mobile site. - still figurin this out 
+        weather table extends to the edge lines on the sides. restrict them to a few inches away from the edge 
 
 
 **UV:   
