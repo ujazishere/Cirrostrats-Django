@@ -1,62 +1,51 @@
 body {
-  background-color: #fbf2e7;
-  margin: 0;
-  padding: 0;
+background-color: #fbf2e7;
+margin: 0;
+padding: 0;
 }
 
 h1 {
-  font-size: 100;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 50px;
+font-size: 36px;
+font-weight: bold;
+text-align: center;
+margin-top: 50px;
 }
 
-h3 {
-  font-size: 20;
-  font-weight: bold;
-  text-align: center;
-}
-
-h4 {
-  font-size: 20;
-  font-weight: bold;
-  text-align: center;
-}
-
+h3,
+h4,
 p {
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 30px;
+font-size: 18px;
+font-weight: bold;
+text-align: center;
+margin-top: 30px;
 }
 
 table {
-  margin: 0 auto;
-  border-collapse: collapse;
-  width: 80%;
-  max-width: 800px;
-  background-color: #fffbeb;
-  border: 1px solid #fffbeb;
-  margin-bottom: 100px;
+margin: 0 auto;
+border-collapse: collapse;
+width: 100%;
+max-width: 800px;
+background-color: #fffbeb;
+margin-bottom: 100px;
 }
 
 th,
 td {
-  padding: 10px;
-  text-align: left;
-  border: 1px solid #000000;
+padding: 10px;
+text-align: left;
+border: 1px solid #000000;
 }
 
 thead {
-  background-color: #f4e4d998;
-  color: #000000;
+background-color: #f4e4d998;
+color: #000000;
 }
 
 tbody tr:nth-child(even) {
-  background-color: #ecf9ff;
+background-color: #ecf9ff;
 }
 
-/* Search form styles */
+
 .search-form-wrapper {
   position: fixed;
   bottom: 0;
@@ -93,39 +82,23 @@ tbody tr:nth-child(even) {
   cursor: pointer;
 }
 
-/* Media queries for responsiveness */
 @media only screen and (max-width: 600px) {
-  h1 {
-    font-size: 36px;
-  }
+.search-form-wrapper {
+width: 200px;
+visibility: visible;
+}
 
-  p {
-    font-size: 18px;
-  }
-
-  .search-form input[type="text"] {
-    width: 200px;
-  }
+.search-form input[type="text"] {
+width: fit-content
+}
 }
 
 @media only screen and (max-width: 400px) {
-  h1 {
-    font-size: 24px;
-  }
-
-  p {
-    font-size: 16px;
-  }
-
-  .search-form input[type="text"] {
-    width: 150px;
-  }
+h1 {
+font-size: 18px;
 }
 
-@media only screen and (max-width: 600px) {
-  /* Other styles... */
-  
-  .search-form-wrapper {
-    margin-bottom: 10px; /* Adjust margin-bottom for smaller screens */
-  }
+p {
+font-size: 14px;
+}
 }
