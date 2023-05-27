@@ -27,13 +27,13 @@ class Weather_display:
         metar_index = 0
         taf_index = 1
         
-        metar_and_taf_in_bs4_list = list(code_tag)      # This list has 2 items. A metar and a TAF.
-        print(len(metar_and_taf_in_bs4_list))
+        metar_and_taf_in_bs4_list = list(code_tag)      # This list has 2 string items. A metar and a TAF.
+        
         if len(metar_and_taf_in_bs4_list) == 2:         # If both metar and TAF are available
             metar_raw = str(list(code_tag)[metar_index].text)
             taf_raw = str(list(code_tag)[taf_index].text)
             
-            print(taf_raw.replace("   ", "/n"))             # TODO: Fix the nwe line problem in TAF 
+            # print(taf_raw.replace("   ", "/n"))             # TODO: Fix the nwe line problem in TAF since it doesnt work in Django
             taf_raw = taf_raw.replace("FM", "\nFrom")
             
             # taf_raw = taf_raw.replace("   ", "/n")        #.replace() does not work in Django. Works outside.

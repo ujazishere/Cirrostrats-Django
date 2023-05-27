@@ -5,19 +5,23 @@ Practice readibility and simplicity. Include description and documentation for o
         When searching random stuff the `try example` sectino is stuck to the left. Align it to center like home.html
         mobile site layout should be presented when requested a mobile site.
         weather table extends to the edge lines on the sides. restrict them to a few inches away from the edge
+        Investigte this WARNINGS from terminal :
+            ?: (staticfiles.W004) The directory 'C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\static' in the STATICFILES_DIRS setting does not exist.
 
 
 **UV:   
         DONE! fix and cleanup description in examples on homepage.
         weather:
             DONE! TAF can be out of index. remove TAF if unavailable. Redirect to no found page if no weather found.
-                for example `w kcdw` returns error since index is out range probably because of TAF is not available for it.
+                for example `w kcdw` returns error since index is out range probably because TAF is not available for it.
 
             seperate end point TAF by "   " and replace it with new line to make it viewable.
     
-        Done! Major time issue fixes. 
+        Done! Major time issue fixes for pulling lengthy web scrape . 
 
         Partially Done! Fix exponentially destructive while loop in the Gate_Scrape_Thread within root_gate_checker.py
+
+        Fix date and time on `i` switch output
 
         Be more descriptive on description. Include Use cases: the `w` switch and the `i` switch
         'If you request a gate in Newark it gives you all he scheduled departures at that gate.

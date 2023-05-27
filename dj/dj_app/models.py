@@ -10,3 +10,8 @@ class Flight(models.Model):
 
     def __str__(self):
         return f"{self.gate,} - {self.flight_number}"
+
+
+class SearchQuery(models.Model):
+    query = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)            # adds a timestamp
