@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import SearchQuery
 from .root.root_gate_checker import Gate_checker, Gate_scrape_thread
 from .root.MET_TAF_parse import Weather_display
 from .root.dep_des import Pull_flight_info
@@ -24,12 +25,8 @@ def home(request):
     if request.method == "POST":
         main_query = request.POST.get('query','')
         
-        # opening queries, updating it and extracting it again.
-        with open('queries.pkl', 'rb') as f:
-            queries = pickle.load(f)           # queries.pkl is a dictionary with time as keys and queries as values.
-            queries.update(dict({current_time: main_query}))
-        with open('queries.pkl', 'wb') as f:
-            pickle.dump(queries, f)
+        search_query = SearchQuery(query=main_query)      # Adds search queries to the 
+        search_query.save()
             
         return parse_query(request, main_query)
 
