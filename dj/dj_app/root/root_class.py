@@ -6,22 +6,11 @@ import pickle
 
 class Root_class():
     
-    def __init__(self,):
-        eastern = pytz.timezone('US/eastern')
-        now = datetime.now(eastern)
-        self.latest_time = now.strftime("%#I:%M%p, %b %d.")
-        self.latest_date_raw = now.strftime('%Y%m%d')
-        self.latest_date_viewable = now.strftime('%b %d, %Y')
-
-
-        # TODO: web splits time in 3 parts.
-                # Makes it harder to pick appropriate information about flights
-                # from different times of the date
+    def __init__(self) -> None:
+            pass
 
 
     def date_time(self):
-        # TODO: This one has not been used much yet.
-                    # but need to be able to show on the web date and time the information was updated.
         eastern = pytz.timezone('US/eastern')
         now = datetime.now(eastern)
         latest_time = now.strftime("%#I:%M%p, %b %d.")

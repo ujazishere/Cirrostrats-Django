@@ -1,11 +1,5 @@
-import threading
 import pickle
-from time import sleep
 from .root_class import Root_class
-from .gate_scrape import Gate_Scrape
-import time
-from datetime import datetime
-import pytz
 import re
 
 
@@ -104,24 +98,3 @@ class Gate_checker(Root_class):
         
         return flights
 
-
-class Gate_scrape_thread(threading.Thread):
-    def __init__(self):
-        super().__init__()
-        self.gc = Gate_Scrape()
-
-    
-    # run method is the inherited. It gets called as
-    def run(self):
-        
-        # self.gc.activator()
-        while True:
-            self.gc.activator()
-            
-            eastern = pytz.timezone('US/eastern')           # Time stamp is local to this Loop. Avoid moving it around
-            now = datetime.now(eastern)
-            latest_time = now.strftime("%#I:%M%p, %b %d.")
-            print('Pulled Gate Scrape at:', latest_time)
-            
-            time.sleep(600)        # TODO: Requires stops between 11:55pm and 4am while also pulling flights from morning once.
-# flights = Gate_checker('').ewr_UA_gate()

@@ -43,23 +43,9 @@ class Weather_display:
         else:                                           # if neither are available
             metar_raw = 'NA'
             taf_raw = 'NA'
-        '''
-        if metar_and_taf_in_bs4_list[0] and metar_and_taf_in_bs4_list[1]:
-            metar_raw = str(list(code_tag)[metar_index].text)
-            taf_raw = str(list(code_tag)[taf_index].text)
-            
-            
-        elif metar_and_taf_in_bs4_list[0] and not metar_and_taf_in_bs4_list[1]:
-            metar_raw = str(list(code_tag)[0].text)
-            taf_raw = ''
-            
-        else:          # Checking if the bs4 element even contains anything
-            metar_raw = ''
-            taf_raw = ''
-'''        
         
-        # split returns into list form for further processing.
-        # metar = metar_raw.split()
+        
+        # metar = metar_raw.split()     # split returns into list form for further processing.
         # taf = taf_raw.split()
         # print((taf_raw))
         return dict({'metar': metar_raw, 'taf': taf_raw})
@@ -70,37 +56,3 @@ class Weather_display:
 # met_taf = weather_display.scrape('kewr')
 
 # print(met_taf)
-
-'''
-while True:
-
-    # Asking User prompt what they want.
-    TAF = 'on' if TAF_bools == 'yes' else 'off'
-
-    awc_web = f"https://aviationweather.gov/metar/data?ids={airport_id}&format=raw&hours=0&taf={TAF}&layout=on"
-
-    response = requests.get(awc_web)
-    soup = bs4(response.content, 'html.parser')
-    code_tag = soup.find_all('code')
-
-
-    # code_tag is bs4 element with meter and taf in it. converted it to list then [0]th item is metar in bs4 that is
-    # converted whole of it to str which is then split and converted to list
-    metar_raw = str(list(code_tag)[0].text)
-    taf_raw = str(list(code_tag)[1].text)
-    
-    metar = metar_raw.split()
-    taf = taf_raw.split()
-    # taf = str(list(code_tag)[1].text).split()
-
-    # stripping the <code> stuff at the beginning. initially I could see it but seems like now that's not the case.
-    # metar[0] = metar[0][6:]
-    # taf[0] = taf[0][6:]
-
-    print(metar_raw)
-    print(taf_raw)
-
-    #  TODO: parse data to detect key indicators like ceilings below 2k vis below 3sm, windshear,
-
-template = ['Station identifier', 'Date and time of the observation', 'Wind direction and speed', 'Visibility', 'Weather phenomena', 'Sky conditions', 'Temperature and dew point', 'Altimeter setting']
-'''
