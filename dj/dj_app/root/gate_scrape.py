@@ -50,7 +50,7 @@ class Gate_Scrape(Root_class):
         
         # Flight.objects.
         
-        # return {flt_num: [gate, scheduled, actual]}
+        return {flt_num: [gate, scheduled, actual]}
 
         # This is a format that resembles more to the format in the final output.
         # return {'flight_num': flt_num, 'gate': gate, 'scheduled': scheduled, 'actual': actual}
