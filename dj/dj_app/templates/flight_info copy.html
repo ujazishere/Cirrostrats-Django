@@ -12,6 +12,10 @@
       <button type="submit">Search</button>
     </form>
   </div>
+  <h3>United Departures at EWR</h3>
+  {% if gate %}
+    <h4>Results for {{gate}} at {{current_time}}</h4>
+  {% endif %}
   {% if gate_data_table %}
     <table>
       <thead>
@@ -24,6 +28,7 @@
       </thead>
       <tbody>
       {% for flight in gate_data_table %}
+        <!-- <h3> {{ flight.gate }}</h3> -->
         <tr>
           <td>{{ flight.gate }}</td>
           <td>{{ flight.flight_number }}</td>
@@ -34,6 +39,19 @@
       </tbody>
     </table>
   {% else %}
+  <body>
     <h3>No Results for {{gate}}.</h3>
+    <h5>
+      <strong>Try the following Examples:</strong>
+      <br><br>
+      <em>C71X</em>: Lists all scheduled departures from the requested gate. You can just search for `X` in this case.
+      <br><br>
+      <em>i 4425:</em> Returns METAR, and TAF at both departure and arrival airports for the given flight number. Use the `i` switch followed by the flight number
+      <br><br>
+      <em>w KEWR:</em> Returns the latest METAR and TAF for the given airport. Use the `w` switch followed by the 4 letter ICAO identifier of the airport. 
+      <br><br>
+      Empty search returns information on all gates for United flights in KEWR.
+    </h5>
+  </body>
   {% endif %}
 {% endblock %}
