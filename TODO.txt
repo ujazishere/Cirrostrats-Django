@@ -1,59 +1,57 @@
 Practice readibility and simplicity. Include description and documentation for others to read and make changes to it
 
 **IS:   
-        make search bar static and minimal- done 
-        When searching random stuff the `try example` sectino is stuck to the left. Align it to center like home.html - done
+        DONE! make search bar static and minimal
+        PARTIALLY DONE! When searching random stuff the `try example` sectino is stuck to the left. Align it to center like home.html
+
         mobile site layout should be presented when requested a mobile site. - still figurin this out 
+        Include Feedback form in the menu section
+        link homepage in the menu to the main homepage. Add About section and contact emails. Add sources, create new html for such.
         weather table extends to the edge lines on the sides. restrict them to a few inches away from the edge 
-        Investigte this WARNINGS from terminal :
+        Investigte this `WARNINGS` from terminal when running `runserver` :
             ?: (staticfiles.W004) The directory 'C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\static' in the STATICFILES_DIRS setting does not exist.
 
 
 **UV:   
         DONE! fix and cleanup description in examples on homepage.
-        weather:
-            DONE! TAF can be out of index. remove TAF if unavailable. Redirect to no found page if no weather found.
+        DONE! TAF can be out of index. remove TAF if unavailable. Redirect to no found page if no weather found.
                 for example `w kcdw` returns error since index is out range probably because TAF is not available for it.
-
-            seperate end point TAF by "   " and replace it with new line to make it viewable.
-    
         Done! Major time issue fixes for pulling lengthy web scrape . 
-
-        Partially Done! Fix exponentially destructive while loop in the Gate_Scrape_Thread within root_gate_checker.py
-
-        Fix date and time on `i` switch output
-
-        Be more descriptive on description. Include Use cases: the `w` switch and the `i` switch
-        'If you request a gate in Newark it gives you all he scheduled departures at that gate.
-            for example `C71X` will show you list of all scheduled departures at C71X. 
-            you can also just search 'X` and it will attempt to find gates with that letter. `C71` will return flight scheduled at all C71 gates that includes the V W X Y Z gates.
-        Only scrape actual times more frequently and from different web.
-        Scrape scheduled times less frequently as mostly static.
+        DONE! Fix date and time on `i` switch output
+        Done! Fix exponentially destructive while loop in the Gate_Scrape_Thread within root_gate_checker.py
+        DONE! Add all past queries in the web itself in a menu section so it is easily accessible.
         
-        Add all past queries in the web itself in a menu section so it is easily accessible. Include Feedback form.
-        Use models and sql for database management.
-
-        Change queries pickle to csv or txt file to be able to view it better
-
+        Scrape `scheduled` times less frequently as it is mostly static.
+        Only scrape `actual` times more frequently and from different web source to decrease intensive pull.
         move reliable structured data operation into activator().
     	treat unreliable flights at source before it is dumped as master.pkl to keep master pikle clean.
         Account for reliable and unreliable outlaws at source rather than scheduled flights
+        
+        fix freeze bug on the EC2. After running lengthy scrape for a few days cmd seems to get stuck.
+        
+        
+        seperate end point TAF by "   " and replace it with new line to make it viewable.
+        flight deet packet:
+            include zulu time top right corner with seconds.
+            include zulu departure and arrival times
+            examine metar and TAF for parsing and color coding IFR and LIFR ceilings, Visibility, freezing conditions and runway condition codes.
+            Highlight weather minimums in red for alternate requirements;(1-2-3 rule per ETA)
+                1/2SM as pink and 1/4SM as black
+            Highlight Icing conditions in blue; LIFR in pink 
+            include gate in this packet of information
+            include IFR routing through flight aware if able
+            associate flight numbers in gates table to their dedicated information for departure, destination and weather
+
+        make use of http://xml.flightview.com/xmlbdom/ for pulling flight data instead of requests and bs4 libraries
+        
+        Use models and sql for database management.
 
         add activator() scrape to include data from few hours later
 
         Add source information 
 
 
-examine metar and TAF for parsing and color coding IFR and LIFR ceilings, Visibility, freezing conditions and runway condition codes.
 
-flight deet packet:
-    include zulu time top right corner with seconds.
-    include zulu departure and arrival times
-    Highlight weather minimums for alternate requirements;(1-2-3 rule per ETA)
-    Highlight Icing conditions in blue; LIFR in pink 
-    include gate in this packet of information
-    include IFR routing through flight aware if able
-    associate flight numbers in gates table to their dedicated information for departure, destination and weather
 
 Use Flightaware API to extract clearance and route.
 
