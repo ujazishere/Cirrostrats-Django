@@ -36,9 +36,11 @@ class Gate_Scrape(Root_class):
 
         scheduled = scd[2].replace('\xa0', '')
         actual = scd[3].replace('\xa0', '')
+        
         gate = scd[4]
         
         return {flt_num: [gate, scheduled, actual]}
+
         # This is a format that resembles more to the format in the final output.
         # return {'flight_num': flt_num, 'gate': gate, 'scheduled': scheduled, 'actual': actual}
 
@@ -59,14 +61,16 @@ class Gate_Scrape(Root_class):
                 # <Future at 0x7f08f203ed10 state=running>: 'DL789'
                         # }
         with ThreadPoolExecutor(max_workers=350) as executor:
+            # First argument in submit method is the lengthy function that needs multi threading
+                # second argument is each flt number that goes into that function. Together forming the futures.key()
             futures = {executor.submit(multithreader, flt_num): flt_num for flt_num in
                         input1}
-            
-            # Still dont understand this `as_completed` sorcery, but it works. Thanks to ChatGPT
+            # futures .key() is the memory location of the task and the .value() is the flt_num associated with it
             for future in as_completed(futures):
+                # again, future is the memory location of the task
                 flt_num = futures[future]
                 try:
-                    result = future.result()
+                    result = future.result()        # result is the output of the task at that memory location 
                     completed.update(result)
                 except Exception as e:
                     # print(f"Error scraping {flt_num}: {e}")

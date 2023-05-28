@@ -2,9 +2,15 @@ import requests
 from bs4 import BeautifulSoup as bs4
 from .root_class import Root_class
 
+'''
+This Script pulls the departur and destination when provided with the flight number.
+An attempt to extract clearance route has been initiated but unreliable.
+    Beter to work with API or XML see TODO UV** 
+'''
 
 class Pull_flight_info(Root_class):
     def __init__(self) -> None:
+        # Super method inherits the init method of the superclass in this case`Root_class`.
         super().__init__()
 
     def pull_dep_des(self, flight_query):
