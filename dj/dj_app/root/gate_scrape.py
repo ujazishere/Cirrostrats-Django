@@ -1,11 +1,19 @@
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from .root_class import Root_class
 import time
 from datetime import datetime
 import pickle
 import pytz
+from models import Flight
 
 
+# TODO: web splits time in 3 parts.
+        # Makes it harder to pick appropriate information about flights
+        # from different times of the date
+        # only solution is to work with models and API/XML
+
+                
 class Gate_Scrape(Root_class):
     def __init__(self) -> None:
         pass
@@ -14,6 +22,7 @@ class Gate_Scrape(Root_class):
         # troubled is setup here so that it can be accessed locally
         self.troubled = set()
         self.master_local = []
+
     
     def pick_flight_data(self, flt_num):
         
@@ -39,6 +48,8 @@ class Gate_Scrape(Root_class):
         
         gate = scd[4]
         
+        # Flight.objects.
+        
         return {flt_num: [gate, scheduled, actual]}
 
         # This is a format that resembles more to the format in the final output.
@@ -63,6 +74,7 @@ class Gate_Scrape(Root_class):
         with ThreadPoolExecutor(max_workers=350) as executor:
             # First argument in submit method is the lengthy function that needs multi threading
                 # second argument is each flt number that goes into that function. Together forming the futures.key()
+                #note no parentheses in the first argument
             futures = {executor.submit(multithreader, flt_num): flt_num for flt_num in
                         input1}
             # futures .key() is the memory location of the task and the .value() is the flt_num associated with it
@@ -172,3 +184,23 @@ class Gate_Scrape(Root_class):
         if self.troubled:
             self.tro()
         
+class Gate_scrape_thread(threading.Thread):
+    def __init__(self):
+        super().__init__()
+        self.gc = Gate_Scrape()
+
+    
+    # run method is the inherited. It gets called as
+    def run(self):
+        
+        # self.gc.activator()
+        while True:
+            self.gc.activator()
+            
+            eastern = pytz.timezone('US/eastern')           # Time stamp is local to this Loop. Avoid moving it around
+            now = datetime.now(eastern)
+            latest_time = now.strftime("%#I:%M%p, %b %d.")
+            print('Pulled Gate Scrape at:', latest_time)
+            
+            time.sleep(600)        # TODO: Requires stops between 11:55pm and 4am while also pulling flights from morning once.
+# flights = Gate_checker('').ewr_UA_gate()

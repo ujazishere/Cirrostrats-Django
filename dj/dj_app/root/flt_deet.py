@@ -6,10 +6,10 @@ import os
 
 # print(os.getcwd())
 
-# Example: {'Florida': ['https:link.com', ['ZPH - Zephyrhills Municipal' , 'KDAB - Daytona airport']]}
-# Dict with keys as states. Each key or 'state' has a list as list as its value.
+# .keys() in the dict are states and the value is a list.
 # This list contains 2 items.
-    # first one is the link and other is the list of all airports of that state
+    # first one is the link(a string) and other is the list of all airports of that state
+# Example: {'Florida': ['https:link.com', ['ZPH - Zephyrhills Municipal' , 'KDAB - Daytona airport']]}
 
 # Use following variables depending on the use case;
 django_path = 'dj_app/root/pkl/all_US_airports_dict.pkl'
