@@ -10,11 +10,16 @@ class Root_class():
             pass
 
 
-    def date_time(self):
+    def date_time(self, raw=None, viewable=None):
         eastern = pytz.timezone('US/eastern')
         now = datetime.now(eastern)
         latest_time = now.strftime("%#I:%M%p, %b %d.")
-        return latest_time
+        if raw:
+            return now.strftime('%Y%m%d')
+        elif viewable:
+            return now.strftime('%b %d, %Y')
+        else:
+            return latest_time
     
 
     def request(self, url, timeout=None):
