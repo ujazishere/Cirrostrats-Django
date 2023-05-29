@@ -21,9 +21,11 @@ class Pull_flight_info(Root_class):
         if use_custum_raw_date:
             date = 20230505
         else:
-            date = self.latest_date_raw
+            date = self.date_time(raw=True)     # Root_class inheritance
         flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt=EWR"
+        print(flight_view)
         response = requests.get(flight_view)
+        
         try :
             soup = bs4(response.content, 'html.parser')
             scripts = soup.find_all('script')       # scripts is a section in the html that contains departure and destination airports 
@@ -34,10 +36,13 @@ class Pull_flight_info(Root_class):
                 if 'var sdepapt' in script.get_text():
                     departure = script.get_text().split('\n')[1].split('\"')[1]
                     destination = script.get_text().split('\n')[2].split('\"')[1]
+            # print(scripts[-3].get_text())       #this is where you can find departure and destination times
+                    # departure_time = 
             return dict({flt_num: [departure, destination]})
         except :
             empty_soup = {} 
             return empty_soup
+        
         # typically 9th index of scripts is where departure and destination is.
             # try print(scripts[9].get_text()) for string version for parsing
         

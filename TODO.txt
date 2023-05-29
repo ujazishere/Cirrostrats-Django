@@ -28,7 +28,8 @@ Practice readibility and simplicity. Include description and documentation for o
         Account for reliable and unreliable outlaws at source rather than scheduled flights
         
         fix freeze bug on the EC2. After running lengthy scrape for a few days cmd seems to get stuck.
-        
+
+        include STD and ETA in zulu in the flight deet and add functionality to find any flight
         
         seperate end point TAF by "   " and replace it with new line to make it viewable.
         flight deet packet:
