@@ -40,4 +40,6 @@ for i in all_metar_list:
         no_k.append(i)
 # print(Typical_met.complete_metar)
 # print(Typical_met.zulu_time)
+altimiter = r"\w{1}\d{4})"
 
+# Seperate Metar after Temp and altimeter

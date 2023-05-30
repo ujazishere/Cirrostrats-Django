@@ -12,7 +12,7 @@
       {% for title, raw_data  in weather.items %}
         <tr>
           <th>{{ title }}</th>
-          <td>{{ raw_data }}</td>
+          <td>{{ raw_data|safe }}</td>
         </tr>
       {% endfor %}
     </tbody>

@@ -1,12 +1,12 @@
 import threading
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from .root_class import Root_class
-import time
+from .newark_departures_scrape import Newark_departures_scrape
 from datetime import datetime
+import time
 import pickle
 import pytz
+import re
 # from models import Flight       # This doesnt work because models is in the upper directory
-
 
 # TODO: web splits time in 3 parts.
         # Makes it harder to pick appropriate information about flights
@@ -22,6 +22,7 @@ class Gate_Scrape(Root_class):
         # troubled is setup here so that it can be accessed locally
         self.troubled = set()
         self.master_local = []
+        self.outlaws_reliable = dict()
 
     
     def pick_flight_data(self, flt_num):
@@ -33,7 +34,7 @@ class Gate_Scrape(Root_class):
         
         eastern = pytz.timezone('US/eastern')
         now = datetime.now(eastern)
-        raw_date = now.strftime('%Y%m%d')           # formaatted as YYYYMMDD
+        raw_date = now.strftime('%Y%m%d')           # formatted as YYYYMMDD
         
         flight_view = f"https://www.flightview.com/flight-tracker/{airline_code}/{flight_number_without_airline_code}?date={raw_date}&depapt=EWR"
         soup2 = self.request(flight_view, timeout=5)
@@ -50,45 +51,29 @@ class Gate_Scrape(Root_class):
         
         # Flight.objects.
         
-        return {flt_num: [gate, scheduled, actual]}
+        reliable_flt_num = re.match(r'[A-Z]{2}\d{2,4}', flt_num)
+        if reliable_flt_num and gate and scheduled and actual:
+            if "Terminal" in gate and scheduled!= 'Not Available' and actual!= 'Not Available':
+                scheduled = self.dt_conversion(scheduled)
+                actual = self.dt_conversion(actual)
+                
+                return {flt_num: [gate, scheduled, actual]}
+            else:
+                print('g',gate, 'f', flt_num)
+                # TODO: Have to deal with these outlaws and feed it back into the system.
+                    # Sometimes gate goes into scheduled or actual. Beware of that kind of data.
+                self.outlaws_reliable.update({
+                    'flight_number': flt_num,
+                    'gate': gate,
+                    'scheduled': scheduled,
+                    'actual': actual,
+                })
+        else:
+            # unreliable outlaws might just not be necessary since flt_num is always available
+            print('!!!UNRELIABLE OUTLAW', gate, reliable_flt_num, scheduled, actual)
 
         # This is a format that resembles more to the format in the final output.
         # return {'flight_num': flt_num, 'gate': gate, 'scheduled': scheduled, 'actual': actual}
-
-
-    def exec(self, input1, multithreader):
-    # TODO: Extract this blueprint for future use.
-    # executor blueprint. In this case input 1 takes in flight numbers and `multithreaders` can be item that needs to be multithreaded.
-        # this will take in all the flight numbers at once and perform web scrape(`pick_flight_data()`) on all of them simultaneously
-        # Multithreading
-        completed = {}
-        troubled = set()
-        exec_output = dict({'completed':  completed, 'troubled': troubled})
-            # VVI!!! The dictionary `futures` .value() is the flight number and  key is the the memory location of return from pick_flight_data()
-            # Used in list comprehension for loop with multiple keys and values in the dictionary. for example:
-            # {ujas vaghani
-                # <Future at 0x7f08f203ec10 state=running>: 'UA123',
-                # <Future at 0x7f08f203ec90 state=running>: 'AA456',
-                # <Future at 0x7f08f203ed10 state=running>: 'DL789'
-                        # }
-        with ThreadPoolExecutor(max_workers=350) as executor:
-            # First argument in submit method is the lengthy function that needs multi threading
-                # second argument is each flt number that goes into that function. Together forming the futures.key()
-                #note no parentheses in the first argument
-            futures = {executor.submit(multithreader, flt_num): flt_num for flt_num in
-                        input1}
-            # futures .key() is the memory location of the task and the .value() is the flt_num associated with it
-            for future in as_completed(futures):
-                # again, future is the memory location of the task
-                flt_num = futures[future]
-                try:
-                    result = future.result()        # result is the output of the task at that memory location 
-                    completed.update(result)
-                except Exception as e:
-                    # print(f"Error scraping {flt_num}: {e}")
-                    troubled.add(flt_num)
-        
-        return exec_output
 
 
     def tro(self):
@@ -154,27 +139,21 @@ class Gate_Scrape(Root_class):
         # self.temp_fix_to_remove_old_flights()
 
         # Extract all United flight numbers in list form through departures_ewr_UA()
-        departures_ewr_UA = self.departures_ewr_UA()
-        
+        departures_ewr_UA = Newark_departures_scrape().united_departures()
         # with open('departures_ewr_UA.pkl', 'rb') as f:
             # pickle.dump(departures_ewr_UA, f)
         
-        ex = self.exec(departures_ewr_UA, self.pick_flight_data)
-        completed_flights = ex['completed']
-        troubled_flights = ex['troubled']
+        multi_thread_output = self.exec(departures_ewr_UA, self.pick_flight_data)    # inherited from root_class.Root_class
+        completed_flights = multi_thread_output['completed']
+        troubled_flights = multi_thread_output['troubled']
         # Cant decide if master should be called or kept empty. When kept empty it saves disk space. When called it keeps track of old information.
         # master = self.load_master()
         master = {}
         master.update(completed_flights)
         self.troubled.update(troubled_flights)
         
-       
-        # TODO:There is a probelm with opening the master_UA.pkl file as is.
-            # Troubled items will already be in this master from old data so they wont be checked and updated
-            # one way to fix it is to check date and time and overwrite the old one with the latest one
-        # Created master_local for troubled items to be checked for and not be removed unncessarily like before.
-
-        print('troubled:', len(self.troubled), self.troubled)
+        # get all the troubled flight numbers
+        # print('troubled:', len(self.troubled), self.troubled)
 
         # Dumping master dict into the root folder in order to be accessed by ewr_UA_gate func later on.
         with open('master_UA.pkl', 'wb') as f:
@@ -183,6 +162,7 @@ class Gate_Scrape(Root_class):
         # Redo the troubled flights
         if self.troubled:
             self.tro()
+        
         
 class Gate_scrape_thread(threading.Thread):
     def __init__(self):
@@ -195,12 +175,13 @@ class Gate_scrape_thread(threading.Thread):
         
         # self.gc.activator()
         while True:
+            print('Lengthy Scrape  in progress...')
             self.gc.activator()
             
             eastern = pytz.timezone('US/eastern')           # Time stamp is local to this Loop. Avoid moving it around
             now = datetime.now(eastern)
             latest_time = now.strftime("%#I:%M%p, %b %d.")
-            print('Pulled Gate Scrape at:', latest_time)
+            print('Pulled Gate Scrape at:', latest_time, eastern)
             
-            time.sleep(600)        # TODO: Requires stops between 11:55pm and 4am while also pulling flights from morning once.
+            time.sleep(1800)        # TODO: Requires stops between 11:55pm and 4am while also pulling flights from morning once.
 # flights = Gate_checker('').ewr_UA_gate()
