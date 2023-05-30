@@ -23,7 +23,6 @@ class Pull_flight_info(Root_class):
         else:
             date = self.date_time(raw=True)     # Root_class inheritance
         flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt=EWR"
-        print(flight_view)
         response = requests.get(flight_view)
         
         try :

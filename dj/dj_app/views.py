@@ -11,9 +11,10 @@ from .root.flt_deet import airports
 views.py runs as soon as the base web is requested. Hence, GateCheckerThread() is run the background right away.
 It will then run 
 '''
-run_lengthy_web_scrape = False
+run_lengthy_web_scrape = False 
 
 if run_lengthy_web_scrape:
+    'Running Lengthy web scrape'
     gc_thread = Gate_scrape_thread()
     gc_thread.start()
 
@@ -25,9 +26,9 @@ def home(request):
     if request.method == "POST":
         main_query = request.POST.get('query','')
         
-        search_query = SearchQuery(query=main_query)      # Adds search queries to the 
-        search_query.save()
-            
+        search_query = SearchQuery(query=main_query)      # Adds search queries to the database
+        search_query.save()                               # you've got to save it otherwise it wont save
+        
         return parse_query(request, main_query)
 
     else:
@@ -62,6 +63,7 @@ def parse_query(request, main_query):
         else:       # If the query is not recognized:
             return gate_info(request, main_query=main_query)
             '''
+            # Attempting to pull all airports for easier access
             florida_airports = airports['Florida'][1]
             for each_airport in florida_airports:
                 if each_query in each_airport:
@@ -82,12 +84,10 @@ def gate_info(request,main_query):
     gate = main_query
     # In the database the all gates are uppercase so making the query uppercase    
     gate = gate.upper()
-    print('Search results for ', gate)
 
     # Dictionary format a list with one or many dictionaries each dictionary containing 4 items:gate,flight,scheduled,actual
 
     current_time = Gate_checker().date_time()
-    print('Gate checked at :', current_time)
     gate_data_table = Gate_checker().ewr_UA_gate(gate)
     
     # showing info if the info is found else it falls back to `No flights found for {{gate}}`on flight_info.html

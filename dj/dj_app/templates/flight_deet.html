@@ -21,7 +21,7 @@
           <tr>
             <td>{{ dep_des_list.0 }}</td>
             {% for type, juice in dep_weather.items %}
-              <td>{{ juice }}</td>
+              <td>{{ juice|safe }}</td>
             {% endfor %}
           </tr>
         {% endfor %}
@@ -41,7 +41,7 @@
           <tr>
             <td>{{ dep_des_list.1 }}</td>
             {% for type, juice in dest_weather.items %}
-              <td>{{ juice }}</td>
+              <td>{{ juice|safe }}</td>
             {% endfor %}
           </tr>
         {% endfor %}

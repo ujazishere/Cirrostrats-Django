@@ -20,22 +20,25 @@ Practice readibility and simplicity. Include description and documentation for o
         DONE! Fix date and time on `i` switch output
         Done! Fix exponentially destructive while loop in the Gate_Scrape_Thread within root_gate_checker.py
         DONE! Add all past queries in the web itself in a menu section so it is easily accessible.
+        DONE! seperate TAF by "   " and replace it with new line to make it viewable.
         
+        DONE! move reliable structured data operation into the scraper rather than dealing with in Gate_checker()
+    	Done! Treat unreliable flights at source before it is dumped as master.pkl to keep master pikle clean.
+                Account for reliable and unreliable outlaws at source rather than scheduled flights
+        DONE! Move all template looking functions to root_class. 
+            exec(), reliable flight_num, 
+                
         Scrape `scheduled` times less frequently as it is mostly static.
         Only scrape `actual` times more frequently and from different web source to decrease intensive pull.
-        move reliable structured data operation into activator().
-    	treat unreliable flights at source before it is dumped as master.pkl to keep master pikle clean.
-        Account for reliable and unreliable outlaws at source rather than scheduled flights
+        
+        add activator() scrape to include data from few hours later
         
         fix freeze bug on the EC2. After running lengthy scrape for a few days cmd seems to get stuck.
-
-        include STD and ETA in zulu in the flight deet and add functionality to find any flight
         
-        seperate end point TAF by "   " and replace it with new line to make it viewable.
         flight deet packet:
-            include zulu time top right corner with seconds.
-            include zulu departure and arrival times
-            examine metar and TAF for parsing and color coding IFR and LIFR ceilings, Visibility, freezing conditions and runway condition codes.
+            Include STD and ETA in zulu in the flight deet.
+            Addfunctionality to find any flight. Also add current Zulu time
+            Examine metar and TAF for parsing and color coding IFR and LIFR ceilings, Visibility, freezing conditions and runway condition codes.
             Highlight weather minimums in red for alternate requirements;(1-2-3 rule per ETA)
                 1/2SM as pink and 1/4SM as black
             Highlight Icing conditions in blue; LIFR in pink 
@@ -47,12 +50,11 @@ Practice readibility and simplicity. Include description and documentation for o
         
         Use models and sql for database management.
 
-        add activator() scrape to include data from few hours later
-
         Add source information 
 
 
-
+Note consistent irregularity in the outlaws - check for patterns.
+    fix outlaws such that those patterns are overwritten and only unique patterns get updated in it. 
 
 Use Flightaware API to extract clearance and route.
 

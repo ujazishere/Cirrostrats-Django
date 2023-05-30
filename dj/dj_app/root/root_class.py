@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 from bs4 import BeautifulSoup as bs4
 from datetime import datetime
@@ -39,8 +40,47 @@ class Root_class():
         # converts date and time string into a class object 
         return datetime.strptime(data, "%I:%M%p, %b%d")
     
-
-    def departures_ewr_UA(self):
+    
+    def exec(self, input1, multithreader):
+    # TODO: Extract this blueprint for future use.
+    # executor blueprint. In this case input 1 takes in flight numbers and `multithreaders` can be item that needs to be multithreaded.
+        # this will take in all the flight numbers at once and perform web scrape(`pick_flight_data()`) on all of them simultaneously
+        # Multithreading
+        completed = {}
+        troubled = set()
+            # VVI!!! The dictionary `futures` .value() is the flight number and  key is the the memory location of return from pick_flight_data()
+            # Used in list comprehension for loop with multiple keys and values in the dictionary. for example:
+            # {<Future at 0x7f08f203ec10 state=running>: 'UA123',
+                # <Future at 0x7f08f203ed10 state=running>: 'DL789'
+                        # }
+        with ThreadPoolExecutor(max_workers=350) as executor:
+            # First argument in submit method is the lengthy function that needs multi threading
+                # second argument is each flt number that goes into that function. Together forming the futures.key()
+                #note no parentheses in the first argument
+            futures = {executor.submit(multithreader, flt_num): flt_num for flt_num in
+                        input1}
+            # futures .key() is the memory location of the task and the .value() is the flt_num associated with it
+            for future in as_completed(futures):
+                # again, future is the memory location of the task
+                flt_num = futures[future]
+                try:
+                    result = future.result()        # result is the output of the task at that memory location 
+                    completed.update(result)
+                except Exception as e:
+                    # print(f"Error scraping {flt_num}: {e}")
+                    troubled.add(flt_num)
+                
+        # reading outlaws and dumping them
+        with open('outlaws.pkl', 'rb') as f:
+            outlaws = pickle.load(f)
+        outlaws.update(self.outlaws_reliable)
+        with open('outlaws.pkl', 'wb') as f:
+            pickle.dump(outlaws, f)
+            
+        return dict({'completed':  completed, 'troubled': troubled})
+        
+        
+    ''''def departures_ewr_UA(self):
         # returns list of all united flights as UA**** each
         # Here we extract raw united flight number departures from airport-ewr.com
         
@@ -67,6 +107,6 @@ class Root_class():
                     all_EWR_deps.append(i.text)
 
         # extracting all united flights and putting them all in list to return it in the function.
-        united_flights =[each for each in all_EWR_deps if 'UA' in each]
-        print(f'total flights {len(all_EWR_deps)} of which UA flights: {len(united_flights)}')
-        return united_flights
+        united_departures_newark =[each for each in all_EWR_deps if 'UA' in each]
+        print(f'total flights {len(all_EWR_deps)} of which UA flights: {len(united_departures_newark)}')
+        return united_departures_newark'''

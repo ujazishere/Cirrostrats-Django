@@ -33,10 +33,8 @@ class Weather_display:
             metar_raw = str(list(code_tag)[metar_index].text)
             taf_raw = str(list(code_tag)[taf_index].text)
             
-            # print(taf_raw.replace("   ", "/n"))             # TODO: Fix the nwe line problem in TAF since it doesnt work in Django
-            taf_raw = taf_raw.replace("FM", "\nFrom")
+            taf_raw = taf_raw.replace("FM", "<br>\xa0\xa0\xa0\xa0FM")   # line break for FM section in TAF
             
-            # taf_raw = taf_raw.replace("   ", "/n")        #.replace() does not work in Django. Works outside.
         elif len(metar_and_taf_in_bs4_list) == 1:       # if only METAR is available which is the first and only item
             metar_raw = str(list(code_tag)[metar_index].text)
             taf_raw = 'NA'
@@ -48,11 +46,14 @@ class Weather_display:
         # metar = metar_raw.split()     # split returns into list form for further processing.
         # taf = taf_raw.split()
         # print((taf_raw))
+        
         return dict({'metar': metar_raw, 'taf': taf_raw})
 
-    
 
+    
+# To check code locally use this:
+# icao_id = 'kewr'
 # weather_display = Weather_display()
-# met_taf = weather_display.scrape('kewr')
+# met_taf = weather_display.scrape('icao_id')
 
 # print(met_taf)
