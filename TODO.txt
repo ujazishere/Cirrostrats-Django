@@ -10,7 +10,7 @@ Practice readibility and simplicity. Include description and documentation for o
         ****It is not possible to add feedback form in menu section, what we will have to do it create another html page maybe about us where we can write your profile, you contact details and add feedback form, I am not sure yet how to integrate it because we will have to link the database somwehere because when people will send feedback it has to go somwhere ****
         Include Feedback form in the menu section
 
-        **** I tried to link homepage in menu section but is throwing an error, it has something to with settings.py maybe can you take a look? because if I change something in setting.py it might mess up with the site, i have linked the home page in menu, just go to menu and click on home it should show you the same error too *****
+        **** I tried to link homepage in menu section but is throwing an error, it has something to with settings.py maybe can you take a look? because if I change something in setting.py it might mess up the site, i have linked the home page in menu, just go to menu and click on home it should show you the same error too *****
         this is the error:
         Using the URLconf defined in dj.urls, Django tried these URL patterns, in this order:
         admin/
