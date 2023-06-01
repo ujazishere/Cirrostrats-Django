@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'metar_info.css' %}">
   <h3> Weather for {{airport}}</h3>
   {% if weather %}
-  <table>
+  <table class="table">
     <tbody>
       {% for title, raw_data  in weather.items %}
         <tr>
