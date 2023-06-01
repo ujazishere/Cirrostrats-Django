@@ -107,11 +107,9 @@
       <!-- Add sidebar -->
       <div class="sidebar">
         <ul>
-          <li><a href= "home.html">Home</a></li>
-          <li><a href="#">Flight Info</a></li>
-          <li><a href="#">Weather</a></li>
-          <li><a href="#">Flight Details</a></li>
-          <li><a href="#">Contact Us</a></li>
+          <li><a href= "{% url 'home' %}">Home</a></li>
+          <li><a href= "{% url 'about' %}">About Us</a></li>
+          <li><a href= "{% url 'contact' %}">Contact Us</a></li>
         </ul>
       </div>
     <title>{% block title %}Gate Check{% endblock %}</title>

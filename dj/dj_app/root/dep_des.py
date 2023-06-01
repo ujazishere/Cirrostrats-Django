@@ -13,16 +13,22 @@ class Pull_flight_info(Root_class):
         # Super method inherits the init method of the superclass in this case`Root_class`.
         super().__init__()
 
-    def pull_dep_des(self, flight_query):
-        flt_num = flight_query
-
+    def pull_dep_des(self, query_in_list_form):
+        
+        query = ' '.join(query_in_list_form)
+        
+        flt_num = query.split()[1]
+        airport = query.split()[2]
+        print(flt_num, airport)
+        
         # date format in the url is YYYYMMDD. For testing, you can find flt_nums on https://www.airport-ewr.com/newark-departures
         use_custum_raw_date = False
         if use_custum_raw_date:
             date = 20230505
         else:
             date = self.date_time(raw=True)     # Root_class inheritance
-        flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt=EWR"
+        flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport}"
+        print(flight_view)
         response = requests.get(flight_view)
         
         try :
