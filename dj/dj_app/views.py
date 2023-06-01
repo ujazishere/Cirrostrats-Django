@@ -21,7 +21,6 @@ if run_lengthy_web_scrape:
 current_time = Gate_checker().date_time()
 
 def home(request):
-    
     # Homepage first skips a "POST", goes to else and returns home.html since the query is not submitted yet.
     if request.method == "POST":
         main_query = request.POST.get('query','')
@@ -33,6 +32,14 @@ def home(request):
 
     else:
         return render(request, 'home.html')
+
+
+def contact(request):
+    return render(request, 'contact.html')
+
+    
+def about(request):
+    return render(request, 'about.html')
 
 
 def parse_query(request, main_query):
@@ -57,8 +64,7 @@ def parse_query(request, main_query):
             return metar_display(request, weather_query_airport)
         
         if first_letter == 'I':        
-            flight_query = query_in_list_form[1]
-            return flight_deets(request, flight_query)
+            return flight_deets(request, query_in_list_form)
         
         else:       # If the query is not recognized:
             return gate_info(request, main_query=main_query)
@@ -98,10 +104,10 @@ def gate_info(request,main_query):
         return render(request, 'flight_info.html', {'gate': gate})
 
 
-def flight_deets(request, flight_query ):
+def flight_deets(request, query_in_list_form ):
     # pull weather for a partifular flight number. 
     flt_info = Pull_flight_info()
-    dep_des = flt_info.pull_dep_des(flight_query)
+    dep_des = flt_info.pull_dep_des(query_in_list_form)
     
     if dep_des: 
         departure = f'K{list(dep_des.values())[0][0]}'      # Turning a 3 letter airport identifier into 4 letter ICAO identifier
@@ -119,6 +125,7 @@ def flight_deets(request, flight_query ):
     if departure and destination:
         dep_weather = weather_req(departure)
         dest_weather = weather_req(destination)
+        flight_query = " ".join(query_in_list_form[1] + query_in_list_form[2])
         bulk_flight_deets = {'flight_query': flight_query, 
                             'dep_des': dep_des,
                             'current_time': current_time,
@@ -141,7 +148,3 @@ def metar_display(request,weather_query):
     weather = weather.scrape(weather_query)
     
     return render(request, 'metar_info.html', {'airport': airport, 'weather': weather})
-
-    
-def about(request):
-    return render(request, 'home.html')
