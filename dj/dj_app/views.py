@@ -41,6 +41,9 @@ def contact(request):
 def about(request):
     return render(request, 'about.html')
 
+def source(request):
+    return render(request, 'source.html')
+
 
 def parse_query(request, main_query):
     main_query = main_query
