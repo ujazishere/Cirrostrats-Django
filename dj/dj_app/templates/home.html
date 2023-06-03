@@ -11,9 +11,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
     <h2>Check Weather, Gate And Flight Information</h2>
 
-    <p>Gate Check</p>
-    <p>Flight Lookup</p>
-    <p>Weather</p>
+    <p><a href="{% url 'gate_check' %}"> Gate Check </a> </p>  
+    <p><a href="{% url 'flight_lookup' %}"> Flight Lookup </a> </p> 
+    <p><a href="{% url 'weather' %}"> Weather </a> </p>
 
     {% csrf_token %}
     <form method="post" class="search-form">
@@ -35,6 +35,6 @@
       Empty search returns information on all gates for United flights in KEWR.
     </p>
   </body>
-</html>
-
-{% endblock %}
+  </html>
+  
+  {% endblock %}

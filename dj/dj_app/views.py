@@ -44,6 +44,15 @@ def about(request):
 def source(request):
     return render(request, 'source.html')
 
+def source(request):
+    return render(request, 'gate_check.html')
+
+def source(request):
+    return render(request, 'flight_lookup.html')
+
+def source(request):
+    return render(request, 'weather.html')
+
 
 def parse_query(request, main_query):
     main_query = main_query

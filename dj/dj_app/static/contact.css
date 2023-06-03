@@ -6,6 +6,7 @@ body {
 
 header, main, footer {
   padding: 20px;
+  width: 100%;
 }
 
 header {
@@ -13,12 +14,14 @@ header {
   color: #fff;
 }
 
-header h1 {
-  margin: 0;
+h1 {
+  margin-bottom: 100;
+  margin-top: 20px;
+  text-align: center;
 }
 
 main {
-  background-color: #f9f9f9;
+  background-color: #fbf2e7;
 }
 
 footer {
@@ -36,17 +39,19 @@ section {
 }
 
 h2 {
-  margin-top: 0;
+  margin: auto;
 }
 
 form label {
   display: block;
   margin-top: 10px;
   color: #333;
+  width: 100%;
 }
 
-form input, form textarea {
-  width: 100%;
+form input,
+form textarea {
+  width: 50%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -58,13 +63,19 @@ form textarea {
   border-radius: 5px;
 }
 
+form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
 form button {
-  padding: 10px 20px;
-  background-color: #333;
-  color: #fff;
-  border: none;
-  cursor: pointer;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid black;
   border-radius: 5px;
+  background-color: #ECF9FF;
+  color: #000000;
+  cursor: pointer;
 }
 
 form button:hover {
@@ -87,4 +98,23 @@ form button:hover {
 .contact-form {
   max-width: 500px;
   margin: 0 auto;
+}
+
+/* Media queries for responsiveness */
+
+@media only screen and (max-width: 768px) {
+  h1 {
+    margin-bottom: 50px;
+  }
+  
+  .about-content,
+  .contact-form {
+    max-width: 100%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  h1 {
+    margin-bottom: 30px;
+  }
 }
