@@ -8,22 +8,24 @@
     <title>{% block title %}Gate Check{% endblock %}</title>
 </head>
 <body>
-    <!-- Add burger menu -->
-    <div class="burger-menu">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
+    <header class="sticky-header">
+        <!-- Add burger menu -->
+        <div class="burger-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
 
-    <!-- Add sidebar -->
-    <div class="sidebar">
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'about' %}">About Us</a></li>
-            <li><a href="{% url 'contact' %}">Contact Us</a></li>
-            <li><a href="{% url 'source' %}"> Source</a></li>
-        </ul>
-    </div>
+        <!-- Add sidebar -->
+        <div class="sidebar">
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About Us</a></li>
+                <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                <li><a href="{% url 'source' %}"> Source</a></li>
+            </ul>
+        </div>
+    </header>
 
     <h1>Lets Fly Safe</h1>
 
@@ -41,5 +43,6 @@
 
     {% block content %}
     {% endblock %}
+
 </body>
 </html>

@@ -1,3 +1,27 @@
+body {
+  background-color: #fbf2e7; /* color */
+  margin: 0;
+  padding: 0;
+}
+
+/* Add styles for the sticky header */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: #fbf2e7; /* Set your desired darker background color */
+  z-index: 999;
+  width: 100%; /* Adjust the width as per your preference */
+  height: 60px; /* Adjust the height as per your preference */
+  margin: 0 auto; /* Center the header horizontally */
+}
+
+.sticky-header h1 {
+  padding: 20px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
 /* Add styles for the burger menu */
 .burger-menu {
   position: fixed;
@@ -21,7 +45,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  width: 200px;
+  width: 240px;
   background-color: #ECF9FF;
   padding: 20px;
   transform: translateX(-100%);
@@ -49,6 +73,12 @@
 }
 
 /* Additional styles for text positioning */
+
+h1 {
+font-size: 35px;
+margin-top: 10px;
+}
+
 h2 {
   margin-top: 20px; /* Adjust the spacing between "Home" and the burger menu icon */
   text-align: center;
@@ -71,8 +101,8 @@ p {
     top: 0;
     left: 0;
     height: 100%;
-    width: 100%;
-    max-width: 300px;
+    width: 500px;
+    max-width: 1000px;
     background-color: #ECF9FF;
     padding: 20px;
     transform: translateX(-100%);
