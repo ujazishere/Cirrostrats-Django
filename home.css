@@ -1,52 +1,32 @@
 body {
-  background-color: #fbf2e7;
+  background-color: #fbf2e7; /* color */
   margin: 0;
   padding: 0;
 }
 
-.links-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-top: -15px;
-  text-decoration: underline;
-}
-
-.links-container a {
-  color: #000000; /* Set desired text color */
-  text-decoration: none; /* Remove underline */
-  transition: font-size 0.2s; /* Add transition for smooth effect */
-}
-
-.links-container a:hover {
-  text-decoration: underline; /* Add underline on hover if desired */
-  font-size: 18px; /* Increase the font size on hover */
-}
-
 h1 {
-  font-size: 35px;
+  font-size: 500;
   font-weight: bold;
   text-align: center;
   margin-top: 50px;
 }
 
 h2 {
-  font-size: 16px;
+  font-size: 100;
   font-weight: bold;
   text-align: center;
   margin-top: 20px;
 }
 
 h3 {
-  font-size: 16px;
+  font-size: 8;
   font-weight: bold;
   text-align: center;
   margin-top: 20px;
 }
 
 p {
-  font-size: 14px;
+  font-size: 6;
   font-weight: lighter;
   text-align: center;
   margin-top: 40px;
@@ -60,6 +40,7 @@ p {
   margin-top: 20px;
   border: black;
   border-radius: 5px;
+
 }
 
 .search-form input[type="text"] {
@@ -83,11 +64,11 @@ p {
 /* Media queries for responsiveness */
 @media only screen and (max-width: 600px) {
   h1 {
-    font-size: 35px;
+    font-size: 36px;
   }
 
   p {
-    font-size: 14px;
+    font-size: 18px;
   }
 
   .search-form input[type="text"] {
@@ -97,11 +78,11 @@ p {
 
 @media only screen and (max-width: 400px) {
   h1 {
-    font-size: 16px;
+    font-size: 24px;
   }
 
   p {
-    font-size: 12px;
+    font-size: 16px;
   }
 
   .search-form input[type="text"] {

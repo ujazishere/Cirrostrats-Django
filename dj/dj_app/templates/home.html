@@ -11,9 +11,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
     <h2>Check Weather, Gate And Flight Information</h2>
 
-    <p><a href="{% url 'gate_check' %}"> Gate Check </a> </p>  
-    <p><a href="{% url 'flight_lookup' %}"> Flight Lookup </a> </p> 
-    <p><a href="{% url 'weather' %}"> Weather </a> </p>
+    <div class="links-container">
+      <p><a href="{% url 'gate_check' %}"> Gate Check </a></p>
+      <p><a href="{% url 'flight_lookup' %}"> Flight Lookup </a></p>
+      <p><a href="{% url 'weather' %}"> Weather </a></p>
+    </div>
 
     {% csrf_token %}
     <form method="post" class="search-form">
