@@ -7,47 +7,54 @@
   <h3>United Flight Information</h3>
   <h4>Results for UA{{flight_query}} at {{current_time}}</h4>
   {% if dep_des %}
-    <table class="comparison-table">
-      <thead>
+</head>
+<body>
+  <table class="comparison-table">
+    <tbody>
+      <tr>
+        <th>Departure</th>
+      </tr>
+      {% for flight_num, dep_des_list in dep_des.items %}
         <tr>
-          <th>Departure</th>
-          {% for type, juice in dep_weather.items %}
-          {% endfor %}
+          <td>{{ dep_des_list.0 }}</td>
         </tr>
-      <tbody>
+      {% endfor %}
+      {% for type, juice in dep_weather.items %}
+        <tr>
+          <th>{{ type }}</th>
+        </tr>
         {% for flight_num, dep_des_list in dep_des.items %}
           <tr>
-            <td>{{ dep_des_list.0 }}</td>
-           {% for type, juice in dep_weather.items %}
-           <tr>
-            <td> metar {{ juice|safe }} taf </td>      
-           </tr>       
-            {% endfor %}
+            <td>{{ juice|safe }}</td>      
           </tr>
-        </thead>
         {% endfor %}
-      </tbody>
-    </table>
+      {% endfor %}
+    </tbody>
+  </table>
+  <body>
     <table class="comparison-table">
-      <thead>
+      <tbody>
         <tr>
           <th>Destination</th>
-          {% for type, juice in dest_weather.items %}
-            <th>{{ type }}</th>
-          {% endfor %}
         </tr>
-      </thead>
-      <tbody>
         {% for flight_num, dep_des_list in dep_des.items %}
           <tr>
             <td>{{ dep_des_list.1 }}</td>
-            {% for type, juice in dest_weather.items %}
-              <td>{{ juice|safe }}</td>
-            {% endfor %}
           </tr>
+        {% endfor %}
+        {% for type, juice in dep_weather.items %}
+          <tr>
+            <th>{{ type }}</th>
+          </tr>
+          {% for flight_num, dep_des_list in dep_des.items %}
+            <tr>
+              <td>{{ juice|safe }}</td>      
+            </tr>
+          {% endfor %}
         {% endfor %}
       </tbody>
     </table>
+    <body>
   {% else %}
     <p>No details found for {{flight_query}}.</p>
   {% endif %}

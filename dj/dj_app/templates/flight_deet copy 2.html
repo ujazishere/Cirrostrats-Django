@@ -12,18 +12,19 @@
         <tr>
           <th>Departure</th>
           {% for type, juice in dep_weather.items %}
-            <th>{{ type }}</th>
           {% endfor %}
         </tr>
-      </thead>
       <tbody>
         {% for flight_num, dep_des_list in dep_des.items %}
           <tr>
             <td>{{ dep_des_list.0 }}</td>
-            {% for type, juice in dep_weather.items %}
-              <td>{{ juice|safe }}</td>
+           {% for type, juice in dep_weather.items %}
+           <tr>
+            <td>{{ juice|safe }}</td>      
+           </tr>       
             {% endfor %}
           </tr>
+        </thead>
         {% endfor %}
       </tbody>
     </table>
