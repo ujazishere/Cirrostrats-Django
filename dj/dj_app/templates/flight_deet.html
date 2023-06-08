@@ -7,54 +7,54 @@
   <h3>United Flight Information</h3>
   <h4>Results for UA{{flight_query}} at {{current_time}}</h4>
   {% if dep_des %}
-</head>
-<body>
-  <table class="comparison-table">
-    <tbody>
-      <tr>
-        <th>Departure</th>
-      </tr>
-      {% for flight_num, dep_des_list in dep_des.items %}
-        <tr>
-          <td>{{ dep_des_list.0 }}</td>
-        </tr>
-      {% endfor %}
-      {% for type, juice in dep_weather.items %}
-        <tr>
-          <th>{{ type }}</th>
-        </tr>
-        {% for flight_num, dep_des_list in dep_des.items %}
-          <tr>
-            <td>{{ juice|safe }}</td>      
-          </tr>
-        {% endfor %}
-      {% endfor %}
-    </tbody>
-  </table>
-  <body>
     <table class="comparison-table">
-      <tbody>
+      <thead>
         <tr>
-          <th>Destination</th>
+          <th>Departure</th>
+          {% for type, juice in dep_weather.items %}
+          {% endfor %}
         </tr>
+      <tbody>
         {% for flight_num, dep_des_list in dep_des.items %}
           <tr>
-            <td>{{ dep_des_list.1 }}</td>
-          </tr>
-        {% endfor %}
-        {% for type, juice in dep_weather.items %}
-          <tr>
-            <th>{{ type }}</th>
-          </tr>
-          {% for flight_num, dep_des_list in dep_des.items %}
+            <td>{{ dep_des_list.0 }}</td>
+           {% for type, juice in dep_weather.items %}
+           <tr>
             <tr>
-              <td>{{ juice|safe }}</td>      
+              <th>{{ type }}</th>
             </tr>
-          {% endfor %}
+            <td> {{ juice|safe }} </td>      
+           </tr>       
+            {% endfor %}
+          </tr>
+        </thead>
         {% endfor %}
       </tbody>
     </table>
-    <body>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Destination</th>
+          {% for type, juice in dest_weather.items %}
+          {% endfor %}
+        </tr>
+       <tbody>
+        {% for flight_num, dep_des_list in dep_des.items %}
+        <tr>
+          <td>{{ dep_des_list.1 }}</td>
+          {% for type, juice in dest_weather.items %}
+          <tr>
+            <tr>
+              <th>{{ type }}</th>
+            </tr>
+            <td>{{ juice|safe }}</td>
+           </tr>
+          {% endfor %}
+        </tr>
+      </thead>
+      {% endfor %}
+     </tbody>
+    </table>
   {% else %}
     <p>No details found for {{flight_query}}.</p>
   {% endif %}
