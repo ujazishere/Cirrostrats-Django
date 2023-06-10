@@ -6,6 +6,11 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
     <title>{% block title %}Gate Check{% endblock %}</title>
+    <style>
+        .shrink {
+            height: 50px !important; /* Adjust the desired height when scrolling */
+        }
+    </style>
 </head>
 <body>
     <header class="sticky-header">
@@ -15,17 +20,21 @@
             <span></span>
             <span></span>
         </div>
-
+        <!-- Add text on the right side of the header -->
+        <div class="header-text">
+            Cirrostarts
+        </div>
         <!-- Add sidebar -->
         <div class="sidebar">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'about' %}">About Us</a></li>
                 <li><a href="{% url 'contact' %}">Contact Us</a></li>
-                <li><a href="{% url 'source' %}"> Source</a></li>
+                <li><a href="{% url 'source' %}">Source</a></li>
             </ul>
         </div>
     </header>
+    
 
     <h1>Lets Fly Safe</h1>
 
@@ -34,10 +43,22 @@
         document.addEventListener("DOMContentLoaded", function () {
             var burgerMenu = document.querySelector(".burger-menu");
             var sidebar = document.querySelector(".sidebar");
+            var header = document.querySelector(".sticky-header");
 
             burgerMenu.addEventListener("click", function () {
                 sidebar.classList.toggle("active");
             });
+
+            var prevScrollPos = window.pageYOffset;
+            window.onscroll = function () {
+                var currentScrollPos = window.pageYOffset;
+                if (prevScrollPos > currentScrollPos) {
+                    header.classList.remove("shrink");
+                } else {
+                    header.classList.add("shrink");
+                }
+                prevScrollPos = currentScrollPos;
+            };
         });
     </script>
 
