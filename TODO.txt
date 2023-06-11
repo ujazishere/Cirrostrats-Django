@@ -2,29 +2,16 @@ Practice readibility and simplicity. Include description and documentation for o
 
 **IS:   
         DONE! make search bar static and minimal 
-        DONE! When searching random stuff the `try example` sectino is stuck to the left. Align it to center like home.html 
-
-        **** I dont think this is possible just with html and CSS, best we can do it responsive site, it will look like desktop site in laptop, tablets and iPad and it will look like mobile app in phone ****
-        mobile site layout should be presented when requested a mobile site. - still figurin this out 
-        
-        ****It is not possible to add feedback form in menu section, what we will have to do it create another html page maybe about us where we can write your profile, you contact details and add feedback form, I am not sure yet how to integrate it because we will have to link the database somwehere because when people will send feedback it has to go somwhere ****
-        Include Feedback form in the menu section
-
-        **** I tried to link homepage in menu section but is throwing an error, it has something to with settings.py maybe can you take a look? because if I change something in setting.py it might mess up the site, i have linked the home page in menu, just go to menu and click on home it should show you the same error too *****
-        this is the error:
-        Using the URLconf defined in dj.urls, Django tried these URL patterns, in this order:
-        admin/
-        [name='home']
-        gate_info [name='gate_info']
-        The current path, home.html, didn’t match any of these.
-        link homepage in the menu to the main homepage. Add About section and contact emails. Add sources, create new html for such.
-
-        **** i guess this is fixed somehow and it looks fine now, let me know if it shows still same in your device maybe will have to change the spacing and padding ****
-        weather table extends to the edge lines on the sides. restrict them to a few inches away from the edge 
-
-        **** In your Django project's settings, you have defined the STATICFILES_DIRS setting to include the directory '/Users/ismailsakhani/Desktop/letsflysafe/dj/static'. However, Django cannot find this directory in the specified location. *****
-        Investigte this `WARNINGS` from terminal when running `runserver` :
+        DONE! Investigte this `WARNINGS` from terminal when running `runserver` :
             ?: (staticfiles.W004) The directory 'C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\static' in the STATICFILES_DIRS setting does not exist.
+        NOT DONE! When searching random stuff the `try example` sectino is stuck to the left. Align it to center like home.html 
+            -- it should show the `try example` section as shown in home.html.
+            
+        DONE! Make seperate css for templates/dj_app/base.html its not a good practive to have styling within html. 
+        DONE! weather table extends to the edge lines on the sides. restrict them tightly for readability.
+        
+            **** I dont think this is possible just with html and CSS, best we can do it responsive site, it will look like desktop site in laptop, tablets and iPad and it will look like mobile app in phone ****
+            mobile site layout should be presented when requested a mobile site. - still figurin this out 
 
 
 **UV:   
@@ -46,10 +33,12 @@ Practice readibility and simplicity. Include description and documentation for o
         Scrape `scheduled` times less frequently as it is mostly static.
         Only scrape `actual` times more frequently and from different web source to decrease intensive pull.
         
-        add activator() scrape to include data from few hours later
+        add activator() scrape to include data from few hours later since its currently only showing 6am, 12pm and 6pm.
         
         fix freeze bug on the EC2. After running lengthy scrape for a few days cmd seems to get stuck.
-        
+            Discard while loop instead use:use a task scheduling library like Celery with a task queue such as RabbitMQ or Redis to handle the scheduled tasks asynchronously.
+            Utilize webhooks or event-driven architectures: Instead of pulling data in a loop, you can set up webhooks or use event-driven architectures to receive notifications or updates from the sources you want to scrape. This way, you can fetch data only when it becomes available or when an event is triggere.
+
         flight deet packet:
             Include STD and ETA in zulu in the flight deet.
             Addfunctionality to find any flight. Also add current Zulu time

@@ -81,7 +81,7 @@ def parse_query(request, main_query):
         else:       # If the query is not recognized:
             return gate_info(request, main_query=main_query)
             '''
-            # Attempting to pull all airports for easier access
+            # Attempting to pull all airports for easier search access
             florida_airports = airports['Florida'][1]
             for each_airport in florida_airports:
                 if each_query in each_airport:
@@ -100,7 +100,7 @@ def parse_query(request, main_query):
 
 def gate_info(request,main_query):
     gate = main_query
-    # In the database the all gates are uppercase so making the query uppercase    
+    # In the database all the gates are uppercase so making the query uppercase    
     gate = gate.upper()
 
     # Dictionary format a list with one or many dictionaries each dictionary containing 4 items:gate,flight,scheduled,actual
@@ -160,3 +160,16 @@ def metar_display(request,weather_query):
     weather = weather.scrape(weather_query)
     
     return render(request, 'metar_info.html', {'airport': airport, 'weather': weather})
+
+
+def contact(request):
+    return render(request, 'contact.html')
+
+
+def about(request):
+    return render(request, 'about.html')
+
+
+def source(request):
+    return render(request, 'source.html')
+
