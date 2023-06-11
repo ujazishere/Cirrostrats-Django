@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
-    <title>{% block title %}Gate Check{% endblock %}</title>
+    <title>{% block title %}Cirrostrats{% endblock %}</title>
     <style>
         .shrink {
             height: 50px !important; /* Adjust the desired height when scrolling */
@@ -28,7 +28,7 @@
         <div class="sidebar">
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'about' %}">About Us</a></li>
+                <li><a href="{% url 'ourstory' %}">Our Story</a></li>
                 <li><a href="{% url 'contact' %}">Contact Us</a></li>
                 <li><a href="{% url 'source' %}">Source</a></li>
             </ul>
@@ -36,7 +36,7 @@
     </header>
     
 
-    <h1>Lets Fly Safe</h1>
+    <h1>Cirrostrats</h1>
 
     <script>
         // JavaScript code for toggling the burger menu and sidebar
