@@ -34,26 +34,6 @@ def home(request):
         return render(request, 'home.html')
 
 
-def contact(request):
-    return render(request, 'contact.html')
-
-    
-def about(request):
-    return render(request, 'about.html')
-
-def source(request):
-    return render(request, 'source.html')
-
-def source(request):
-    return render(request, 'gate_check.html')
-
-def source(request):
-    return render(request, 'flight_lookup.html')
-
-def source(request):
-    return render(request, 'weather.html')
-
-
 def parse_query(request, main_query):
     main_query = main_query
     query_in_list_form = []     # Global variable since it is used outside of the if statement in case it was not triggered. purpose: Handeling Error
@@ -166,10 +146,9 @@ def contact(request):
     return render(request, 'contact.html')
 
 
-def about(request):
-    return render(request, 'about.html')
+def ourstory(request):
+    return render(request, 'ourstory.html')
 
 
 def source(request):
     return render(request, 'source.html')
-
