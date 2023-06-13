@@ -115,3 +115,13 @@ tbody tr:nth-child(even) {
     width: 100%;
   }
 }
+
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  width: 80%;
+}
+
+body {
+  margin-bottom: 100px;
+}

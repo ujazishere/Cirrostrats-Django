@@ -2,7 +2,7 @@ body {
   background-color: #fbf2e7; /* color */
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: geologica;
 }
 
 .shrink {
@@ -27,13 +27,15 @@ body {
   font-weight: bold;
 }
 
-.header-text {
+.header-text a {
   position: fixed;
   top: 15px;
   left: 20px;
   z-index: 999;
   font-size: 20px;
   font-weight: bold;
+  color: black;
+  text-decoration: none;
 }
 
 /* Add styles for the burger menu */
@@ -134,3 +136,4 @@ p {
     right: 20px;
   }
 }
+

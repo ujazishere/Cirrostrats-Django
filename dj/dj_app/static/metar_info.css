@@ -58,6 +58,7 @@ tbody tr:nth-child(even) {
   margin-top: 20px;
   border:black;
   border-radius: 5px;
+  margin-bottom: 20px;
 }
 
 .search-form input[type="text"] {

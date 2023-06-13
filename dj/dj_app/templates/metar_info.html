@@ -5,6 +5,7 @@
 {% block content %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'metar_info.css' %}">
+<div class="search-form-wrapper">
   <h3> Weather for {{airport}}</h3>
   {% if weather %}
   <table class="table">
