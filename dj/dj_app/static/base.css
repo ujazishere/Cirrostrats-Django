@@ -137,3 +137,11 @@ p {
   }
 }
 
+h1 {
+  font-size: 35px;
+  margin-top: 10px;
+}
+
+body {
+  font-family: geologica;
+}

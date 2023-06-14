@@ -1,19 +1,10 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
 
 h1 {
-  margin-bottom: 100px;
-  margin-top: 20px;
+  margin-top: 50px;
   text-align: center;
+  font-size: 35px;
 }
 
-main {
-  background-color: #fbf2e7;
-}
 
 footer {
   background-color: #333;

@@ -11,6 +11,7 @@ body {
   gap: 20px;
   margin-top: -15px;
   text-decoration: underline;
+  font-weight: bold;
 }
 
 .links-container a {
@@ -32,7 +33,7 @@ h1 {
 }
 
 h2 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   text-align: center;
   margin-top: 20px;
@@ -47,7 +48,7 @@ h3 {
 
 p {
   font-size: 14px;
-  font-weight: lighter;
+  font-weight: normal;
   text-align: center;
   margin-top: 40px;
 }
