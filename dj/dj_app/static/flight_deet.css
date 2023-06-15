@@ -1,5 +1,4 @@
 body {
-  background-color: #fbf2e7;
   margin: 0;
   padding: 0;
 }
@@ -55,37 +54,36 @@ p {
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #ECF9FF;
+  background-color: #ef8354;
   color: #000000;
   cursor: pointer;
 }
 
 table.comparison-table {
   margin: 20px auto;
-  border-collapse: collapse;
   width: 80%;
   max-width: 800px;
-  background-color: #ECF9FF;
-  border: 1px solid #000000;
+  background-color: #ef8354;
   text-align: center;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px #ef8354;
 }
 
 table.comparison-table th {
   padding: 10px;
   text-align: center;
-  border: 1px solid #000000;
-  background-color: #ECF9FF;
+  background-color: #ef8354;
 }
 
 table.comparison-table td {
   padding: 10px;
   text-align: center;
-  border: 1px solid #000000;
-  background-color: #ECF9FF;
+  background-color: #ffffff;
 }
 
 table.comparison-table thead {
-  background-color: #ECF9FF;
+  background-color: #ef8354;
   color: #333;
 }
 

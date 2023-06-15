@@ -1,5 +1,4 @@
 body {
-  background-color: #fbf2e7;
   margin: 0;
   padding: 0;
   display: flex;
@@ -31,27 +30,30 @@ h5 {
 
 table {
   margin: 0 auto;
-  border-collapse: collapse;
   width: 100%;
   max-width: 800px;
-  background-color: #fffbeb;
+  background-color: #ffffff;
   margin-bottom: 100px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1.5px #ef8354;
 }
 
 th,
 td {
   padding: 10px;
   text-align: left;
-  border: 1px solid #000000;
+
 }
 
 thead {
-  background-color: #f4e4d998;
+  background-color: #ef8354;
   color: #000000;
 }
 
+
 tbody tr:nth-child(even) {
-  background-color: #ecf9ff;
+  background-color: #ef8354;
 }
 
 .search-form-wrapper {
@@ -89,7 +91,7 @@ tbody tr:nth-child(even) {
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #ecf9ff;
+  background-color: #ef8354;
   color: #000000;
   cursor: pointer;
 }

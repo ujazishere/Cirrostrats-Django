@@ -15,6 +15,7 @@
     </form>
   </div>
   {% if gate_data_table %}
+  <div class ="table-wrapper">
     <table>
       <thead>
         <tr>
@@ -35,6 +36,7 @@
       {% endfor %}
       </tbody>
     </table>
+  </div>  
   {% else %}
     <h3>No Results for {{gate}}.</h3>
   {% endif %}

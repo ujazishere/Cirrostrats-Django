@@ -1,5 +1,4 @@
 body {
-  background-color: #fbf2e7;
   margin: 0;
   padding: 0;
 }
@@ -31,8 +30,11 @@ p {
   border-collapse: collapse;
   width: 80%;
   max-width: 550px;
-  background-color: #fffbeb;
-  border: 1px solid #000000;
+  background-color: #ef8354;
+  border: 2px solid #000000;
+  border-radius: 15px;
+  overflow: hidden;
+  overflow: black;
 }
 
 th, td {
@@ -42,12 +44,12 @@ th, td {
 }
 
 thead {
-  background-color: #f4e4d9;
+  background-color: #ef8354;
   color: #000000;
 }
 
 tbody tr:nth-child(even) {
-  background-color: #ecf9ff;
+  background-color: #ffffff;
 }
 
 /* Search form styles */
@@ -74,7 +76,7 @@ tbody tr:nth-child(even) {
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #ecf9ff;
+  background-color: #ef8354;
   color: #000000;
   cursor: pointer;
 }

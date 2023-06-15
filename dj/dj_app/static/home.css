@@ -1,5 +1,4 @@
 body {
-  background-color: #fbf2e7;
   margin: 0;
   padding: 0;
 }
@@ -76,7 +75,7 @@ p {
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #ECF9FF;
+  background-color: #ef8354;
   color: #000000;
   cursor: pointer;
 }
