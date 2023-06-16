@@ -1,0 +1,29 @@
+{% extends "dj_app/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'guide.css' %}">
+    <h2>Check Weather, Gate And Flight Information</h2>
+
+    <h3>Note: Gate Queries Are Currently Only Available for United Flights in Newark.</h3>
+    <p>
+      <strong>Try the following Examples:</strong>
+      <br><br>
+      <em>C71X</em>: Lists all scheduled departures from the requested gate. You can just search for `X` in this case.
+      <br><br>
+      <em>i 492 ewr:</em> Returns METAR, and TAF at both departure and arrival airports for the given flight number. Use the `i` switch followed by the flight number followed by 3 letter departure code.
+      <br><br>
+      <em>w KEWR:</em> Returns the latest METAR and TAF for the given airport. Use the `w` switch followed by the 4 letter ICAO identifier of the airport.
+      <br><br>
+      Empty search returns information on all gates for United flights in KEWR.
+    </p>
+  </body>
+  </html>
+  
+  {% endblock %}

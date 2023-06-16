@@ -54,8 +54,8 @@ p {
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #ef8354;
-  color: #000000;
+  background-color: #474350;
+  color: #ffffff;
   cursor: pointer;
 }
 
@@ -63,17 +63,18 @@ table.comparison-table {
   margin: 20px auto;
   width: 80%;
   max-width: 800px;
-  background-color: #ef8354;
+  background-color: #474350;
   text-align: center;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 0 0 1px #ef8354;
+  box-shadow: 0 0 0 1px #474350;
 }
 
 table.comparison-table th {
   padding: 10px;
   text-align: center;
-  background-color: #ef8354;
+  background-color: #474350;
+  color: #ffffff;
 }
 
 table.comparison-table td {
@@ -83,8 +84,8 @@ table.comparison-table td {
 }
 
 table.comparison-table thead {
-  background-color: #ef8354;
-  color: #333;
+  background-color: #474350;
+  color: #ffffff;
 }
 
 table.comparison-table th:first-child,

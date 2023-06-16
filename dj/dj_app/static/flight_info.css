@@ -7,7 +7,7 @@ body {
 }
 
 h1 {
-  font-size: 36px;
+  font-size: 35px;
   font-weight: bold;
   text-align: center;
   margin-top: 50px;
@@ -32,28 +32,31 @@ table {
   margin: 0 auto;
   width: 100%;
   max-width: 800px;
-  background-color: #ffffff;
+  background-color: #474350;
   margin-bottom: 100px;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 0 0 1.5px #ef8354;
+  box-shadow: 0 0 0 2px #474350;
 }
 
 th,
 td {
   padding: 10px;
   text-align: left;
-
 }
 
 thead {
-  background-color: #ef8354;
-  color: #000000;
+  background-color: #474350;
+  color: #ffffff;
 }
 
 
 tbody tr:nth-child(even) {
-  background-color: #ef8354;
+  background-color: #ffffff;
+}
+
+tbody tr:nth-child(odd) {
+  color: #ffffff;
 }
 
 .search-form-wrapper {
@@ -91,8 +94,8 @@ tbody tr:nth-child(even) {
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #ef8354;
-  color: #000000;
+  background-color: #474350;
+  color: #ffffff;
   cursor: pointer;
 }
 

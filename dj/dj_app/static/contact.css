@@ -4,42 +4,19 @@ body {
   padding: 0;
 }
 
-header, main, footer {
-  padding: 20px;
-  width: 100%;
-}
-
-header {
-  background-color: #333;
-  color: #fff;
-}
-
 h1 {
-  margin-bottom: 100;
-  margin-top: 20px;
+  font-size: 35px;
+  font-weight: bold;
   text-align: center;
-}
-
-main {
-  background-color: #fbf2e7;
-}
-
-footer {
-  background-color: #333;
-  text-align: center;
-}
-
-footer a {
-  color: #fff;
-  text-decoration: none;
-}
-
-section {
-  margin-bottom: 20px;
+  margin-top: 50px;
 }
 
 h2 {
   margin: auto;
+  margin-top: even;
+  font-size: 28px;
+  font-weight: bold;
+  
 }
 
 form label {
@@ -73,8 +50,8 @@ form button {
   margin-top: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #bfc0c0;
-  color: #000000;
+  background-color: #474350;
+  color: #ffffff;
   cursor: pointer;
 }
 

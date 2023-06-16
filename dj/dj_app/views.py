@@ -152,3 +152,8 @@ def ourstory(request):
 
 def source(request):
     return render(request, 'source.html')
+
+def source(request):
+    return render(request, 'guide.html')
+
+
