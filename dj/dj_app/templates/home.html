@@ -5,38 +5,77 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>LETSLFYSAFE</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
-    <h2>Check Weather, Gate And Flight Information</h2>
+<head>
+  <title>LETSLFYSAFE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+</head>
 
-    <div class="links-container">
-      <p><a href="{% url 'gate_check' %}"> Gate Check </a></p>
-      <p><a href="{% url 'flight_lookup' %}"> Flight Lookup </a></p>
-      <p><a href="{% url 'weather' %}"> Weather </a></p>
-    </div>
+<style>
+    
+  /* Add light and dark mode switch styles */
+  .dark-mode-switch {
+    position: fixed;
+    top: 100px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .dark-mode-switch label {
+    margin-left: 5px;
+  }
+  
+  /* Style the links in white color for dark mode */
+  .dark-mode .links-container a {
+    color: white;
+  }
 
+</style>
+
+<body>
+  <h2>Check Weather, Gate And Flight Information</h2>
+
+  <div class="links-container">
+    <p><a href="{% url 'gate_check' %}">Gate Check</a></p>
+    <p><a href="{% url 'flight_lookup' %}">Flight Lookup</a></p>
+    <p><a href="{% url 'weather' %}">Weather</a></p>
+  </div>
+
+  <!-- Light and dark mode switch -->
+  <div class="dark-mode-switch">
+    <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+    <label for="darkModeToggle">Dark Mode</label>
+  </div>
+
+  {% csrf_token %}
+  <form method="post" class="search-form">
     {% csrf_token %}
-    <form method="post" class="search-form">
-      {% csrf_token %}
-      <label for="query"></label>
-      <input type="text" name="query" id="query">
-      <button type="submit">Search</button>
-    </form>
-    <h3>Note: Gate Queries Are Currently Only Available for United Flights in Newark.</h3>
-    <p>
-      <strong>Try the following Examples:</strong>
-      <br><br>
-      <em>C71X</em>: Lists all scheduled departures from the requested gate. You can just search for `X` in this case.
-      <br><br>
-      <em>i 492 ewr:</em> Returns METAR, and TAF at both departure and arrival airports for the given flight number. Use the `i` switch followed by the flight number followed by 3 letter departure code.
-      <br><br>
-      <em>w KEWR:</em> Returns the latest METAR and TAF for the given airport. Use the `w` switch followed by the 4 letter ICAO identifier of the airport.
-      <br><br>
-      Empty search returns information on all gates for United flights in KEWR.
-    </p>
-  </body>
-  </html>
+    <label for="query"></label>
+    <input type="text" name="query" id="query">
+    <button type="submit">Search</button>
+  </form>
+  <h3>Note: Gate Queries Are Currently Only Available for United Flights in Newark.</h3>
+  <p>
+    <strong>Try the following Examples:</strong>
+    <br><br>
+    <em>C71X</em>: Lists all scheduled departures from the requested gate. You can just search for `X` in this case.
+    <br><br>
+    <em>i 492 ewr:</em> Returns METAR, and TAF at both departure and arrival airports for the given flight number. Use the `i` switch followed by the flight number followed by 3 letter departure code.
+    <br><br>
+    <em>w KEWR:</em> Returns the latest METAR and TAF for the given airport. Use the `w` switch followed by the 4 letter ICAO identifier of the airport.
+    <br><br>
+    Empty search returns information on all gates for United flights in KEWR.
+  </p>
 
-  {% endblock %}
+  <script>
+    // JavaScript function to toggle dark mode
+    function toggleDarkMode() {
+      var body = document.body;
+      body.classList.toggle("dark-mode");
+    }
+  </script>
+</body>
+</html>
+{% endblock %}
