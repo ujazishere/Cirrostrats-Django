@@ -3,6 +3,10 @@ body {
   padding: 0;
 }
 
+body.dark-mode .links-container a {
+  color: #ffffff;
+}
+
 .links-container {
   display: flex;
   justify-content: center;
