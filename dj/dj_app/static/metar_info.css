@@ -8,8 +8,29 @@ body.dark-mode {
 }
 
 body.dark-mode thead{
-  font: #FFFFFF;
+  color: #FFFFFF;
 }
+
+.dark-mode .search-form button{
+  border: 1px solid white
+}
+
+.dark-mode tr:nth-child(odd) {
+  color: #ffffff;
+}
+
+.dark-mode tr:nth-child(even) {
+  color: #000000;
+}
+
+.dark-mode .table {
+  background-color: black;
+  border-collapse: separate; /* Change the value to "separate" */
+  border: 1px solid #ffffff;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
 
 h1 {
   font-size: 10;
@@ -52,7 +73,6 @@ th, td {
 }
 
 thead {
-  background-color: #474350;
   color: #ffffff;
 }
 

@@ -21,6 +21,11 @@ body {
     color: white;
   }
 
+
+  .dark-mode .search-form button{
+    border: 1px solid white
+  }
+
 .links-container {
   display: flex;
   justify-content: center;
