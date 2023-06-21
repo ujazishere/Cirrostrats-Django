@@ -5,13 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
-    <style>
-        /* Add dark mode styles here */
-        .dark-mode {
-            background-color: #1f1f1f;
-            color: #ffffff;
-        }
-    </style>
     <title>{% block title %}Cirrostrats{% endblock %}</title>
 </head>
 <body>
@@ -40,25 +33,14 @@
     
     <h1>Cirrostrats</h1>
 
-    <!-- Add dark mode switch -->
-    <div class="dark-mode-switch">
-        <input type="checkbox" id="darkModeToggle">
-        <label for="darkModeToggle">Dark Mode</label>
-    </div>
-
     <script>
         // JavaScript code for toggling the burger menu, sidebar, and dark mode
         document.addEventListener("DOMContentLoaded", function () {
             var burgerMenu = document.querySelector(".burger-menu");
             var sidebar = document.querySelector(".sidebar");
-            var darkModeToggle = document.getElementById("darkModeToggle");
-
+            
             burgerMenu.addEventListener("click", function () {
                 sidebar.classList.toggle("active");
-            });
-
-            darkModeToggle.addEventListener("change", function () {
-                document.body.classList.toggle("dark-mode");
             });
         });
     </script>

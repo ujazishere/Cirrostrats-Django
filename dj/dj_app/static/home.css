@@ -3,9 +3,23 @@ body {
   padding: 0;
 }
 
-body.dark-mode .links-container a {
-  color: #ffffff;
-}
+  /* Add light and dark mode switch styles */
+  .dark-mode-switch {
+    position: fixed;
+    top: 100px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .dark-mode-switch label {
+    margin-left: 5px;
+  }
+  
+  .dark-mode .links-container a {
+    color: white;
+  }
 
 .links-container {
   display: flex;
