@@ -6,6 +6,8 @@ Practice readibility and simplicity. Include description and documentation for o
         implement show and hide feature for departure and destination boxes on flight_deet page
         
 **UV:   
+        Implement search bar suggestions as user initiates typing.
+        
         Scrape `scheduled` times less frequently as it is mostly static.
         Only scrape `actual` times more frequently and from different web source to decrease intensive pull.
         

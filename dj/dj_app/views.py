@@ -153,6 +153,19 @@ def ourstory(request):
 def source(request):
     return render(request, 'source.html')
 
+
+def gate_check(request):
+    return render(request, 'gate_check.html')
+
+
+def flight_lookup(request):
+    return render(request, 'home.html', {'flight_lookup': True})
+
+
+def weather(request):
+    return render(request, 'weather.html')
+    
+
 def guide(request):
     return render(request, 'guide.html')
 
