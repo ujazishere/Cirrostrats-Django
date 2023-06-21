@@ -153,7 +153,7 @@ def ourstory(request):
 def source(request):
     return render(request, 'source.html')
 
-def source(request):
+def guide(request):
     return render(request, 'guide.html')
 
 

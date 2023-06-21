@@ -1,35 +1,11 @@
 Practice readibility and simplicity. Include description and documentation for others to read and make changes to it
 
 **IS:   
-        DONE! make search bar static and minimal 
-        DONE! Investigte this `WARNINGS` from terminal when running `runserver` :
-            ?: (staticfiles.W004) The directory 'C:\Users\ujasv\OneDrive\Desktop\codes\Weather_work\dj\static' in the STATICFILES_DIRS setting does not exist.
-        NOT DONE! When searching random stuff the `try example` sectino is stuck to the left. Align it to center like home.html 
-            -- it should show the `try example` section as shown in home.html.
-            
-        DONE! Make seperate css for templates/dj_app/base.html its not a good practive to have styling within html. 
-        DONE! weather table extends to the edge lines on the sides. restrict them tightly for readability.
+        Use Dark mode across the web.
+        Make seperate css for templates/dj_app/base.html instead of having it within the base.html. Its not a good practive to have styling within html. 
+        implement show and hide feature for departure and destination boxes on flight_deet page
         
-            **** I dont think this is possible just with html and CSS, best we can do it responsive site, it will look like desktop site in laptop, tablets and iPad and it will look like mobile app in phone ****
-            mobile site layout should be presented when requested a mobile site. - still figurin this out 
-
-
 **UV:   
-        DONE! fix and cleanup description in examples on homepage.
-        DONE! TAF can be out of index. remove TAF if unavailable. Redirect to no found page if no weather found.
-                for example `w kcdw` returns error since index is out range probably because TAF is not available for it.
-        Done! Major time issue fixes for pulling lengthy web scrape . 
-        DONE! Fix date and time on `i` switch output
-        Done! Fix exponentially destructive while loop in the Gate_Scrape_Thread within root_gate_checker.py
-        DONE! Add all past queries in the web itself in a menu section so it is easily accessible.
-        DONE! seperate TAF by "   " and replace it with new line to make it viewable.
-        
-        DONE! move reliable structured data operation into the scraper rather than dealing with in Gate_checker()
-    	Done! Treat unreliable flights at source before it is dumped as master.pkl to keep master pikle clean.
-                Account for reliable and unreliable outlaws at source rather than scheduled flights
-        DONE! Move all template looking functions to root_class. 
-            exec(), reliable flight_num, 
-                
         Scrape `scheduled` times less frequently as it is mostly static.
         Only scrape `actual` times more frequently and from different web source to decrease intensive pull.
         
@@ -49,6 +25,8 @@ Practice readibility and simplicity. Include description and documentation for o
             include gate in this packet of information
             include IFR routing through flight aware if able
             associate flight numbers in gates table to their dedicated information for departure, destination and weather
+        
+        build analytics for how a user navigates and where they spend most times.
 
         make use of http://xml.flightview.com/xmlbdom/ for pulling flight data instead of requests and bs4 libraries
         
@@ -102,3 +80,19 @@ weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf',
 "{flight number} weather" = "{metar} {departure airport} {destination airport}"
 "{flight number} destination" = return destination or destination
 "{flight number} not, notam, notams" = return notams for departure and destination. include ability to return just pertinant information.
+
+        DONE! fix and cleanup description in examples on homepage.
+        DONE! TAF can be out of index. remove TAF if unavailable. Redirect to no found page if no weather found.
+                for example `w kcdw` returns error since index is out range probably because TAF is not available for it.
+        Done! Major time issue fixes for pulling lengthy web scrape . 
+        DONE! Fix date and time on `i` switch output
+        Done! Fix exponentially destructive while loop in the Gate_Scrape_Thread within root_gate_checker.py
+        DONE! Add all past queries in the web itself in a menu section so it is easily accessible.
+        DONE! seperate TAF by "   " and replace it with new line to make it viewable.
+        
+        DONE! move reliable structured data operation into the scraper rather than dealing with in Gate_checker()
+    	Done! Treat unreliable flights at source before it is dumped as master.pkl to keep master pikle clean.
+                Account for reliable and unreliable outlaws at source rather than scheduled flights
+        DONE! Move all template looking functions to root_class. 
+            exec(), reliable flight_num, 
+                

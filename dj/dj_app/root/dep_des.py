@@ -10,7 +10,7 @@ An attempt to extract clearance route has been initiated but unreliable.
 
 class Pull_flight_info(Root_class):
     def __init__(self) -> None:
-        # Super method inherits the init method of the superclass in this case`Root_class`.
+        # Super method inherits the init method of the superclass. In this case`Root_class`.
         super().__init__()
 
     def pull_dep_des(self, query_in_list_form):
@@ -28,11 +28,9 @@ class Pull_flight_info(Root_class):
         else:
             date = self.date_time(raw=True)     # Root_class inheritance
         flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport}"
-        print(flight_view)
-        response = requests.get(flight_view)
         
         try :
-            soup = bs4(response.content, 'html.parser')
+            soup = self.request(flight_view)
             scripts = soup.find_all('script')       # scripts is a section in the html that contains departure and destination airports 
             for script in scripts:
                 # looks up text 'var sdepapt' which is associated with departure airport.
@@ -53,6 +51,23 @@ class Pull_flight_info(Root_class):
         
         # print(departure, destination)
 
+    def pull_cirum(self):
+        info = "https://united-airlines.flight-status.info/ua-492"
+        soup = self.request(info)
+
+        # table = soup.find('div', {'class': 'a2'})
+        distane_and_duration = soup.find('ul', {'class': 'a3_n'})
+
+        # airport_name = soup.find('div', {'class': 'a2_a'})
+        airport_id = soup.find('div', {'class': 'a2_ak'})
+        time = soup.find('div', {'class': 'a2_b'})          # scheduled and actual times in local time zone
+        gate = soup.find('div', {'class': 'a2_c'})
+        # time = soup.find('div', {'class': 'a2_b'})
+
+
+        juice = [gate, time,]
+
+        return distane_and_duration 
 
     def pull_route(self, flight_query):     # Still under construction. Difficult to work with API. Attempting AeroAPI
         # Much unfinished work here! Cant seem to get how to extract the clearance route from flightaware,

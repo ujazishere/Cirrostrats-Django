@@ -10,20 +10,20 @@
     <table class="comparison-table">
       <thead>
         <tr>
-          <th>Departure</th>
+          <th>Departure; {zulu time; local}</th>
           {% for type, juice in dep_weather.items %}
           {% endfor %}
         </tr>
       <tbody>
         {% for flight_num, dep_des_list in dep_des.items %}
           <tr>
-            <td>{{ dep_des_list.0 }}</td>
-           {% for type, juice in dep_weather.items %}
+            <td>{{ dep_des_list.0 }}</td> <!-- Departure ID -->
+           {% for metar_taf_title, metar_taf_data in dep_weather.items %}
            <tr>
             <tr>
-              <th>{{ type }}</th>
+              <th>{{ metar_taf_title }}</th>
             </tr>
-            <td> {{ juice|safe }} </td>      
+            <td> {{ metar_taf_data|safe }} </td>      
            </tr>       
             {% endfor %}
           </tr>
@@ -34,20 +34,18 @@
     <table class="comparison-table">
       <thead>
         <tr>
-          <th>Destination</th>
-          {% for type, juice in dest_weather.items %}
-          {% endfor %}
+          <th>Destination {zulu time; local}</th>
         </tr>
        <tbody>
         {% for flight_num, dep_des_list in dep_des.items %}
         <tr>
-          <td>{{ dep_des_list.1 }}</td>
-          {% for type, juice in dest_weather.items %}
+          <td>{{ dep_des_list.1 }}</td>  <!-- Destination ID  -->
+          {% for metar_taf_title, metar_taf_data in dest_weather.items %}
           <tr>
             <tr>
-              <th>{{ type }}</th>
+              <th>{{ metar_taf_title }}</th>
             </tr>
-            <td>{{ juice|safe }}</td>
+            <td>{{ metar_taf_data|safe }}</td> <!-- safe allows it to print char "/n"  for a new line -->
            </tr>
           {% endfor %}
         </tr>

@@ -14,7 +14,7 @@ urlpatterns = [
     path('gate_check', views.source, name = 'gate_check'), #gate_check page.
     path('flight_lookup', views.source, name = 'flight_lookup'), #flight_lookup page.
     path('weather', views.source, name = 'weather'), #weather page. 
-    path('guide', views.source, name = 'guide'), #guide page.  
+    path('guide', views.guide, name = 'guide'), #guide page.  
  
 ]
 
