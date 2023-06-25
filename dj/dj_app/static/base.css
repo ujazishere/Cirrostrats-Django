@@ -49,7 +49,6 @@ body.dark-mode thead{
   width: 100%; /* Adjust the width as per your preference */
   height: 60px; /* Adjust the height as per your preference */
   margin: 0 auto; /* Center the header horizontally */
-  border-radius: 2.5px;
   border-collapse: collapse;
 }
 

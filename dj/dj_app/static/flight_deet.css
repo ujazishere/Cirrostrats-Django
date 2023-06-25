@@ -3,6 +3,22 @@ body {
   padding: 0;
 }
 
+.dark-mode table.comparison-table thead th {
+  background-color: black;
+}
+
+.dark-mode table.comparison-table th {
+  background-color: black;
+}
+
+.dark-mode table.comparison-table td {
+  color: black;
+}
+
+.dark-mode table.comparison-table {
+  box-shadow: 0 0 0 1px #ffffff;
+}
+
 h1 {
   font-size: 35px;
   font-weight: bold;

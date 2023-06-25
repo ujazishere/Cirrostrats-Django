@@ -21,10 +21,14 @@ body {
     color: white;
   }
 
-
   .dark-mode .search-form button{
     border: 1px solid white
   }
+  
+  .dark-mode h3 a {
+    color: #ffffff; /* white color */
+  }
+  
 
 .links-container {
   display: flex;
@@ -66,6 +70,10 @@ h3 {
   font-weight: bold;
   text-align: center;
   margin-top: 20px;
+}
+
+h3 a {
+  color: #000000;
 }
 
 p {
