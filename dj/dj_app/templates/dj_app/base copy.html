@@ -17,7 +17,7 @@
         </div>
         <!-- Add text on the right side of the header -->
         <div class="header-text">
-            <a href="{% url 'home' %}" style = "color: white; text-decoration: none; position: absolute;">Cirrostarts</a> 
+            <a href="{% url 'home' %}" style="color: white; text-decoration: none; position: absolute;">Cirrostarts</a> 
         </div>
         <!-- Add sidebar -->
         <div class="sidebar">
@@ -27,35 +27,21 @@
                 <li><a href="{% url 'contact' %}">Contact Us</a></li>
                 <li><a href="{% url 'source' %}">Source</a></li>
                 <li><a href="{% url 'guide' %}">Guide</a></li>
-
             </ul>
         </div>
     </header>
     
-
     <h1>Cirrostrats</h1>
 
     <script>
-        // JavaScript code for toggling the burger menu and sidebar
+        // JavaScript code for toggling the burger menu, sidebar, and dark mode
         document.addEventListener("DOMContentLoaded", function () {
             var burgerMenu = document.querySelector(".burger-menu");
             var sidebar = document.querySelector(".sidebar");
-            var header = document.querySelector(".sticky-header");
-
+            
             burgerMenu.addEventListener("click", function () {
                 sidebar.classList.toggle("active");
             });
-
-            var prevScrollPos = window.pageYOffset;
-            window.onscroll = function () {
-                var currentScrollPos = window.pageYOffset;
-                if (prevScrollPos > currentScrollPos) {
-                    header.classList.remove("shrink");
-                } else {
-                    header.classList.add("shrink");
-                }
-                prevScrollPos = currentScrollPos;
-            };
         });
     </script>
 
