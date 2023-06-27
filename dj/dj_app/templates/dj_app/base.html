@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
+
     <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
     <title>{% block title %}Cirrostrats{% endblock %}</title>
 </head>
@@ -15,10 +16,12 @@
             <span></span>
             <span></span>
         </div>
+
         <!-- Add text on the right side of the header -->
         <div class="header-text">
             <a href="{% url 'home' %}" style="color: white; text-decoration: none; position: absolute;">Cirrostarts</a> 
         </div>
+    
         <!-- Add sidebar -->
         <div class="sidebar">
             <ul>
@@ -31,6 +34,7 @@
         </div>
     </header>
     
+
     <h1>Cirrostrats</h1>
 
     <script>
