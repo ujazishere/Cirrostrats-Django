@@ -8,15 +8,15 @@
     
   /* Add light and dark mode switch styles */
   .dark-mode-switch {
-    position: absolute;
+    position: fixed ;
     display: flex;
     align-items: center;
     justify-content: center; /* Add this line to center horizontally */
-    top: 17%;
-    left: 40%;
-    width: 100%; /* Set the width to 100% to span the entire width */
+    top: 2%;
+    left: 77%;
+    z-index: 999; /* Increase the z-index value */
   }
-  
+
   /* Hide the default checkbox */
   .dark-mode-switch input[type="checkbox"] {
     display: none;
