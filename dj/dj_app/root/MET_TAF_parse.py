@@ -47,7 +47,7 @@ class Weather_display:
         # taf = taf_raw.split()
         # print((taf_raw))
         
-        return dict({'metar': metar_raw, 'taf': taf_raw})
+        return dict({'METAR': metar_raw, 'TAF': taf_raw})
 
 
     

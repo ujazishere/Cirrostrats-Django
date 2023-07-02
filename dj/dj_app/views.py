@@ -20,6 +20,7 @@ if run_lengthy_web_scrape:
 
 current_time = Gate_checker().date_time()
 
+
 def home(request):
     # Homepage first skips a "POST", goes to else and returns home.html since the query is not submitted yet.
     if request.method == "POST":
@@ -97,8 +98,10 @@ def gate_info(request,main_query):
 
 
 def flight_deets(request, query_in_list_form ):
-    # pull weather for a partifular flight number. 
+    # given a flight number it returns its, gates, scheduled and actual times of departure and arrival
+
     flt_info = Pull_flight_info()
+    '''
     dep_des = flt_info.pull_dep_des(query_in_list_form)
     
     if dep_des: 
@@ -127,8 +130,22 @@ def flight_deets(request, query_in_list_form ):
         return render(request, 'flight_deet.html', bulk_flight_deets )
     else:
         return render(request, 'flight_deet.html', {'flight_query': flight_query} )
+    '''
     
-    # find departure and destination of this particular flight from the web.
+    bulk_flight_deets = flt_info.pull_UA(query_in_list_form)
+    
+    def weather_req(airport):
+        weather = Weather_display()
+        weather = weather.scrape(airport)
+        return weather
+    
+    dep_weather = weather_req(bulk_flight_deets['departure_ID'])
+    dest_weather = weather_req(bulk_flight_deets['destination_ID'])
+    weather = {'dep_weather':dep_weather, 'dest_weather': dest_weather}
+    
+    bulk_flight_deets.update(weather)
+    
+    return render(request, 'flight_deet.html', bulk_flight_deets)
     
 
 def metar_display(request,weather_query):

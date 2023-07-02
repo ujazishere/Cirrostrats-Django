@@ -65,19 +65,17 @@
 </div>
 
   <h3>United Flight Information</h3>
-  <h4>Results for UA{{flight_query}} at {{current_time}}</h4>
-  {% if dep_des %}
+  <h4>Results for {{flight_number}}</h4>
+  
+  {% if flight_number %}
     <table class="comparison-table">
       <thead>
         <tr>
-          <th>Departure; {zulu time; local}</th>
-          {% for type, juice in dep_weather.items %}
-          {% endfor %}
+          <th>Departure {{ departure_ID }} | {{ departure_gate }}</th>
         </tr>
       <tbody>
-        {% for flight_num, dep_des_list in dep_des.items %}
           <tr>
-            <td>{{ dep_des_list.0 }}</td> <!-- Departure ID -->
+            <td> {{scheduled_departure_time}}</td>
            {% for metar_taf_title, metar_taf_data in dep_weather.items %}
            <tr>
             <tr>
@@ -88,18 +86,16 @@
             {% endfor %}
           </tr>
         </thead>
-        {% endfor %}
       </tbody>
     </table>
     <table class="comparison-table">
       <thead>
         <tr>
-          <th>Destination {zulu time; local}</th>
+          <th>Destination {{ destination_ID }} | {{ destination_gate }}</th>
         </tr>
        <tbody>
-        {% for flight_num, dep_des_list in dep_des.items %}
         <tr>
-          <td>{{ dep_des_list.1 }}</td>  <!-- Destination ID  -->
+          <td>{{ scheduled_arrival_time }}</td>
           {% for metar_taf_title, metar_taf_data in dest_weather.items %}
           <tr>
             <tr>
@@ -110,7 +106,6 @@
           {% endfor %}
         </tr>
       </thead>
-      {% endfor %}
      </tbody>
     </table>
   {% else %}
