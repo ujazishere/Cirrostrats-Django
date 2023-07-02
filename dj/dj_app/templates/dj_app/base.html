@@ -21,6 +21,12 @@
         <div class="header-text">
             <a href="{% url 'home' %}" style="color: white; text-decoration: none; position: absolute;">Cirrostarts</a> 
         </div>
+
+        <!-- Light and dark mode switch -->
+        <div class="dark-mode-switch">
+          <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+          <label for="darkModeToggle"></label>
+         </div>
     
         <!-- Add sidebar -->
         <div class="sidebar">
@@ -34,7 +40,6 @@
         </div>
     </header>
     
-
     <h1>Cirrostrats</h1>
 
     <script>
@@ -47,10 +52,14 @@
                 sidebar.classList.toggle("active");
             });
         });
-    </script>
 
+     // JavaScript function to toggle dark mode
+    function toggleDarkMode() {
+      var body = document.body;
+      body.classList.toggle("dark-mode");
+    }
+    </script>
     {% block content %}
     {% endblock %}
-
 </body>
 </html>
