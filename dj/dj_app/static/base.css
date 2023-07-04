@@ -1,75 +1,92 @@
 body {
-  background-color: #FFFFFF; /* color */
+  background-color: #FFFFFF;
   margin: 0;
   padding: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-  /* Add light and dark mode switch styles */
-  .dark-mode-switch {
-    position: absolute;
-    top: 15px;
-    right: 100px;
-    z-index: 999;
-    cursor: pointer;
-  }
-  
-  /* Hide the default checkbox */
-  .dark-mode-switch input[type="checkbox"] {
-    display: none;
-  }
-  
-  /* Style the toggle switch */
-  .dark-mode-switch label {
-    display: block;
-    width: 50px; /* Adjust the width as per your preference */
-    height: 25px; /* Adjust the height as per your preference */
-    border-radius: 13px; /* Half of the height to create a round switch */
-    background-color: #ccc; /* Default background color */
-    position: relative;
-    cursor: pointer;
-  }
-  
-  /* Style the toggle switch handle */
-  .dark-mode-switch label::after {
-    content: "";
-    position: absolute;
-    top: 2px; /* Adjust the position as per your preference */
-    left: 2px; /* Adjust the position as per your preference */
-    width: 22px; /* Adjust the width as per your preference */
-    height: 22px; /* Adjust the height as per your preference */
-    border-radius: 50%; /* Create a round handle */
-    background-color: #fff; /* Default handle color */
-    transition: all 0.3s ease-in-out;
-  }
-  
-  /* Adjust the appearance for the checked (dark mode) state */
-  .dark-mode-switch input[type="checkbox"]:checked + label {
-    background-color: #6b6b6b; /* Background color for dark mode */
-  }
-  
-  .dark-mode-switch input[type="checkbox"]:checked + label::after {
-    transform: translateX(24px); /* Move the handle to the right for checked state */
-  }
+/* Dark and light mode switch styles */
+.dark-mode-switch {
+  position: absolute;
+  top: 15px;
+  right: 100px;
+  z-index: 999;
+  cursor: pointer;
+}
+
+.dark-mode-switch input[type="checkbox"] {
+  display: none;
+}
+
+.dark-mode-switch label {
+  display: inline-block;
+  width: 50px;
+  height: 30px;
+  background-color: #ccc;
+  border-radius: 15px;
+  position: relative;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.dark-mode-switch label::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  transition: transform 0.3s ease-in-out;
+}
+
+.dark-mode-switch input[type="checkbox"]:checked + label {
+  background-color: #6b6b6b;
+}
+
+.dark-mode-switch input[type="checkbox"]:checked + label::after {
+  transform: translateX(20px);
+}
+
+/* Additional styles for the dark and light mode icons */
+.dark-mode-switch label::before {
+  content: "☀️";
+  align-content: center;
+  font-size: 20px;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  color: #fff;
+  transition: 0.3s ease-in-out;
+}
+
+.dark-mode-switch input[type="checkbox"]:checked + label::before {
+  content: "🌙";
+  align-content: center;
+}
+
+.dark-mode-switch input[type="checkbox"]:checked + label::before {
+  transform: translateX(24px); /* Move the handle to the right for checked state */
+  transition: 0.3s ease-in-out;
+}
 
 /* Dark mode styles */
 body.dark-mode {
   background-color: #000000;
 }
 
-body.dark-mode h1{
+body.dark-mode h1 {
   color: #FFFFFF;
 }
 
-body.dark-mode h2{
+body.dark-mode h2 {
   color: #FFFFFF;
 }
 
-body.dark-mode h3{
+body.dark-mode h3 {
   color: #FFFFFF;
 }
 
-body.dark-mode p{
+body.dark-mode p {
   color: #FFFFFF;
 }
 
@@ -77,7 +94,7 @@ body.dark-mode .sticky-header {
   background-color: #000000;
 }
 
-body.dark-mode thead{
+body.dark-mode thead {
   font: #FFFFFF;
 }
 
@@ -85,11 +102,11 @@ body.dark-mode thead{
 .sticky-header {
   position: sticky;
   top: 0;
-  background-color: #474350; /* Set your desired darker background color */
+  background-color: #474350;
   z-index: 999;
-  width: 100%; /* Adjust the width as per your preference */
-  height: 60px; /* Adjust the height as per your preference */
-  margin: 0 auto; /* Center the header horizontally */
+  width: 100%;
+  height: 60px;
+  margin: 0 auto;
   border-collapse: collapse;
 }
 
@@ -142,13 +159,13 @@ body.dark-mode thead{
 }
 
 .sidebar.active {
-  transform: translateX(0) !important; /* Added !important */
+  transform: translateX(0) !important;
 }
 
 .sidebar ul {
   list-style-type: none;
   padding: 0;
-  margin-top: 50px; /* Add spacing between "Home" and the burger menu */
+  margin-top: 50px;
   text-align: right;
 }
 
@@ -165,7 +182,6 @@ body.dark-mode thead{
 }
 
 /* Additional styles for text positioning */
-
 h1 {
   font-size: 35px;
   margin-top: 10px;
@@ -173,7 +189,7 @@ h1 {
 }
 
 h2 {
-  margin-top: 20px; /* Adjust the spacing between "Home" and the burger menu icon */
+  margin-top: 20px;
   text-align: center;
   color: #050505;
 }
