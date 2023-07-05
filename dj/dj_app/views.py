@@ -4,7 +4,7 @@ from .root.gate_checker import Gate_checker
 from .root.gate_scrape import Gate_scrape_thread
 from .root.MET_TAF_parse import Weather_display
 from .root.dep_des import Pull_flight_info
-from .root.flt_deet import airports
+# from .root.flt_deet import airports
 
 
 '''

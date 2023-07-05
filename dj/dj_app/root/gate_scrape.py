@@ -53,7 +53,7 @@ class Gate_Scrape(Root_class):
         
         reliable_flt_num = re.match(r'[A-Z]{2}\d{2,4}', flt_num)
         if reliable_flt_num and gate and scheduled and actual:
-            if "Terminal" in gate and scheduled!= 'Not Available' and actual!= 'Not Available':
+            if "Terminal" in gate and scheduled != 'Not Available' and actual != 'Not Available':
                 scheduled = self.dt_conversion(scheduled)
                 actual = self.dt_conversion(actual)
                 
@@ -101,6 +101,7 @@ class Gate_Scrape(Root_class):
                 # Here we check how many times we've looped so far and how many troubled items are still remaining.
                 print(f'{i}th trial- troubled len:', len(self.troubled) )
             elif not self.troubled:
+                print('all self.troubled completed')
                 # breaking since troubled is probably empty
                 break
         

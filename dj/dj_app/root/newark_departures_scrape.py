@@ -8,27 +8,34 @@ class Newark_departures_scrape(Root_class):
 
     def newark_deps(self):
         print('working on united departures out of Newark')
-        # morning = '?tp=6'         # When its late in night and you want to run lengthy scrape it wont work since
-                                        # there are no flights. Use this morning to pull early morning flights instead
-        morning = ''
-        EWR_deps_url = f'https://www.airport-ewr.com/newark-departures{morning}'
+        day_times = {'very_early_morn': '?tp=0',
+                     'morning': '?tp6',
+                     'noon': '?tp=12',
+                     'evening': '?tp=18',
+                         }                                
+        # When its late in night and you want to run lengthy scrape it wont work since
 
-        # TODO: web splits time in 3 parts.
-                # Makes it harder to pick appropriate information about flights
-                # from different times of the date
+        # The link can only consist of united departures at particular terminal. check into it.
+            # there are no flights. Use this morning to pull early morning flights instead
+        for time_of_the_day, code in day_times.items():
+            EWR_deps_url = f'https://www.airport-ewr.com/newark-departures{code}'
 
-        
-        soup = self.request(EWR_deps_url)
-        raw_bs4_all_EWR_deps = soup.find_all('div', class_="flight-col flight-col__flight")[1:]
-        # TODO: raw_bs4_html_ele contains delay info. Get delayed flight numbers
-        # raw_bs4_html_ele = soup.find_all('div', class_="flight-row")[1:]
+            # TODO: web splits time in 3 parts.
+                    # Makes it harder to pick appropriate information about flights
+                    # from different times of the date
 
-        #  This code pulls out all the flight numbers departing out of EWR
-        all_EWR_deps = []
-        for index in range(len(raw_bs4_all_EWR_deps)):
-            for i in raw_bs4_all_EWR_deps[index]:
-                if i != '\n':
-                    all_EWR_deps.append(i.text)
+            
+            soup = self.request(EWR_deps_url)
+            raw_bs4_all_EWR_deps = soup.find_all('div', class_="flight-col flight-col__flight")[1:]
+            # TODO: raw_bs4_html_ele contains delay info. Get delayed flight numbers
+            # raw_bs4_html_ele = soup.find_all('div', class_="flight-row")[1:]
+
+            #  This code pulls out all the flight numbers departing out of EWR
+            all_EWR_deps = []
+            for index in range(len(raw_bs4_all_EWR_deps)):
+                for i in raw_bs4_all_EWR_deps[index]:
+                    if i != '\n':
+                        all_EWR_deps.append(i.text)
         
         return all_EWR_deps
 

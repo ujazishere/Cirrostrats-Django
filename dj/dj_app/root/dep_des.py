@@ -59,16 +59,13 @@ class Pull_flight_info(Root_class):
         # airport = query.split()[2]
 
         info = f"https://united-airlines.flight-status.info/ua-{flt_num}"
-        flight_stats_url = "https://www.flightstats.com/v2/flight-tracker/UA/492?year=2023&month=07&date=02&flightId=1197707218"
         flight_view = "https://www.flightview.com/flight-tracker/UA/492?date=20230702&depapt=EWR"
+        flight_stats_url = f"https://www.flightstats.com/v2/flight-details/UA/{flt_num}?year=2023&month=7&date=2"
         soup = self.request(info)
 
         # table = soup.find('div', {'class': 'a2'})
         distane_and_duration = soup.find('ul', {'class': 'a3_n'})
         distance_duration = [i.text for i in distane_and_duration if 'Flight D' in i.text]
-        duration = distance_duration[0]
-        distance = distance_duration[1]
-        # airport_name = soup.find('div', {'class': 'a2_a'})
         airport_id = soup.find_all('div', {'class': 'a2_ak'})
         airport_id = [i.text for i in airport_id if 'ICAO' in i.text]
         departure_ID = airport_id[0].split()[2]
@@ -93,8 +90,6 @@ class Pull_flight_info(Root_class):
         return {'flight_number': f'UA{flt_num}',
                  'departure_ID': departure_ID,
                  'destination_ID':destination_ID, 
-                 'duration': duration,
-                 'distance': distance, 
                  'departure_gate': departure_gate,
                  'scheduled_departure_time': scheduled_departure_time,
                  'actual_departure_time': actual_departure_time,
