@@ -24,7 +24,7 @@
 
         <!-- Light and dark mode switch -->
         <div class="dark-mode-switch">
-          <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+          <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()" {% if selected_mode == 'dark' %}checked{% endif %}>
           <label for="darkModeToggle"></label>
          </div>
     
@@ -53,11 +53,23 @@
             });
         });
 
-     // JavaScript function to toggle dark mode
-    function toggleDarkMode() {
-      var body = document.body;
-      body.classList.toggle("dark-mode");
-    }
+        // JavaScript function to toggle dark mode
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle("dark-mode");
+            var selectedMode = body.classList.contains("dark-mode") ? "dark" : "light";
+            localStorage.setItem("selectedMode", selectedMode);
+        }
+
+        // Check and set the mode on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            var selectedMode = localStorage.getItem("selectedMode");
+            if (selectedMode === "dark") {
+                var body = document.body;
+                body.classList.add("dark-mode");
+                document.getElementById("darkModeToggle").checked = true;
+            }
+        });
     </script>
     {% block content %}
     {% endblock %}
