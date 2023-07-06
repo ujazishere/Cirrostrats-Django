@@ -1,14 +1,17 @@
 Practice readibility and simplicity. Include description and documentation for others to read and make changes to it
 
 **IS:   
-        Use Dark mode across the web.
-        Make seperate css for templates/dj_app/base.html instead of having it within the base.html. Its not a good practive to have styling within html. 
         implement show and hide feature for departure and destination boxes on flight_deet page
+        Make all pages in Menu bar symmetric.
+        Make dark mode switch symmetric
+        Make the flight deet page more like the google flight packet. search `i 492` to view the flight deet
+        DONE! Use Dark mode across the web.
+        DONE! Make seperate css for templates/dj_app/base.html instead of having it within the base.html. Its not a good practive to have styling within html. 
         
 **UV:   
         Implement search bar suggestions as user initiates typing.
         
-        Scrape `scheduled` times less frequently as it is mostly static.
+        Scrape `scheduled` times less frequently as it is mostly static and expensive.
         Only scrape `actual` times more frequently and from different web source to decrease intensive pull.
         
         add activator() scrape to include data from few hours later since its currently only showing 6am, 12pm and 6pm.
