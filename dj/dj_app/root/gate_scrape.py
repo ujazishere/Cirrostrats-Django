@@ -8,12 +8,7 @@ import pytz
 import re
 # from models import Flight       # This doesnt work because models is in the upper directory
 
-# TODO: web splits time in 3 parts.
-        # Makes it harder to pick appropriate information about flights
-        # from different times of the date
-        # only solution is to work with models and API/XML
 
-                
 class Gate_Scrape(Root_class):
     def __init__(self) -> None:
         pass
@@ -26,9 +21,9 @@ class Gate_Scrape(Root_class):
 
     
     def pick_flight_data(self, flt_num):
-        
         # refer to self.exec() first, then come back here since this function is called by the exector
-        # returns a dict with value of list that contains 3 items. Refer to the `return` item
+        
+        # This function returns a dict with value of list that contains 3 items. Refer to the `return` item
         airline_code = flt_num[:2]      # first 2 characters of airline code eg. UA, DL
         flight_number_without_airline_code = flt_num[2:]
         
@@ -37,8 +32,8 @@ class Gate_Scrape(Root_class):
         raw_date = now.strftime('%Y%m%d')           # formatted as YYYYMMDD
         
         flight_view = f"https://www.flightview.com/flight-tracker/{airline_code}/{flight_number_without_airline_code}?date={raw_date}&depapt=EWR"
-        soup2 = self.request(flight_view, timeout=5)
-        raw_bs4_scd2 = soup2.find_all('td')
+        soup = self.request(flight_view, timeout=5)
+        raw_bs4_scd2 = soup.find_all('td')
 
         # Schedule and terminal information with a lot of other garbage:
         scd = []
@@ -54,6 +49,8 @@ class Gate_Scrape(Root_class):
         reliable_flt_num = re.match(r'[A-Z]{2}\d{2,4}', flt_num)
         if reliable_flt_num and gate and scheduled and actual:
             if "Terminal" in gate and scheduled != 'Not Available' and actual != 'Not Available':
+                # The "Not Available" should also be displayed on the web since it contains atleast the flight number
+                # and maybe even the scheduled time of departure.
                 scheduled = self.dt_conversion(scheduled)
                 actual = self.dt_conversion(actual)
                 
@@ -68,9 +65,6 @@ class Gate_Scrape(Root_class):
                     'scheduled': scheduled,
                     'actual': actual,
                 })
-        else:
-            # unreliable outlaws might just not be necessary since flt_num is always available
-            print('!!!UNRELIABLE OUTLAW', gate, reliable_flt_num, scheduled, actual)
 
         # This is a format that resembles more to the format in the final output.
         # return {'flight_num': flt_num, 'gate': gate, 'scheduled': scheduled, 'actual': actual}
@@ -134,19 +128,17 @@ class Gate_Scrape(Root_class):
 
     def activator(self):
         
-        # TODO:This is where the structure needs to be fixed before it enters master.pkl. This is the source of information
-        
-        # remove old flights from master from before today
+        # This removes old flights from master from before today
         # self.temp_fix_to_remove_old_flights()
 
-        # Extract all United flight numbers in list form through departures_ewr_UA()
-        departures_ewr_UA = Newark_departures_scrape().united_departures()
-        # with open('departures_ewr_UA.pkl', 'rb') as f:
-            # pickle.dump(departures_ewr_UA, f)
+        # Extracting all United flight numbers in list form.
+        ewr_departures_UA = Newark_departures_scrape().united_departures()
+        # with open('ewr_departures_UA.pkl', 'rb') as f:
+            # pickle.dump(ewr_departures_UA, f)
         
-        multi_thread_output = self.exec(departures_ewr_UA, self.pick_flight_data)    # inherited from root_class.Root_class
-        completed_flights = multi_thread_output['completed']
-        troubled_flights = multi_thread_output['troubled']
+        exec_output = self.exec(ewr_departures_UA, self.pick_flight_data)    # inherited from root_class.Root_class
+        completed_flights = exec_output['completed']
+        troubled_flights = exec_output['troubled']
         # Cant decide if master should be called or kept empty. When kept empty it saves disk space. When called it keeps track of old information.
         # master = self.load_master()
         master = {}
