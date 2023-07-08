@@ -20,7 +20,7 @@ body {
 
 .dark-mode-switch label {
   display: inline-block;
-  width: 55px;
+  width: 57px;
   height: 30px;
   background-color: #fafafa;
   border-radius: 15px;
@@ -51,10 +51,10 @@ body {
 .dark-mode-switch label::before {
   content: "☀️";
   align-content: center;
-  font-size: 20px;
+  font-size: 18px;
   position: absolute;
   top: 4px;
-  left: 4px;
+  left: 6px;
   color: #fff;
   transition: 0.3s ease-in-out;
 }
@@ -62,6 +62,8 @@ body {
 .dark-mode-switch input[type="checkbox"]:checked + label::before {
   content: "🌙";
   align-content: center;
+  font-size: 18px;
+  position: absolute;
 }
 
 .dark-mode-switch input[type="checkbox"]:checked + label::before {

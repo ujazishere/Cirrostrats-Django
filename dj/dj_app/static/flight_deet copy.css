@@ -3,24 +3,6 @@ body {
   padding: 0;
 }
 
-.toggle-button {
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.hidden {
-  display: none;
-}
-
-h5 {
-  text-align: center;
-}
-
 .dark-mode table.comparison-table thead th {
   background-color: black;
 }
@@ -35,13 +17,6 @@ h5 {
 
 .dark-mode table.comparison-table {
   box-shadow: 0 0 0 1px #ffffff;
-}
-.dark-mode h4 {
-  color: white;
-}
-
-.dark-mode h5 {
-  color: white;
 }
 
 h1 {

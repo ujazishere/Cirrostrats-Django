@@ -9,59 +9,65 @@
   <h4>Results for {{flight_number}}</h4>
 
   {% if flight_number %}
-    <table class="comparison-table">
-      <thead>
-        <tr>
-          <th>Departure {{ departure_ID }} | {{ departure_gate }}</th>
-        </tr>
-      <tbody>
+    <div id="departure-container" class="table-container">
+      <h5>Departure {{ departure_ID }} | {{ departure_gate }}</h5>
+      <button class="toggle-button" onclick="toggleTable('departure-table')">Show/Hide Departure Table</button>
+      <table id="departure-table" class="comparison-table">
+        <thead>
           <tr>
-            <td> {{scheduled_departure_time}}</td>
-           {% for metar_taf_title, metar_taf_data in dep_weather.items %}
-           <tr>
-            <tr>
-              <th>{{ metar_taf_title }}</th>
-            </tr>
-            <td> {{ metar_taf_data|safe }} </td>      
-           </tr>       
-            {% endfor %}
+            <th>Departure {{ departure_ID }} | {{ departure_gate }}</th>
           </tr>
         </thead>
-      </tbody>
-    </table>
-    <table class="comparison-table">
-      <thead>
-        <tr>
-          <th>Destination {{ destination_ID }} | {{ destination_gate }}</th>
-        </tr>
-       <tbody>
-        <tr>
-          <td>{{ scheduled_arrival_time }}</td>
-          {% for metar_taf_title, metar_taf_data in dest_weather.items %}
+        <tbody>
           <tr>
-            <tr>
-              <th>{{ metar_taf_title }}</th>
-            </tr>
-            <td>{{ metar_taf_data|safe }}</td> <!-- safe allows it to print char "/n"  for a new line -->
-           </tr>
-          {% endfor %}
-        </tr>
-      </thead>
-     </tbody>
-    </table>
+            <td>{{scheduled_departure_time}}</td>
+            {% for metar_taf_title, metar_taf_data in dep_weather.items %}
+              <tr>
+                <th>{{ metar_taf_title }}</th>
+              </tr>
+              <td>{{ metar_taf_data|safe }}</td>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="destination-container" class="table-container">
+      <h5>Destination {{ destination_ID }} | {{ destination_gate }}</h5>
+      <button class="toggle-button" onclick="toggleTable('destination-table')">Show/Hide Destination Table</button>
+      <table id="destination-table" class="comparison-table">
+        <thead>
+          <tr>
+            <th>Destination {{ destination_ID }} | {{ destination_gate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ scheduled_arrival_time }}</td>
+            {% for metar_taf_title, metar_taf_data in dest_weather.items %}
+              <tr>
+                <th>{{ metar_taf_title }}</th>
+              </tr>
+              <td>{{ metar_taf_data|safe }}</td>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
   {% else %}
     <p>No details found for {{flight_query}}.</p>
-      <strong>Try the following Examples:</strong>
-      <br><br>
-      <em>C71X</em>: Lists all scheduled departures from the requested gate. You can just search for `X` in this case.
-      <br><br>
-      <em>i 492 ewr:</em> Returns METAR, and TAF at both departure and arrival airports for the given flight number. Use the `i` switch followed by the flight number followed by 3 letter departure code.
-      <br><br>
-      <em>w KEWR:</em> Returns the latest METAR and TAF for the given airport. Use the `w` switch followed by the 4 letter ICAO identifier of the airport.
-      <br><br>
-      Empty search returns information on all gates for United flights in KEWR.
+    <strong>Try the following Examples:</strong>
+    <br><br>
+    <em>C71X</em>: Lists all scheduled departures from the requested gate. You can just search for `X` in this case.
+    <br><br>
+    <em>i 492 ewr:</em> Returns METAR, and TAF at both departure and arrival airports for the given flight number. Use the `i` switch followed by the flight number followed by 3 letter departure code.
+    <br><br>
+    <em>w KEWR:</em> Returns the latest METAR and TAF for the given airport. Use the `w` switch followed by the 4 letter ICAO identifier of the airport.
+    <br><br>
+    Empty search returns information on all gates for United flights in KEWR.
   {% endif %}
-  {% csrf_token %}
+
   <div class="search-form-wrapper">
     <form method="post" class="search-form">
       {% csrf_token %}
@@ -71,4 +77,11 @@
     </form>
   </div>
 
+  <script>
+    function toggleTable(tableId) {
+      var table = document.getElementById(tableId);
+      table.classList.toggle("hidden");
+    }
+  </script>
+  
 {% endblock %}

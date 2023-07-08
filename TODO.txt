@@ -2,8 +2,8 @@ Practice readibility and simplicity. Include description and documentation for o
 
 **IS:   
         implement show and hide feature for departure and destination boxes on flight_deet page
-        Make all pages in Menu bar symmetric.
-        Make dark mode switch symmetric
+        DONE! Make all pages in Menu bar symmetric.
+        DONE! Make dark mode switch symmetric
         Make the flight deet page more like the google flight packet. search `i 492` to view the flight deet
         DONE! Use Dark mode across the web.
         DONE! Make seperate css for templates/dj_app/base.html instead of having it within the base.html. Its not a good practive to have styling within html. 
