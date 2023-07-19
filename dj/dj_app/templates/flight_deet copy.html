@@ -10,12 +10,8 @@
 
   {% if flight_number %}
     <div id="departure-container" class="table-container">
-      <h5>
-        <span class="header-title">Departure {{ departure_ID }} | {{ departure_gate }}</span>
-        <button class="toggle-button arrow-button" onclick="toggleTable('departure-table')">
-          <span id="departure-arrow" class="arrow-up"></span>
-        </button>
-      </h5>
+      <h5>Departure {{ departure_ID }} | {{ departure_gate }}</h5>
+      <button class="toggle-button" onclick="toggleTable('departure-table')">Show/Hide Table</button>
       <table id="departure-table" class="comparison-table">
         <thead>
           <tr>
@@ -37,12 +33,8 @@
     </div>
 
     <div id="destination-container" class="table-container">
-      <h5>
-        <span class="header-title">Destination {{ destination_ID }} | {{ destination_gate }}</span>
-        <button class="toggle-button arrow-button" onclick="toggleTable('destination-table')">
-          <span id="destination-arrow" class="arrow-up"></span>
-        </button>
-      </h5>
+      <h5>Destination {{ destination_ID }} | {{ destination_gate }}</h5>
+      <button class="toggle-button" onclick="toggleTable('destination-table')">Show/Hide Table</button>
       <table id="destination-table" class="comparison-table">
         <thead>
           <tr>
@@ -88,19 +80,8 @@
   <script>
     function toggleTable(tableId) {
       var table = document.getElementById(tableId);
-      var arrow = document.getElementById(tableId + "-arrow");
-
-      if (table.classList.contains("hidden")) {
-        table.classList.remove("hidden");
-        arrow.classList.remove("arrow-down");
-        arrow.classList.add("arrow-up");
-      } else {
-        table.classList.add("hidden");
-        arrow.classList.remove("arrow-up");
-        arrow.classList.add("arrow-down");
-      }
+      table.classList.toggle("hidden");
     }
-
   </script>
   
 {% endblock %}
