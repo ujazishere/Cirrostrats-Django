@@ -9,12 +9,12 @@ Practice readibility and simplicity. Include description and documentation for o
         DONE! Make seperate css for templates/dj_app/base.html instead of having it within the base.html. Its not a good practive to have styling within html. 
         
 **UV:   
-        Implement search bar suggestions as user initiates typing.
-        
+        DONE! add activator() scrape to include data from few hours later since its currently only showing 6am, 12pm and 6pm.
+
         Scrape `scheduled` times less frequently as it is mostly static and expensive.
         Only scrape `actual` times more frequently and from different web source to decrease intensive pull.
         
-        add activator() scrape to include data from few hours later since its currently only showing 6am, 12pm and 6pm.
+        Implement search bar suggestions as user initiates typing.        
         
         fix freeze bug on the EC2. After running lengthy scrape for a few days cmd seems to get stuck.
             Discard while loop instead use:use a task scheduling library like Celery with a task queue such as RabbitMQ or Redis to handle the scheduled tasks asynchronously.
@@ -31,13 +31,11 @@ Practice readibility and simplicity. Include description and documentation for o
             include IFR routing through flight aware if able
             associate flight numbers in gates table to their dedicated information for departure, destination and weather
         
-        build analytics for how a user navigates and where they spend most times.
+        build analytics for how a user navigates and where they spend most times, what they search.
 
         make use of http://xml.flightview.com/xmlbdom/ for pulling flight data instead of requests and bs4 libraries
         
         Use models and sql for database management.
-
-        Add source information 
 
 
 Note consistent irregularity in the outlaws - check for patterns.
