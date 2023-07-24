@@ -14,7 +14,7 @@ class Pull_flight_info(Root_class):
         # Super method inherits the init method of the superclass. In this case`Root_class`.
         super().__init__()
 
-    def pull_dep_des(self, query_in_list_form):
+    def pull_dep_des(self, query_in_list_form):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
         
         query = ' '.join(query_in_list_form)
         
@@ -58,11 +58,14 @@ class Pull_flight_info(Root_class):
         flt_num = query.split()[1]
         # airport = query.split()[2]
 
-        info = f"https://united-airlines.flight-status.info/ua-{flt_num}"
+        #  TODO: pull information on flight numners from the info web and use that to pll info through flightview.
+        # attempt to only pull departure and destination from the united from the info web.
+        info = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
         flight_view = "https://www.flightview.com/flight-tracker/UA/492?date=20230702&depapt=EWR"
         flight_stats_url = f"https://www.flightstats.com/v2/flight-details/UA/{flt_num}?year=2023&month=7&date=2"
         soup = self.request(info)
 
+        # Airport dsistaace and duration can be misleading. Be careful with using these. 
         # table = soup.find('div', {'class': 'a2'})
         distane_and_duration = soup.find('ul', {'class': 'a3_n'})
         distance_duration = [i.text for i in distane_and_duration if 'Flight D' in i.text]
@@ -80,14 +83,14 @@ class Pull_flight_info(Root_class):
         scheduled_arrival_time = destination_times[:9] + ' ' + destination_times[9:27]
         actual_arrival_time = destination_times[28:34] + ' ' + destination_times[34:]
         
-        gate = soup.find_all('div', {'class': 'a2_c'})
+        gate = soup.find_all('div', {'class': 'a2_c'})              # the data from the gate is also probably misleading.
         gate = [i.text.replace('\n', '') for i in gate]
         departure_gate = gate[0]
         destination_gate = gate[1]
         
         # time = soup.find('div', {'class': 'a2_b'})
 
-        return {'flight_number': f'UA{flt_num}',
+        return {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                  'departure_ID': departure_ID,
                  'destination_ID':destination_ID, 
                  'departure_gate': departure_gate,

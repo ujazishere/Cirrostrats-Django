@@ -11,18 +11,28 @@ Practice readibility and simplicity. Include description and documentation for o
 **UV:   
         DONE! add activator() scrape to include data from few hours later since its currently only showing 6am, 12pm and 6pm.
 
+        Include ground stop information.
+
         Scrape `scheduled` times less frequently as it is mostly static and expensive.
         Only scrape `actual` times more frequently and from different web source to decrease intensive pull.
         
         Implement search bar suggestions as user initiates typing.        
         
+        Make search availabe such that the initial switches are disregarded.
+
+        Have the ability to save queries made on the web such that they are unique.
+        Currently its such  that too many similar quires are getting cluttered in the /admin page.
+
+        Gotta be able to get the route from the web.
+
         fix freeze bug on the EC2. After running lengthy scrape for a few days cmd seems to get stuck.
             Discard while loop instead use:use a task scheduling library like Celery with a task queue such as RabbitMQ or Redis to handle the scheduled tasks asynchronously.
             Utilize webhooks or event-driven architectures: Instead of pulling data in a loop, you can set up webhooks or use event-driven architectures to receive notifications or updates from the sources you want to scrape. This way, you can fetch data only when it becomes available or when an event is triggere.
 
         flight deet packet:
-            Include STD and ETA in zulu in the flight deet.
-            Addfunctionality to find any flight. Also add current Zulu time
+            Include departure and arrival times in zulu as well as the local timem in the flight deet page.
+            Attempt to include delay informaation. from the faa.gov on the ground stop.
+                Make a seperate expand/collapse sectio for it
             Examine metar and TAF for parsing and color coding IFR and LIFR ceilings, Visibility, freezing conditions and runway condition codes.
             Highlight weather minimums in red for alternate requirements;(1-2-3 rule per ETA)
                 1/2SM as pink and 1/4SM as black
