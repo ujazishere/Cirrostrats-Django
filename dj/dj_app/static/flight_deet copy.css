@@ -3,21 +3,6 @@ body {
   padding: 0;
 }
 
-/* ... existing styles ... */
-
-/* Hide the content of the accordion by default */
-.accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.2s ease-out;
-}
-
-/* Show the content when the accordion is active */
-.accordion-content.active {
-  max-height: 1000px; /* Adjust this value as needed */
-}
-
-
 .toggle-button {
   margin-bottom: 10px;
   display: flex;

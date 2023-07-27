@@ -11,48 +11,52 @@
   {% if flight_number %}
     <div id="departure-container" class="table-container">
       <h5>Departure {{ departure_ID }} | {{ departure_gate }}</h5>
-      <button class="toggle-button" onclick="toggleTable('departure-table')">Show/Hide Table</button>
-      <table id="departure-table" class="comparison-table">
-        <thead>
-          <tr>
-            <th>Departure {{ departure_ID }} | {{ departure_gate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{scheduled_departure_time}}</td>
-            {% for metar_taf_title, metar_taf_data in dep_weather.items %}
-              <tr>
-                <th>{{ metar_taf_title }}</th>
-              </tr>
-              <td>{{ metar_taf_data|safe }}</td>
-            {% endfor %}
-          </tr>
-        </tbody>
-      </table>
+      <button class="toggle-button" onclick="toggleAccordion('departure-table-content')">Show/Hide Table</button>
+      <div id="departure-table-content" class="accordion-content">
+        <table id="departure-table" class="comparison-table">
+          <thead>
+            <tr>
+              <th>Departure {{ departure_ID }} | {{ departure_gate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{scheduled_departure_time}}</td>
+              {% for metar_taf_title, metar_taf_data in dep_weather.items %}
+                <tr>
+                  <th>{{ metar_taf_title }}</th>
+                </tr>
+                <td>{{ metar_taf_data|safe }}</td>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div id="destination-container" class="table-container">
       <h5>Destination {{ destination_ID }} | {{ destination_gate }}</h5>
-      <button class="toggle-button" onclick="toggleTable('destination-table')">Show/Hide Table</button>
-      <table id="destination-table" class="comparison-table">
-        <thead>
-          <tr>
-            <th>Destination {{ destination_ID }} | {{ destination_gate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ scheduled_arrival_time }}</td>
-            {% for metar_taf_title, metar_taf_data in dest_weather.items %}
-              <tr>
-                <th>{{ metar_taf_title }}</th>
-              </tr>
-              <td>{{ metar_taf_data|safe }}</td>
-            {% endfor %}
-          </tr>
-        </tbody>
-      </table>
+      <button class="toggle-button" onclick="toggleAccordion('destination-table-content')">Show/Hide Table</button>
+      <div id="destination-table-content" class="accordion-content">
+        <table id="destination-table" class="comparison-table">
+          <thead>
+            <tr>
+              <th>Destination {{ destination_ID }} | {{ destination_gate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ scheduled_arrival_time }}</td>
+              {% for metar_taf_title, metar_taf_data in dest_weather.items %}
+                <tr>
+                  <th>{{ metar_taf_title }}</th>
+                </tr>
+                <td>{{ metar_taf_data|safe }}</td>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
   {% else %}
@@ -78,9 +82,9 @@
   </div>
 
   <script>
-    function toggleTable(tableId) {
-      var table = document.getElementById(tableId);
-      table.classList.toggle("hidden");
+    function toggleAccordion(contentId) {
+      var content = document.getElementById(contentId);
+      content.classList.toggle("active");
     }
   </script>
   
