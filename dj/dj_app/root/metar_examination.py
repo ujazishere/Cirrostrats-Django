@@ -23,7 +23,7 @@ for i in all_metar_list:
 
 all_metar_list = [i.split() for i in met]       # List of lists: Bulk metar in the list form. Each metar is also a list of metar items.
 
-# The first prominent item is the airport ID. It semes TAF got in there somehow.
+# The first prominent item is the 4 letter ICAO airport ID. It semes TAF got in there somehow.
 # Removing the metar items that dont have first letter as 'K' or is not 4 letters long.
 len(all_metar_list)             # printing len to compare before and after the loop to see what was popped
 for individual_full_metar in all_metar_list:
@@ -41,9 +41,10 @@ for individual_full_metar in all_metar_list:
     z_in_datetime = individual_full_metar[1][-1]
     if len(datetime) != 7 and z_in_datetime != 'Z':    # conditions for it to be reliable:
         outlaw_metar = individual_full_metar
-        all_metar_list.pop(all_metar_list.index(outlaw_metar))
+        outlaw_metar_index = all_metar_list.index(outlaw_metar)
+        all_metar_list.pop(outlaw_metar_index)
 
-
+"""
 # Third prominent item is the AUTO or not item. if its not AUTO its usually winds with gust.
 # Another significant BLUEPRINT!!!!
 class Auto_or_not:
@@ -54,7 +55,7 @@ class Auto_or_not:
         auto_as_third_item = individual_full_metar[2]
         if auto_as_third_item == 'AUTO':
             auto_items.append(auto_as_third_item)
-        elif auto_as_third_item !='' 'AUTO':
+        elif auto_as_third_item != 'AUTO':
             not_auto.append(auto_as_third_item)
         else:
             others.append(auto_as_third_item)
@@ -62,25 +63,39 @@ x = Auto_or_not()
 len(x.auto_items)
 len(x.not_auto)
 len(x.others)
+"""
 
-counter = Counter(item_one)
+class Auto:
+    # Purpose of this is to remove AUTO item from all metars to keep the metar consistent with pattern.
+    # This essentially brings the winds(next items) up a level making it consistent with metars that do not have auto items.
+    new_all_metar_list = []
+    for individual_full_metar in all_metar_list:
+        auto_as_third_item = individual_full_metar[2]
+        if auto_as_third_item == 'AUTO': # This should be inserterd and not replaced
+            individual_full_metar.pop(2)
+            new_all_metar_list.append(individual_full_metar)
+        elif auto_as_third_item != 'AUTO':
+            new_all_metar_list.append(individual_full_metar)
+x = Auto()
+
+all_metar_list = x.new_all_metar_list
+
+# The following will allow for extracting unique items and their count.
+
+counter = Counter(x.not_auto)
 unique = counter.keys()
 
 # TODO: insert NOT_AUTO into the mix that way you can work with data easily.
 
-
-
-
-typical_bulk_metars = Auto_or_not.auto_items
-
+# Fourth prominent item is the wind speed
 class Wind_items:
     wind_items = []
     no_winds = []
-    for i in typical_bulk_metars:
+    for i in all_metar_list:
         if 'KT' in i[3]:
-            wind_items.append(i)
+            wind_items.append(i[3])
         else:
-            no_winds.append(i)
+            no_winds.append(i[3])
     print(len(all_metar_list), len(wind_items))
 
 typical_bulk_metars = Wind_items.wind_items
