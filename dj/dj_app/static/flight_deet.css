@@ -9,7 +9,7 @@ body {
 .accordion-content {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.2s ease-out;
+  transition: max-height 0.6s ease-in-out;
 }
 
 /* Show the content when the accordion is active */
