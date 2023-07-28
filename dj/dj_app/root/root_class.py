@@ -39,8 +39,8 @@ class Root_class():
     def dt_conversion(self, data):
         # converts date and time string into a class object 
         return datetime.strptime(data, "%I:%M%p, %b%d")
-    
-    
+
+
     def exec(self, input1, multithreader):
     # TODO: Extract this blueprint for future use.
     # executor blueprint. In this case input 1 takes in flight numbers and `multithreaders` can be item that needs to be multithreaded.

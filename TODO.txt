@@ -13,6 +13,8 @@ Practice readibility and simplicity. Include description and documentation for o
 
         Include ground stop information.
 
+        add Notams for departure and destinations.
+        
         Scrape `scheduled` times less frequently as it is mostly static and expensive.
         Only scrape `actual` times more frequently and from different web source to decrease intensive pull.
         

@@ -75,11 +75,13 @@ class Pull_flight_info(Root_class):
 
         affected_airports = [i.text for i in root.iter('ARPT')]
 
-        ground_stop_packet = [] 
-        for i in root.iter('Ground_Stop_List'):
-            program = i[0]
-            for y in program:
-                ground_stop_packet.append([y.tag, y.text])
+
+        ground_stop_packet = []
+        count = 0
+        for programs in root.iter('Program'):
+            count += 1
+            for each_program in programs:
+                ground_stop_packet.append([count, each_program.tag, each_program.text])
         
         ground_delay_packet = []
         gd = root.iter('Ground_Delay')
@@ -121,13 +123,13 @@ class Pull_flight_info(Root_class):
                 }
 
     def pull_dep_des(self, query_in_list_form):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
-        
+
         query = ' '.join(query_in_list_form)
-        
+
         flt_num = query.split()[1]
         airport = query.split()[2]
         print(flt_num, airport)
-        
+
         # date format in the url is YYYYMMDD. For testing, you can find flt_nums on https://www.airport-ewr.com/newark-departures
         use_custum_raw_date = False
         if use_custum_raw_date:
@@ -135,7 +137,7 @@ class Pull_flight_info(Root_class):
         else:
             date = self.date_time(raw=True)     # Root_class inheritance
         flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport}"
-        
+
         try :
             soup = self.request(flight_view)
             scripts = soup.find_all('script')       # scripts is a section in the html that contains departure and destination airports 
@@ -152,7 +154,7 @@ class Pull_flight_info(Root_class):
         except :
             empty_soup = {} 
             return empty_soup
-        
+
         # typically 9th index of scripts is where departure and destination is.
             # try print(scripts[9].get_text()) for string version for parsing
         
@@ -160,7 +162,7 @@ class Pull_flight_info(Root_class):
 
     def pull_route(self, flight_query):     # Still under construction. Difficult to work with API. Attempting AeroAPI
         # Much unfinished work here! Cant seem to get how to extract the clearance route from flightaware,
-        
+
         flt_num = flight_query
 
         flight_aware = f"https://flightaware.com/live/flight/UAL{flt_num}"
@@ -174,7 +176,7 @@ class Pull_flight_info(Root_class):
             return empty_soup
         # print(data_tag)
         print(soup.get_text())
-        
+
         # Seperate trial with the API. 
         url = "https://aeroapi.flightaware.com/aeroapi"
 
@@ -188,3 +190,7 @@ class Pull_flight_info(Root_class):
         if response.status_code==200:
             data = response.json()
             print(data)
+        
+
+
+
