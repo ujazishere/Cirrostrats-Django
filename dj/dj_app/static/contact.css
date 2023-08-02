@@ -47,7 +47,7 @@ form .form-group {
 }
 
 .dark-mode .form-group {
-  color: white; /* Add this line */
+  color: white;
 }
 
 .dark-mode h4 {
@@ -86,7 +86,6 @@ form button:hover {
   margin: 0 auto;
 }
 
-/* Media queries for responsiveness */
 
 @media only screen and (max-width: 768px) {
   h1 {

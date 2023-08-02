@@ -31,7 +31,6 @@ p {
   margin-top: 40px;
 }
 
-/* Search form styles */
 .search-form {
   display: flex;
   justify-content: center;
@@ -60,7 +59,6 @@ p {
   cursor: pointer;
 }
 
-/* Media queries for responsiveness */
 @media only screen and (max-width: 600px) {
   h1 {
     font-size: 36px;
