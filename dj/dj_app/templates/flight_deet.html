@@ -10,8 +10,9 @@
 
   {% if flight_number %}
     <div id="departure-container" class="table-container">
-      <h5>Departure {{ departure_ID }} | {{ departure_gate }}</h5>
-      <button class="toggle-button" onclick="toggleAccordion('departure-table-content')">Show/Hide Table</button>
+      <button class="toggle-button" data-content="departure-table-content" onclick="toggleAccordion(this)">
+        &#9660;
+      </button>
       <div id="departure-table-content" class="accordion-content active">
         <table id="departure-table" class="comparison-table">
           <thead>
@@ -35,8 +36,9 @@
     </div>
 
     <div id="destination-container" class="table-container">
-      <h5>Destination {{ destination_ID }} | {{ destination_gate }}</h5>
-      <button class="toggle-button" onclick="toggleAccordion('destination-table-content')">Show/Hide Table</button>
+      <button class="toggle-button" data-content="destination-table-content" onclick="toggleAccordion(this)">
+        &#9660;
+      </button>
       <div id="destination-table-content" class="accordion-content active">
         <table id="destination-table" class="comparison-table">
           <thead>
@@ -82,18 +84,11 @@
   </div>
 
   <script>
-   function toggleAccordion(contentId) {
-    var content = document.getElementById(contentId);
-    var button = document.querySelector(`[data-content="${contentId}"]`);
-
-    if (content.classList.contains('active')) {
-      content.classList.remove('active');
-      button.classList.remove('active');
-    } else {
-      content.classList.add('active');
-      button.classList.add('active');
+    function toggleAccordion(button) {
+      var content = button.nextElementSibling;
+      content.classList.toggle("active");
     }
-  }
   </script>
+
   
 {% endblock %}

@@ -14,25 +14,27 @@ body {
 }
 
 .toggle-button {
-  margin-bottom: 10px;
   display: flex;
-  position: relative;
   justify-content: center;
   align-items: center;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-  width: 120px;
+  width: 35px;
   height: 35px;
-  background-color: #fafafa;
-  border-radius: 7px;
-  border: 1px solid #474350;
-  box-shadow: 0 0 0 1px #474350;
   cursor: pointer;
+  transition: transform 0.3s ease;
+  border: 0.1px;
+  background-color: #FFFFFF;
 }
 
-.hidden {
-  display: none;
+.dark-mode .toggle-button {
+  background-color: black;
+  color: #FFFFFF;
+}
+
+.toggle-button.active {
+  transform: rotate(180deg);
 }
 
 h5 {
@@ -186,4 +188,20 @@ table.comparison-table td {
   .search-form input[type="text"] {
     width: 150px;
   }
+
+  .toggle-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-left: auto;
+    margin-right: 70px;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border: 0.1px;
+    background-color: #FFFFFF;
+  }
+
 }

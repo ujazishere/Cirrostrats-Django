@@ -3,43 +3,52 @@
 {% load static %}
 
 {% block content %}
+  <link rel="stylesheet" type="text/css" href="{% static 'flight_deet.css' %}">
 
+  <h3>United Flight Information</h3>
+  <h4>Results for {{flight_number}}</h4>
 
-<h2>Flight Gate Information</h2>
-<link rel="stylesheet" type="text/css" href="{% static 'flight_info.css' %}">
-<div class="search-form-wrapper">
-  <form method="post" class="search-form">
-    {% csrf_token %}
-    <label for="query"></label>
-    <input type="text" name="query" id="query">
-    <button type="submit">Search</button>
-  </form>
-</div>
+  {% if flight_number %}
+    <div id="departure-container" class="table-container">
+      <h5>Departure {{ departure_ID }} | {{ departure_gate }}</h5>
+      <button class="toggle-button" data-content="departure-table-content" onclick="toggleAccordion(this)">
+        &#9660; <!-- Unicode down arrow -->
+      </button>
+      <div id="departure-table-content" class="accordion-content active">
+        <table id="departure-table" class="comparison-table">
+          <!-- Departure table content here -->
+        </table>
+      </div>
+    </div>
 
-{% if gate_data_table %}
-<div class="table-wrapper">
-  <table>
-    <thead>
-      <tr>
-        <th>Gate</th>
-        <th>Flight</th>
-        <th>Scheduled</th>
-        <th>Actual</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for flight in gate_data_table %}
-      <tr>
-        <td>{{ flight.gate }}</td>
-        <td>{{ flight.flight_number }}</td>
-        <td>{{ flight.scheduled }}</td>
-        <td>{{ flight.actual }}</td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-</div>  
-{% else %}
-  <h3>No Results for {{gate}}.</h3>
-{% endif %}
+    <div id="destination-container" class="table-container">
+      <h5>Destination {{ destination_ID }} | {{ destination_gate }}</h5>
+      <button class="toggle-button" data-content="destination-table-content" onclick="toggleAccordion(this)">
+        &#9660; <!-- Unicode down arrow -->
+      </button>
+      <div id="destination-table-content" class="accordion-content active">
+        <table id="destination-table" class="comparison-table">
+          <!-- Destination table content here -->
+        </table>
+      </div>
+    </div>
+  {% else %}
+    <!-- No details found message here -->
+  {% endif %}
+
+  <div class="search-form-wrapper">
+    <form method="post" class="search-form">
+      <!-- Search form content here -->
+    </form>
+  </div>
+
+  <script>
+    function toggleAccordion(button) {
+      var contentId = button.getAttribute("data-content");
+      var content = document.getElementById(contentId);
+      button.classList.toggle("active");
+      content.classList.toggle("active");
+    }
+  </script>
+  
 {% endblock %}
