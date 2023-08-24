@@ -12,7 +12,7 @@ body {
   }
   
   .dark-mode h3 a {
-    color: #ffffff; /* white color */
+    color: #ffffff;
   }
   
 .links-container {
@@ -26,14 +26,14 @@ body {
 }
 
 .links-container a {
-  color: #000000; /* Set desired text color */
-  text-decoration: none; /* Remove underline */
-  transition: font-size 0.2s; /* Add transition for smooth effect */
+  color: #000000; 
+  text-decoration: none; 
+  transition: font-size 0.2s; 
 }
 
 .links-container a:hover {
-  text-decoration: underline; /* Add underline on hover if desired */
-  font-size: 18px; /* Increase the font size on hover */
+  text-decoration: underline; 
+  font-size: 18px; 
 }
 
 h1 {

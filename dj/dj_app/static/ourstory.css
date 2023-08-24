@@ -80,7 +80,6 @@ form button:hover {
   margin: 0 auto;
 }
 
-/* Media queries for responsiveness */
 @media only screen and (max-width: 768px) {
   h1 {
     margin-bottom: 50px;
