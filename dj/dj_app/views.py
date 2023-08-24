@@ -55,10 +55,9 @@ def parse_query(request, main_query):
             weather_query_airport  = query_in_list_form[1]
             weather_query_airport = weather_query_airport.upper()       # Making query uppercase for it to be compatible
             return metar_display(request, weather_query_airport)
-        
+
         if first_letter == 'I':        
             return flight_deets(request, query_in_list_form)
-        
         else:       # If the query is not recognized:
             return gate_info(request, main_query=main_query)
             '''
@@ -88,7 +87,7 @@ def gate_info(request,main_query):
 
     current_time = Gate_checker().date_time()
     gate_data_table = Gate_checker().ewr_UA_gate(gate)
-    
+
     # showing info if the info is found else it falls back to `No flights found for {{gate}}`on flight_info.html
     if gate_data_table: 
         # print(gate_data_table)
@@ -131,22 +130,22 @@ def flight_deets(request, query_in_list_form ):
     else:
         return render(request, 'flight_deet.html', {'flight_query': flight_query} )
     '''
-    
+
     bulk_flight_deets = flt_info.pull_UA(query_in_list_form)
-    
+
     def weather_req(airport):
         weather = Weather_display()
         weather = weather.scrape(airport)
         return weather
-    
+
     dep_weather = weather_req(bulk_flight_deets['departure_ID'])
     dest_weather = weather_req(bulk_flight_deets['destination_ID'])
     weather = {'dep_weather':dep_weather, 'dest_weather': dest_weather}
-    
+
     bulk_flight_deets.update(weather)
-    
+
     return render(request, 'flight_deet.html', bulk_flight_deets)
-    
+
 
 def metar_display(request,weather_query):
     

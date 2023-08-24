@@ -1,27 +1,30 @@
 import pickle
 import os
 from collections import Counter
+
 # CONCLUSION: Majors:
 
-# TODO: Attempt to derrive the Typical_met pattern on the metar and the taf to determine prominent info:
-         # VFR/IFR/LIFR; Freezing conditions, icing, stronger winds with gusts, reduce font size of less important information
+# use METAR DECODER on https://e6bx.com/metar-decoder/
+# TODO: Attempt to derive the Typical_met pattern on the metar and the taf to determine prominent info:
+         # VFR/IFR/LIFR; Freezing conditions, icing, stronger winds with gusts, reduce font size of less important information.
+         # give ability to decode individual complex items.  
 # POA: determine each item for typicality in the metar list form and put them all together in a seperate container.
     # Once that is done, sort the non-typical ones for typicality.
         # Repeat the process until exhaustion. sort these by most typical to the least typical.
         # The goal is to make use of the most typical metar items then color code by them
 
-# Be careful these paths. Shortened path is only local to the vs clode terminal but doesnt work on the main cmd terminal
+# Be careful these paths. Shortened path is only local to the vs code terminal but doesnt work on the main cmd terminal
 metar_stack_pkl_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\dj_app\root\pkl\METAR_stack.pkl"
 with open(metar_stack_pkl_path, 'rb') as f:         
     met = pickle.load(f)
 
-'''
-item_2 = []
-for i in all_metar_list:
-    item_2.append(i[1])
-'''
-
 all_metar_list = [i.split() for i in met]       # List of lists: Bulk metar in the list form. Each metar is also a list of metar items.
+
+
+typical_metar_item = []
+for i in all_metar_list:
+    item_index = 3
+    typical_metar_item.append(i[item_index])
 
 # The first prominent item is the 4 letter ICAO airport ID. It semes TAF got in there somehow.
 # Removing the metar items that dont have first letter as 'K' or is not 4 letters long.
@@ -66,49 +69,56 @@ len(x.others)
 """
 
 class Auto:
-    # Purpose of this is to remove AUTO item from all metars to keep the metar consistent with pattern.
-    # This essentially brings the winds(next items) up a level making it consistent with metars that do not have auto items.
     new_all_metar_list = []
+    not_auto = []
     for individual_full_metar in all_metar_list:
         auto_as_third_item = individual_full_metar[2]
-        if auto_as_third_item == 'AUTO': # This should be inserterd and not replaced
+        if auto_as_third_item == 'AUTO':    # If 'AUTO' then remove it
             individual_full_metar.pop(2)
             new_all_metar_list.append(individual_full_metar)
         elif auto_as_third_item != 'AUTO':
+            not_auto.append(auto_as_third_item)
             new_all_metar_list.append(individual_full_metar)
-x = Auto()
 
-all_metar_list = x.new_all_metar_list
+auto = Auto()
+
+all_metar_list = auto.new_all_metar_list
+
+new_aml = []
+wind_index = 2
+for each_metar in all_metar_list:
+    wind_item = each_metar[wind_index]
+    if 'KT' in wind_item:
+        if len(wind_item) == 7 or 'G' in wind_item:
+            each_metar.pop(wind_index)
+            new_aml.append(each_metar)
+        else:
+            new_aml.append(each_metar)
+    else:
+        new_aml.append(each_metar)
+
+all_metar_list = new_aml
+
+# 5th prominent item is visibility.
+new_aml = []
+vis_index = 2
+for each_metar in all_metar_list:
+    visibility = each_metar[vis_index]
+    if 'SM' in visibility:
+        each_metar.pop(vis_index)
+        new_aml.append(each_metar)
+    else:
+        new_aml.append(each_metar)
+all_metar_list.append()
+
+altimeter_setting = r"\w{1}\d{4})"
+
+# Seperate Metar after Temp and altimeter
 
 # The following will allow for extracting unique items and their count.
 
 counter = Counter(x.not_auto)
 unique = counter.keys()
-
-# TODO: insert NOT_AUTO into the mix that way you can work with data easily.
-
-# Fourth prominent item is the wind speed
-class Wind_items:
-    wind_items = []
-    no_winds = []
-    for i in all_metar_list:
-        if 'KT' in i[3]:
-            wind_items.append(i[3])
-        else:
-            no_winds.append(i[3])
-    print(len(all_metar_list), len(wind_items))
-
-typical_bulk_metars = Wind_items.wind_items
-
-no_k = []               # No k in airport ID
-for airport_id in typical_bulk_metars:
-    if airport_id[0][1] == 'K':
-        no_k.append(airport_id)
-# print(Typical_met.complete_metar)
-# print(Typical_met.zulu_time)
-altimeter_setting = r"\w{1}\d{4})"
-
-# Seperate Metar after Temp and altimeter
 
 
 # Seems unnecessary. 

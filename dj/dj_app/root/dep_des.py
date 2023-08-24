@@ -36,7 +36,7 @@ class Pull_flight_info(Root_class):
         airport_id = [i.text for i in airport_id if 'ICAO' in i.text]
         departure_ID = airport_id[0].split()[2]
         destination_ID = airport_id[1].split()[2]
-                               
+
         times = soup.find_all('div', {'class': 'a2_b'})          # scheduled and actual times in local time zone
         times = [i.text for i in times if 'Scheduled' in i.text]
         departure_times = ' '.join(times[0].replace('\n','').split())
@@ -45,13 +45,22 @@ class Pull_flight_info(Root_class):
         destination_times = ' '.join(times[1].replace('\n','').split())
         scheduled_arrival_time = destination_times[:9] + ' ' + destination_times[9:27]
         actual_arrival_time = destination_times[28:34] + ' ' + destination_times[34:]
-        
+
         gate = soup.find_all('div', {'class': 'a2_c'})              # the data from the gate is also probably misleading.
         gate = [i.text.replace('\n', '') for i in gate]
         departure_gate = gate[0]
         destination_gate = gate[1]
-        
+
         # time = soup.find('div', {'class': 'a2_b'})
+
+        nas_delays = self.ground_stop()
+        dep_delay = None
+        destination_delay = None
+        for each_airport in nas_delays['affected_airports']:
+            if departure_ID == each_airport:
+                for k, v in nas_delays.items():
+                    pass
+                    
 
         return {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                  'departure_ID': departure_ID,
@@ -64,7 +73,21 @@ class Pull_flight_info(Root_class):
                  'actual_arrival_time': actual_arrival_time,
                  }
 
-    def ground_stop(self):
+    def nas_status(self):
+        '''
+        import pickle
+        with open('et_root_eg_1.pkl', 'wb') as f:
+            pickle.dump(root, f)
+        '''
+        
+        '''
+        import requests
+        from bs4 import BeautifulSoup as bs4
+        from .root_class import Root_class
+        import xml.etree.ElementTree as ET
+        import pytz
+        '''
+
         nas = "https://nasstatus.faa.gov/api/airport-status-information"
         response = requests.get(nas)
         xml_data = response.content
@@ -74,7 +97,7 @@ class Pull_flight_info(Root_class):
         update_time = root[0].text
 
         affected_airports = [i.text for i in root.iter('ARPT')]
-
+        affected_airports.sort()
 
         ground_stop_packet = []
         count = 0
@@ -94,7 +117,7 @@ class Pull_flight_info(Root_class):
         for i in addl:
             for y in i:
                 for x in y:
-                    if x.tag =='Arrival_Departure':
+                    if x.tag == 'Arrival_Departure':
                         arr_dep_del_list.append([x.tag, x.attrib])
                     else:
                         arr_dep_del_list.append([x.tag, x.text])
