@@ -9,44 +9,41 @@
   <h4>Results for {{flight_number}}</h4>
 
   {% if flight_number %}
-  <div class="table-container">
-    <table id="departure-table" class="comparison-table">
-      <thead>
-        <tr>
-          <th class="clickable-header">
-            <button class="toggle-button" onclick="toggleAccordion(this)">
+  <div id="departure-container" class="table-container">
+    <div id="departure-table-content" class="accordion-content active">
+      <table id="departure-table" class="comparison-table">
+        <thead>
+          <tr>
+            <th class="clickable-header">
+            <input type="checkbox" class="accordion-checkbox" onclick="toggleAccordion(this, event)">
               &#9660;
-            </button>
-            Departure {{ departure_ID }} | {{ departure_gate }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colspan="2">
-            <div class="accordion-content">
-              {{scheduled_departure_time}}
-              {% for metar_taf_title, metar_taf_data in dep_weather.items %}
-                <div>
-                  <strong>{{ metar_taf_title }}</strong>
-                </div>
-                <div>{{ metar_taf_data|safe }}</div>
-              {% endfor %}
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+              Departure {{ departure_ID }} | {{ departure_gate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{scheduled_departure_time}}</td>
+            {% for metar_taf_title, metar_taf_data in dep_weather.items %}
+              <tr>
+                <th>{{ metar_taf_title }}</th>
+              </tr>
+              <td>{{ metar_taf_data|safe }}</td>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-  
 
   <div id="destination-container" class="table-container">
     <div id="destination-table-content" class="accordion-content active">
       <table id="destination-table" class="comparison-table">
         <thead>
           <tr>
-            <th class="clickable-header" onclick="toggleAccordion(this)">
-              &#9660;
+            <th class="clickable-header">
+              <input type="checkbox" class="accordion-checkbox" onclick="toggleAccordion(this, event)">
+                &#9660;
               Destination {{ destination_ID }} | {{ destination_gate }}
             </th>
           </tr>
@@ -89,10 +86,12 @@
   </div>
 
   <script>
-    function toggleAccordion(button) {
-      var content = button.closest('.table-container').querySelector('.accordion-content');
+    function toggleAccordion(checkbox, event) {
+      event.stopPropagation();
+      var content = checkbox.closest('.table-container').querySelector('.accordion-content');
       content.classList.toggle("active");
     }
   </script>
+  
   
 {% endblock %}

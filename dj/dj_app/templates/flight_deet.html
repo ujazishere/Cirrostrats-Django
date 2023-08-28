@@ -10,14 +10,15 @@
 
   {% if flight_number %}
   <div id="departure-container" class="table-container">
-    <div id="departure-table-content" class="accordion-content active">
-      <table id="departure-table" class="comparison-table">
+    <div class="accordion-content active">
+      <table class="comparison-table">
         <thead>
           <tr>
             <th class="clickable-header">
-            <input type="checkbox" class="accordion-checkbox" onclick="toggleAccordion(this, event)">
-              &#9660;
-              Departure {{ departure_ID }} | {{ departure_gate }}
+              <button class="accordion-button" onclick="toggleAccordion(this)">
+                &#9660;
+                Departure {{ departure_ID }} | {{ departure_gate }}
+              </button>
             </th>
           </tr>
         </thead>
@@ -26,7 +27,7 @@
             <td>{{scheduled_departure_time}}</td>
             {% for metar_taf_title, metar_taf_data in dep_weather.items %}
               <tr>
-                <th>{{ metar_taf_title }}</th>
+                <td>{{ metar_taf_title }}</td>
               </tr>
               <td>{{ metar_taf_data|safe }}</td>
             {% endfor %}
@@ -37,14 +38,15 @@
   </div>
 
   <div id="destination-container" class="table-container">
-    <div id="destination-table-content" class="accordion-content active">
-      <table id="destination-table" class="comparison-table">
+    <div class="accordion-content active">
+      <table class="comparison-table">
         <thead>
           <tr>
             <th class="clickable-header">
-              <input type="checkbox" class="accordion-checkbox" onclick="toggleAccordion(this, event)">
+              <button class="accordion-button" onclick="toggleAccordion(this)">
                 &#9660;
-              Destination {{ destination_ID }} | {{ destination_gate }}
+                Destination {{ destination_ID }} | {{ destination_gate }}
+              </button>
             </th>
           </tr>
         </thead>
@@ -53,7 +55,7 @@
             <td>{{ scheduled_arrival_time }}</td>
             {% for metar_taf_title, metar_taf_data in dest_weather.items %}
               <tr>
-                <th>{{ metar_taf_title }}</th>
+                <td>{{ metar_taf_title }}</td>
               </tr>
               <td>{{ metar_taf_data|safe }}</td>
             {% endfor %}
@@ -86,12 +88,10 @@
   </div>
 
   <script>
-    function toggleAccordion(checkbox, event) {
-      event.stopPropagation();
-      var content = checkbox.closest('.table-container').querySelector('.accordion-content');
+    function toggleAccordion(button) {
+      var content = button.closest('.table-container').querySelector('.accordion-content');
       content.classList.toggle("active");
     }
   </script>
-  
-  
+
 {% endblock %}

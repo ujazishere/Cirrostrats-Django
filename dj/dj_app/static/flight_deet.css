@@ -13,6 +13,25 @@ body {
   transition: max-height 1.2s ease;
 }
 
+.accordion-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
+  text-align: left;
+}
+
+.accordion-button:focus {
+  outline: none;
+}
+
+/* Style for the button container */
+.accordion-button-container {
+  display: flex;
+  align-items: center;
+}
+
+
 .toggle-button {
   display: flex;
   justify-content: center;
