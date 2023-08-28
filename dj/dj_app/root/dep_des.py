@@ -54,17 +54,19 @@ class Pull_flight_info(Root_class):
         # time = soup.find('div', {'class': 'a2_b'})
 
         nas_delays = self.nas_status()
-        dep_delay = None
-        destination_delay = None
+        departure_affected = None
+        destination_affected = None
         for each_airport in nas_delays['affected_airports']:
-            if departure_ID == each_airport:
-                for k, v in nas_delays.items():
-                    pass
-                    
+            if departure_ID[1:] == each_airport:
+                departure_affected = True
+            if destination_ID[1:] == each_airport:
+                destination_affected = True
 
         return {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                  'departure_ID': departure_ID,
-                 'destination_ID':destination_ID, 
+                 'departure_affected': departure_affected,
+                 'destination_ID':destination_ID,
+                 'destination_affected': destination_affected,
                  'departure_gate': departure_gate,
                  'scheduled_departure_time': scheduled_departure_time,
                  'actual_departure_time': actual_departure_time,
@@ -78,12 +80,14 @@ class Pull_flight_info(Root_class):
         import pickle
         with open('et_root_eg_1.pkl', 'wb') as f:
             pickle.dump(root, f)
+        with open('et_root_eg_1.pkl', 'rb') as f:
+            root = pickle.load(f)
         '''
         
         '''
         import requests
         from bs4 import BeautifulSoup as bs4
-        from .root_class import Root_class
+        from dj.dj_app.root.root_class import Root_class
         import xml.etree.ElementTree as ET
         import pytz
         '''
