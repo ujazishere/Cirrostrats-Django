@@ -53,7 +53,7 @@ class Pull_flight_info(Root_class):
 
         # time = soup.find('div', {'class': 'a2_b'})
 
-        nas_delays = self.ground_stop()
+        nas_delays = self.nas_status()
         dep_delay = None
         destination_delay = None
         for each_airport in nas_delays['affected_airports']:
