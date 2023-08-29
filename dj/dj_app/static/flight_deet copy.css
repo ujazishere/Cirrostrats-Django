@@ -13,6 +13,26 @@ body {
   transition: max-height 1.2s ease;
 }
 
+.accordion-button {
+  background: none;
+  cursor: pointer;
+  font-size: inherit;
+  text-align: center;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
+.accordion-button:focus {
+  outline: none;
+}
+
+.accordion-button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px; 
+}
+
 .toggle-button {
   display: flex;
   justify-content: center;
@@ -45,23 +65,42 @@ h5 {
   background-color: black;
 }
 
+.dark-mode table.comparison-table {
+  background-color: black;
+  box-shadow: 0 0 0 1px #ffffff;
+  border-color: #ffffff;
+  border-collapse: collapse;
+}
+
 .dark-mode table.comparison-table th {
   background-color: black;
+  color: white;
+  border-color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white; 
 }
 
 .dark-mode table.comparison-table td {
-  color: black;
+  background-color: black;
+  color: white;
+  border-color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white; 
 }
 
-.dark-mode table.comparison-table {
-  box-shadow: 0 0 0 1px #ffffff;
-}
+
+
 .dark-mode h4 {
   color: white;
 }
 
 .dark-mode h5 {
   color: white;
+}
+
+.dark-mode .accordion-button {
+  color: white;
+  border-color: white;
 }
 
 h1 {
@@ -126,9 +165,10 @@ table.comparison-table {
   max-width: 800px;
   background-color: #474350;
   text-align: center;
-  border-radius: 15px;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 0 0 1px #474350;
+  box-shadow: 0 0 0 1px #000000;
+
 }
 
 table.comparison-table th {
