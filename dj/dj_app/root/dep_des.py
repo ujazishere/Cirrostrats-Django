@@ -11,9 +11,11 @@ An attempt to extract clearance route has been initiated but unreliable.
 '''
 
 class Pull_flight_info(Root_class):
+
     def __init__(self) -> None:
         # Super method inherits the init method of the superclass. In this case`Root_class`.
         super().__init__()
+
 
     def pull_UA(self, query_in_list_form):
         query = ' '.join(query_in_list_form)
@@ -65,18 +67,39 @@ class Pull_flight_info(Root_class):
                  'delay_packet': delay_packet
                  }
 
+
     def gs_sorting(self,dep_ID, dest_ID):
         # TODO: airport closures remaining
         departure_ID = dep_ID[1:]       # Stripping off the 'K' since NAS uses 3 letter airport ID
         destination_ID = dest_ID[1:]
 
         nas_delays = self.nas_status()
+        airport_closures = nas_delays['airport_closures']
         ground_stop_packet = nas_delays['ground_stop_packet']
         ground_delay_packet = nas_delays['ground_delay_packet']
         arr_dep_del_list = nas_delays['arr_dep_del_list']
 
         departure_affected = {}
         destination_affected = {}
+
+        for i in airport_closures:
+            airport_identifier = i[1]
+            if airport_identifier == departure_ID or airport_identifier == destination_ID:
+                airport_index = airport_closures.index(i)
+                reason = airport_closures[airport_index+1][1]
+                start = airport_closures[airport_index+2][1]
+                reopen = airport_closures[airport_index+3][1]
+                if airport_identifier == departure_ID:
+                    departure_affected.update({'ground_delay_packet':{'departure': airport_identifier,
+                                              'reason': reason,
+                                              'start': start,
+                                              'reopen': reopen}})
+                if airport_identifier == destination_ID:
+                    destination_affected.update({'ground_delay_packet':{'destination': airport_identifier,
+                                              'reason': reason,
+                                              'start': start,
+                                              'reopen': reopen}})
+
 
         for i in ground_delay_packet:
             airport_identifier = i[1]
@@ -91,7 +114,7 @@ class Pull_flight_info(Root_class):
                                               'average_delay': average_delay,
                                               'max_delay': max_delay}})
                 if airport_identifier == destination_ID:
-                    destination_affected.update({'ground_delay_packet':{'departure': airport_identifier,
+                    destination_affected.update({'ground_delay_packet':{'destination': airport_identifier,
                                               'reason': reason,
                                               'average_delay': average_delay,
                                               'max_delay': max_delay}})
@@ -107,7 +130,7 @@ class Pull_flight_info(Root_class):
                                               'reason': reason,
                                               'end_time': end_time}})
                 if airport_identifier == destination_ID:
-                    destination_affected.update({'ground_stop_packet':{'departure': airport_identifier,
+                    destination_affected.update({'ground_stop_packet':{'destination': airport_identifier,
                                               'reason': reason,
                                               'end_time': end_time}})
 
@@ -128,7 +151,7 @@ class Pull_flight_info(Root_class):
                                               'max_delay': max_delay,
                                               'trend': trend}})
                 if airport_identifier == destination_ID:
-                    destination_affected.update({'arr_dep_delay_list':{'departure': airport_identifier,
+                    destination_affected.update({'arr_dep_delay_list':{'destination': airport_identifier,
                                               'reason': reason,
                                               'arr_or_dep': arr_or_dep,
                                               'min_delay': min_delay,
@@ -147,7 +170,7 @@ class Pull_flight_info(Root_class):
         with open('et_root_eg_1.pkl', 'rb') as f:
             root = pickle.load(f)
         '''
-        
+
         '''
         import requests
         from bs4 import BeautifulSoup as bs4
@@ -166,6 +189,13 @@ class Pull_flight_info(Root_class):
 
         affected_airports = [i.text for i in root.iter('ARPT')]
         affected_airports.sort()
+
+        airport_closures = []
+        closure = root.iter('Airport_Closure_List')
+        for i in closure:
+            for y in i:
+                for x in y:
+                    airport_closures.append([x.tag, x.text])
 
         ground_stop_packet = []
         count = 0
@@ -197,6 +227,7 @@ class Pull_flight_info(Root_class):
                 'ground_stop_packet': ground_stop_packet, 
                 'ground_delay_packet': ground_delay_packet,
                 'arr_dep_del_list': arr_dep_del_list,
+                'airport_closures': airport_closures
                 }
 
 
