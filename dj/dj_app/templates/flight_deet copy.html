@@ -10,20 +10,18 @@
 
   {% if flight_number %}
   <div id="departure-container" class="table-container">
-    <button class="accordion-button" onclick="toggleAccordion(this, 'departure-content')">
-      &#9660;
-      Departure {{ departure_ID }} | {{ departure_gate }}
-    </button>
+    <div class="accordion-button-container">
+      <button class="accordion-button" onclick="toggleAccordion(this, 'departure-content')">
+        &#9660;
+              Departure {{ departure_ID }} | {{ departure_gate }}
+              {% if delay_packet.departure_affected %}
+                  {{ delay_packet.departure_affected }}
+              {% endif %} </button>
+    </div>
     <div class="accordion-content active" id="departure-content">
       <table class="comparison-table">
         <thead>
           <tr>
-            <th class="clickable-header">
-              <button class="accordion-button" onclick="toggleAccordion(this)">
-                &#9660;
-                Departure {{ departure_ID }} | {{ departure_gate }}
-              </button>
-            </th>
           </tr>
         </thead>
         <tbody>
@@ -41,17 +39,19 @@
     </div>
   </div>
 
-  <div id="destination-container" class="table-container">
-    <div class="accordion-content active">
+  <div id="departure-container" class="table-container">
+    <div class="accordion-button-container">
+      <button class="accordion-button" onclick="toggleAccordion(this, 'departure-content')">
+        &#9660;
+              Destination {{ destination_ID }} | {{ destination_gate }}
+              {% if delay_packet.destination_affected %}
+                  {{ delay_packet.destination_affected }}
+              {% endif %} </button>
+    </div>
+    <div class="accordion-content active" id=“destination-content">
       <table class="comparison-table">
         <thead>
           <tr>
-            <th class="clickable-header">
-              <button class="accordion-button" onclick="toggleAccordion(this)">
-                &#9660;
-                Destination {{ destination_ID }} | {{ destination_gate }}
-              </button>
-            </th>
           </tr>
         </thead>
         <tbody>
@@ -92,10 +92,12 @@
   </div>
 
   <script>
-    function toggleAccordion(button, contentId) {
-      var content = document.getElementById(contentId);
+    function toggleAccordion(button) {
+      var content = button.closest('.table-container').querySelector('.accordion-content');
       content.classList.toggle("active");
     }
   </script>
 
+  
+  
 {% endblock %}

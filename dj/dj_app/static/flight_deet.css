@@ -88,6 +88,28 @@ h5 {
   border-bottom: 1px solid white; 
 }
 
+.dark-mode table.another-table {
+  background-color: black;
+  box-shadow: 0 0 0 1px #ffffff;
+  border-color: #ffffff;
+  border-collapse: collapse;
+}
+
+.dark-mode table.another-table th {
+  background-color: black;
+  color: white;
+  border-color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+.dark-mode table.another-table td {
+  background-color: black;
+  color: white;
+  border-color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
 
 
 .dark-mode h4 {
@@ -170,6 +192,44 @@ table.comparison-table {
   box-shadow: 0 0 0 1px #000000;
 
 }
+
+table.another-table {
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  background-color: #474350;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px #000000;
+  border-collapse: collapse;
+}
+
+table.another-table th {
+  padding: 10px;
+  text-align: center;
+  background-color: #474350;
+  color: #ffffff;
+  border: 1px solid #000000; /* Add border for headers */
+}
+
+table.another-table td {
+  padding: 10px;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #000000; /* Add border for data cells */
+}
+
+table.another-table thead {
+  background-color: #474350;
+  color: #ffffff;
+}
+
+table.another-table th:first-child,
+table.another-table td:first-child {
+  font-weight: bold;
+}
+
 
 table.comparison-table th {
   padding: 10px;
