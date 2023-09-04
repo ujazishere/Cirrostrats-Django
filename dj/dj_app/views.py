@@ -99,42 +99,11 @@ def gate_info(request,main_query):
 def flight_deets(request, query_in_list_form ):
     # given a flight number it returns its, gates, scheduled and actual times of departure and arrival
 
-    flt_info = Pull_flight_info()
-    '''
-    dep_des = flt_info.pull_dep_des(query_in_list_form)
-    
-    if dep_des: 
-        departure = f'K{list(dep_des.values())[0][0]}'      # Turning a 3 letter airport identifier into 4 letter ICAO identifier
-        destination = f'K{list(dep_des.values())[0][1]}' 
-    else:
-        departure = ''
-        destination = ''
-        
-        
-    def weather_req(airport):
-        weather = Weather_display()
-        weather = weather.scrape(airport)
-        return weather
-    
-    if departure and destination:
-        dep_weather = weather_req(departure)
-        dest_weather = weather_req(destination)
-        flight_query = " ".join(query_in_list_form[1] + query_in_list_form[2])
-        bulk_flight_deets = {'flight_query': flight_query, 
-                            'dep_des': dep_des,
-                            'current_time': current_time,
-                            'dep_weather': dep_weather,
-                            'dest_weather': dest_weather       
-                                }
-        return render(request, 'flight_deet.html', bulk_flight_deets )
-    else:
-        return render(request, 'flight_deet.html', {'flight_query': flight_query} )
-    '''
-
+    flt_info = Pull_flight_info()           # from dep_des.py file
     bulk_flight_deets = flt_info.pull_UA(query_in_list_form)
 
     def weather_req(airport):
-        weather = Weather_display()
+        weather = Weather_display()         # from MET_TAF_parse.py
         weather = weather.scrape(airport)
         return weather
 

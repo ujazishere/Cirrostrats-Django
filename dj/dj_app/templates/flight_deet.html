@@ -20,6 +20,14 @@
       <table class="comparison-table">
         <thead>
           <tr>
+            <th class="clickable-header">
+            <input type="checkbox" class="accordion-checkbox" onclick="toggleAccordion(this, event)">
+              &#9660;
+              Departure {{ departure_ID }} | {{ departure_gate }}
+              {% if delay_packet.departure_affected %}
+                  {{ delay_packet.departure_affected }}
+              {% endif %}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -45,9 +53,17 @@
       </button>
     </div>
     <div class="accordion-content active" id=“destination-content">
-      <table class="comparison-table">
+      <table" class="comparison-table">
         <thead>
           <tr>
+            <th class="clickable-header">
+              <input type="checkbox" class="accordion-checkbox" onclick="toggleAccordion(this, event)">
+                &#9660;
+              Destination {{ destination_ID }} | {{ destination_gate }}
+              {% if delay_packet.destination_affected %}
+                  {{ delay_packet.destination_affected }}
+              {% endif %}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -55,7 +71,7 @@
             <td>{{ scheduled_arrival_time }}</td>
             {% for metar_taf_title, metar_taf_data in dest_weather.items %}
               <tr>
-                <td>{{ metar_taf_title }}</td>
+                <th>{{ metar_taf_title }}</th>
               </tr>
               <td>{{ metar_taf_data|safe }}</td>
             {% endfor %}
@@ -88,10 +104,12 @@
   </div>
 
   <script>
-    function toggleAccordion(button) {
-      var content = button.closest('.table-container').querySelector('.accordion-content');
+    function toggleAccordion(checkbox, event) {
+      event.stopPropagation();
+      var content = checkbox.closest('.table-container').querySelector('.accordion-content');
       content.classList.toggle("active");
     }
   </script>
-
+  
+  
 {% endblock %}

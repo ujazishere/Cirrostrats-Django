@@ -51,29 +51,93 @@ class Pull_flight_info(Root_class):
         departure_gate = gate[0]
         destination_gate = gate[1]
 
-        # time = soup.find('div', {'class': 'a2_b'})
-
-        nas_delays = self.nas_status()
-        departure_affected = None
-        destination_affected = None
-        for each_airport in nas_delays['affected_airports']:
-            if departure_ID[1:] == each_airport:
-                departure_affected = True
-            if destination_ID[1:] == each_airport:
-                destination_affected = True
+        delay_packet = self.gs_sorting(departure_ID, destination_ID)
 
         return {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                  'departure_ID': departure_ID,
-                 'departure_affected': departure_affected,
                  'destination_ID':destination_ID,
-                 'destination_affected': destination_affected,
                  'departure_gate': departure_gate,
                  'scheduled_departure_time': scheduled_departure_time,
                  'actual_departure_time': actual_departure_time,
                  'destination_gate': destination_gate,
                  'scheduled_arrival_time': scheduled_arrival_time,
                  'actual_arrival_time': actual_arrival_time,
+                 'delay_packet': delay_packet
                  }
+
+    def gs_sorting(self,dep_ID, dest_ID):
+        # TODO: airport closures remaining
+        departure_ID = dep_ID[1:]       # Stripping off the 'K' since NAS uses 3 letter airport ID
+        destination_ID = dest_ID[1:]
+
+        nas_delays = self.nas_status()
+        ground_stop_packet = nas_delays['ground_stop_packet']
+        ground_delay_packet = nas_delays['ground_delay_packet']
+        arr_dep_del_list = nas_delays['arr_dep_del_list']
+
+        departure_affected = {}
+        destination_affected = {}
+
+        for i in ground_delay_packet:
+            airport_identifier = i[1]
+            if airport_identifier == departure_ID or airport_identifier == destination_ID:
+                airport_index = ground_delay_packet.index(i)
+                reason = ground_delay_packet[airport_index+1][1]
+                average_delay = ground_delay_packet[airport_index+2][1]
+                max_delay = ground_delay_packet[airport_index+3][1]
+                if airport_identifier == departure_ID:
+                    departure_affected.update({'ground_delay_packet':{'departure': airport_identifier,
+                                              'reason': reason,
+                                              'average_delay': average_delay,
+                                              'max_delay': max_delay}})
+                if airport_identifier == destination_ID:
+                    destination_affected.update({'ground_delay_packet':{'departure': airport_identifier,
+                                              'reason': reason,
+                                              'average_delay': average_delay,
+                                              'max_delay': max_delay}})
+
+        for i in ground_stop_packet:
+            airport_identifietu = i[1]
+            if airport_identifier == departure_ID or airport_identifier == destination_ID:
+                airport_index = ground_stop_packet.index(i)
+                reason = ground_stop_packet[airport_index+1][1]
+                end_time = ground_stop_packet[airport_index+2][1]
+                if airport_identifier == departure_ID:
+                    departure_affected.update({'ground_stop_paceket':{'departure': airport_identifier,
+                                              'reason': reason,
+                                              'end_time': end_time}})
+                if airport_identifier == destination_ID:
+                    destination_affected.update({'ground_stop_packet':{'departure': airport_identifier,
+                                              'reason': reason,
+                                              'end_time': end_time}})
+
+        for i in arr_dep_del_list:
+            airport_identifier = i[1]
+            if airport_identifier == departure_ID or airport_identifier == destination_ID:
+                airport_index = arr_dep_del_list.index(i)
+                reason = arr_dep_del_list[airport_index+1][1]
+                arr_or_dep = arr_dep_del_list[airport_index+2][1]
+                min_delay = arr_dep_del_list[airport_index+3][1]
+                max_delay = arr_dep_del_list[airport_index+4][1]
+                trend = arr_dep_del_list[airport_index+5][1]
+                if airport_identifier == departure_ID:
+                    departure_affected.update({'arr_dep_del_list':{'departure': airport_identifier,
+                                              'reason': reason,
+                                              'arr_or_dep': arr_or_dep,
+                                              'min_delay': min_delay,
+                                              'max_delay': max_delay,
+                                              'trend': trend}})
+                if airport_identifier == destination_ID:
+                    destination_affected.update({'arr_dep_delay_list':{'departure': airport_identifier,
+                                              'reason': reason,
+                                              'arr_or_dep': arr_or_dep,
+                                              'min_delay': min_delay,
+                                              'max_delay': max_delay,
+                                              'trend': trend}})
+
+        return {'departure_affected': departure_affected,
+                'destination_affected': destination_affected}
+
 
     def nas_status(self):
         '''
@@ -128,26 +192,13 @@ class Pull_flight_info(Root_class):
                     for a in x:
                         arr_dep_del_list.append([a.tag, a.text])
 
-        """
-        all_intel = {}
-        count = 0
-        name= []
-        for individual_delay_type in root.iter('Delay_type'):
-            name.append(individual_delay_type.find('Name'))
-            name_local = individual_delay_type.find('Name')
-            for list_type in individual_delay_type:
-                for ty in list_type:
-                    for i in ty:
-                        count += 1
-                        all_intel.update(dict({count:[name_local.text, individual_delay_type.tag, individual_delay_type.text,
-                    list_type.tag, i.tag, i.text]}))
-        """
         return {'update_time': update_time,
                 'affected_airports': affected_airports,
-                'gsp': ground_stop_packet, 
-                'gdp': ground_delay_packet,
-                'addl': arr_dep_del_list,
+                'ground_stop_packet': ground_stop_packet, 
+                'ground_delay_packet': ground_delay_packet,
+                'arr_dep_del_list': arr_dep_del_list,
                 }
+
 
     def pull_dep_des(self, query_in_list_form):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
 
@@ -186,6 +237,7 @@ class Pull_flight_info(Root_class):
             # try print(scripts[9].get_text()) for string version for parsing
         
         # print(departure, destination)
+
 
     def pull_route(self, flight_query):     # Still under construction. Difficult to work with API. Attempting AeroAPI
         # Much unfinished work here! Cant seem to get how to extract the clearance route from flightaware,
