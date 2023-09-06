@@ -105,7 +105,7 @@ h5 {
 
 .dark-mode table.another-table td {
   background-color: rgb(254, 61, 61);
-  color: white;
+  color: rgb(0, 0, 0);
   border-color: white;
   border-top: 1px solid white;
   border-bottom: 1px solid white;
