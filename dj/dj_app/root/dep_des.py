@@ -119,6 +119,7 @@ class Pull_flight_info(Root_class):
                                               'average_delay': average_delay,
                                               'max_delay': max_delay}})
 
+        
         for i in ground_stop_packet:
             airport_identifietu = i[1]
             if airport_identifier == departure_ID or airport_identifier == destination_ID:
@@ -133,6 +134,7 @@ class Pull_flight_info(Root_class):
                     destination_affected.update({'ground_stop_packet':{'destination': airport_identifier,
                                               'reason': reason,
                                               'end_time': end_time}})
+
 
         for i in arr_dep_del_list:
             airport_identifier = i[1]
@@ -157,6 +159,7 @@ class Pull_flight_info(Root_class):
                                               'min_delay': min_delay,
                                               'max_delay': max_delay,
                                               'trend': trend}})
+
 
         return {'departure_affected': departure_affected,
                 'destination_affected': destination_affected}
