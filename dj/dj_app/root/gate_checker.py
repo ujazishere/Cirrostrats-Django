@@ -12,6 +12,7 @@ class Gate_checker(Root_class):
 
     def ewr_UA_gate(self, query=None):
         # Stacking query items together
+        # update actual more frequently and scheduled less frequently. maybe couple times a day for scheduled
         master = self.load_master()
         flights = []
         for flt_num, values in master.items():

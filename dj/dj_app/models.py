@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Flight(models.Model):
+    # This is an attempt to create a sql database template
     gate = models.CharField(max_length=10)
     flight_number = models.CharField(max_length=10)
     scheduled = models.DateTimeField()

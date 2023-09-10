@@ -38,7 +38,26 @@
       <table class="another-table">
         <tbody>
           <tr>
-            <td>{{ delay_packet.departure_affected }}</td>
+            <table border="1">
+                    <thead>
+                        <tr>
+                        {% for key, value  in delay_packet.departure_affected.ground_delay_packet.items %}
+                          <tr>
+                            <th> {{ key}}</th>
+                          </tr>
+                          <td></td>
+                          <tr>
+                              <td>{{ value }}</td>
+                          </tr>
+                        {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Add your table rows and data here -->
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            <td></td>
           </tr>
         </tbody>
       </table>

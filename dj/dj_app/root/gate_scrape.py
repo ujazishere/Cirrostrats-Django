@@ -16,12 +16,11 @@ class Gate_Scrape(Root_class):
 
         # troubled is setup here so that it can be accessed locally
         self.troubled = set()
-        self.master_local = []
         self.outlaws_reliable = dict()
 
     
     def pick_flight_data(self, flt_num):
-        # refer to self.exec() first, then come back here since this function is called by the exector
+        # refer to activator()
         
         # This function returns a dict with value of list that contains 3 items. Refer to the `return` item
         airline_code = flt_num[:2]      # first 2 characters of airline code eg. UA, DL
@@ -90,7 +89,7 @@ class Gate_Scrape(Root_class):
 
                 #Following code essentially removes troubled items that are already in the master.
                 # logic: if troubled items are not in master make a new troubled set with those. Essentially doing the job of removing master keys from troubled set
-                self.troubled = {each for each in self.troubled if each not in self.master_local}
+                self.troubled = {each for each in self.troubled if each not in master}
                 
                 # Here we check how many times we've looped so far and how many troubled items are still remaining.
                 print(f'{i}th trial- troubled len:', len(self.troubled) )
@@ -99,6 +98,10 @@ class Gate_Scrape(Root_class):
                 # breaking since troubled is probably empty
                 break
         
+        # Refer to the activator() master dump. This dump is updated after..
+        # Investigate. This one I suppise was only reaading then I changedd it to write
+        # But i realised it would overright the old master so I switcheed it back to rb.
+        # However. Master is loaded earlier using load_master. so master seems retained so it can be a write file.
         with open('master_UA.pkl', 'wb') as f:
             pickle.dump(master, f) 
         
@@ -128,12 +131,10 @@ class Gate_Scrape(Root_class):
 
     def activator(self):
         
-        # This removes old flights from master from before today
-        # self.temp_fix_to_remove_old_flights()
-
         # Extracting all United flight numbers in list form.
         ewr_departures_UA = Newark_departures_scrape().united_departures()
-        # with open('ewr_departures_UA.pkl', 'rb') as f:
+        # Dmping all flight numbers for newark united departures.
+        # with open('ewr_departures_UA.pkl', 'wb') as f:
             # pickle.dump(ewr_departures_UA, f)
         
         exec_output = self.exec(ewr_departures_UA, self.pick_flight_data)    # inherited from root_class.Root_class
@@ -176,5 +177,8 @@ class Gate_scrape_thread(threading.Thread):
             latest_time = now.strftime("%#I:%M%p, %b %d.")
             print('Pulled Gate Scrape at:', latest_time, eastern)
             
-            time.sleep(1800)        # TODO: Requires stops between 11:55pm and 4am while also pulling flights from morning once.
+           # TODO: Requires stops between 11:55pm and 4am while also pulling flights from morning once. 
+            time.sleep(1800)        
 # flights = Gate_checker('').ewr_UA_gate()
+
+

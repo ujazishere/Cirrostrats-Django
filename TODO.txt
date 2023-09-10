@@ -9,6 +9,9 @@ Practice readibility and simplicity. Include description and documentation for o
         DONE! Make seperate css for templates/dj_app/base.html instead of having it within the base.html. Its not a good practive to have styling within html. 
         
 **UV:   
+        App:
+            with search capability such that most frequest searches are stored for quick access.
+            search bar
         DONE! add activator() scrape to include data from few hours later since its currently only showing 6am, 12pm and 6pm.
 
         DONE! Include ground stop information.
@@ -16,11 +19,16 @@ Practice readibility and simplicity. Include description and documentation for o
         add Notams for departure and destinations.
         
         Scrape `scheduled` times less frequently as it is mostly static and expensive.
+            Scraper scrapes overnight when its not necessary. Avoid those.
         Only scrape `actual` times more frequently and from different web source to decrease intensive pull.
         
-        Implement search bar suggestions as user initiates typing.        
-        
+        Implement search bar suggestions as user initiates typing.
+
+        group search queries.
+
         Make search availabe such that the initial switches are disregarded.
+            analyse flight numbers, and gates such that '3' or '4' gives direct search instead of `i` switch
+                if flt# clashes with gates, seperate them in a function if those are queried.
 
         Have the ability to save queries made on the web such that they are unique.
         Currently its such  that too many similar quires are getting cluttered in the /admin page.

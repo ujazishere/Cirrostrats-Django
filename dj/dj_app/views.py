@@ -26,6 +26,8 @@ def home(request):
     if request.method == "POST":
         main_query = request.POST.get('query','')
         
+        # This one adds similar queries to the admin panel in SearchQuerys.
+        # Make it such that the duplicates are grouped using maybe unique.
         search_query = SearchQuery(query=main_query)      # Adds search queries to the database
         search_query.save()                               # you've got to save it otherwise it wont save
         
