@@ -101,6 +101,37 @@
     </div>
   </div>
 
+  {% if delay_packet.destination_affected %}
+  <table class="another-table">
+    <tbody>
+      <tr>
+        <table border="1">
+                <thead>
+                    <tr>
+                    {% for key, value  in delay_packet.destination_affected.ground_delay_packet.items %}
+                      <tr>
+                        <th> {{ key}}</th>
+                      </tr>
+                      <td></td>
+                      <tr>
+                          <td>{{ value }}</td>
+                      </tr>
+                    {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Add your table rows and data here -->
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+{% endif %}
+</div>
+</div>
+
   {% else %}
     <p>No details found for {{flight_query}}.</p>
     <strong>Try the following Examples:</strong>
