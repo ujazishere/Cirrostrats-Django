@@ -53,7 +53,7 @@ class Pull_flight_info(Root_class):
         departure_gate = gate[0]
         destination_gate = gate[1]
 
-        delay_packet = self.gs_sorting(departure_ID, destination_ID)
+        nas_packet = self.gs_sorting(departure_ID, destination_ID)
 
         return {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                  'departure_ID': departure_ID,
@@ -64,7 +64,7 @@ class Pull_flight_info(Root_class):
                  'destination_gate': destination_gate,
                  'scheduled_arrival_time': scheduled_arrival_time,
                  'actual_arrival_time': actual_arrival_time,
-                 'delay_packet': delay_packet
+                 'nas_packet': nas_packet
                  }
 
 
@@ -82,84 +82,94 @@ class Pull_flight_info(Root_class):
         departure_affected = {}
         destination_affected = {}
 
+
+        affected_ground_stop = []
         for i in airport_closures:
-            airport_identifier = i[1]
-            if airport_identifier == departure_ID or airport_identifier == destination_ID:
-                airport_index = airport_closures.index(i)
-                reason = airport_closures[airport_index+1][1]
-                start = airport_closures[airport_index+2][1]
-                reopen = airport_closures[airport_index+3][1]
-                if airport_identifier == departure_ID:
-                    departure_affected.update({'ground_delay_packet':{'departure': airport_identifier,
-                                              'reason': reason,
-                                              'start': start,
-                                              'reopen': reopen}})
-                if airport_identifier == destination_ID:
-                    destination_affected.update({'ground_delay_packet':{'destination': airport_identifier,
-                                              'reason': reason,
-                                              'start': start,
-                                              'reopen': reopen}})
+            if i[0] == 'ARPT':
+                airport_identifier = i[1]
+                affected_ground_stop.append(airport_identifier)
+                if airport_identifier == departure_ID or airport_identifier == destination_ID:
+                    airport_index = airport_closures.index(i)
+                    reason = airport_closures[airport_index+1][1]
+                    start = airport_closures[airport_index+2][1]
+                    reopen = airport_closures[airport_index+3][1]
+                    if airport_identifier == departure_ID:
+                        departure_affected.update({'airport_closures':{'departure': airport_identifier,
+                                                'reason': reason,
+                                                'start': start,
+                                                'reopen': reopen}})
+                    if airport_identifier == destination_ID:
+                        destination_affected.update({'airport_closures':{'destination': airport_identifier,
+                                                'reason': reason,
+                                                'start': start,
+                                                'reopen': reopen}})
 
-
+        affected_ground_delay_packet = []
         for i in ground_delay_packet:
-            airport_identifier = i[1]
-            if airport_identifier == departure_ID or airport_identifier == destination_ID:
-                airport_index = ground_delay_packet.index(i)
-                reason = ground_delay_packet[airport_index+1][1]
-                average_delay = ground_delay_packet[airport_index+2][1]
-                max_delay = ground_delay_packet[airport_index+3][1]
-                if airport_identifier == departure_ID:
-                    departure_affected.update({'ground_delay_packet':{'departure': airport_identifier,
-                                              'reason': reason,
-                                              'average_delay': average_delay,
-                                              'max_delay': max_delay}})
-                if airport_identifier == destination_ID:
-                    destination_affected.update({'ground_delay_packet':{'destination': airport_identifier,
-                                              'reason': reason,
-                                              'average_delay': average_delay,
-                                              'max_delay': max_delay}})
+            if i[0] == 'ARPT':
+                airport_identifier = i[1]
+                affected_ground_delay_packet.append(airport_identifier)
+                if airport_identifier == departure_ID or airport_identifier == destination_ID:
+                    airport_index = ground_delay_packet.index(i)
+                    reason = ground_delay_packet[airport_index+1][1]
+                    average_delay = ground_delay_packet[airport_index+2][1]
+                    max_delay = ground_delay_packet[airport_index+3][1]
+                    if airport_identifier == departure_ID:
+                        departure_affected.update({'ground_delay_packet':{'departure': airport_identifier,
+                                                'reason': reason,
+                                                'average_delay': average_delay,
+                                                'max_delay': max_delay}})
+                    if airport_identifier == destination_ID:
+                        destination_affected.update({'ground_delay_packet':{'destination': airport_identifier,
+                                                'reason': reason,
+                                                'average_delay': average_delay,
+                                                'max_delay': max_delay}})
 
-
+                                                
+        affected_ground_stop_packet = []
         for i in ground_stop_packet:
-            airport_identifietu = i[1]
-            if airport_identifier == departure_ID or airport_identifier == destination_ID:
-                airport_index = ground_stop_packet.index(i)
-                reason = ground_stop_packet[airport_index+1][1]
-                end_time = ground_stop_packet[airport_index+2][1]
-                if airport_identifier == departure_ID:
-                    departure_affected.update({'ground_stop_paceket':{'departure': airport_identifier,
-                                              'reason': reason,
-                                              'end_time': end_time}})
-                if airport_identifier == destination_ID:
-                    destination_affected.update({'ground_stop_packet':{'destination': airport_identifier,
-                                              'reason': reason,
-                                              'end_time': end_time}})
+            if i[0] == 'ARPT':
+                airport_identifier = i[1]
+                affected_ground_stop_packet.append(airport_identifier)
+                if airport_identifier == departure_ID or airport_identifier == destination_ID:
+                    airport_index = ground_stop_packet.index(i)
+                    reason = ground_stop_packet[airport_index+1][1]
+                    end_time = ground_stop_packet[airport_index+2][1]
+                    if airport_identifier == departure_ID:
+                        departure_affected.update({'ground_stop_paceket':{'departure': airport_identifier,
+                                                'reason': reason,
+                                                'end_time': end_time}})
+                    if airport_identifier == destination_ID:
+                        destination_affected.update({'ground_stop_packet':{'destination': airport_identifier,
+                                                'reason': reason,
+                                                'end_time': end_time}})
 
-
+        affected_arr_dep_del_list = []
         for i in arr_dep_del_list:
-            airport_identifier = i[1]
-            if airport_identifier == departure_ID or airport_identifier == destination_ID:
-                airport_index = arr_dep_del_list.index(i)
-                reason = arr_dep_del_list[airport_index+1][1]
-                arr_or_dep = arr_dep_del_list[airport_index+2][1]
-                min_delay = arr_dep_del_list[airport_index+3][1]
-                max_delay = arr_dep_del_list[airport_index+4][1]
-                trend = arr_dep_del_list[airport_index+5][1]
-                if airport_identifier == departure_ID:
-                    departure_affected.update({'arr_dep_del_list':{'departure': airport_identifier,
-                                              'reason': reason,
-                                              'arr_or_dep': arr_or_dep,
-                                              'min_delay': min_delay,
-                                              'max_delay': max_delay,
-                                              'trend': trend}})
-                if airport_identifier == destination_ID:
-                    destination_affected.update({'arr_dep_delay_list':{'destination': airport_identifier,
-                                              'reason': reason,
-                                              'arr_or_dep': arr_or_dep,
-                                              'min_delay': min_delay,
-                                              'max_delay': max_delay,
-                                              'trend': trend}})
-
+            if i[0] == 'ARPT':
+                airport_identifier = i[1]
+                affected_arr_dep_del_list.append(airport_identifier)
+                if airport_identifier == departure_ID or airport_identifier == destination_ID:
+                    airport_index = arr_dep_del_list.index(i)
+                    reason = arr_dep_del_list[airport_index+1][1]
+                    arr_or_dep = arr_dep_del_list[airport_index+2][1]
+                    min_delay = arr_dep_del_list[airport_index+3][1]
+                    max_delay = arr_dep_del_list[airport_index+4][1]
+                    trend = arr_dep_del_list[airport_index+5][1]
+                    if airport_identifier == departure_ID:
+                        departure_affected.update({'arr_dep_del_list':{'departure': airport_identifier,
+                                                'reason': reason,
+                                                'arr_or_dep': arr_or_dep,
+                                                'min_delay': min_delay,
+                                                'max_delay': max_delay,
+                                                'trend': trend}})
+                    if airport_identifier == destination_ID:
+                        destination_affected.update({'arr_dep_delay_list':{'destination': airport_identifier,
+                                                'reason': reason,
+                                                'arr_or_dep': arr_or_dep,
+                                                'min_delay': min_delay,
+                                                'max_delay': max_delay,
+                                                'trend': trend}})
 
         return {'departure_affected': departure_affected,
                 'destination_affected': destination_affected}
@@ -188,15 +198,17 @@ class Pull_flight_info(Root_class):
 
         root = ET.fromstring(xml_data) 
         '''
+
+        # These upto pickle load is dummy file. comment them out to get the actual NAS packet.
         import pickle
 
-        with open(r'C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\et_root_eg_3.pkl', 'rb') as f:
+        with open('ewr_delay_packet_experimantal.pkl', 'rb') as f:
             root = pickle.load(f)
 
         update_time = root[0].text
 
         affected_airports = [i.text for i in root.iter('ARPT')]
-        affected_airports.sort()
+        affected_airports = list(set(affected_airports)).sort()
 
         airport_closures = []
         closure = root.iter('Airport_Closure_List')
@@ -210,7 +222,7 @@ class Pull_flight_info(Root_class):
         for programs in root.iter('Program'):
             count += 1
             for each_program in programs:
-                ground_stop_packet.append([count, each_program.tag, each_program.text])
+                ground_stop_packet.append([each_program.tag, each_program.text])
         
         ground_delay_packet = []
         gd = root.iter('Ground_Delay')
@@ -229,7 +241,6 @@ class Pull_flight_info(Root_class):
                         arr_dep_del_list.append([x.tag, x.text])
                     for a in x:
                         arr_dep_del_list.append([a.tag, a.text])
-
         return {'update_time': update_time,
                 'affected_airports': affected_airports,
                 'ground_stop_packet': ground_stop_packet, 

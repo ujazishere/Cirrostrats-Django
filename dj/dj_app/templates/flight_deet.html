@@ -34,14 +34,14 @@
         </tbody>
       </table>
 
-      {% if delay_packet.departure_affected %}
+      {% if nas_packet.departure_affected %}
       <table class="another-table">
         <tbody>
           <tr>
             <table border="1">
                     <thead>
                         <tr>
-                        {% for key, value  in delay_packet.departure_affected.ground_delay_packet.items %}
+                        {% for key, value  in nas_packet.departure_affected.items %}
                           <tr>
                             <th> {{ key}}</th>
                           </tr>
@@ -89,11 +89,11 @@
           </tr>
         </tbody>
       </table>
-      {% if delay_packet.destination_affected %}
+      {% if nas_packet.destination_affected %}
       <table class="another-table">
         <tbody>
           <tr>
-            <td>{{ delay_packet.destination_affected }}</td>
+            <td>{{ nas_packet.destination_affected }}</td>
           </tr>
         </tbody>
       </table>
@@ -101,14 +101,14 @@
     </div>
   </div>
 
-  {% if delay_packet.destination_affected %}
+  {% if nas_packet.destination_affected %}
   <table class="another-table">
     <tbody>
       <tr>
         <table border="1">
                 <thead>
                     <tr>
-                    {% for key, value  in delay_packet.destination_affected.ground_delay_packet.items %}
+                    {% for key, value  in nas_packet.destination_affected.items %}
                       <tr>
                         <th> {{ key}}</th>
                       </tr>
