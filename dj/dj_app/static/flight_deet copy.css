@@ -90,6 +90,28 @@ h5 {
 
 
 
+
+
+
+.dark-mode table.another-table {
+  box-shadow: 0 0 0 1px #ffffff;
+  border-color: #ffffff;
+  border-collapse: collapse;
+}
+
+.dark-mode table.another-table th {
+  border-color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white; 
+}
+
+.dark-mode table.another-table td {
+  border-color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white; 
+}
+
+
 .dark-mode h4 {
   color: white;
 }
@@ -201,6 +223,55 @@ table.comparison-table th {
 table.comparison-table td {
   width: 15%;
 }
+
+/* Apply styling to the "another-table" */
+table.another-table {
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  background-color: #000000;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+table.another-table th {
+  padding: 10px;
+  text-align: center;
+  background-color: #fa6767;
+  color: #000000;
+  border: 1px solid #000000; /* Add border for headers */
+}
+
+table.another-table td {
+  padding: 10px;
+  text-align: center;
+  background-color: #fa6767;
+  border: 1px solid #000000; /* Add border for data cells */
+}
+
+table.another-table thead {
+  background-color: #fa6767;
+  color: #000000;
+}
+
+table.another-table th:first-child,
+table.another-table td:first-child {
+  font-weight: 600;
+}
+
+.table-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 25vh; /* Adjust the minimum height as needed */
+  margin: 0 auto; /* Center horizontally by setting left and right margin to "auto" */
+  max-width: 800px; /* Adjust the maximum width as needed */
+}
+
+
+
+
 
 @media only screen and (max-width: 600px) {
   h1 {
