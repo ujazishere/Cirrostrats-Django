@@ -88,28 +88,6 @@ h5 {
   border-bottom: 1px solid white; 
 }
 
-.dark-mode table.another-table {
-  background-color: rgb(0, 0, 0);
-  box-shadow: 0 0 0 1px #ffffff;
-  border-color: #ffffff;
-  border-collapse: collapse;
-}
-
-.dark-mode table.another-table th {
-  background-color: rgb(0, 0, 0);
-  color: white;
-  border-color: white;
-  border-top: 1px solid white;
-  border-bottom: 1px solid white;
-}
-
-.dark-mode table.another-table td {
-  background-color: rgb(254, 61, 61);
-  color: rgb(0, 0, 0);
-  border-color: white;
-  border-top: 1px solid white;
-  border-bottom: 1px solid white;
-}
 
 
 .dark-mode h4 {
@@ -193,44 +171,6 @@ table.comparison-table {
 
 }
 
-table.another-table {
-  margin: 20px auto;
-  width: 80%;
-  max-width: 800px;
-  background-color: #474350;
-  text-align: center;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 0 0 1px #000000;
-  border-collapse: collapse;
-}
-
-table.another-table th {
-  padding: 10px;
-  text-align: center;
-  background-color: #474350;
-  color: #ffffff;
-  border: 1px solid #000000; /* Add border for headers */
-}
-
-table.another-table td {
-  padding: 10px;
-  text-align: center;
-  background-color: rgb(254, 61, 61);
-  border: 1px solid #000000; /* Add border for data cells */
-}
-
-table.another-table thead {
-  background-color: #474350;
-  color: #ffffff;
-}
-
-table.another-table th:first-child,
-table.another-table td:first-child {
-  font-weight: bold;
-}
-
-
 table.comparison-table th {
   padding: 10px;
   text-align: center;
@@ -261,6 +201,52 @@ table.comparison-table th {
 table.comparison-table td {
   width: 15%;
 }
+
+/* Apply styling to the "another-table" */
+table.another-table {
+  width: 0; /* Set the width to 100% to make it responsive */
+  max-width: 800px; /* Adjust the maximum width as needed */
+  background-color: #f54646;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+table.another-table th {
+  padding: 10px;
+  text-align: center;
+  background-color: #f54646;
+  color: #ffffff;
+  border: 1px solid #000000; /* Add border for headers */
+}
+
+table.another-table td {
+  padding: 10px;
+  text-align: center;
+  background-color: #f54646;
+  border: 1px solid #000000; /* Add border for data cells */
+}
+
+table.another-table thead {
+  background-color: #f54646;
+  color: #f54646;
+}
+
+table.another-table th:first-child,
+table.another-table td:first-child {
+  font-weight: bold;
+}
+
+.table-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 25vh; /* Adjust the minimum height as needed */
+  margin: 0 auto; /* Center horizontally by setting left and right margin to "auto" */
+  max-width: 800px; /* Adjust the maximum width as needed */
+}
+
+
 
 @media only screen and (max-width: 600px) {
   h1 {

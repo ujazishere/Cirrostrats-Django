@@ -35,9 +35,9 @@
       </table>
 
       {% if nas_packet.departure_affected %}
+      <div class="table-wrapper">
       <table class="another-table">
         <tbody>
-          <tr>
             <table border="1">
                     <thead>
                         <tr>
@@ -45,20 +45,12 @@
                           <tr>
                             <th> {{ key}}</th>
                           </tr>
-                          <td></td>
                           <tr>
                               <td>{{ value }}</td>
                           </tr>
                         {% endfor %}
-                        </tr>
                     </thead>
-                    <tbody>
-                        <!-- Add your table rows and data here -->
-                        <!-- Add more rows as needed -->
-                    </tbody>
                 </table>
-            <td></td>
-          </tr>
         </tbody>
       </table>
     {% endif %}
@@ -89,22 +81,13 @@
           </tr>
         </tbody>
       </table>
-      {% if nas_packet.destination_affected %}
-      <table class="another-table">
-        <tbody>
-          <tr>
-            <td>{{ nas_packet.destination_affected }}</td>
-          </tr>
-        </tbody>
-      </table>
-    {% endif %}
     </div>
   </div>
 
   {% if nas_packet.destination_affected %}
+  <div class="table-wrapper">
   <table class="another-table">
     <tbody>
-      <tr>
         <table border="1">
                 <thead>
                     <tr>
@@ -112,20 +95,12 @@
                       <tr>
                         <th> {{ key}}</th>
                       </tr>
-                      <td></td>
                       <tr>
                           <td>{{ value }}</td>
                       </tr>
                     {% endfor %}
-                    </tr>
                 </thead>
-                <tbody>
-                    <!-- Add your table rows and data here -->
-                    <!-- Add more rows as needed -->
-                </tbody>
             </table>
-        <td></td>
-      </tr>
     </tbody>
   </table>
 {% endif %}
