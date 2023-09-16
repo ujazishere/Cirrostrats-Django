@@ -38,8 +38,7 @@
       <div class="table-wrapper">
       <table class="another-table">
         <tbody>
-            <table border="1">
-                    <thead>
+                              <thead>
                         <tr>
                         {% for key, value  in nas_packet.departure_affected.items %}
                           <tr>
@@ -50,7 +49,6 @@
                           </tr>
                         {% endfor %}
                     </thead>
-                </table>
         </tbody>
       </table>
     {% endif %}
@@ -88,7 +86,6 @@
   <div class="table-wrapper">
   <table class="another-table">
     <tbody>
-        <table border="1">
                 <thead>
                     <tr>
                     {% for key, value  in nas_packet.destination_affected.items %}
@@ -100,7 +97,6 @@
                       </tr>
                     {% endfor %}
                 </thead>
-            </table>
     </tbody>
   </table>
 {% endif %}

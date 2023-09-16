@@ -13,10 +13,7 @@
     <div class="accordion-button-container">
       <button class="accordion-button" onclick="toggleAccordion(this, 'departure-content')">
         &#9660;
-              Departure {{ departure_ID }} | {{ departure_gate }}
-              {% if delay_packet.departure_affected %}
-                  {{ delay_packet.departure_affected }}
-              {% endif %} </button>
+              Departure {{ departure_ID }} | {{ departure_gate }} </button>
     </div>
     <div class="accordion-content active" id="departure-content">
       <table class="comparison-table">
@@ -36,6 +33,25 @@
           </tr>
         </tbody>
       </table>
+
+      {% if nas_packet.departure_affected %}
+      <div class="table-wrapper">
+      <table class="another-table">
+        <tbody>
+                              <thead>
+                        <tr>
+                        {% for key, value  in nas_packet.departure_affected.items %}
+                          <tr>
+                            <th> {{ key}}</th>
+                          </tr>
+                          <tr>
+                              <td>{{ value }}</td>
+                          </tr>
+                        {% endfor %}
+                    </thead>
+        </tbody>
+      </table>
+    {% endif %}
     </div>
   </div>
 
@@ -43,10 +59,7 @@
     <div class="accordion-button-container">
       <button class="accordion-button" onclick="toggleAccordion(this, 'departure-content')">
         &#9660;
-              Destination {{ destination_ID }} | {{ destination_gate }}
-              {% if delay_packet.destination_affected %}
-                  {{ delay_packet.destination_affected }}
-              {% endif %} </button>
+              Destination {{ destination_ID }} | {{ destination_gate }} </button>
     </div>
     <div class="accordion-content active" id=“destination-content">
       <table class="comparison-table">
@@ -68,6 +81,27 @@
       </table>
     </div>
   </div>
+
+  {% if nas_packet.destination_affected %}
+  <div class="table-wrapper">
+  <table class="another-table">
+    <tbody>
+                <thead>
+                    <tr>
+                    {% for key, value  in nas_packet.destination_affected.items %}
+                      <tr>
+                        <th> {{ key}}</th>
+                      </tr>
+                      <tr>
+                          <td>{{ value }}</td>
+                      </tr>
+                    {% endfor %}
+                </thead>
+    </tbody>
+  </table>
+{% endif %}
+</div>
+</div>
 
   {% else %}
     <p>No details found for {{flight_query}}.</p>

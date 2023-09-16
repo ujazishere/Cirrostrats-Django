@@ -90,6 +90,28 @@ h5 {
 
 
 
+
+
+
+.dark-mode table.another-table {
+  box-shadow: 0 0 0 1px #ffffff;
+  border-color: #ffffff;
+  border-collapse: collapse;
+}
+
+.dark-mode table.another-table th {
+  border-color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white; 
+}
+
+.dark-mode table.another-table td {
+  border-color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white; 
+}
+
+
 .dark-mode h4 {
   color: white;
 }
@@ -204,9 +226,10 @@ table.comparison-table td {
 
 /* Apply styling to the "another-table" */
 table.another-table {
-  width: 0; /* Set the width to 100% to make it responsive */
-  max-width: 800px; /* Adjust the maximum width as needed */
-  background-color: #f54646;
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  background-color: #000000;
   text-align: center;
   border-radius: 10px;
   overflow: hidden;
@@ -215,26 +238,26 @@ table.another-table {
 table.another-table th {
   padding: 10px;
   text-align: center;
-  background-color: #f54646;
-  color: #ffffff;
+  background-color: #fa6767;
+  color: #000000;
   border: 1px solid #000000; /* Add border for headers */
 }
 
 table.another-table td {
   padding: 10px;
   text-align: center;
-  background-color: #f54646;
+  background-color: #fa6767;
   border: 1px solid #000000; /* Add border for data cells */
 }
 
 table.another-table thead {
-  background-color: #f54646;
-  color: #f54646;
+  background-color: #fa6767;
+  color: #000000;
 }
 
 table.another-table th:first-child,
 table.another-table td:first-child {
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .table-wrapper {
@@ -245,6 +268,8 @@ table.another-table td:first-child {
   margin: 0 auto; /* Center horizontally by setting left and right margin to "auto" */
   max-width: 800px; /* Adjust the maximum width as needed */
 }
+
+
 
 
 
