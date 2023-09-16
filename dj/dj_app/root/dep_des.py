@@ -208,7 +208,8 @@ class Pull_flight_info(Root_class):
         update_time = root[0].text
 
         affected_airports = [i.text for i in root.iter('ARPT')]
-        affected_airports = list(set(affected_airports)).sort()
+        affected_airports = list(set(affected_airports))
+        affected_airports.sort()
 
         airport_closures = []
         closure = root.iter('Airport_Closure_List')
@@ -223,7 +224,7 @@ class Pull_flight_info(Root_class):
             count += 1
             for each_program in programs:
                 ground_stop_packet.append([each_program.tag, each_program.text])
-        
+
         ground_delay_packet = []
         gd = root.iter('Ground_Delay')
         for i in gd:
@@ -241,6 +242,7 @@ class Pull_flight_info(Root_class):
                         arr_dep_del_list.append([x.tag, x.text])
                     for a in x:
                         arr_dep_del_list.append([a.tag, a.text])
+
         return {'update_time': update_time,
                 'affected_airports': affected_airports,
                 'ground_stop_packet': ground_stop_packet, 
