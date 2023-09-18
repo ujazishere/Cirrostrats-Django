@@ -23,7 +23,7 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{scheduled_departure_time}}</td>
+            <td>{{scheduled_departure_time}} {{ departure_ID }} | {{ departure_gate }} </td>
             {% for metar_taf_title, metar_taf_data in dep_weather.items %}
               <tr>
                 <td>{{ metar_taf_title }}</td>
@@ -36,26 +36,24 @@
 
       {% if nas_packet.departure_affected %}
       <div class="table-wrapper">
-      <table class="another-table">
-        <tbody>
+        <table class="another-table">
           <thead>
-              <tr>
-              {% for d1_key, d1_value in nas_packet.departure_affected.items %}
+            <tr>
+              <th>2nd Dimension Key</th>
+              <th>2nd Dimension Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d1_key, d1_value in nas_packet.departure_affected.items %}
+              {% for d2_key, d2_value in d1_value.items %}
                 <tr>
-                  <th>1Dimension key: {{ d1_key}} </th>
-                </tr>
-                <tr>
-                  {% for d2_key, d2_value in d1_value.items %}
-                    <tr>
-                      <th> 2Dimension key: {{ d2_key }} </th>
-                      <td> 2Dimension value: {{ d2_value }} </td>
-                    </tr>
-                  {% endfor %}
+                  <td> {{ d2_key }} </td>
+                  <td> {{ d2_value }} </td>
                 </tr>
               {% endfor %}
-          </thead>
-        </tbody>
-      </table>
+            {% endfor %}
+          </tbody>
+        </table>        
     {% endif %}
     </div>
   </div>
@@ -74,7 +72,7 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{ scheduled_arrival_time }}</td>
+            <td>{{ scheduled_arrival_time }} {{ destination_ID }} | {{ destination_gate }} </td>
             {% for metar_taf_title, metar_taf_data in dest_weather.items %}
               <tr>
                 <td>{{ metar_taf_title }}</td>
@@ -89,21 +87,24 @@
 
   {% if nas_packet.destination_affected %}
   <div class="table-wrapper">
-  <table class="another-table">
-    <tbody>
+    <table class="another-table">
       <thead>
         <tr>
-        {% for key, value  in nas_packet.destination_affected.items %}
-          <tr>
-            <th> {{ key}}</th>
-          </tr>
-          <tr>
-              <td>{{ value }}</td>
-          </tr>
-        {% endfor %}
+          <th>2nd Dimension Key</th>
+          <th>2nd Dimension Value</th>
+        </tr>
       </thead>
-    </tbody>
-  </table>
+      <tbody>
+        {% for d1_key, d1_value in nas_packet.destination_affected.items %}
+          {% for d2_key, d2_value in d1_value.items %}
+            <tr>
+              <td> {{ d2_key }} </td>
+              <td> {{ d2_value }} </td>
+            </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>        
 {% endif %}
 </div>
 </div>
