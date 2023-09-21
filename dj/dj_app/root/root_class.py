@@ -15,8 +15,8 @@ class Root_class():
         eastern = pytz.timezone('US/eastern')
         now = datetime.now(eastern)
         latest_time = now.strftime("%#I:%M%p, %b %d.")
-        if raw:
-            return now.strftime('%Y%m%d')
+        if raw:         # format yyyymmdd
+            return now.strftime('%Y%m%d')       # date format yyyymmdd
         elif viewable:
             return now.strftime('%b %d, %Y')
         else:

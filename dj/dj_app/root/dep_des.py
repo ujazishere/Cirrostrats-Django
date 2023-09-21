@@ -22,13 +22,26 @@ class Pull_flight_info(Root_class):
         
         flt_num = query.split()[1]
         # airport = query.split()[2]
+        date = self.date_time(raw=True)     # Root_class inheritance format yyyymmdd
 
-        #  TODO: pull information on flight numners from the info web and use that to pll info through flightview.
+        #  TODO: pull information on flight numners from the info web and use that to pull info through flightview.
         # attempt to only pull departure and destination from the united from the info web.
+        # TODO: Use Flightstats for scheduled times conversion
         info = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
         flight_view = "https://www.flightview.com/flight-tracker/UA/492?date=20230702&depapt=EWR"
-        flight_stats_url = f"https://www.flightstats.com/v2/flight-details/UA/{flt_num}?year=2023&month=7&date=2"
+        flight_stats_url = f"https://www.flightstats.com/v2/flight-tracker/UA/{flt_num}?year={date[:4]}&month={date[4:6]}&date={date[-2:]}"
         soup = self.request(info)
+        
+        soup_fs = self.request(flight_stats_url)
+        fs_juice = soup_fs.select('[class*="TicketContainer]')
+        fs_time_zone = soup_fs.select('[class*="TimeGroupContainer"]')
+        departure_time_zone = fs_time_zone[0].get_text()
+        arrival_time_zone = fs_time_zone[1].get_text()
+        
+        # This is only the
+        # for div in fs_juice[0].find_all('div'):
+            # print(div.text)
+
 
         # Airport distance and duration can be misleading. Be careful with using these. 
         # table = soup.find('div', {'class': 'a2'})
@@ -257,7 +270,10 @@ class Pull_flight_info(Root_class):
         query = ' '.join(query_in_list_form)
 
         flt_num = query.split()[1]
-        airport = query.split()[2]
+        if query.split()[2]:
+            airport = query.split()[2]
+        else:
+            airport = self.pull_UA(query_in_list_form)['departure_ID']
         print(flt_num, airport)
 
         # date format in the url is YYYYMMDD. For testing, you can find flt_nums on https://www.airport-ewr.com/newark-departures
@@ -265,7 +281,7 @@ class Pull_flight_info(Root_class):
         if use_custum_raw_date:
             date = 20230505
         else:
-            date = self.date_time(raw=True)     # Root_class inheritance
+            date = self.date_time(raw=True)     # Root_class inheritance format yyyymmdd
         flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport}"
 
         try :
@@ -289,39 +305,4 @@ class Pull_flight_info(Root_class):
             # try print(scripts[9].get_text()) for string version for parsing
         
         # print(departure, destination)
-
-
-    def pull_route(self, flight_query):     # Still under construction. Difficult to work with API. Attempting AeroAPI
-        # Much unfinished work here! Cant seem to get how to extract the clearance route from flightaware,
-
-        flt_num = flight_query
-
-        flight_aware = f"https://flightaware.com/live/flight/UAL{flt_num}"
-        response = requests.get(flight_aware)
-        try :
-            soup = bs4(response.content, 'html.parser')
-            # data_tag= soup.find_all('flightPageData')
-            data_tag= soup.find_all("div", class_="flightpagedata")
-        except :
-            empty_soup = {} 
-            return empty_soup
-        # print(data_tag)
-        print(soup.get_text())
-
-        # Seperate trial with the API. 
-        url = "https://aeroapi.flightaware.com/aeroapi"
-
-        headers = {"Authorization": "qPRqXI2e1puzGQaGLaU387h33BImo8AA"}
-        params = {"flight_number": "", 
-                "date": ""}
-
-        response = requests.get(url, headers=headers, params=params)
-        print(response.url)
-        print(response.status_code)
-        if response.status_code==200:
-            data = response.json()
-            print(data)
-        
-
-
 
