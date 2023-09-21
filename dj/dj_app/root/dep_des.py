@@ -28,20 +28,19 @@ class Pull_flight_info(Root_class):
         # attempt to only pull departure and destination from the united from the info web.
         # TODO: Use Flightstats for scheduled times conversion
         info = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
-        flight_view = "https://www.flightview.com/flight-tracker/UA/492?date=20230702&depapt=EWR"
+        flight_view = "https://www.flightview.com/flight-tracker/UA/492?date=20230702&depapt=EWR"   # check pull_dep_des 
         flight_stats_url = f"https://www.flightstats.com/v2/flight-tracker/UA/{flt_num}?year={date[:4]}&month={date[4:6]}&date={date[-2:]}"
         soup = self.request(info)
         
         soup_fs = self.request(flight_stats_url)
-        fs_juice = soup_fs.select('[class*="TicketContainer]')
+        fs_juice = soup_fs.select('[class*="TicketContainer"]')     # This is the whole packet not needed now
         fs_time_zone = soup_fs.select('[class*="TimeGroupContainer"]')
-        departure_time_zone = fs_time_zone[0].get_text()
+        departure_time_zone = fs_time_zone[0].get_text()        #  format is HH:MM XXX timezone(eg.EST)
+        departure_time_zone = "STD " + departure_time_zone[9:18]
+        departure_estimated_or_actual = departure_time_zone[18:]
         arrival_time_zone = fs_time_zone[1].get_text()
-        
-        # This is only the
-        # for div in fs_juice[0].find_all('div'):
-            # print(div.text)
-
+        arrival_time_zone = "STA " + arrival_time_zone[9:18]
+        arrival_estimated_or_actual = arrival_time_zone[18:]
 
         # Airport distance and duration can be misleading. Be careful with using these. 
         # table = soup.find('div', {'class': 'a2'})
