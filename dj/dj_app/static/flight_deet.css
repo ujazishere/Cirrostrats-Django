@@ -8,9 +8,20 @@ body {
   overflow: hidden;
   transition: max-height 1.2s ease;
 }
+
 .accordion-content.active {
   max-height: 1000px; 
-  transition: max-height 1.2s ease;
+}
+
+.comparison-table thead th{
+  position: sticky;
+  top: 0;
+  background-color: #474350;
+  z-index: 1;
+}
+
+.header-button {
+  cursor: pointer;
 }
 
 .accordion-button {
@@ -21,31 +32,13 @@ body {
   padding: 10px;
   border: 2px solid black;
   border-radius: 5px;
-}
-
-.accordion-button:focus {
-  outline: none;
+  outline: none; /* Remove outline on focus */
 }
 
 .accordion-button-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px; 
-}
-
-.toggle-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  width: 35px;
-  height: 35px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  border: 0.1px;
-  background-color: #FFFFFF;
+  margin-bottom: 10px;
 }
 
 .dark-mode .toggle-button {
@@ -62,7 +55,8 @@ h5 {
 }
 
 .dark-mode table.comparison-table thead th {
-  background-color: black;
+  background-color: rgb(255, 255, 255);
+  color: black;
 }
 
 .dark-mode table.comparison-table {

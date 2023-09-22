@@ -11,14 +11,14 @@
   {% if flight_number %}
   <div id="departure-container" class="table-container">
     <div class="accordion-button-container">
-      <button class="accordion-button" onclick="toggleAccordion(this, 'departure-content')">
-        &#9660;
-              Departure {{ departure_ID }} | {{ departure_gate }} </button>
     </div>
     <div class="accordion-content active" id="departure-content">
       <table class="comparison-table">
         <thead>
           <tr>
+            <th>      <button class="accordion-button" onclick="toggleAccordion(this, 'departure-content')">
+              &#9660;
+                    Departure {{ departure_ID }} | {{ departure_gate }} </button></th>
           </tr>
         </thead>
         <tbody>
