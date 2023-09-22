@@ -38,25 +38,25 @@
       <div class="table-wrapper">
         <table class="another-table">
           <thead>
-            <tr>
-              <th>2nd Dimension Key</th>
-              <th>2nd Dimension Value</th>
-            </tr>
           </thead>
           <tbody>
             {% for d1_key, d1_value in nas_packet.departure_affected.items %}
-              {% for d2_key, d2_value in d1_value.items %}
-                <tr>
-                  <td> {{ d2_key }} </td>
-                  <td> {{ d2_value }} </td>
-                </tr>
-              {% endfor %}
+            <tr>
+              <td colspan="2">{{ d1_key }}</td>
+            </tr>
+            {% for d2_key, d2_value in d1_value.items %}
+            <tr>
+              <td>{{ d2_key }}</td>
+              <td>{{ d2_value }}</td>
+            </tr>
+            {% endfor %}
             {% endfor %}
           </tbody>
-        </table>        
+        </table>
+      </div>    
     {% endif %}
     </div>
-  </div>
+    </div>
 
   <div id="departure-container" class="table-container">
     <div class="accordion-button-container">
@@ -89,22 +89,22 @@
   <div class="table-wrapper">
     <table class="another-table">
       <thead>
-        <tr>
-          <th>2nd Dimension Key</th>
-          <th>2nd Dimension Value</th>
-        </tr>
       </thead>
       <tbody>
         {% for d1_key, d1_value in nas_packet.destination_affected.items %}
-          {% for d2_key, d2_value in d1_value.items %}
-            <tr>
-              <td> {{ d2_key }} </td>
-              <td> {{ d2_value }} </td>
-            </tr>
-          {% endfor %}
+        <tr>
+          <td colspan="2">{{ d1_key }}</td>
+        </tr>
+        {% for d2_key, d2_value in d1_value.items %}
+        <tr>
+          <td>{{ d2_key }}</td>
+          <td>{{ d2_value }}</td>
+        </tr>
+        {% endfor %}
         {% endfor %}
       </tbody>
-    </table>        
+    </table>
+  </div>    
 {% endif %}
 </div>
 </div>
