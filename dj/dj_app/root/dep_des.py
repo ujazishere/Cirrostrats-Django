@@ -42,6 +42,7 @@ class Pull_flight_info(Root_class):
         arrival_time_zone = "STA " + arrival_time_zone[9:18]
         arrival_estimated_or_actual = arrival_time_zone[18:]
 
+
         # Airport distance and duration can be misleading. Be careful with using these. 
         # table = soup.find('div', {'class': 'a2'})
         distane_and_duration = soup.find('ul', {'class': 'a3_n'})
@@ -66,6 +67,7 @@ class Pull_flight_info(Root_class):
         destination_gate = gate[1]
 
         nas_packet = self.gs_sorting(departure_ID, destination_ID)
+        soup_fv = self.pull_dep_des(query_in_list_form, departure_ID)
 
         return {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                  'departure_ID': departure_ID,
@@ -86,7 +88,7 @@ class Pull_flight_info(Root_class):
         destination_ID = dest_ID[1:]
 
         nas_delays = self.nas_status()
-        airport_closures = nas_delays['airport_closures']
+        airport_closures = nas_delays['Airport Closure']
         ground_stop_packet = nas_delays['ground_stop_packet']
         ground_delay_packet = nas_delays['ground_delay_packet']
         arr_dep_del_list = nas_delays['arr_dep_del_list']
@@ -106,15 +108,15 @@ class Pull_flight_info(Root_class):
                     start = airport_closures[airport_index+2][1]
                     reopen = airport_closures[airport_index+3][1]
                     if airport_identifier == departure_ID:
-                        departure_affected.update({'airport_closures':{'departure': airport_identifier,
-                                                'reason': reason,
-                                                'start': start,
-                                                'reopen': reopen}})
+                        departure_affected.update({'Airport Closure':{'Departure': airport_identifier,
+                                                'Reason': reason,
+                                                'Start': start,
+                                                'Reopen': reopen}})
                     if airport_identifier == destination_ID:
-                        destination_affected.update({'airport_closures':{'destination': airport_identifier,
-                                                'reason': reason,
-                                                'start': start,
-                                                'reopen': reopen}})
+                        destination_affected.update({'Airport Closure':{'Destination': airport_identifier,
+                                                'Reason': reason,
+                                                'Start': start,
+                                                'Reopen': reopen}})
 
         affected_ground_delay_packet = []
         for i in ground_delay_packet:
@@ -127,15 +129,15 @@ class Pull_flight_info(Root_class):
                     average_delay = ground_delay_packet[airport_index+2][1]
                     max_delay = ground_delay_packet[airport_index+3][1]
                     if airport_identifier == departure_ID:
-                        departure_affected.update({'ground_delay_packet':{'departure': airport_identifier,
-                                                'reason': reason,
-                                                'average_delay': average_delay,
-                                                'max_delay': max_delay}})
+                        departure_affected.update({'Ground Delay':{'Departure': airport_identifier,
+                                                'Reason': reason,
+                                                'Average Delay': average_delay,
+                                                'Maximum Delay': max_delay}})
                     if airport_identifier == destination_ID:
-                        destination_affected.update({'ground_delay_packet':{'destination': airport_identifier,
-                                                'reason': reason,
-                                                'average_delay': average_delay,
-                                                'max_delay': max_delay}})
+                        destination_affected.update({'Ground Delay':{'Destination': airport_identifier,
+                                                'Reason': reason,
+                                                'Average Delay': average_delay,
+                                                'Maximum Delay': max_delay}})
 
                                                 
         affected_ground_stop_packet = []
@@ -148,13 +150,13 @@ class Pull_flight_info(Root_class):
                     reason = ground_stop_packet[airport_index+1][1]
                     end_time = ground_stop_packet[airport_index+2][1]
                     if airport_identifier == departure_ID:
-                        departure_affected.update({'ground_stop_paceket':{'departure': airport_identifier,
-                                                'reason': reason,
-                                                'end_time': end_time}})
+                        departure_affected.update({'Ground Stop':{'Departure': airport_identifier,
+                                                'Reason': reason,
+                                                'End Time': end_time}})
                     if airport_identifier == destination_ID:
-                        destination_affected.update({'ground_stop_packet':{'destination': airport_identifier,
-                                                'reason': reason,
-                                                'end_time': end_time}})
+                        destination_affected.update({'Ground Stop':{'Destination': airport_identifier,
+                                                'Reason': reason,
+                                                'End Time': end_time}})
 
         affected_arr_dep_del_list = []
         for i in arr_dep_del_list:
@@ -169,19 +171,19 @@ class Pull_flight_info(Root_class):
                     max_delay = arr_dep_del_list[airport_index+4][1]
                     trend = arr_dep_del_list[airport_index+5][1]
                     if airport_identifier == departure_ID:
-                        departure_affected.update({'arr_dep_del_list':{'departure': airport_identifier,
-                                                'reason': reason,
-                                                'arr_or_dep': arr_or_dep,
-                                                'min_delay': min_delay,
-                                                'max_delay': max_delay,
-                                                'trend': trend}})
+                        departure_affected.update({'Arrival/Departure Delay':{'Departure': airport_identifier,
+                                                'Reason': reason,
+                                                'Type': arr_or_dep['Type'],
+                                                'Minimum': min_delay,
+                                                'Maximum': max_delay,
+                                                'Trend': trend}})
                     if airport_identifier == destination_ID:
-                        destination_affected.update({'arr_dep_delay_list':{'destination': airport_identifier,
-                                                'reason': reason,
-                                                'arr_or_dep': arr_or_dep,
-                                                'min_delay': min_delay,
-                                                'max_delay': max_delay,
-                                                'trend': trend}})
+                        destination_affected.update({'Arrival/Departure Delay':{'Destination': airport_identifier,
+                                                'Reason': reason,
+                                                'Type': arr_or_dep['Type'],
+                                                'Minimum': min_delay,
+                                                'Maximum': max_delay,
+                                                'Trend': trend}})
 
         return {'departure_affected': departure_affected,
                 'destination_affected': destination_affected}
@@ -203,20 +205,18 @@ class Pull_flight_info(Root_class):
         import xml.etree.ElementTree as ET
         import pytz
         '''
-        '''
         nas = "https://nasstatus.faa.gov/api/airport-status-information"
         response = requests.get(nas)
         xml_data = response.content
 
         root = ET.fromstring(xml_data) 
         '''
-
         # These upto pickle load is dummy file. comment them out to get the actual NAS packet.
         import pickle
 
         with open('ewr_delay_packet_experimantal.pkl', 'rb') as f:
             root = pickle.load(f)
-
+        '''
         update_time = root[0].text
 
         affected_airports = [i.text for i in root.iter('ARPT')]
@@ -260,20 +260,19 @@ class Pull_flight_info(Root_class):
                 'ground_stop_packet': ground_stop_packet, 
                 'ground_delay_packet': ground_delay_packet,
                 'arr_dep_del_list': arr_dep_del_list,
-                'airport_closures': airport_closures
+                'Airport Closure': airport_closures
                 }
 
 
-    def pull_dep_des(self, query_in_list_form):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
+    def pull_dep_des(self, query_in_list_form, airport):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
 
         query = ' '.join(query_in_list_form)
 
         flt_num = query.split()[1]
-        if query.split()[2]:
+        if len(query.split()) > 2:
             airport = query.split()[2]
         else:
-            airport = self.pull_UA(query_in_list_form)['departure_ID']
-        print(flt_num, airport)
+            pass
 
         # date format in the url is YYYYMMDD. For testing, you can find flt_nums on https://www.airport-ewr.com/newark-departures
         use_custum_raw_date = False
@@ -281,7 +280,7 @@ class Pull_flight_info(Root_class):
             date = 20230505
         else:
             date = self.date_time(raw=True)     # Root_class inheritance format yyyymmdd
-        flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport}"
+        flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport[1:]}"
 
         try :
             soup = self.request(flight_view)
@@ -305,3 +304,23 @@ class Pull_flight_info(Root_class):
         
         # print(departure, destination)
 
+
+class NAS_template:
+    def __init__(self,
+                 update_time=None,
+                 affected_airports=None,
+                 ground_stop_packet=None,
+                 ground_delay_packet=None,
+                 arr_dep_del_list=None,
+                 airport_closures=None,
+
+                ) -> None:
+        pass
+    def output(self):
+        return {'Update Time': self.update_time,
+                'Affected Airports': self.affected_airports,
+                'Ground Stop': self.ground_stop_packet,
+                'Ground Delay': self.ground_delay_packet,
+                'Arrival/Departure Delay': self.arr_dep_del_list,
+                'Airport Closure': self.airport_closures,
+                }
