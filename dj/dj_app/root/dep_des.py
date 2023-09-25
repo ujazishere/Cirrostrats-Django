@@ -63,7 +63,7 @@ class Pull_flight_info(Root_class):
 
         gate = soup.find_all('div', {'class': 'a2_c'})              # the data from the gate is also probably misleading.
         gate = [i.text.replace('\n', '') for i in gate]
-        departure_gate = gate[0]
+        departure_gate = gate[0]        # Unreliable for Newark Hardstand
         destination_gate = gate[1]
 
         nas_packet = self.gs_sorting(departure_ID, destination_ID)
@@ -72,11 +72,15 @@ class Pull_flight_info(Root_class):
         return {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                  'departure_ID': departure_ID,
                  'destination_ID':destination_ID,
-                 'departure_gate': departure_gate,
-                 'scheduled_departure_time': scheduled_departure_time,
-                 'actual_departure_time': actual_departure_time,
-                 'destination_gate': destination_gate,
-                 'scheduled_arrival_time': scheduled_arrival_time,
+                 'departure_gate': soup_fv['departure_gate'],       # Takes forever to load data
+                #  'departure_gate': departure_gate,
+                #  'scheduled_departure_time': scheduled_departure_time,
+                 'scheduled_departure_time': departure_time_zone,
+                 'actual_departure_time': actual_departure_time,    # Takes forever to load data
+                 'destination_gate': soup_fv['arrival_gate'],
+                #  'destination_gate': destination_gate,
+                #  'scheduled_arrival_time': scheduled_arrival_time,
+                 'scheduled_arrival_time': arrival_time_zone,
                  'actual_arrival_time': actual_arrival_time,
                  'nas_packet': nas_packet
                  }
@@ -264,7 +268,7 @@ class Pull_flight_info(Root_class):
                 }
 
 
-    def pull_dep_des(self, query_in_list_form, airport):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
+    def pull_dep_des(self, query_in_list_form, airport=None):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
 
         query = ' '.join(query_in_list_form)
 
@@ -275,15 +279,23 @@ class Pull_flight_info(Root_class):
             pass
 
         # date format in the url is YYYYMMDD. For testing, you can find flt_nums on https://www.airport-ewr.com/newark-departures
-        use_custum_raw_date = False
-        if use_custum_raw_date:
+        use_custom_dummy_data = False
+        if use_custom_dummy_data:
             date = 20230505
         else:
             date = self.date_time(raw=True)     # Root_class inheritance format yyyymmdd
         flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport[1:]}"
-
+        soup = self.request(flight_view)
+        # print(flight_view, date)
         try :
-            soup = self.request(flight_view)
+            leg_data = soup.find_all('div', class_='leg')   # Has all the departure and destination data
+            departure_gate = leg_data[0].find_all('tr', class_='even')[1].text[17:]
+            print(departure_gate)
+            # departure_gate = departure_gate[26:-1]
+            arrival_gate = leg_data[0].find_all('tr', class_='even')[4].text[17:]
+            print(arrival_gate)
+            # arrival_gate = arrival_gate[26:-1]
+
             scripts = soup.find_all('script')       # scripts is a section in the html that contains departure and destination airports 
             for script in scripts:
                 # looks up text 'var sdepapt' which is associated with departure airport.
@@ -294,9 +306,14 @@ class Pull_flight_info(Root_class):
                     destination = script.get_text().split('\n')[2].split('\"')[1]
             # print(scripts[-3].get_text())       #this is where you can find departure and destination times
                     # departure_time = 
-            return dict({flt_num: [departure, destination]})
+            # return dict({flt_num: [departure, destination]})
+            return {'departure_gate': departure_gate,
+                    'arrival_gate': arrival_gate,
+                    }
+            
         except :
-            empty_soup = {} 
+            empty_soup = {'departure_gate': 'NA',
+                          'arrival_gate': 'NA'} 
             return empty_soup
 
         # typically 9th index of scripts is where departure and destination is.

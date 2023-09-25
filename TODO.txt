@@ -9,13 +9,12 @@ Practice readibility and simplicity. Include description and documentation for o
         DONE! Make seperate css for templates/dj_app/base.html instead of having it within the base.html. Its not a good practive to have styling within html. 
         
 **UV:   
+        Implement asynchronous loading of the data on the flight_deet page.
+            Load data incrementally so as to avoid waiting for all data to be fetched.
+
         App:
             with search capability such that most frequest searches are stored for quick access.
             search bar
-        DONE! add activator() scrape to include data from few hours later since its currently only showing 6am, 12pm and 6pm.
-
-        DONE! Include ground stop information.
-
         add Notams for departure and destinations.
         
         Scrape `scheduled` times less frequently as it is mostly static and expensive.
@@ -56,6 +55,10 @@ Practice readibility and simplicity. Include description and documentation for o
         make use of http://xml.flightview.com/xmlbdom/ for pulling flight data instead of requests and bs4 libraries
         
         Use models and sql for database management.
+        DONE! add activator() scrape to include data from few hours later since its currently only showing 6am, 12pm and 6pm.
+
+        DONE! Include ground stop information.
+
 
 
 Note consistent irregularity in the outlaws - check for patterns.
