@@ -39,6 +39,10 @@
             </ul>
         </div>
     </header>
+
+    <div class="gmt-clock">
+        GMT: <span id="gmt-time"></span>
+    </div>    
     
     <h1>Cirrostrats</h1>
 
@@ -70,6 +74,22 @@
                 document.getElementById("darkModeToggle").checked = true;
             }
         });
+   
+        // Function to update the GMT clock
+    function updateGMTClock() {
+        var gmtTimeElement = document.getElementById("gmt-time");
+        var now = new Date();
+        var gmtTime = now.toGMTString(); // Get GMT time string
+        gmtTimeElement.textContent = gmtTime;
+    }
+
+    // Update the GMT clock initially and set an interval to update it every second
+    document.addEventListener("DOMContentLoaded", function () {
+        updateGMTClock(); // Update the GMT clock initially
+        setInterval(updateGMTClock, 1000); // Update it every second
+    });
+        
+
     </script>
     {% block content %}
     {% endblock %}
