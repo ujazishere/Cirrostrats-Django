@@ -9,12 +9,11 @@ body {
   position: fixed;
   top: 65px; /* Adjust the top position as needed */
   right: 10px; /* Adjust the right position as needed */
-  background-color: rgba(0, 0, 0, 1); /* Background color */
+  background-color: rgba(0, 0, 0, 0.5); /* Background color */
   color: white; /* Text color */
   padding: 5px 10px; /* Padding for the clock */
   border-radius: 5px; /* Rounded corners */
   font-size: 14px; /* Font size */
-  z-index: 9999; /* Ensure it's on top of other content */
 }
 
 .dark-mode-switch {
