@@ -47,10 +47,13 @@ def parse_query(request, main_query):
     if main_query != '':        # if query is not empty it splits it into list form
         query_in_list_form = main_query.split()
         if len(query_in_list_form) == 1:            # If query is only one word or item  
-
-            # When the length of query_in_list_form is only 1 it returns gates table for that particular query.
-            gate_query = query_in_list_form[0]
-            return gate_info(request, main_query=gate_query)
+            query = query_in_list_form[0]
+            if len(query) == 4 or len(query) == 3:
+                return flight_deets(request, query)
+            else:
+                # When the length of query_in_list_form is only 1 it returns gates table for that particular query.
+                gate_query = query
+                return gate_info(request, main_query=gate_query)
     if len(query_in_list_form) > 1:
         first_letter = query_in_list_form[0].upper()        # Making it uppercase for compatibility issues and error handling
         if first_letter == 'W':

@@ -1,20 +1,21 @@
 Practice readibility and simplicity. Include description and documentation for others to read and make changes to it
 
 **IS:   
-        DONE! implement show and hide feature for departure and destination boxes on flight_deet page
-        DONE! Make all pages in Menu bar symmetric.
-        DONE! Make dark mode switch symmetric
-        DONE! Make the flight deet page more like the google flight packet. search `i 492` to view the flight deet
-        DONE! Use Dark mode across the web.
-        DONE! Make seperate css for templates/dj_app/base.html instead of having it within the base.html. Its not a good practive to have styling within html. 
-        
+        Make a `report` on homepage allowing for qick reporting of anomaly.
+            probably the ability to send a screenshot. some sort of chat mechanism.
+        Move Departure times to the left most side and gate deets to the right most side of the title.
+        Fix expang/collapse squaring on the flight_deet page and make it consistent with box size.
+        come up with a better cleaner font across the web. Especially web title.
 **UV:   
+        Fix 401 forbidden error; CSFR token issues.
+        Fix bug that takes in 2 flight routes for singular flight number.
+        main query is len 4 or 3 for flight number. Make it such that gates are only searched with airport in the front
         Implement asynchronous loading of the data on the flight_deet page.
             Load data incrementally so as to avoid waiting for all data to be fetched.
 
         App:
             with search capability such that most frequest searches are stored for quick access.
-            search bar
+            search bar:
         add Notams for departure and destinations.
         
         Scrape `scheduled` times less frequently as it is mostly static and expensive.
@@ -60,6 +61,13 @@ Practice readibility and simplicity. Include description and documentation for o
         DONE! Include ground stop information.
 
 
+IS Done!!:
+        DONE! implement show and hide feature for departure and destination boxes on flight_deet page
+        DONE! Make all pages in Menu bar symmetric.
+        DONE! Make dark mode switch symmetric
+        DONE! Make the flight deet page more like the google flight packet. search `i 492` to view the flight deet
+        DONE! Use Dark mode across the web.
+        DONE! Make seperate css for templates/dj_app/base.html instead of having it within the base.html. Its not a good practive to have styling within html. 
 
 Note consistent irregularity in the outlaws - check for patterns.
     fix outlaws such that those patterns are overwritten and only unique patterns get updated in it. 

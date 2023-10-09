@@ -17,11 +17,13 @@ class Pull_flight_info(Root_class):
         super().__init__()
 
 
-    def pull_UA(self, query_in_list_form):
-        query = ' '.join(query_in_list_form)
-        
-        flt_num = query.split()[1]
-        # airport = query.split()[2]
+    def pull_UA(self, query):
+        if type(query) == list:
+             query = query[1]
+            
+        # flt_num = query.split()[1]
+        flt_num = query
+        # airport = query.split()[2]        This was for when passing `i flt_num airport` as search
         date = self.date_time(raw=True)     # Root_class inheritance format yyyymmdd
 
         #  TODO: pull information on flight numners from the info web and use that to pull info through flightview.
@@ -41,7 +43,6 @@ class Pull_flight_info(Root_class):
         arrival_time_zone = fs_time_zone[1].get_text()
         arrival_time_zone = "STA " + arrival_time_zone[9:18]
         arrival_estimated_or_actual = arrival_time_zone[18:]
-
 
         # Airport distance and duration can be misleading. Be careful with using these. 
         # table = soup.find('div', {'class': 'a2'})
@@ -67,7 +68,7 @@ class Pull_flight_info(Root_class):
         destination_gate = gate[1]
 
         nas_packet = self.gs_sorting(departure_ID, destination_ID)
-        soup_fv = self.pull_dep_des(query_in_list_form, departure_ID)
+        soup_fv = self.pull_dep_des(query, departure_ID)
 
         return {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                  'departure_ID': departure_ID,
@@ -268,15 +269,9 @@ class Pull_flight_info(Root_class):
                 }
 
 
-    def pull_dep_des(self, query_in_list_form, airport=None):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
+    def pull_dep_des(self, query, airport=None):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
 
-        query = ' '.join(query_in_list_form)
-
-        flt_num = query.split()[1]
-        if len(query.split()) > 2:
-            airport = query.split()[2]
-        else:
-            pass
+        flt_num = query
 
         # date format in the url is YYYYMMDD. For testing, you can find flt_nums on https://www.airport-ewr.com/newark-departures
         use_custom_dummy_data = False
@@ -290,10 +285,8 @@ class Pull_flight_info(Root_class):
         try :
             leg_data = soup.find_all('div', class_='leg')   # Has all the departure and destination data
             departure_gate = leg_data[0].find_all('tr', class_='even')[1].text[17:]
-            print(departure_gate)
             # departure_gate = departure_gate[26:-1]
             arrival_gate = leg_data[0].find_all('tr', class_='even')[4].text[17:]
-            print(arrival_gate)
             # arrival_gate = arrival_gate[26:-1]
 
             scripts = soup.find_all('script')       # scripts is a section in the html that contains departure and destination airports 
