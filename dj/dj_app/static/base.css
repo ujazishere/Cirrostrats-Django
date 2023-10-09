@@ -5,6 +5,17 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+.gmt-clock {
+  position: fixed;
+  top: 65px; /* Adjust the top position as needed */
+  right: 10px; /* Adjust the right position as needed */
+  background-color: rgba(0, 0, 0, 0.5); /* Background color */
+  color: white; /* Text color */
+  padding: 5px 10px; /* Padding for the clock */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 14px; /* Font size */
+}
+
 .dark-mode-switch {
   position: absolute;
   top: 15px;
