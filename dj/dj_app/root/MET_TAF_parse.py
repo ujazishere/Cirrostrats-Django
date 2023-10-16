@@ -15,8 +15,19 @@ class Weather_display:
         
         # Find ways to convert raw query input into identifiable airport ID
         airport_id = query
-        TAF =  'on'
+        awc_metar_api = f"https://beta.aviationweather.gov/cgi-bin/data/metar.php?ids={airport_id}"
+        metar_raw = requests.get(awc_metar_api)
+        metar_raw = metar_raw.content
+        metar_raw = metar_raw.decode("utf-8")
         
+        awc_taf_api = f"https://beta.aviationweather.gov/cgi-bin/data/taf.php?ids={airport_id}"
+        taf_raw = requests.get(awc_taf_api)
+        taf_raw = taf_raw.content
+        taf_raw = taf_raw.decode("utf-8")
+        taf_raw = taf_raw.replace("FM", "<br>\xa0\xa0\xa0\xa0FM")   # line break for FM section in TAF
+        
+        """
+        TAF =  'on'
         awc_web = f"https://aviationweather.gov/metar/data?ids={airport_id}&format=raw&hours=0&taf={TAF}&layout=on"
         response = requests.get(awc_web)
         soup = bs4(response.content, 'html.parser')
@@ -42,7 +53,7 @@ class Weather_display:
             metar_raw = 'NA'
             taf_raw = 'NA'
         
-        
+        """
         # metar = metar_raw.split()     # split returns into list form for further processing.
         # taf = taf_raw.split()
         # print((taf_raw))
