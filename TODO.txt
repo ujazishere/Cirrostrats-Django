@@ -7,9 +7,11 @@ Practice readibility and simplicity. Include description and documentation for o
         Fix expang/collapse squaring on the flight_deet page and make it consistent with box size.
         come up with a better cleaner font across the web. Especially web title.
 **UV:   
+        set up linux AWS EC2
         Fix 401 forbidden error; CSFR token issues.
         Fix bug that takes in 2 flight routes for singular flight number.
-        main query is len 4 or 3 for flight number. Make it such that gates are only searched with airport in the front
+        main query is len 4 or 3 for flight number. Make it such that gates are
+            only searched with airport in the front
         Implement asynchronous loading of the data on the flight_deet page.
             Load data incrementally so as to avoid waiting for all data to be fetched.
 

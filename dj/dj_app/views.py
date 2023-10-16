@@ -47,13 +47,24 @@ def parse_query(request, main_query):
     if main_query != '':        # if query is not empty it splits it into list form
         query_in_list_form = main_query.split()
         if len(query_in_list_form) == 1:            # If query is only one word or item  
-            query = query_in_list_form[0]
-            if len(query) == 4 or len(query) == 3:
-                return flight_deets(request, query)
-            else:
+            query = query_in_list_form[0].upper()           # this is string form instead of list
+            if 'A' in query or 'B' in query or 'C' in query or len(query)==1:
                 # When the length of query_in_list_form is only 1 it returns gates table for that particular query.
                 gate_query = query
                 return gate_info(request, main_query=gate_query)
+            elif query[:2] == "UA":
+                return flight_deets(request, query[2:])
+            elif len(query) == 4 or len(query) == 3 or len(query) == 2:
+                if query.isdigit():
+                    # if betwee 1 to 35 for A, between 40-70 for B between 70-135 for c
+                    query = int(query)
+                    if 1 <= query <= 35 or 40 <= query <= 136:
+                        return gate_info(request, main_query=str(query))
+                    else:    
+                        return flight_deets(request, query)
+                else:
+                    return gate_info(request, main_query=str(query))
+
     if len(query_in_list_form) > 1:
         first_letter = query_in_list_form[0].upper()        # Making it uppercase for compatibility issues and error handling
         if first_letter == 'W':
