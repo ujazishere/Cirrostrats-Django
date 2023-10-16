@@ -6,52 +6,6 @@
     {% load static %}
 
     <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
-    <style>
-        .warning-sign {
-            color: yellow;
-            cursor: pointer;
-            font-size: 40px; /* Adjust the font size as needed */
-            position: fixed;
-            top: 65px; /* Adjust the top position as needed */
-            left: 10px; /* Adjust the right position as needed */
-            background-color: rgba(0, 0, 0, 0.5); /* Background color */
-            padding: 5px 10px; /* Padding for the clock */
-        }
-        
-        .popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .popup-content {
-            background: white;
-            width: 300px;
-            height: 220px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            overflow: auto;
-            border-radius: 5px; /* Rounded corners */
-        }
-
-        .popup-content label {
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .popup-content textarea {
-            width: calc(100% - 40px);
-            resize: vertical;
-        }
-    </style>
-
     <title>{% block title %}Cirrostrats{% endblock %}</title>
 </head>
 <body>
@@ -91,20 +45,6 @@
     </div>    
     
     <h1>Cirrostrats</h1>
-
-    <!-- Add the warning sign and popup -->
-    <div class="warning-sign" onclick="openPopup()">⚠</div>
-
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <h5>Report Issue</h5>
-            <form>
-                <label for="issue-description">Issue Description:</label><br>
-                <textarea id="issue-description" name="issue-description" rows="4" cols="50"></textarea><br><br>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
-    </div>
 
     <script>
         // JavaScript code for toggling the burger menu, sidebar, and dark mode
@@ -153,12 +93,6 @@
             updateGMTClock(); // Update the GMT clock initially
             setInterval(updateGMTClock, 1000); // Update it every second
         });
-
-        // Function to open the popup
-        function openPopup() {
-            var popup = document.getElementById("popup");
-            popup.style.display = "block";
-        }
     </script>
 
     {% block content %}
