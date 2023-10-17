@@ -15,12 +15,12 @@ class Weather_display:
         
         # Find ways to convert raw query input into identifiable airport ID
         airport_id = query
-        awc_metar_api = f"https://beta.aviationweather.gov/cgi-bin/data/metar.php?ids={airport_id}"
+        awc_metar_api = f"https://aviationweather.gov/api/data/metar?ids={airport_id}"
         metar_raw = requests.get(awc_metar_api)
         metar_raw = metar_raw.content
         metar_raw = metar_raw.decode("utf-8")
         
-        awc_taf_api = f"https://beta.aviationweather.gov/cgi-bin/data/taf.php?ids={airport_id}"
+        awc_taf_api = f"https://aviationweather.gov/api/data/taf?ids={airport_id}"
         taf_raw = requests.get(awc_taf_api)
         taf_raw = taf_raw.content
         taf_raw = taf_raw.decode("utf-8")
