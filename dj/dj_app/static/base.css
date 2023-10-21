@@ -6,7 +6,7 @@ body {
 }
 
 .gmt-clock {
-  position: fixed;
+  position: absolute;
   top: 65px; /* Adjust the top position as needed */
   right: 10px; /* Adjust the right position as needed */
   background-color: rgba(0, 0, 0, 0.5); /* Background color */
