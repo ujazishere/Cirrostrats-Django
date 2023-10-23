@@ -170,4 +170,6 @@ def weather(request):
 def guide(request):
     return render(request, 'guide.html')
 
+def report_an_issue(request):
+    return render(request, 'report_an_issue.html')
 
