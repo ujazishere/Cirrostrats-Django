@@ -6,22 +6,28 @@ Practice readibility and simplicity. Include description and documentation for o
         Move Departure times to the left most side and gate deets to the right most side of the title.
         Fix expang/collapse squaring on the flight_deet page and make it consistent with box size.
         come up with a better cleaner font across the web. Especially web title.
+        weather table should be the same as weather table on flight_deet.
+            Searching `w kewr` to see just metar and taf vs search 414 to see how that table differs
 **UV:   
-        Fix 401 forbidden error; CSFR token issues.
+        Remove port 8000.
+            Might help fix 401 forbidden error; CSFR token issues.
+            Might solve SkiFi_secure WiFi restricted access of the web.
         Fix bug that takes in 2 flight routes for singular flight number.
+            Add option to scroll left and right for dates. 
         Implement asynchronous loading of the data on the flight_deet page.
             Load data incrementally so as to avoid waiting for all data to be fetched.
 
         App:
             with search capability such that most frequest searches are stored for quick access.
             search bar:
+            Implement search bar suggestions as user initiates typing.
+        
         add Notams for departure and destinations.
         
         Scrape `scheduled` times less frequently as it is mostly static and expensive.
             Scraper scrapes overnight when its not necessary. Avoid those.
         Only scrape `actual` times more frequently and from different web source to decrease intensive pull.
         
-        Implement search bar suggestions as user initiates typing.
 
         group search queries.
 

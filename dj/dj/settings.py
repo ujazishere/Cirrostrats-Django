@@ -77,6 +77,7 @@ WSGI_APPLICATION = 'dj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# Base directory(BASE_DIR) in this case is Cirrostrats/dj
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -119,7 +120,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'sj_app/static/'
+STATIC_URL = 'dj_app/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "dj_app" / "static",

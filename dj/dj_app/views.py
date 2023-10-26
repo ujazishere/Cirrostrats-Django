@@ -8,7 +8,7 @@ from .root.dep_des import Pull_flight_info
 
 
 '''
-views.py runs as soon as the base web is requested. Hence, GateCheckerThread() is run the background right away.
+views.py runs as soon as the base web is requested. Hence, GateCheckerThread() is run in the background right away.
 It will then run 
 '''
 run_lengthy_web_scrape = False 
@@ -169,6 +169,7 @@ def weather(request):
 
 def guide(request):
     return render(request, 'guide.html')
+
 
 def report_an_issue(request):
     return render(request, 'report_an_issue.html')
