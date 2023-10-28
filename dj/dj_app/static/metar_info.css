@@ -141,7 +141,7 @@ tbody tr:nth-child(odd) {
 }
 
 .highlight-red {
-    background-color: lightcoral; 
-    color: white; 
-    padding: 5px; 
+    color: rgb(255, 0, 0); 
+    padding: 4px; 
+    border-radius: 5px;
 }
