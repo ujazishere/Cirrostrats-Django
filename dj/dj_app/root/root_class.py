@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup as bs4
 from datetime import datetime
 import pytz
 import pickle
+import os
 
 class Root_class():
     
@@ -32,8 +33,14 @@ class Root_class():
 
 
     def load_master(self):
-        with open('master_UA.pkl', 'rb') as f:
-            return pickle.load(f)
+        try:
+            with open('master_UA.pkl', 'rb') as f:
+                return pickle.load(f)
+        except:
+            with open('dj/master_UA.pkl', 'rb') as f:
+                return pickle.load(f)
+
+
 
 
     def dt_conversion(self, data):
