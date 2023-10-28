@@ -23,7 +23,11 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ scheduled_departure_time }} {{ departure_ID }} | {{ departure_gate }} </td>
+                    <td>
+                        <span style="float: left;">{{ scheduled_departure_time }}</span>
+                        <span style="float: none;">{{ departure_ID }}</span>
+                        <span style="float: right;">{{ departure_gate }}</span>
+                    </td>
                 </tr>
                 {% for metar_taf_title, metar_taf_data in dep_weather.items %}
                 <tr>
@@ -77,7 +81,11 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ scheduled_arrival_time }} {{ destination_ID }} | {{ destination_gate }} </td>
+                    <td>
+                        <span style="float: left;">{{scheduled_arrival_time}}</span>
+                        <span style="float: none;">{{destination_ID}}</span>
+                        <span style="float: right;">{{destination_gate}}</span>
+                    </td>
                 </tr>
                 {% for metar_taf_title, metar_taf_data in dest_weather.items %}
                 <tr>
@@ -164,5 +172,7 @@ Empty search returns information on all gates for United flights in KEWR.
     cursor: pointer;
   }
 </style>
+
+
 
 {% endblock %}
