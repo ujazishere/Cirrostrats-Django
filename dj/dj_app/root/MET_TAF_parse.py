@@ -25,10 +25,11 @@ class Weather_display:
         taf_raw = requests.get(awc_taf_api)
         taf_raw = taf_raw.content
         taf_raw = taf_raw.decode("utf-8")
+        print(taf_raw)
 
         ismail_work = r'<span class="highlight-red">\1\2</span>'
-        
-        highlighted_taf = re.sub(r'(BKN|OVC)(\d{2}\d*|1[0-9])', ismail_work, taf_raw)
+
+        highlighted_taf = re.sub(r'(BKN|OVC)(0[0-1]\d)', ismail_work, taf_raw)
         highlighted_taf = highlighted_taf.replace("FM", "<br>\xa0\xa0\xa0\xa0FM")   # line break for FM section in TAF for HTML
         print(highlighted_taf)
         return dict({'METAR': metar_raw, 'TAF': highlighted_taf})
