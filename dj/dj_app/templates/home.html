@@ -12,11 +12,11 @@
 </head>
 <body>
   <h2>Check Weather, Gate And Flight Information</h2>
-  <div class="links-container">
+  <!-- <div class="links-container">
     <p><a href="{% url 'gate_check' %}">Gate Check</a></p>
     <p><a href="{% url 'flight_lookup' %}">Flight Lookup</a></p>
     <p><a href="{% url 'weather' %}">Weather</a></p>
-  </div>
+  </div> -->
   {% csrf_token %}
   <form method="post" class="search-form">
     {% csrf_token %}
