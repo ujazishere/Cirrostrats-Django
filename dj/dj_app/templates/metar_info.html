@@ -10,11 +10,15 @@
   {% if weather %}
   <table class="table">
     <tbody>
-      {% for title, raw_data  in weather.items %}
-        <tr>
-          <th>{{ title }}</th>
-          <td>{{ raw_data|safe }}</td>
-        </tr>
+      {% for title, raw_data in weather.items %}
+      <tr>
+        <th>
+          <p class="text-center" style="font-size: 14px; margin-bottom: 0; margin-top: 0; color: white;">{{ title }}</p>
+        </th>
+      </tr>
+      <tr>
+        <td>{{ raw_data|safe }}</td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
