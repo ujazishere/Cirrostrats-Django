@@ -29,7 +29,8 @@ class Weather_display:
 
         ismail_work = r'<span class="highlight-red">\1\2</span>'
 
+        highlighted_metar = re.sub(r'(BKN|OVC)(0[0-1]\d)', ismail_work, metar_raw)
         highlighted_taf = re.sub(r'(BKN|OVC)(0[0-1]\d)', ismail_work, taf_raw)
         highlighted_taf = highlighted_taf.replace("FM", "<br>\xa0\xa0\xa0\xa0FM")   # line break for FM section in TAF for HTML
         print(highlighted_taf)
-        return dict({'METAR': metar_raw, 'TAF': highlighted_taf})
+        return dict({'METAR': highlighted_metar, 'TAF': highlighted_taf})
