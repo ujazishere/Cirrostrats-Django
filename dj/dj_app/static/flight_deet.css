@@ -264,6 +264,11 @@ table.another-table td:first-child {
 }
 
 
+.highlight-red {
+    color: rgb(255, 0, 0); 
+    padding: 4px; 
+    border-radius: 5px;
+}
 
 
 

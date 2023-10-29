@@ -3,12 +3,13 @@ Practice readibility and simplicity. Include description and documentation for o
 **IS:   
         SSL cert for https port.
         Linking flight deet page with metar info page to reduce the cloning data.
-        Fix expand/collapse squaring on the flight_deet page and make it consistent with box size.
+        Fix expand/collapse squaring on the flight_deet page and make it co:nsistent with box size.
         come up with a better cleaner font across the web. Especially web title.
         Move Departure times to the left most side and gate deets to the right most side of the title.
         Make a `report` on homepage allowing for qick reporting of anomaly.
             probably the ability to send a screenshot. some sort of chat mechanism.
 **UV:   
+        
         Remove `Terminal` from the gate on flight deet page.
             Might help fix 401 forbidden error; CSFR token issues.
             Might solve SkiFi_secure WiFi restricted access of the web.
@@ -18,6 +19,7 @@ Practice readibility and simplicity. Include description and documentation for o
             Load data incrementally so as to avoid waiting for all data to be fetched.
 
         App:
+            swift language
             with search capability such that most frequest searches are stored for quick access.
             search bar:
             Implement search bar suggestions as user initiates typing.
