@@ -4,8 +4,7 @@ Practice readibility and simplicity. Include description and documentation for o
         wip! Fix expand/collapse squaring on the flight_deet page and make it co:nsistent with box size.
         come up with a better cleaner font across the web. Especially web title.
         Move Departure times to the left most side and gate deets to the right most side of the title.
-        Make a `report` on homepage allowing for qick reporting of anomaly.
-            probably the ability to send a screenshot. some sort of chat mechanism.
+
 **UV:   
         
         Remove `Terminal` from the gate on flight deet page.
@@ -140,5 +139,6 @@ weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf',
             Searching `w kewr` to see just metar and taf vs search 414 to see how that table differs.
         DONE! Remove port 8000.
         DONE! SSL cert for https port.
+        DONE! Make a `report` on homepage allowing for qick reporting of anomaly. probably the ability to send a screenshot. some sort of chat mechanism.
 
         
