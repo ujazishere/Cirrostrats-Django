@@ -1,0 +1,106 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+h1 {
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 50px;
+}
+
+h2 {
+  margin: auto;
+  margin-top: even;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+form label {
+  display: block;
+  margin-top: 10px;
+  color: #333;
+  width: 100%;
+}
+
+form input,
+form textarea {
+  align-self: center;
+  width: 50%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+}
+
+form input[type="text"],
+form input[type="email"],
+form textarea {
+  border-radius: 5px;
+}
+
+form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.dark-mode .form-group {
+  color: white;
+}
+
+.dark-mode h4 {
+  color: white;
+}
+
+form button {
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #474350;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #555;
+}
+
+.about-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.about-content p {
+  line-height: 1.5;
+}
+
+.about-content ul {
+  padding-left: 20px;
+}
+
+.contact-form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+
+@media only screen and (max-width: 768px) {
+  h1 {
+    margin-bottom: 50px;
+  }
+
+  .about-content,
+  .contact-form {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  h1 {
+    margin-bottom: 30px;
+  }
+}
