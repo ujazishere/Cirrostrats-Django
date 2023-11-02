@@ -48,12 +48,14 @@ def parse_query(request, main_query):
         query_in_list_form = main_query.split()
         if len(query_in_list_form) == 1:            # If query is only one word or item  
             query = query_in_list_form[0].upper()           # this is string form instead of list
-            if 'A' in query or 'B' in query or 'C' in query or len(query)==1:
+            if query[:2] == 'UA':
+                flight_initials = query[:2]
+                flgiht_digits = query[2:]
+                return flight_deets(request, flgiht_digits)
+            elif 'A' in query or 'B' in query or 'C' in query or len(query)==1:     # Accounting for 1 letter only
                 # When the length of query_in_list_form is only 1 it returns gates table for that particular query.
                 gate_query = query
                 return gate_info(request, main_query=gate_query)
-            elif query[:2] == "UA":
-                return flight_deets(request, query[2:])
             elif len(query) == 4 or len(query) == 3 or len(query) == 2:
                 if query.isdigit():
                     # if betwee 1 to 35 for A, between 40-70 for B between 70-135 for c
@@ -112,11 +114,11 @@ def gate_info(request,main_query):
         return render(request, 'flight_info.html', {'gate': gate})
 
 
-def flight_deets(request, query_in_list_form ):
+def flight_deets(request, query):
     # given a flight number it returns its, gates, scheduled and actual times of departure and arrival
 
     flt_info = Pull_flight_info()           # from dep_des.py file
-    bulk_flight_deets = flt_info.pull_UA(query_in_list_form)
+    bulk_flight_deets = flt_info.pull_UA(query)
 
     def weather_req(airport):
         weather = Weather_display()         # from MET_TAF_parse.py

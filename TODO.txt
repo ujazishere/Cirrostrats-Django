@@ -4,12 +4,13 @@ Practice readibility and simplicity. Include description and documentation for o
         wip! Fix expand/collapse squaring on the flight_deet page and make it co:nsistent with box size.
         come up with a better cleaner font across the web. Especially web title.
         Move Departure times to the left most side and gate deets to the right most side of the title.
-
+        Make a `report` on homepage allowing for qick reporting of anomaly.
+            probably the ability to send a screenshot and send it to email.
+            some sort of chat mechanism
 **UV:   
-        
+        Remove database and create own for seamless lightweight version.
         Remove `Terminal` from the gate on flight deet page.
-            Might help fix 401 forbidden error; CSFR token issues.
-            Might solve SkiFi_secure WiFi restricted access of the web.
+        401 forbidden error; CSFR token issues.
         Fix bug that takes in 2 flight routes for singular flight number.
             Add option to scroll left and right for dates. 
         Implement asynchronous loading of the data on the flight_deet page.
@@ -27,7 +28,6 @@ Practice readibility and simplicity. Include description and documentation for o
             Scraper scrapes overnight when its not necessary. Avoid those.
         Only scrape `actual` times more frequently and from different web source to decrease intensive pull.
         
-
         group search queries.
 
         Make search availabe such that the initial switches are disregarded.

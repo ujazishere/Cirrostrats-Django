@@ -259,7 +259,7 @@ class Pull_flight_info(Root_class):
                         arr_dep_del_list.append([x.tag, x.text])
                     for a in x:
                         arr_dep_del_list.append([a.tag, a.text])
-
+                        
         return {'update_time': update_time,
                 'affected_airports': affected_airports,
                 'ground_stop_packet': ground_stop_packet, 
@@ -281,13 +281,16 @@ class Pull_flight_info(Root_class):
             date = self.date_time(raw=True)     # Root_class inheritance format yyyymmdd
         flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport[1:]}"
         soup = self.request(flight_view)
-        # print(flight_view, date)
         try :
             leg_data = soup.find_all('div', class_='leg')   # Has all the departure and destination data
             departure_gate = leg_data[0].find_all('tr', class_='even')[1].text[17:]
             # departure_gate = departure_gate[26:-1]
             arrival_gate = leg_data[0].find_all('tr', class_='even')[4].text[17:]
             # arrival_gate = arrival_gate[26:-1]
+            if 'Terminal' in departure_gate:
+                departure_gate = departure_gate.replace('Terminal', '')
+            if 'Terminal' in arrival_gate:
+                arrival_gate = arrival_gate.replace('Terminal', '')
 
             scripts = soup.find_all('script')       # scripts is a section in the html that contains departure and destination airports 
             for script in scripts:

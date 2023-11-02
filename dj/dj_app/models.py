@@ -16,3 +16,11 @@ class Flight(models.Model):
 class SearchQuery(models.Model):
     query = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)            # adds a timestamp
+
+"""
+
+class UniqueQueries(models.Model):
+    query = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)            # adds a timestamp
+
+"""
