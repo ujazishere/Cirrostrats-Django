@@ -37,12 +37,16 @@ class Pull_flight_info(Root_class):
         soup_fs = self.request(flight_stats_url)
         fs_juice = soup_fs.select('[class*="TicketContainer"]')     # This is the whole packet not needed now
         fs_time_zone = soup_fs.select('[class*="TimeGroupContainer"]')
-        departure_time_zone = fs_time_zone[0].get_text()        #  format is HH:MM XXX timezone(eg.EST)
-        departure_time_zone = "STD " + departure_time_zone[9:18]
-        departure_estimated_or_actual = departure_time_zone[18:]
-        arrival_time_zone = fs_time_zone[1].get_text()
-        arrival_time_zone = "STA " + arrival_time_zone[9:18]
-        arrival_estimated_or_actual = arrival_time_zone[18:]
+        if fs_time_zone:
+            departure_time_zone = fs_time_zone[0].get_text()        #  format is HH:MM XXX timezone(eg.EST)
+            departure_time_zone = "STD " + departure_time_zone[9:18]
+            # departure_estimated_or_actual = departure_time_zone[18:]
+            arrival_time_zone = fs_time_zone[1].get_text()
+            arrival_time_zone = "STA " + arrival_time_zone[9:18]
+            # arrival_estimated_or_actual = arrival_time_zone[18:]
+        else:
+            departure_time_zone = None
+            arrival_time_zone = None
 
         # Airport distance and duration can be misleading. Be careful with using these. 
         # table = soup.find('div', {'class': 'a2'})
@@ -68,7 +72,16 @@ class Pull_flight_info(Root_class):
         destination_gate = gate[1]
 
         nas_packet = self.gs_sorting(departure_ID, destination_ID)
-        soup_fv = self.pull_dep_des(query, departure_ID)
+        soup_fv = self.pull_dep_des(query, departure_ID)  # Only used for departure and arrival gates
+        if 'min' in soup_fv['departure_gate']:
+            soup_fv['departure_gate'] = None
+        if 'min' in soup_fv['arrival_gate']:
+            soup_fv['arrival_gate'] = None
+        fa_data = self.flight_aware_data(query)
+        if departure_ID == fa_data['origin'] and destination_ID == fa_data['destination']:
+            route = fa_data['route']
+        else:
+            route = None
 
         return {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                  'departure_ID': departure_ID,
@@ -83,6 +96,7 @@ class Pull_flight_info(Root_class):
                 #  'scheduled_arrival_time': scheduled_arrival_time,
                  'scheduled_arrival_time': arrival_time_zone,
                  'actual_arrival_time': actual_arrival_time,
+                 'route': route,
                  'nas_packet': nas_packet
                  }
 
@@ -308,14 +322,86 @@ class Pull_flight_info(Root_class):
                     }
             
         except :
-            empty_soup = {'departure_gate': 'NA',
-                          'arrival_gate': 'NA'} 
+            empty_soup = {'departure_gate': 'None',
+                          'arrival_gate': 'None'} 
             return empty_soup
 
         # typically 9th index of scripts is where departure and destination is.
             # try print(scripts[9].get_text()) for string version for parsing
         
         # print(departure, destination)
+
+    def flight_aware_data(self, query):
+        
+        apiKey = "V2M5XJKNC5L1oJb0Dxukt0HJ7c8cxXDQ"
+        apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
+        auth_header = {'x-apikey':apiKey}
+        
+        """
+        airport = 'KSFO'
+        payload = {'max_pages': 2}
+        auth_header = {'x-apikey':apiKey}
+        response = requests.get(apiUrl + f"airports/{airport}/flights",
+            params=payload, headers=auth_header)
+        
+        """
+
+        response = requests.get(apiUrl + f"flights/UAL{query}", headers=auth_header)
+        
+        route = None
+        if response.status_code == 200:
+            flights = response.json()['flights']
+            # These flights are across 10 days and hence iter across them
+            """
+            for i in range(len(flights)):
+                fa_flight_id = flights[i]['fa_flight_id']
+                origin = flights[i]['origin']['code_icao']
+                destination = flights[i]['destination']['code_icao']
+                scheduled_out = flights[i]['scheduled_out']
+                estimated_out = flights[i]['estimated_out']
+                actual_out = flights[i]['actual_out']
+                scheduled_off = flights[i]['scheduled_off']
+                estimated_off = flights[i]['estimated_off']
+                actual_off = flights[i]['actual_off']
+                scheduled_on = flights[i]['scheduled_on']
+                estimated_on = flights[i]['estimated_on']
+                actual_on = flights[i]['actual_on']
+                scheduled_in = flights[i]['scheduled_in']
+                estimated_in = flights[i]['estimated_in']
+                actual_in = flights[i]['actual_in']
+                
+                route = flights[i]['route']
+                gate_origin = flights[i]['gate_origin']
+                gate_destination = flights[i]['gate_destination']
+                terminal_origin = flights[i]['terminal_origin']
+                terminal_destination = flights[i]['terminal_destination']
+                registration = flights[i]['registration']
+                departure_delay = flights[i]['departure_delay']
+                arrival_delay = flights[i]['arrival_delay']
+                filed_ete = flights[i]['filed_ete']
+                filed_altitude = flights[i]['filed_altitude']
+            """
+            if flights:
+                if flights[0]['route']:     # If the first one returns None go next, so on
+                    origin = flights[0]['origin']['code_icao']
+                    destination = flights[0]['destination']['code_icao']
+                    route = flights[0]['route']
+                elif flights[1]['route']:
+                    origin = flights[1]['origin']['code_icao']
+                    destination = flights[1]['destination']['code_icao']
+                    route = flights[1]['route']
+                else:
+                    origin = flights[2]['origin']['code_icao']
+                    destination = flights[2]['destination']['code_icao']
+                    route = flights[2]['route']
+            else:
+                origin,destination,route = None, None, None
+        
+        return {'origin': origin, 'destination': destination, 'route': route}
+        
+        # fa_flight_id = ""
+        # response = requests.get(apiUrl + f"flights/{fa_flight_id}/route", headers=auth_header)
+
 
 
 class NAS_template:
