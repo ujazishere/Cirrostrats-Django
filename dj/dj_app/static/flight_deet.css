@@ -13,6 +13,7 @@ body {
   max-height: 1000px; 
 }
 
+
 .comparison-table thead th{
   position: sticky;
   top: 0;
@@ -81,10 +82,6 @@ h5 {
   border-top: 1px solid white;
   border-bottom: 1px solid white; 
 }
-
-
-
-
 
 
 .dark-mode table.another-table {
@@ -173,6 +170,51 @@ p {
   background-color: #474350;
   color: #ffffff;
   cursor: pointer;
+}
+
+.route {
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  background-color: #ffffff;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px #000000;
+  border: 5px;
+  border-collapse: collapse; /* Added border-collapse property */
+}
+
+.dark-mode .route {
+  background-color: #000000;
+  color: white;
+  box-shadow: 0 0 0 1px #ffffff;
+}
+
+.route th {
+  padding: 10px 5px; /* Adjusted padding */
+  text-align: center;
+  background-color: #474350;
+  color: #ffffff;
+  border-radius: 10px; /* Added border-radius */
+}
+
+.dark-mode .route th {
+  background-color: white;
+  color: black;
+}
+
+.route td {
+  padding: 10px;
+  text-align: center;
+}
+
+.route tr:first-child {
+  border-radius: 10px 10px 0 0;
+}
+
+.route tr:last-child {
+  border-radius: 0 0 10px 10px;
 }
 
 table.comparison-table {
@@ -315,3 +357,16 @@ table.another-table td:first-child {
   }
 
 }
+
+.table-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.table-data {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+

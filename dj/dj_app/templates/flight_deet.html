@@ -24,9 +24,9 @@
             <tbody>
                 <tr>
                     <td>
-                        <span style="float: left;">{{ scheduled_departure_time }}</span>
-                        <span style="float: none;">{{ departure_ID }}</span>
-                        <span style="float: right;">{{ departure_gate }}</span>
+                        <span style="text-align: left;">{{ scheduled_departure_time }}</span>
+                        <span style="text-align: center;">{{ departure_ID }}</span>
+                        <span style="text-align: right;">{{ departure_gate }}</span>
                     </td>
                 </tr>
                 {% for metar_taf_title, metar_taf_data in dep_weather.items %}
@@ -42,9 +42,14 @@
     </div>
 </div>
 
-<tr>
-    <span> ROUTE: {{ route }}</span>
-</tr>
+<table class="route">
+    <tr>
+        <th>ROUTE</th>
+    </tr>
+    <tr>
+        <td>{{ route }}</td>
+    </tr>
+</table>
 
 {% if nas_packet.departure_affected %}
 <div class="table-wrapper">
@@ -86,9 +91,9 @@
             <tbody>
                 <tr>
                     <td>
-                        <span style="float: left;">{{scheduled_arrival_time}}</span>
-                        <span style="float: none;">{{destination_ID}}</span>
-                        <span style="float: right;">{{destination_gate}}</span>
+                        <span style="text-align: left;">{{scheduled_arrival_time}}</span>
+                        <span style="text-align: center;">{{destination_ID}}</span>
+                        <span style="text-align: right;">{{destination_gate}}</span>
                     </td>
                 </tr>
                 {% for metar_taf_title, metar_taf_data in dest_weather.items %}
@@ -176,7 +181,6 @@ Empty search returns information on all gates for United flights in KEWR.
     cursor: pointer;
   }
 </style>
-
 
 
 {% endblock %}

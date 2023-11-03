@@ -4,9 +4,7 @@ Practice readibility and simplicity. Include description and documentation for o
         wip! Fix expand/collapse squaring on the flight_deet page and make it co:nsistent with box size.
         come up with a better cleaner font across the web. Especially web title.
         Move Departure times to the left most side and gate deets to the right most side of the title.
-        Make a `report` on homepage allowing for qick reporting of anomaly.
-            probably the ability to send a screenshot and send it to email.
-            some sort of chat mechanism
+        
 **UV:   
         Remove database and create own for seamless lightweight version.
         Remove `Terminal` from the gate on flight deet page.
