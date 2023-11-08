@@ -8,9 +8,21 @@ body {
   overflow: hidden;
   transition: max-height 1.2s ease;
 }
+
 .accordion-content.active {
   max-height: 1000px; 
-  transition: max-height 1.2s ease;
+}
+
+
+.comparison-table thead th{
+  position: sticky;
+  top: 0;
+  background-color: #474350;
+  z-index: 1;
+}
+
+.header-button {
+  cursor: pointer;
 }
 
 .accordion-button {
@@ -21,31 +33,13 @@ body {
   padding: 10px;
   border: 2px solid black;
   border-radius: 5px;
-}
-
-.accordion-button:focus {
-  outline: none;
+  outline: none; /* Remove outline on focus */
 }
 
 .accordion-button-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px; 
-}
-
-.toggle-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  width: 35px;
-  height: 35px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  border: 0.1px;
-  background-color: #FFFFFF;
+  margin-bottom: 10px;
 }
 
 .dark-mode .toggle-button {
@@ -62,7 +56,8 @@ h5 {
 }
 
 .dark-mode table.comparison-table thead th {
-  background-color: black;
+  background-color: rgb(255, 255, 255);
+  color: black;
 }
 
 .dark-mode table.comparison-table {
@@ -87,10 +82,6 @@ h5 {
   border-top: 1px solid white;
   border-bottom: 1px solid white; 
 }
-
-
-
-
 
 
 .dark-mode table.another-table {
@@ -181,6 +172,51 @@ p {
   cursor: pointer;
 }
 
+.route {
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  background-color: #ffffff;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px #000000;
+  border: 5px;
+  border-collapse: collapse; /* Added border-collapse property */
+}
+
+.dark-mode .route {
+  background-color: #000000;
+  color: white;
+  box-shadow: 0 0 0 1px #ffffff;
+}
+
+.route th {
+  padding: 10px 5px; /* Adjusted padding */
+  text-align: center;
+  background-color: #474350;
+  color: #ffffff;
+  border-radius: 10px; /* Added border-radius */
+}
+
+.dark-mode .route th {
+  background-color: white;
+  color: black;
+}
+
+.route td {
+  padding: 10px;
+  text-align: center;
+}
+
+.route tr:first-child {
+  border-radius: 10px 10px 0 0;
+}
+
+.route tr:last-child {
+  border-radius: 0 0 10px 10px;
+}
+
 table.comparison-table {
   margin: 20px auto;
   width: 80%;
@@ -239,7 +275,7 @@ table.another-table th {
   padding: 10px;
   text-align: center;
   background-color: #fa6767;
-  color: #000000;
+  color: #3c2f2f;
   border: 1px solid #000000; /* Add border for headers */
 }
 
@@ -270,6 +306,11 @@ table.another-table td:first-child {
 }
 
 
+.highlight-red {
+    color: rgb(255, 0, 0); 
+    padding: 4px; 
+    border-radius: 5px;
+}
 
 
 
@@ -316,3 +357,16 @@ table.another-table td:first-child {
   }
 
 }
+
+.table-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.table-data {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+

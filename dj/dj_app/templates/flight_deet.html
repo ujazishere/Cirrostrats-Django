@@ -7,6 +7,8 @@
 <h3>United Flight Information</h3>
 <h4>Results for {{ flight_number }}</h4>
 
+
+
 {% if flight_number %}
 <div id="departure-container" class="table-container">
     <div class="accordion-button-container">
@@ -23,12 +25,14 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>
-                        <span style="text-align: left;">{{ scheduled_departure_time }}</span>
-                        <span style="text-align: center;">{{ departure_ID }}</span>
-                        <span style="text-align: right;">{{ departure_gate }}</span>
+                    <td style="text-align: left;">
+                        <span style="float: left;">{{ scheduled_departure_time }}</span>
+                        <span style="float: none; display: block; text-align: center; width: 100%;">{{ departure_ID }}</span>
+                        <span style="float: right;">{{ departure_gate }}</span>
                     </td>
+                                      
                 </tr>
+                
                 {% for metar_taf_title, metar_taf_data in dep_weather.items %}
                 <tr>
                     <td>{{ metar_taf_title }}</td>
