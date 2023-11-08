@@ -1,4 +1,5 @@
 import pickle
+import os
 from django.shortcuts import render
 from .models import SearchQuery
 from .root.gate_checker import Gate_checker
@@ -99,8 +100,12 @@ def parse_query(request, main_query):
                         pass'''
 
 def dummy(request, query):
-    
-    bulk_flight_deets = pickle.load(open('dummy_flight_deet.pkl', 'rb'))
+    print(os.getcwd())   
+    try:
+        bulk_flight_deets = pickle.load(open('dummy_flight_deet.pkl', 'rb'))
+    except:
+        bulk_flight_deets = pickle.load(open('/Users/ismailsakhani/Desktop/Cirrostrats/dj/dummy_flight_deet.pkl', 'rb'))
+        
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 def gate_info(request,main_query):
