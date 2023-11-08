@@ -1,3 +1,4 @@
+import pickle
 from django.shortcuts import render
 from .models import SearchQuery
 from .root.gate_checker import Gate_checker
@@ -44,6 +45,8 @@ def parse_query(request, main_query):
                                     
     if main_query == '':        # query is empty then return all gates
         return gate_info(request, main_query='')
+    if main_query == 'dumm':
+        return dummy(request,main_query)
     if main_query != '':        # if query is not empty it splits it into list form
         query_in_list_form = main_query.split()
         if len(query_in_list_form) == 1:            # If query is only one word or item  
@@ -95,6 +98,10 @@ def parse_query(request, main_query):
                         # return a static html saying no information found for flight number ****
                         pass'''
 
+def dummy(request, query):
+    
+    bulk_flight_deets = pickle.load(open('dummy_flight_deet.pkl', 'rb'))
+    return render(request, 'flight_deet.html', bulk_flight_deets)
 
 def gate_info(request,main_query):
     gate = main_query
@@ -128,7 +135,7 @@ def flight_deets(request, query):
     dep_weather = weather_req(bulk_flight_deets['departure_ID'])
     dest_weather = weather_req(bulk_flight_deets['destination_ID'])
     weather = {'dep_weather':dep_weather, 'dest_weather': dest_weather}
-
+    
     bulk_flight_deets.update(weather)
 
     return render(request, 'flight_deet.html', bulk_flight_deets)

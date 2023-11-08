@@ -73,11 +73,13 @@ class Pull_flight_info(Root_class):
 
         nas_packet = self.gs_sorting(departure_ID, destination_ID)
         soup_fv = self.pull_dep_des(query, departure_ID)  # Only used for departure and arrival gates
-        if 'min' in soup_fv['departure_gate']:
+        if 'min' in soup_fv['departure_gate']:      # This acocunts for faulty hrs and mins in string
             soup_fv['departure_gate'] = None
         if 'min' in soup_fv['arrival_gate']:
             soup_fv['arrival_gate'] = None
         fa_data = self.flight_aware_data(query)
+
+        # Matching flightaware departure and destination with base for accuracy
         if departure_ID == fa_data['origin'] and destination_ID == fa_data['destination']:
             route = fa_data['route']
         else:
