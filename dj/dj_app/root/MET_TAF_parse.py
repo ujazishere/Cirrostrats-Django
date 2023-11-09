@@ -1,6 +1,7 @@
 import re
 from bs4 import BeautifulSoup as bs4
 import requests
+import json
 # from data_access import load_kewr
 # kewr = load_kewr()
 
@@ -26,10 +27,17 @@ class Weather_display:
         taf_raw = taf_raw.content
         taf_raw = taf_raw.decode("utf-8")
 
-        ismail_work = r'<span class="highlight-red">\1\2</span>'
+        datis_api =  f"https://datis.clowd.io/api/{airport_id}"
+        datis = requests.get(datis_api)
+        datis = json.loads(datis.content.decode('utf-8'))
+        datis_raw = 'N/A'
+        if type(datis) == list and 'datis' in datis[0].keys():
+            datis_raw = datis[0]['datis']
 
-        highlighted_metar = re.sub(r'(BKN|OVC)(0[0-1]\d)', ismail_work, metar_raw)
-        highlighted_taf = re.sub(r'(BKN|OVC)(0[0-1]\d)', ismail_work, taf_raw)
+        html_data = r'<span class="highlight-red">\1\2</span>'
+
+        highlighted_metar = re.sub(r'(BKN|OVC)(0[0-1]\d)', html_data, metar_raw)
+        highlighted_taf = re.sub(r'(BKN|OVC)(0[0-1]\d)', html_data, taf_raw)
         highlighted_taf = highlighted_taf.replace("FM", "<br>\xa0\xa0\xa0\xa0FM")   # line break for FM section in TAF for HTML
 
-        return dict({'METAR': highlighted_metar, 'TAF': highlighted_taf})
+        return dict({ 'D-ATIS': datis_raw, 'METAR': highlighted_metar, 'TAF': highlighted_taf})

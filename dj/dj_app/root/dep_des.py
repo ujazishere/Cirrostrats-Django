@@ -82,8 +82,13 @@ class Pull_flight_info(Root_class):
         # Matching flightaware departure and destination with base for accuracy
         if departure_ID == fa_data['origin'] and destination_ID == fa_data['destination']:
             route = fa_data['route']
+            filed_altitude = "FL" + str(fa_data['filed_altitude'])
+            filed_ete = ""
+            # filed_ete = fa_data['filed_ete']
         else:
             route = None
+            filed_altitude = None
+            filed_ete = None
 
         return {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                  'departure_ID': departure_ID,
@@ -99,6 +104,8 @@ class Pull_flight_info(Root_class):
                  'scheduled_arrival_time': arrival_time_zone,
                  'actual_arrival_time': actual_arrival_time,
                  'route': route,
+                 'filed_ete': filed_ete,
+                 'filed_altitude': filed_altitude,
                  'nas_packet': nas_packet
                  }
 
@@ -350,7 +357,8 @@ class Pull_flight_info(Root_class):
 
         response = requests.get(apiUrl + f"flights/UAL{query}", headers=auth_header)
         
-        route = None
+        route = None        # Declaring not available unless available throught flights
+        filed_altitude, filed_ete = None, None
         if response.status_code == 200:
             flights = response.json()['flights']
             # These flights are across 10 days and hence iter across them
@@ -384,22 +392,31 @@ class Pull_flight_info(Root_class):
                 filed_altitude = flights[i]['filed_altitude']
             """
             if flights:
-                if flights[0]['route']:     # If the first one returns None go next, so on
+                if flights[0]['route']:     # If the first one returns None go next, so on since latest is first
                     origin = flights[0]['origin']['code_icao']
                     destination = flights[0]['destination']['code_icao']
                     route = flights[0]['route']
+                    filed_altitude = flights[1]['filed_altitude']
+                    filed_ete = flights[0]['filed_ete']
                 elif flights[1]['route']:
                     origin = flights[1]['origin']['code_icao']
                     destination = flights[1]['destination']['code_icao']
                     route = flights[1]['route']
+                    filed_altitude = flights[1]['filed_altitude']
+                    filed_ete = flights[1]['filed_ete']
                 else:
                     origin = flights[2]['origin']['code_icao']
                     destination = flights[2]['destination']['code_icao']
                     route = flights[2]['route']
+                    filed_altitude = flights[1]['filed_altitude']
+                    filed_ete = flights[2]['filed_ete']
             else:
                 origin,destination,route = None, None, None
-        
-        return {'origin': origin, 'destination': destination, 'route': route}
+            
+        print(filed_altitude, route, filed_ete)
+        return {'origin': origin, 'destination': destination,
+                'route': route, 'filed_altitude': filed_altitude, 'filed_ete': filed_ete}
+
         
         # fa_flight_id = ""
         # response = requests.get(apiUrl + f"flights/{fa_flight_id}/route", headers=auth_header)
