@@ -30,13 +30,12 @@
                     <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }}</span>
                 </td>
                 
-                {% for metar_taf_title, metar_taf_data in dep_weather.items %}
+                <tr>{% for metar_taf_title, metar_taf_data in dep_weather.items %}</tr>
                 <tr>
                     <td>{{ metar_taf_title }}</td>
                 </tr>
                 <tr>
-                    <td>{{ metar_taf_data|safe }}</td>
-                </tr>
+                    <td style="font-family: Menlo, monospace;">{{ metar_taf_data|safe }}</td>                </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -96,13 +95,12 @@
                         <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
                         <span style="float: right; width: 33%; text-align: right;">{{ destination_gate }}</span>
                     </td>
-                </tr>
-                {% for metar_taf_title, metar_taf_data in dest_weather.items %}
+                </tr> {% for metar_taf_title, metar_taf_data in dest_weather.items %}
                 <tr>
                     <td>{{ metar_taf_title }}</td>
                 </tr>
                 <tr>
-                    <td>{{ metar_taf_data|safe }}</td>
+                    <td style="font-family: Menlo, monospace;"> {{ metar_taf_data|safe }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
