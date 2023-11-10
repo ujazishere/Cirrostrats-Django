@@ -58,15 +58,14 @@ body {
 }
 
 .dark-mode-switch label::before {
-  content: "\2600";
+  content: "☀️";
   align-content: center;
   font-size: 18px;
   position: absolute;
   top: 4px;
   left: 6px;
-  color: #000000;
+  color: #ffdd00;
   transition: 0.3s ease-in-out;
-  font-size: 22px;
 }
 
 .dark-mode-switch input[type="checkbox"]:checked + label::before {
@@ -82,27 +81,27 @@ body {
 }
 
 body.dark-mode {
-  background-color: #000000;
+  background-color: #22272E;
 }
 
 body.dark-mode h1 {
-  color: #FFFFFF;
+  color: #ADBAC7;
 }
 
 body.dark-mode h2 {
-  color: #FFFFFF;
+  color: #515A65;
 }
 
 body.dark-mode h3 {
-  color: #FFFFFF;
+  color: #515A65;
 }
 
 body.dark-mode p {
-  color: #FFFFFF;
+  color: #515A65;
 }
 
 body.dark-mode .sticky-header {
-  background-color: #000000;
+  background-color: #2D333B;
 }
 
 body.dark-mode thead {
@@ -112,7 +111,7 @@ body.dark-mode thead {
 .sticky-header {
   position: sticky;
   top: 0;
-  background-color: #474350;
+  background-color: #24292E;
   z-index: 999;
   width: 100%;
   height: 60px;
@@ -134,7 +133,7 @@ body.dark-mode thead {
   z-index: 999;
   font-size: 20px;
   font-weight: bold;
-  color: #FFFFFF;
+  color: #24292E;
   text-decoration: none;
 }
 
@@ -160,7 +159,7 @@ body.dark-mode thead {
   right: 0;
   height: 100%;
   width: 300px;
-  background-color: #474350 !important;
+  background-color: #2D333B !important;
   padding: 20px;
   transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
@@ -192,25 +191,25 @@ body.dark-mode thead {
 h1 {
   font-size: 35px;
   margin-top: 10px;
-  color: #050505;
+  color: #24292E;
 }
 
 h2 {
   margin-top: 20px;
   text-align: center;
-  color: #050505;
+  color: #24292E;
 }
 
 h3 {
   text-align: center;
   margin-top: 40px;
-  color: #050505;
+  color: #24292E;
 }
 
 p {
   text-align: center;
   margin-top: 20px;
-  color: #050505;
+  color: #24292E;
 }
 
 @media only screen and (max-width: 600px) {
@@ -240,5 +239,5 @@ p {
 h1 {
   font-size: 32px;
   margin-top: 10px;
-  color: #050505;
+  color: #24292E;
 }

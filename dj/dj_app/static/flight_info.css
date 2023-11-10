@@ -32,7 +32,7 @@ table {
   margin: 0 auto;
   width: 100%;
   max-width: 800px;
-  background-color: #474350;
+  background-color: #2D333B;
   margin-bottom: 100px;
   border-radius: 15px;
   overflow: hidden;
@@ -46,7 +46,7 @@ td {
 }
 
 thead {
-  background-color: #474350;
+  background-color: #2D333B;
   color: #ffffff;
 }
 
@@ -64,18 +64,18 @@ tbody tr:nth-child(odd) {
 }
 
 .dark-mode tbody tr:nth-child(even){
-  color: rgb(0, 0, 0);
+  color: #2D333B;
 }
 
 .dark-mode table {
-  background-color: black;
+  background-color: #2D333B;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 0 0 2px #ffffff;
 }
 
 .dark-mode thead {
-  background-color: black;
+  background-color: #2D333B;
 }
 
 .search-form-wrapper {
@@ -113,7 +113,7 @@ tbody tr:nth-child(odd) {
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #474350;
+  background-color: #2D333B;
   color: #ffffff;
   cursor: pointer;
 }
