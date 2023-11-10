@@ -9,7 +9,7 @@ body {
 
   .dark-mode .search-form button{
     border: 1px solid white;
-    color: #2D333B;
+    background-color: #2D333B;
   }
   
   .dark-mode h3 a {
@@ -117,9 +117,6 @@ p {
   }
 }
 
-.search-form button {
-  background-color: #2D333B;
-}
 
 @media only screen and (max-width: 400px) {
   h1 {
@@ -135,6 +132,4 @@ p {
   }
 }
 
-.search-form button {
-  background-color: #2D333B;
-}
+
