@@ -24,10 +24,10 @@
         </div>
 
         <!-- Light and dark mode switch -->
-        <div class="dark-mode-switch">
-          <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()" {% if selected_mode == 'dark' %}checked{% endif %}>
-          <label for="darkModeToggle"></label>
-         </div>
+        <div class="dark-mode-switch" id="darkModeSwitch">
+            <button id="modeButton" onclick="toggleDarkMode()"></button>
+        </div>
+        
     
         <!-- Add sidebar -->
         <div class="sidebar">
@@ -59,13 +59,41 @@
             });
         });
 
-        // JavaScript function to toggle dark mode
-        function toggleDarkMode() {
-            var body = document.body;
-            body.classList.toggle("dark-mode");
-            var selectedMode = body.classList.contains("dark-mode") ? "dark" : "light";
-            localStorage.setItem("selectedMode", selectedMode);
-        }
+
+
+
+        
+        var initialMode = localStorage.getItem("selectedMode");
+if (initialMode === "dark") {
+    document.body.classList.add("dark-mode");
+    updateButtonContent(true);
+}
+
+function toggleDarkMode() {
+    var body = document.body;
+    body.classList.toggle("dark-mode");
+    var isDarkMode = body.classList.contains("dark-mode");
+
+    // Update button content based on the mode
+    updateButtonContent(isDarkMode);
+
+    // Save the selected mode to localStorage
+    var selectedMode = isDarkMode ? "dark" : "light";
+    localStorage.setItem("selectedMode", selectedMode);
+}
+
+function updateButtonContent(isDarkMode) {
+    var modeButton = document.querySelector('.dark-mode-switch button');
+    
+    // Remove the existing class and add the appropriate class
+    modeButton.classList.remove('sun', 'moon');
+    modeButton.classList.add(isDarkMode ? 'moon' : 'sun');
+}
+
+
+
+
+
 
         // Check and set the mode on page load
         document.addEventListener("DOMContentLoaded", function () {
