@@ -33,34 +33,35 @@ body {
   position: relative;
   transition: background-color 0.3s ease-in-out;
   overflow: hidden;
+  
 }
 
-.dark-mode-switch button::before {
-  content: "☀️";
-  align-content: center;
-  font-size: 18px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #ffdd00;
-  transition: 0.3s ease-in-out;
+.dark-mode-switch button .sun {
+  display: none;
 }
 
-.dark-mode-switch.dark-mode button::before {
-  content: "🌙";
-  color: #ffffff; /* Adjust the moon color if needed */
+.dark-mode-switch button.moon .sun {
+  display: block;
 }
 
-.dark-mode-switch button.moon::before {
-  content: "🌙";
-  color: #ffffff; /* Adjust the moon color if needed */
+.dark-mode-switch button.sun .moon {
+  display: none;
 }
 
-.dark-mode-switch button.sun::before {
-  content: "☀️";
-  color: #ffdd00;
+body.dark-mode .dark-mode-switch button {
+  background-color: #22272E;
 }
+
+body.dark-mode .dark-mode-switch button .sun {
+  display: block;
+}
+
+body.dark-mode .dark-mode-switch button .moon {
+  display: none;
+}
+
+
+
 
 body.dark-mode {
   background-color: #22272E;

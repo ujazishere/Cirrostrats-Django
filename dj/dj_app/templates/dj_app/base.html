@@ -23,12 +23,14 @@
             <a href="{% url 'home' %}" style="color: white; text-decoration: none; position: absolute;">Cirrostrats</a> 
         </div>
 
-        <!-- Light and dark mode switch -->
-        <div class="dark-mode-switch" id="darkModeSwitch">
-            <button id="modeButton" onclick="toggleDarkMode()"></button>
-        </div>
+        <div class="dark-mode-switch">
+            <button id="modeButton" onclick="toggleDarkMode()">
+              <img class="sun" src="/Cirrostrats/logo/sun.svg">
+              <img class="moon" src="/Cirrostrats/logo/moon.svg">
+            </button>
+          </div>
+          
         
-    
         <!-- Add sidebar -->
         <div class="sidebar">
             <ul>
@@ -85,10 +87,13 @@ function toggleDarkMode() {
 function updateButtonContent(isDarkMode) {
     var modeButton = document.querySelector('.dark-mode-switch button');
     
-    // Remove the existing class and add the appropriate class
-    modeButton.classList.remove('sun', 'moon');
-    modeButton.classList.add(isDarkMode ? 'moon' : 'sun');
+    // Set the background image directly
+    modeButton.style.backgroundImage = isDarkMode ? 'url("/Cirrostrats/logo/moon.svg")' : 'url("/Cirrostrats/logo/sun.svg")';
+    modeButton.style.backgroundSize = 'cover';
+    modeButton.style.backgroundPosition = 'center';
 }
+
+
 
 
 
