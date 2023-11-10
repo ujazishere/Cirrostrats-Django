@@ -8,7 +8,8 @@ body {
   }
 
   .dark-mode .search-form button{
-    border: 1px solid white
+    border: 1px solid white;
+    color: #2D333B;
   }
   
   .dark-mode h3 a {
@@ -78,8 +79,6 @@ p {
   border-radius: 5px;
 }
 
-
-
 .search-form input[type="text"] {
   padding: 10px;
   width: 300px;
@@ -118,6 +117,10 @@ p {
   }
 }
 
+.search-form button {
+  background-color: #2D333B;
+}
+
 @media only screen and (max-width: 400px) {
   h1 {
     font-size: 16px;
@@ -130,4 +133,8 @@ p {
   .search-form input[type="text"] {
     width: 150px;
   }
+}
+
+.search-form button {
+  background-color: #2D333B;
 }
