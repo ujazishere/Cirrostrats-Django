@@ -25,8 +25,8 @@
 
         <div class="dark-mode-switch">
             <button id="modeButton" onclick="toggleDarkMode()">
-              <img class="sun" src="/Cirrostrats/logo/sun.svg">
-              <img class="moon" src="/Cirrostrats/logo/moon.svg">
+              <img class="moon" src="https://www.svgrepo.com/download/433086/light-mode.svg">
+              <img class="sun" src="https://www.svgrepo.com/download/432507/light-mode.svg">
             </button>
           </div>
           
@@ -87,8 +87,8 @@ function toggleDarkMode() {
 function updateButtonContent(isDarkMode) {
     var modeButton = document.querySelector('.dark-mode-switch button');
     
-    // Set the background image directly
-    modeButton.style.backgroundImage = isDarkMode ? 'url("/Cirrostrats/logo/moon.svg")' : 'url("/Cirrostrats/logo/sun.svg")';
+    // Set the background image directly with absolute paths
+    modeButton.style.backgroundImage = isDarkMode ? 'url("")' : '")';
     modeButton.style.backgroundSize = 'cover';
     modeButton.style.backgroundPosition = 'center';
 }
