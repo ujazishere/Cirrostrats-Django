@@ -18,7 +18,7 @@ body {
 .comparison-table thead th{
   position: sticky;
   top: 0;
-  background-color: #474350;
+  background-color: #2D333B;
   z-index: 1;
 }
 
@@ -36,6 +36,7 @@ body {
   border: 2px solid black;
   border-radius: 5px;
   outline: none; /* Remove outline on focus */
+  background-color: #2D333B;
 }
 
 .accordion-button-container {
@@ -45,7 +46,7 @@ body {
 }
 
 .dark-mode .toggle-button {
-  background-color: black;
+  background-color: #2D333B;
   color: #FFFFFF;
 }
 
@@ -223,7 +224,7 @@ table.comparison-table {
   margin: 20px auto;
   width: 80%;
   max-width: 800px;
-  background-color: #474350;
+  background-color: #2D333B;
   text-align: center;
   border-radius: 10px;
   overflow: hidden;
@@ -234,7 +235,7 @@ table.comparison-table {
 table.comparison-table th {
   padding: 10px;
   text-align: center;
-  background-color: #474350;
+  background-color: #2D333B;
   color: #ffffff;
 }
 
@@ -245,7 +246,7 @@ table.comparison-table td {
 }
 
 table.comparison-table thead {
-  background-color: #474350;
+  background-color: #2D333B;
   color: #ffffff;
 }
 
@@ -277,7 +278,7 @@ table.another-table th {
   padding: 10px;
   text-align: center;
   background-color: #fa6767;
-  color: #3c2f2f;
+  color: #2D333B;
   border: 1px solid #000000; /* Add border for headers */
 }
 
