@@ -35,10 +35,20 @@ form textarea {
   border: 1px solid #ccc;
 }
 
+.dark-mode form input, form textarea {
+  color: #ADBAC7;
+}
+
 form input[type="text"],
 form input[type="email"],
 form textarea {
   border-radius: 5px;
+}
+
+.dark-mode form input[type="text"],
+form input[type="email"],
+form textarea {
+  color: #ADBAC7;
 }
 
 form .form-group {
@@ -59,13 +69,13 @@ form button {
   margin-top: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #474350;
+  background-color: #2D333B;
   color: #ffffff;
   cursor: pointer;
 }
 
 form button:hover {
-  background-color: #555;
+  background-color: #2D333B;
 }
 
 .about-content {

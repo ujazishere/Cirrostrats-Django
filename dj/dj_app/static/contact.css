@@ -19,10 +19,10 @@ h2 {
   font-weight: bold;
 }
 
+
 form label {
   display: block;
   margin-top: 10px;
-  color: #333;
   width: 100%;
 }
 
@@ -33,12 +33,14 @@ form textarea {
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
+  color: #ADBAC7;
 }
 
 form input[type="text"],
 form input[type="email"],
 form textarea {
   border-radius: 5px;
+  color: #ADBAC7;
 }
 
 form .form-group {
@@ -62,6 +64,10 @@ form button {
   background-color: #474350;
   color: #ffffff;
   cursor: pointer;
+}
+
+.dark-mode form button {
+  background-color: #2D333B;
 }
 
 form button:hover {

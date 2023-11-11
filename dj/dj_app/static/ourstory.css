@@ -3,18 +3,10 @@ h1 {
   margin-top: 50px;
   text-align: center;
   font-size: 35px;
+  color: #ADBAC7;
 }
 
 
-footer {
-  background-color: #333;
-  text-align: center;
-}
-
-footer a {
-  color: #fff;
-  text-decoration: none;
-}
 
 section {
   margin-bottom: 20px;
@@ -22,10 +14,12 @@ section {
 
 h2 {
   margin: auto;
+  color: #ADBAC7;
 }
 
 ul {
   text-align: auto;
+  color: #ADBAC7;
 }
 
 
@@ -65,6 +59,7 @@ form button:hover {
 .about-content {
   max-width: 800px;
   margin: 0 auto;
+  color: #ADBAC7;
 }
 
 .about-content p {

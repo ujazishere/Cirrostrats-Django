@@ -59,23 +59,28 @@ tbody tr:nth-child(odd) {
   color: #ffffff;
 }
 
+.dark-mode tbody tr:nth-child(odd) {
+  color: #ADBAC7;
+}
+
 .dark-mode .search-form button{
   border: 1px solid white
 }
 
 .dark-mode tbody tr:nth-child(even){
-  color: #2D333B;
+  color: #22272E;
 }
 
 .dark-mode table {
-  background-color: #2D333B;
+  background-color: #22272E;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 0 0 2px #ffffff;
+  box-shadow: 0 0 0 2px #ADBAC7;
 }
 
 .dark-mode thead {
   background-color: #2D333B;
+  color: #ADBAC7;
 }
 
 .search-form-wrapper {
