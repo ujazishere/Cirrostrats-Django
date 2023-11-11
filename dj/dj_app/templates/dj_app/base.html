@@ -86,11 +86,11 @@ function updateButtonContent(isDarkMode) {
     var modeButton = document.querySelector('.dark-mode-switch button');
     
     // Set the initial background image
-    modeButton.style.backgroundImage = isDarkMode ? 'url("https://www.svgrepo.com/download/432507/light-mode.svg")' : 'url("https://www.svgrepo.com/download/433086/light-mode.svg")';
+    modeButton.style.backgroundImage = isDarkMode ? 'url("https://www.svgrepo.com/download/381213/dark-mode-night-moon.svg")' : 'url("https://www.svgrepo.com/download/433086/light-mode.svg")';
     
     // Adjust the size of the SVG image
-    modeButton.style.backgroundSize = isDarkMode ? '25px 25px' : '25px 25px'; // You can adjust the size as needed
-    
+    modeButton.style.backgroundSize = isDarkMode ? '70%' : '26px 26px'; // You can adjust the size as needed
+    modeButton.style.backgroundRepeat = 'no-repeat';
     modeButton.style.width = '35px'; // Set the width of the button
     modeButton.style.height = '35px'; // Set the height of the button
     modeButton.style.backgroundPosition = 'center';
