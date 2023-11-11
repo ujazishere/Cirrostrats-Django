@@ -18,8 +18,13 @@ body {
 .comparison-table thead th{
   position: sticky;
   top: 0;
-  background-color: #2D333B;
+  background-color: #2D333B !important ;
   z-index: 1;
+  color: #24292E;
+}
+
+.comparison-table th {
+  background-color: #2D333B;
 }
 
 .header-button {
@@ -60,18 +65,19 @@ h5 {
 
 .dark-mode table.comparison-table thead th {
   background-color: rgb(255, 255, 255);
-  color: #2D333B;
+  color: #ffffff;
+  background-color: #2D333B;
 }
 
 .dark-mode table.comparison-table {
-  background-color: black;
+  background-color: #2D333B !important;
   box-shadow: 0 0 0 1px #ffffff;
   border-color: #ffffff;
   border-collapse: collapse;
 }
 
 .dark-mode table.comparison-table th {
-  background-color: black;
+  background-color: #2D333B;
   color: white;
   border-color: white;
   border-top: 1px solid white;
@@ -79,7 +85,7 @@ h5 {
 }
 
 .dark-mode table.comparison-table td {
-  background-color: black;
+  background-color: #2D333B;
   color: white;
   border-color: white;
   border-top: 1px solid white;
@@ -170,7 +176,7 @@ p {
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #474350;
+  background-color: #2D333B;
   color: #ffffff;
   cursor: pointer;
 }
@@ -189,7 +195,7 @@ p {
 }
 
 .dark-mode .route {
-  background-color: #000000;
+  background-color: #2D333B;
   color: white;
   box-shadow: 0 0 0 1px #ffffff;
 }
@@ -197,14 +203,14 @@ p {
 .route th {
   padding: 10px 5px; /* Adjusted padding */
   text-align: center;
-  background-color: #474350;
+  background-color: #2D333B;
   color: #ffffff;
   border-radius: 10px; /* Added border-radius */
 }
 
 .dark-mode .route th {
-  background-color: white;
-  color: black;
+  background-color: #2D333B;
+  color: rgb(255, 255, 255);
 }
 
 .route td {
@@ -243,6 +249,7 @@ table.comparison-table td {
   padding: 10px;
   text-align: center;
   background-color: #ffffff;
+  color: #24292E;
 }
 
 table.comparison-table thead {
