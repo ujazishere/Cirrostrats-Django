@@ -1,12 +1,13 @@
 Practice readibility and simplicity. Include description and documentation for others to read and make changes to it
 
 **IS:   
+        google type flight_deet box
         wip! Fix expand/collapse squaring on the flight_deet page and make it co:nsistent with box size.
         come up with a better cleaner font across the web. Especially web title.
         
 **UV:   
-        Remove database and create own for seamless lightweight version.
-        Remove `Terminal` from the gate on flight deet page.
+        
+        Remove sql database and create own for seamless lightweight version.
         401 forbidden error; CSFR token issues.
         Fix bug that takes in 2 flight routes for singular flight number.
             Add option to scroll left and right for dates. 

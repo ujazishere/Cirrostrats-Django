@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup as bs4
 from .root_class import Root_class
 import xml.etree.ElementTree as ET
+import re
 import pytz
 
 '''
@@ -80,17 +81,12 @@ class Pull_flight_info(Root_class):
         fa_data = self.flight_aware_data(query)
 
         # Matching flightaware departure and destination with base for accuracy
-        if departure_ID == fa_data['origin'] and destination_ID == fa_data['destination']:
-            route = fa_data['route']
-            filed_altitude = "FL" + str(fa_data['filed_altitude'])
-            filed_ete = ""
-            # filed_ete = fa_data['filed_ete']
-        else:
-            route = None
-            filed_altitude = None
-            filed_ete = None
+        if departure_ID != fa_data['origin'] and destination_ID != fa_data['destination']:
+            for keys, _ in fa_data.items():
+                fa_data[keys]= None
 
-        return {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
+
+        bulk_flight_deet = {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                  'departure_ID': departure_ID,
                  'destination_ID':destination_ID,
                  'departure_gate': soup_fv['departure_gate'],       # Takes forever to load data
@@ -103,11 +99,12 @@ class Pull_flight_info(Root_class):
                 #  'scheduled_arrival_time': scheduled_arrival_time,
                  'scheduled_arrival_time': arrival_time_zone,
                  'actual_arrival_time': actual_arrival_time,
-                 'route': route,
-                 'filed_ete': filed_ete,
-                 'filed_altitude': filed_altitude,
                  'nas_packet': nas_packet
-                 }
+                                            }
+
+        bulk_flight_deet.update(fa_data)
+
+        return bulk_flight_deet
 
 
     def gs_sorting(self,dep_ID, dest_ID):
@@ -353,6 +350,9 @@ class Pull_flight_info(Root_class):
         response = requests.get(apiUrl + f"airports/{airport}/flights",
             params=payload, headers=auth_header)
         
+        # fa_flight_id = ""
+        # response = requests.get(apiUrl + f"flights/{fa_flight_id}/route", headers=auth_header)
+        
         """
 
         response = requests.get(apiUrl + f"flights/UAL{query}", headers=auth_header)
@@ -392,53 +392,41 @@ class Pull_flight_info(Root_class):
                 filed_altitude = flights[i]['filed_altitude']
             """
             if flights:
-                if flights[0]['route']:     # If the first one returns None go next, so on since latest is first
-                    origin = flights[0]['origin']['code_icao']
-                    destination = flights[0]['destination']['code_icao']
-                    route = flights[0]['route']
-                    filed_altitude = flights[1]['filed_altitude']
-                    filed_ete = flights[0]['filed_ete']
-                elif flights[1]['route']:
-                    origin = flights[1]['origin']['code_icao']
-                    destination = flights[1]['destination']['code_icao']
-                    route = flights[1]['route']
-                    filed_altitude = flights[1]['filed_altitude']
-                    filed_ete = flights[1]['filed_ete']
-                else:
-                    origin = flights[2]['origin']['code_icao']
-                    destination = flights[2]['destination']['code_icao']
-                    route = flights[2]['route']
-                    filed_altitude = flights[1]['filed_altitude']
-                    filed_ete = flights[2]['filed_ete']
-            else:
-                origin,destination,route = None, None, None
-            
-        print(filed_altitude, route, filed_ete)
-        return {'origin': origin, 'destination': destination,
-                'route': route, 'filed_altitude': filed_altitude, 'filed_ete': filed_ete}
+                for i in range(3):
+
+                    if flights[i]['route']:     # If the first one returns None go next, so on since latest is first
+                        origin = flights[i]['origin']['code_icao']
+                        destination = flights[i]['destination']['code_icao']
+                        registration = flights[i]['registration']
+                        
+                        scheduled_out = flights[i]['scheduled_out']
+                        scheduled_out = re.search("T(\d{2}:\d{2})", scheduled_out).group(1).replace(":","") + "Z"
+                        estimated_out = flights[i]['estimated_out']
+                        
+                        scheduled_in = flights[i]['scheduled_in']
+                        scheduled_in = re.search("T(\d{2}:\d{2})", scheduled_in).group(1).replace(":","") + "Z"
+                        estimated_in = flights[i]['estimated_in']
+                        
+                        route = flights[i]['route']
+                        filed_altitude =  "FL" + str(flights[1]['filed_altitude'])
+                        filed_ete = flights[i]['filed_ete']
+                        break
+                    else:
+                        filed_ete, filed_altitude, route, estimated_in = [None] * 4
+                        scheduled_in, estimated_out, scheduled_out = [None] * 3
+                        registration, destination, origin = [None] *3
+                        
+            return {
+                    'origin':origin, 
+                    'destination':destination, 
+                    'registration':registration, 
+                    'scheduled_out':scheduled_out, 
+                    'estimated_out':estimated_out, 
+                    'scheduled_in':scheduled_in, 
+                    'estimated_in':estimated_in, 
+                    'route':route, 
+                    'filed_altitude':filed_altitude, 
+                    'filed_ete':filed_ete
+                            }
 
         
-        # fa_flight_id = ""
-        # response = requests.get(apiUrl + f"flights/{fa_flight_id}/route", headers=auth_header)
-
-
-
-class NAS_template:
-    def __init__(self,
-                 update_time=None,
-                 affected_airports=None,
-                 ground_stop_packet=None,
-                 ground_delay_packet=None,
-                 arr_dep_del_list=None,
-                 airport_closures=None,
-
-                ) -> None:
-        pass
-    def output(self):
-        return {'Update Time': self.update_time,
-                'Affected Airports': self.affected_airports,
-                'Ground Stop': self.ground_stop_packet,
-                'Ground Delay': self.ground_delay_packet,
-                'Arrival/Departure Delay': self.arr_dep_del_list,
-                'Airport Closure': self.airport_closures,
-                }
