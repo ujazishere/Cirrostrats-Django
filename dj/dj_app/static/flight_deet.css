@@ -274,6 +274,54 @@ table.comparison-table td {
   width: 15%;
 }
 
+table.summary-table {
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  background-color: #2D333B;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px #000000;
+  color: inherit;
+  text-decoration: inherit;
+  border-collapse: collapse;
+}
+
+table.summary-table th {
+  padding: 10px;
+  text-align: center;
+  background-color: #2D333B;
+  color: #ffffff;
+}
+
+table.summary-table td {
+  padding: 10px;
+  text-align: center;
+  background-color: #ffffff;
+  color: #24292E;
+}
+
+table.summary-table thead {
+  background-color: #2D333B;
+  color: #ffffff;
+}
+
+table.summary-table th:first-child,
+table.summary-table td:first-child {
+  font-weight: bold;
+}
+
+table.summary-table th {
+  width: 20%;
+}
+
+table.summary-table td {
+  width: 15%;
+  border: none; /* Add this line to remove the border from individual cells */
+}
+
+
 /* Apply styling to the "another-table" */
 table.another-table {
   margin: 20px auto;

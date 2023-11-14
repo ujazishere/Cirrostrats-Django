@@ -10,8 +10,48 @@
 <h4>Results for {{ flight_number }}</h4>
 
 
-
 {% if flight_number %}
+
+<table class="summary-table">
+    <thead>
+        <tr>
+            <th colspan="10">Summary Table</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <span style="float: left; width: 33%;">Destination</span>
+                <span style="float: right; width: 33%;">Departure</span>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <span style="float: left; width: 33%;">Scheduled Time (GMT)</span>
+                <span>Actual Time (GMT)</span>
+                <span style="float: right; width: 33%;"> Estimated Time (GMT)</span>
+            </td>
+        </tr>
+             
+        <tr>
+            <td>
+                <span style="float: left; width: 33%;">Scheduled Time (Local)</span>
+                <span style="float: right; width: 33%;">Estimated Time (Local)</span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+                <span style="float: left; width: 33%;">Gate</span>
+                <span style="float: right; width: 33%;">Registration</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
 <div id="departure-container" class="table-container">
     <div class="accordion-button-container">
     <div class="accordion-content active" id="departure-content-{{ departure_ID }}">
