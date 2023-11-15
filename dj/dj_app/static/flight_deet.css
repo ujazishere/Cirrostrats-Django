@@ -286,6 +286,7 @@ table.summary-table {
   color: inherit;
   text-decoration: inherit;
   border-collapse: collapse;
+  font-family: Menlo, monospace
 }
 
 table.summary-table th {
