@@ -15,23 +15,23 @@
 <table class="summary-table">
     <thead>
         <tr>
-            <th colspan="10">Summary Table</th>
+            <th colspan="10">Summary</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>
-                <span style="float: left; width: 33%;">Destination</span>
-                <span style="float: right; width: 33%;">Departure</span>
+                <span style="float: left; width: 33%;">{{ departure_ID }}</span>
+                <span style="float: right; width: 33%;">{{ destination_ID }} </span>
 
             </td>
         </tr>
 
         <tr>
             <td>
-                <span style="float: left; width: 33%;">Scheduled Time (GMT)</span>
+                <span style="float: left; width: 33%;">{{ scheduled_departure_time }} </span>
                 <span>Actual Time (GMT)</span>
-                <span style="float: right; width: 33%;"> Estimated Time (GMT)</span>
+                <span style="float: right; width: 33%;">{{scheduled_arrival_time}}</span>
             </td>
         </tr>
              
@@ -44,8 +44,8 @@
         
         <tr>
             <td>
-                <span style="float: left; width: 33%;">Gate</span>
-                <span style="float: right; width: 33%;">Registration</span>
+                <span style="float: left; width: 33%;">{{ departure_gate }}</span>
+                <span style="float: right; width: 33%;">{{ registration }}</span>
             </td>
         </tr>
     </tbody>
@@ -67,7 +67,7 @@
             </thead>
             <tbody>
                 <td style="width: 100%; text-align: left;">
-                    <span style="float: left; width: 33%;">{{ scheduled_departure_time }} ({{scheduled_out}})</span>
+                    <span style="float: left; width: 33%;">{{ scheduled_departure_time }} {{scheduled_out}}</span>
                     <span style="float: left; width: 33%; text-align: center;">{{ departure_ID }}</span>
                     <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }}</span>
                 </td>
@@ -132,7 +132,7 @@
             <tbody>
                 <tr>
                     <td style="width: 100%; text-align: left;">
-                        <span style="float: left; width: 33%;">{{scheduled_arrival_time}} ({{scheduled_in}})</span>
+                        <span style="float: left; width: 33%;">{{scheduled_arrival_time}} {{scheduled_in}}</span>
                         <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
                         <span style="float: right; width: 33%; text-align: right;">{{ destination_gate }}</span>
                     </td>
