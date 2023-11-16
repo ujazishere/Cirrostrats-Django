@@ -114,7 +114,7 @@ h5 {
 
 
 .dark-mode h4 {
-  color: white;
+  color: #515A65;
 }
 
 .dark-mode h5 {
@@ -283,44 +283,74 @@ table.summary-table {
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 0 0 1px #000000;
-  color: inherit;
-  text-decoration: inherit;
-  border-collapse: collapse;
+  color: #ffffff;
   font-family: 'Roboto', Menlo, monospace;
+  border-collapse: collapse;
+}
+
+
+table.summary-table th, table.summary-table td {
+  padding: 10px;
 }
 
 table.summary-table th {
-  padding: 10px;
-  text-align: center;
   background-color: #2D333B;
-  color: #ffffff;
 }
 
 table.summary-table td {
-  padding: 10px;
-  text-align: center;
   background-color: #ffffff;
   color: #24292E;
 }
 
-table.summary-table thead {
-  background-color: #2D333B;
-  color: #ffffff;
-}
-
-table.summary-table th:first-child,
 table.summary-table td:first-child {
   font-weight: bold;
 }
 
-table.summary-table th {
-  width: 20%;
+table.summary-table td {
+  width: 50%;
+  padding: 10px;
+  color: #24292E; /* Set the desired text color */
 }
 
-table.summary-table td {
-  width: 15%;
-  border: none; /* Add this line to remove the border from individual cells */
+table.summary-table td:nth-child(odd) {
+  text-align: left;
 }
+
+table.summary-table td:nth-child(even) {
+  text-align: right;
+  font-weight: bold; /* Add this line to make the text bold */
+}
+
+.dark-mode table.summary-table thead th {
+  background-color: rgb(255, 255, 255);
+  color: #ADBAC7;
+  background-color: #2D333B;
+}
+
+.dark-mode table.summary-table {
+  background-color: #2D333B !important;
+  box-shadow: 0 0 0 1px #ffffff;
+  border-color: #ffffff;
+  border-collapse: collapse;
+  color: #ADBAC7;
+}
+
+.dark-mode table.summary-table th {
+  background-color: #2D333B;
+  color: #ADBAC7;
+  border-color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white; 
+}
+
+.dark-mode table.summary-table td {
+  background-color: #22272E;
+  color: #ADBAC7;
+  border-color: #22272E;
+  border-top: 1px solid #22272E;
+  border-bottom: 1px solid #22272E; 
+}
+
 
 
 /* Apply styling to the "another-table" */

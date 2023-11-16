@@ -15,41 +15,37 @@
 <table class="summary-table">
     <thead>
         <tr>
-            <th colspan="10">Summary</th>
+            <th colspan="2">Summary</th>
         </tr>
     </thead>
     <tbody>
+        <td colspan="2" style="text-align: center;">
+            <span style="font-size: 18px;">{{ flight_number }}</span> <br>
+            {{ registration }}
+        </td>
         <tr>
-            <td>
-                <span style="float: left; width: 33%;">{{ departure_ID }}</span>
-                <span style="float: right; width: 33%;">{{ destination_ID }} </span>
-
-            </td>
+            <td>{{ departure_ID }}</td>
+            <td>{{ destination_ID }}</td>
         </tr>
-
         <tr>
-            <td>
-                <span style="float: left; width: 33%;">{{ scheduled_departure_time }} </span>
-                <span>Actual Time (GMT)</span>
-                <span style="float: right; width: 33%;">{{scheduled_arrival_time}}</span>
-            </td>
+            <td>{{ departure_gate }}</td>
+            <td>{{ destination_gate }}</td>
         </tr>
-             
         <tr>
             <td>
-                <span style="float: left; width: 33%;">Scheduled Time (Local)</span>
-                <span style="float: right; width: 33%;">Estimated Time (Local)</span>
+                Scheduled Local Departure <br>
+                {{ scheduled_out }} <br>
+                {{ estimated_out }}
             </td>
-        </tr>
-        
-        <tr>
             <td>
-                <span style="float: left; width: 33%;">{{ departure_gate }}</span>
-                <span style="float: right; width: 33%;">{{ registration }}</span>
+                Scheduled Local Arrival <br>
+                {{ scheduled_in }} <br>
+                {{ estimated_in }}
             </td>
         </tr>
     </tbody>
 </table>
+
 
 
 <div id="departure-container" class="table-container">
