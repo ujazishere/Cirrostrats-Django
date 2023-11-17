@@ -4,7 +4,11 @@ Practice readibility and simplicity. Include description and documentation for o
         google type flight_deet box
         
 **UV:   
-        
+
+        Extract all airports D-Atis info during all wewather conditinos for analyses and classification
+            Add thunderstorm, freezing and such symbols on title.
+            Add departure/approach runways in use.
+        integrate EDCT info  from https://www.fly.faa.gov/edct/jsp/edctLookUp.jsp
         Remove sql database and create own for seamless lightweight version.
         401 forbidden error; CSFR token issues.
         Fix bug that takes in 2 flight routes for singular flight number.

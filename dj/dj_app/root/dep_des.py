@@ -414,7 +414,7 @@ class Pull_flight_info(Root_class):
                     else:
                         filed_ete, filed_altitude, route, estimated_in = [None] * 4
                         scheduled_in, estimated_out, scheduled_out = [None] * 3
-                        registration, destination, origin = [None] *3
+                        registration, destination, origin = [None] * 3
                         
             return {
                     'origin':origin, 

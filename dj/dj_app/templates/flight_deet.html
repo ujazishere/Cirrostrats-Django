@@ -33,14 +33,14 @@
         </tr>
         <tr>
             <td>
-                Scheduled Local Departure <br>
+                {{ scheduled_departure_time}} <br>
                 {{ scheduled_out }} <br>
                 {{ estimated_out }}
             </td>
             <td>
-                Scheduled Local Arrival <br>
-                {{ scheduled_in }} <br>
-                {{ estimated_in }}
+                LCL {{  scheduled_arrival_time }} <br>
+                STD {{ scheduled_in }} <br>
+                ETD {{ estimated_in }}
             </td>
         </tr>
     </tbody>
@@ -65,7 +65,7 @@
                 <td style="width: 100%; text-align: left;">
                     <span style="float: left; width: 33%;">{{ scheduled_departure_time }} {{scheduled_out}}</span>
                     <span style="float: left; width: 33%; text-align: center;">{{ departure_ID }}</span>
-                    <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }}</span>
+                    <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }} ({{registration}})</span>
                 </td>
                 
                 <tr>{% for metar_taf_title, metar_taf_data in dep_weather.items %}</tr>
@@ -84,7 +84,7 @@
         <th>ROUTE</th>
     </tr>
     <tr>
-        <td>{{ filed_altitude }}  {{ route }}  {{ filed_ete }}</td>
+        <td>({{ filed_altitude }})  {{ route }}  (ETE {{ filed_ete }})</td>
     </tr>
 </table>
 
