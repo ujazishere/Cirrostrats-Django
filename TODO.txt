@@ -4,7 +4,7 @@ Practice readibility and simplicity. Include description and documentation for o
         google type flight_deet box
         
 **UV:   
-
+        Add skyvector map
         Extract all airports D-Atis info during all wewather conditinos for analyses and classification
             Add thunderstorm, freezing and such symbols on title.
             Add departure/approach runways in use.
@@ -44,9 +44,7 @@ Practice readibility and simplicity. Include description and documentation for o
             Utilize webhooks or event-driven architectures: Instead of pulling data in a loop, you can set up webhooks or use event-driven architectures to receive notifications or updates from the sources you want to scrape. This way, you can fetch data only when it becomes available or when an event is triggere.
 
         flight deet packet:
-            Include departure and arrival times in zulu as well as the local timem in the flight deet page.
-            DONE! Attempt to include delay informaation. from the faa.gov on the ground stop.
-                Make a seperate expand/collapse section for it
+            Make a seperate expand/collapse section for NAS packet.
             Examine metar and TAF for parsing and color coding IFR and LIFR ceilings, Visibility, freezing conditions and runway condition codes.
             Highlight weather minimums in red for alternate requirements;(1-2-3 rule per ETA)
                 1/2SM as pink and 1/4SM as black
@@ -143,6 +141,6 @@ weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf',
         DONE! FIXED AND MADE IT TO CENTER Move Departure times to the left most side and gate deets to the right most side of the title.
         DONE! come up with a better cleaner font across the web. Especially web title.
         DONE! Fix expand/collapse squaring on the flight_deet page and make it co:nsistent with box size.
-
-
+        DONE!! Include departure and arrival times in zulu as well as the local timem in the flight deet page.
+        DONE! Delay/GS from the faa.gov on the ground stop.
         

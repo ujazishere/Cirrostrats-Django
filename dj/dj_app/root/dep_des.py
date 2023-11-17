@@ -85,7 +85,6 @@ class Pull_flight_info(Root_class):
             for keys, _ in fa_data.items():
                 fa_data[keys]= None
 
-
         bulk_flight_deet = {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                  'departure_ID': departure_ID,
                  'destination_ID':destination_ID,
@@ -412,11 +411,22 @@ class Pull_flight_info(Root_class):
                         route = flights[i]['route']
                         filed_altitude =  "FL" + str(flights[1]['filed_altitude'])
                         filed_ete = flights[i]['filed_ete']
+                        
+                        rs = route.split()
+                        if len(rs) > 1:
+                            rh = []
+                            for i in rs:
+                                rh.append(f"%20{rs[rs.index(i)]}")
+                            rh = ''.join(rh)
+                        sv = f"https://skyvector.com/?fpl=%20{origin}{rh}%20{destination}"
+                        
                         break
+                        
                     else:
                         filed_ete, filed_altitude, route, estimated_in = [None] * 4
                         scheduled_in, estimated_out, scheduled_out = [None] * 3
-                        registration, destination, origin = [None] * 3
+                        registration, destination, origin, sv = [None] * 4
+                    
                         
             return {
                     'origin':origin, 
@@ -428,7 +438,8 @@ class Pull_flight_info(Root_class):
                     'estimated_in':estimated_in, 
                     'route':route, 
                     'filed_altitude':filed_altitude, 
-                    'filed_ete':filed_ete
+                    'filed_ete':filed_ete,
+                    'sv': sv
                             }
 
         

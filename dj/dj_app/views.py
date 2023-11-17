@@ -46,7 +46,7 @@ def parse_query(request, main_query):
                                     
     if main_query == '':        # query is empty then return all gates
         return gate_info(request, main_query='')
-    if main_query == 'dumm':
+    if  'DUMM' in main_query.upper():
         return dummy(request,main_query)
     if main_query != '':        # if query is not empty it splits it into list form
         query_in_list_form = main_query.split()
@@ -142,7 +142,11 @@ def flight_deets(request, query):
     weather = {'dep_weather':dep_weather, 'dest_weather': dest_weather}
     
     bulk_flight_deets.update(weather)
-
+    
+    # extracting a for a dummy file
+    # with open('lifr.pkl', 'wb') as f:
+        # pickle.dump(bulk_flight_deets, f)
+    
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
