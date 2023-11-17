@@ -1,7 +1,7 @@
 Practice readibility and simplicity. Include description and documentation for others to read and make changes to it
 
 **IS:   
-        google type flight_deet box
+    
         
 **UV:   
         Add skyvector map
@@ -143,4 +143,4 @@ weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf',
         DONE! Fix expand/collapse squaring on the flight_deet page and make it co:nsistent with box size.
         DONE!! Include departure and arrival times in zulu as well as the local timem in the flight deet page.
         DONE! Delay/GS from the faa.gov on the ground stop.
-        
+        DONE! google type flight_deet box

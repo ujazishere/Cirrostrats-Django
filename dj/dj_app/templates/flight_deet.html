@@ -79,17 +79,26 @@
     </div>
 </div>
 
+<style>
+    .route a {
+        color: rgb(255, 93, 93); /* Change the color to your preference */
+    }
+</style>
+
 <table class="route">
     <tr>
-        <th>ROUTE (MAP)</th>
+        <th>ROUTE (<a href="{{ sv }}" target="_blank">MAP</a>)</th>
     </tr>
     <tr>
         <td>({{ filed_altitude }})  {{ route }}  (ETE {{ filed_ete }})</td>
     </tr>
     <tr>
-        <td>   {{ sv }} </td>
+        <td>{{ sv }}</td>
     </tr>
 </table>
+
+
+
 
 {% if nas_packet.departure_affected %}
 <div class="table-wrapper">
