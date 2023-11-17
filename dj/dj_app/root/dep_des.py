@@ -402,10 +402,12 @@ class Pull_flight_info(Root_class):
                         scheduled_out = flights[i]['scheduled_out']
                         scheduled_out = re.search("T(\d{2}:\d{2})", scheduled_out).group(1).replace(":","") + "Z"
                         estimated_out = flights[i]['estimated_out']
+                        estimated_out = re.search("T(\d{2}:\d{2})", estimated_out).group(1).replace(":","") + "Z"
                         
                         scheduled_in = flights[i]['scheduled_in']
                         scheduled_in = re.search("T(\d{2}:\d{2})", scheduled_in).group(1).replace(":","") + "Z"
                         estimated_in = flights[i]['estimated_in']
+                        estimated_in = re.search("T(\d{2}:\d{2})", estimated_in).group(1).replace(":","") + "Z"
                         
                         route = flights[i]['route']
                         filed_altitude =  "FL" + str(flights[1]['filed_altitude'])
