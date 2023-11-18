@@ -409,7 +409,7 @@ class Pull_flight_info(Root_class):
                         estimated_in = re.search("T(\d{2}:\d{2})", estimated_in).group(1).replace(":","") + "Z"
                         
                         route = flights[i]['route']
-                        filed_altitude =  "FL" + str(flights[1]['filed_altitude'])
+                        filed_altitude =  "FL" + str(flights[i]['filed_altitude'])
                         filed_ete = flights[i]['filed_ete']
                         
                         rs = route.split()
