@@ -192,3 +192,6 @@ def guide(request):
 def report_an_issue(request):
     return render(request, 'report_an_issue.html')
 
+def live_map(request):
+    return render(request, 'live_map.html')
+

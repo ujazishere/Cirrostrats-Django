@@ -18,9 +18,9 @@ urlpatterns = [
     path('flight_lookup', views.flight_lookup, name = 'flight_lookup'), #flight_lookup page.
     path('weather', views.weather, name = 'weather'), #weather page. 
     path('guide', views.guide, name = 'guide'), #guide page. 
-    path('report', views.report_an_issue, name = 'report'), #report page 
+    path('report', views.report_an_issue, name = 'report'), #report page.
+    path('live_map', views.live_map, name = 'live_map'), #live_map page.
  
-
 ]
 
 
