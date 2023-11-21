@@ -418,8 +418,9 @@ class Pull_flight_info(Root_class):
                             for i in rs:
                                 rh.append(f"%20{rs[rs.index(i)]}")
                             rh = ''.join(rh)
-                        sv = f"https://skyvector.com/?fpl=%20{origin}{rh}%20{destination}"
-                        
+                        sv = f"https://skyvector.com/api/lchart?fpl=%20{origin}{rh}%20{destination}"
+                        print(sv)     
+
                         break
                         
                     else:

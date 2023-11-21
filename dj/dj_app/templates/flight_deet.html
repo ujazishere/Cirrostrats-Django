@@ -87,13 +87,18 @@
 
 <table class="route">
     <tr>
-        <th>ROUTE (<a href="{{ sv }}" target="_blank">MAP</a>)</th>
+        <th>ROUTE (<a href="#" onclick="showMap('{{ sv }}'); return false;">MAP</a>)</th>
     </tr>
     <tr>
         <td>({{ filed_altitude }})  {{ route }}  (ETE {{ filed_ete }})</td>
     </tr>
 </table>
 
+
+<div id="sv_1313" style="width: 200px; height: 200px;">Make your <a href="https://skyvector.com/">Flight Plan</a> at SkyVector.com</div><script src="https://skyvector.com/api/lchart?ll=38.64948232258205,-81.29223632199243&chart=301&zoom=9&fpl=%20KIAD%20RNLDI4%20OTTTO%20Q176%20COLNS%20GAVNN6%20KCVG" type="text/javascript"></script>
+
+
+<div id="map-container"></div>
 
 
 
@@ -211,7 +216,26 @@ Empty search returns information on all gates for United flights in KEWR.
     }
   }
 
+  function showMap(mapUrl) {
+        // Get the container div
+        var mapContainer = document.getElementById('map-container');
 
+        // Clear any existing content in the container
+        mapContainer.innerHTML = '';
+
+        // Create an iframe element
+        var iframe = document.createElement('iframe');
+
+        // Set the source of the iframe to the SkyVector map URL
+        iframe.src = mapUrl;
+
+        // Set the width and height of the iframe (adjust as needed)
+        iframe.width = '800';
+        iframe.height = '600';
+
+        // Append the iframe to the container
+        mapContainer.appendChild(iframe);
+    }
 
 
 </script>
