@@ -29,7 +29,7 @@
         </tr>
         <tr>
             <td>{{ departure_gate }}</td>
-            <td>{{ destination_gate }}</td>
+            <td>{{ arrival_gate }}</td>
         </tr>
         <tr>
             <td>
@@ -94,14 +94,6 @@
     </tr>
 </table>
 
-
-<div id="sv_1313" style="width: 200px; height: 200px;">Make your <a href="https://skyvector.com/">Flight Plan</a> at SkyVector.com</div><script src="https://skyvector.com/api/lchart?ll=38.64948232258205,-81.29223632199243&chart=301&zoom=9&fpl=%20KIAD%20RNLDI4%20OTTTO%20Q176%20COLNS%20GAVNN6%20KCVG" type="text/javascript"></script>
-
-
-<div id="map-container"></div>
-
-
-
 {% if nas_packet.departure_affected %}
 <div class="table-wrapper">
     <table class="another-table">
@@ -144,7 +136,7 @@
                     <td style="width: 100%; text-align: left;">
                         <span style="float: left; width: 33%;">{{scheduled_arrival_time}} {{scheduled_in}}</span>
                         <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
-                        <span style="float: right; width: 33%; text-align: right;">{{ destination_gate }}</span>
+                        <span style="float: right; width: 33%; text-align: right;">{{ arrival_gate }}</span>
                     </td>
                 </tr> {% for metar_taf_title, metar_taf_data in dest_weather.items %}
                 <tr>

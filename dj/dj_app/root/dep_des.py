@@ -26,17 +26,17 @@ class Pull_flight_info(Root_class):
         flt_num = query
         # airport = query.split()[2]        This was for when passing `i flt_num airport` as search
         date = self.date_time(raw=True)     # Root_class inheritance format yyyymmdd
-
+        
         #  TODO: pull information on flight numners from the info web and use that to pull info through flightview.
         # attempt to only pull departure and destination from the united from the info web.
         # TODO: Use Flightstats for scheduled times conversion
-        info = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
         flight_view = "https://www.flightview.com/flight-tracker/UA/492?date=20230702&depapt=EWR"   # check pull_dep_des 
+
         flight_stats_url = f"https://www.flightstats.com/v2/flight-tracker/UA/{flt_num}?year={date[:4]}&month={date[4:6]}&date={date[-2:]}"
-        soup = self.request(info)
-        
         soup_fs = self.request(flight_stats_url)
-        fs_juice = soup_fs.select('[class*="TicketContainer"]')     # This is the whole packet not needed now
+        
+        
+        # fs_juice = soup_fs.select('[class*="TicketContainer"]')     # This is the whole packet not needed now
         fs_time_zone = soup_fs.select('[class*="TimeGroupContainer"]')
         if fs_time_zone:
             departure_time_zone = fs_time_zone[0].get_text()        #  format is HH:MM XXX timezone(eg.EST)
@@ -49,61 +49,46 @@ class Pull_flight_info(Root_class):
             departure_time_zone = None
             arrival_time_zone = None
 
+        # info = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
+        # soup = self.request(info)
+        # Airport distance and duration can be misleading. Be careful with using these. 
+        # airport_id = soup.find_all('div', {'class': 'a2_ak'})
+        # airport_id = [i.text for i in airport_id if 'ICAO' in i.text]
+        # departure_ID = airport_id[0].split()[2]
+        # destination_ID = airport_id[1].split()[2]
+
+        
+        # fa_data = self.flight_aware_data(query)     # TODO: This shouldn't be here. move it to views.py 
+
+        # Matching flightaware departure and destination with base for accuracy
+        print('Success at pull_UA for scheduled_dep and arr with time zone')
+        bulk_flight_deet = {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
+                #  'departure_ID': departure_ID,          # From united-flights.info web.
+                #  'destination_ID':destination_ID,       # From united-flights.info web.
+
+                 'scheduled_departure_time': departure_time_zone,
+                 'scheduled_arrival_time': arrival_time_zone,
+                                            }
+
+        return bulk_flight_deet
+
+
+    def united_flight_status_info_scrape(self, query):
+
+        flt_num = query
+        info = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
+        soup = self.request(info)
         # Airport distance and duration can be misleading. Be careful with using these. 
         # table = soup.find('div', {'class': 'a2'})
-        distane_and_duration = soup.find('ul', {'class': 'a3_n'})
-        distance_duration = [i.text for i in distane_and_duration if 'Flight D' in i.text]
         airport_id = soup.find_all('div', {'class': 'a2_ak'})
         airport_id = [i.text for i in airport_id if 'ICAO' in i.text]
         departure_ID = airport_id[0].split()[2]
         destination_ID = airport_id[1].split()[2]
+        print('Success at united_flight_stat scrape for dep and des ID')
 
-        times = soup.find_all('div', {'class': 'a2_b'})          # scheduled and actual times in local time zone
-        times = [i.text for i in times if 'Scheduled' in i.text]
-        departure_times = ' '.join(times[0].replace('\n','').split())
-        scheduled_departure_time = departure_times[:9] + ' ' + departure_times[9:27]
-        actual_departure_time = departure_times[28:34] + ' ' + departure_times[34:]
-        destination_times = ' '.join(times[1].replace('\n','').split())
-        scheduled_arrival_time = destination_times[:9] + ' ' + destination_times[9:27]
-        actual_arrival_time = destination_times[28:34] + ' ' + destination_times[34:]
+        return {'departure_ID': departure_ID,
+                'destination_ID': destination_ID}
 
-        gate = soup.find_all('div', {'class': 'a2_c'})              # the data from the gate is also probably misleading.
-        gate = [i.text.replace('\n', '') for i in gate]
-        departure_gate = gate[0]        # Unreliable for Newark Hardstand
-        destination_gate = gate[1]
-
-        nas_packet = self.gs_sorting(departure_ID, destination_ID)
-        soup_fv = self.pull_dep_des(query, departure_ID)  # Only used for departure and arrival gates
-        if 'min' in soup_fv['departure_gate']:      # This acocunts for faulty hrs and mins in string
-            soup_fv['departure_gate'] = None
-        if 'min' in soup_fv['arrival_gate']:
-            soup_fv['arrival_gate'] = None
-        fa_data = self.flight_aware_data(query)
-
-        # Matching flightaware departure and destination with base for accuracy
-        if departure_ID != fa_data['origin'] and destination_ID != fa_data['destination']:
-            for keys, _ in fa_data.items():
-                fa_data[keys]= None
-
-        bulk_flight_deet = {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
-                 'departure_ID': departure_ID,
-                 'destination_ID':destination_ID,
-                 'departure_gate': soup_fv['departure_gate'],       # Takes forever to load data
-                #  'departure_gate': departure_gate,
-                #  'scheduled_departure_time': scheduled_departure_time,
-                 'scheduled_departure_time': departure_time_zone,
-                 'actual_departure_time': actual_departure_time,    # Takes forever to load data
-                 'destination_gate': soup_fv['arrival_gate'],
-                #  'destination_gate': destination_gate,
-                #  'scheduled_arrival_time': scheduled_arrival_time,
-                 'scheduled_arrival_time': arrival_time_zone,
-                 'actual_arrival_time': actual_arrival_time,
-                 'nas_packet': nas_packet
-                                            }
-
-        bulk_flight_deet.update(fa_data)
-
-        return bulk_flight_deet
 
 
     def gs_sorting(self,dep_ID, dest_ID):
@@ -111,7 +96,7 @@ class Pull_flight_info(Root_class):
         departure_ID = dep_ID[1:]       # Stripping off the 'K' since NAS uses 3 letter airport ID
         destination_ID = dest_ID[1:]
 
-        nas_delays = self.nas_status()
+        nas_delays = self.nas_status()          # Doing the scraping here
         airport_closures = nas_delays['Airport Closure']
         ground_stop_packet = nas_delays['ground_stop_packet']
         ground_delay_packet = nas_delays['ground_delay_packet']
@@ -209,6 +194,7 @@ class Pull_flight_info(Root_class):
                                                 'Maximum': max_delay,
                                                 'Trend': trend}})
 
+        print('Done NAS through gs_sorting')
         return {'departure_affected': departure_affected,
                 'destination_affected': destination_affected}
 
@@ -278,7 +264,8 @@ class Pull_flight_info(Root_class):
                         arr_dep_del_list.append([x.tag, x.text])
                     for a in x:
                         arr_dep_del_list.append([a.tag, a.text])
-                        
+        
+        print('done NAS pull through nas_status')
         return {'update_time': update_time,
                 'affected_airports': affected_airports,
                 'ground_stop_packet': ground_stop_packet, 
@@ -297,7 +284,7 @@ class Pull_flight_info(Root_class):
         if use_custom_dummy_data:
             date = 20230505
         else:
-            date = self.date_time(raw=True)     # Root_class inheritance format yyyymmdd
+            date = str(self.date_time(raw=True))     # Root_class inheritance format yyyymmdd
         flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport[1:]}"
         soup = self.request(flight_view)
         try :
@@ -322,6 +309,12 @@ class Pull_flight_info(Root_class):
             # print(scripts[-3].get_text())       #this is where you can find departure and destination times
                     # departure_time = 
             # return dict({flt_num: [departure, destination]})
+            
+            if 'min' in departure_gate:      # This acocunts for faulty hrs and mins in string
+                departure_gate = None
+            if 'min' in arrival_gate:
+                arrival_gate = None
+            print('success at pull_dep_des for gate info')
             return {'departure_gate': departure_gate,
                     'arrival_gate': arrival_gate,
                     }
@@ -329,6 +322,7 @@ class Pull_flight_info(Root_class):
         except :
             empty_soup = {'departure_gate': 'None',
                           'arrival_gate': 'None'} 
+            print('unsuccessful at pull_dep_des for gate info')
             return empty_soup
 
         # typically 9th index of scripts is where departure and destination is.
@@ -337,11 +331,11 @@ class Pull_flight_info(Root_class):
         # print(departure, destination)
 
     def flight_aware_data(self, query):
-        
+
         apiKey = "V2M5XJKNC5L1oJb0Dxukt0HJ7c8cxXDQ"
         apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
         auth_header = {'x-apikey':apiKey}
-        
+
         """
         airport = 'KSFO'
         payload = {'max_pages': 2}
@@ -355,13 +349,14 @@ class Pull_flight_info(Root_class):
         """
 
         response = requests.get(apiUrl + f"flights/UAL{query}", headers=auth_header)
-        
+
         route = None        # Declaring not available unless available throught flights
         filed_altitude, filed_ete = None, None
         if response.status_code == 200:
             flights = response.json()['flights']
-            # These flights are across 10 days and hence iter across them
+
             """
+            # these flights are across 10 days and hence iter across them
             for i in range(len(flights)):
                 fa_flight_id = flights[i]['fa_flight_id']
                 origin = flights[i]['origin']['code_icao']
@@ -390,45 +385,52 @@ class Pull_flight_info(Root_class):
                 filed_ete = flights[i]['filed_ete']
                 filed_altitude = flights[i]['filed_altitude']
             """
+
             if flights:
                 for i in range(3):
-
-                    if flights[i]['route']:     # If the first one returns None go next, so on since latest is first
+                    if flights[i]['route']:
                         origin = flights[i]['origin']['code_icao']
                         destination = flights[i]['destination']['code_icao']
                         registration = flights[i]['registration']
-                        
-                        scheduled_out = flights[i]['scheduled_out']
-                        scheduled_out = re.search("T(\d{2}:\d{2})", scheduled_out).group(1).replace(":","") + "Z"
+                        print(origin)
+                        scheduled_out_fa = flights[i]['scheduled_out']
+                        scheduled_out = re.search("T(\d{2}:\d{2})", scheduled_out_fa).group(1).replace(":","") + "Z"
                         estimated_out = flights[i]['estimated_out']
                         estimated_out = re.search("T(\d{2}:\d{2})", estimated_out).group(1).replace(":","") + "Z"
-                        
+
                         scheduled_in = flights[i]['scheduled_in']
                         scheduled_in = re.search("T(\d{2}:\d{2})", scheduled_in).group(1).replace(":","") + "Z"
                         estimated_in = flights[i]['estimated_in']
                         estimated_in = re.search("T(\d{2}:\d{2})", estimated_in).group(1).replace(":","") + "Z"
-                        
+
                         route = flights[i]['route']
                         filed_altitude =  "FL" + str(flights[i]['filed_altitude'])
                         filed_ete = flights[i]['filed_ete']
-                        
+
                         rs = route.split()
                         if len(rs) > 1:
                             rh = []
                             for i in rs:
                                 rh.append(f"%20{rs[rs.index(i)]}")
                             rh = ''.join(rh)
+                        sv = f"https://skyvector.com/?fpl=%20{origin}{rh}%20{destination}"
+
                         sv = f"https://skyvector.com/api/lchart?fpl=%20{origin}{rh}%20{destination}"
                         print(sv)     
 
                         break
-                        
+
                     else:
                         filed_ete, filed_altitude, route, estimated_in = [None] * 4
                         scheduled_in, estimated_out, scheduled_out = [None] * 3
                         registration, destination, origin, sv = [None] * 4
-                    
-                        
+
+            else:
+                filed_ete, filed_altitude, route, estimated_in = [None] * 4
+                scheduled_in, estimated_out, scheduled_out = [None] * 3
+                registration, destination, origin, sv = [None] * 4
+
+            print('done f_a_data')
             return {
                     'origin':origin, 
                     'destination':destination, 
@@ -440,7 +442,10 @@ class Pull_flight_info(Root_class):
                     'route':route, 
                     'filed_altitude':filed_altitude, 
                     'filed_ete':filed_ete,
-                    'sv': sv
+                    'sv': sv,
+                    # 'scheduled_out_fa': scheduled_out_fa
                             }
-
+                           
+        else:
+            print(response.status_code)
         

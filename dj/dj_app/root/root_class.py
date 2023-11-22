@@ -12,11 +12,14 @@ class Root_class():
             pass
 
 
-    def date_time(self, raw=None, viewable=None):
+    def date_time(self, raw=None, viewable=None, raw_utc=None):
         eastern = pytz.timezone('US/eastern')
         now = datetime.now(eastern)
         latest_time = now.strftime("%#I:%M%p, %b %d.")
-        if raw:         # format yyyymmdd
+        if raw_utc:
+            raw_utc = pytz.timezone('UTC')
+            return datetime.now(raw_utc)
+        elif raw:         # format yyyymmdd
             return now.strftime('%Y%m%d')       # date format yyyymmdd
         elif viewable:
             return now.strftime('%b %d, %Y')

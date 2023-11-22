@@ -1,5 +1,6 @@
 import pickle
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from django.shortcuts import render
 from .models import SearchQuery
 from .root.gate_checker import Gate_checker
@@ -47,7 +48,7 @@ def parse_query(request, main_query):
     if main_query == '':        # query is empty then return all gates
         return gate_info(request, main_query='')
     if  'DUMM' in main_query.upper():
-        return dummy(request,main_query)
+        return dummy(request)
     if main_query != '':        # if query is not empty it splits it into list form
         query_in_list_form = main_query.split()
         if len(query_in_list_form) == 1:            # If query is only one word or item  
@@ -99,13 +100,12 @@ def parse_query(request, main_query):
                         # return a static html saying no information found for flight number ****
                         pass'''
 
-def dummy(request, query):
-    print(os.getcwd())   
+def dummy(request):
     try:
         bulk_flight_deets = pickle.load(open('dummy_flight_deet.pkl', 'rb'))
     except:
         bulk_flight_deets = pickle.load(open('/Users/ismailsakhani/Desktop/Cirrostrats/dj/dummy_flight_deet.pkl', 'rb'))
-        
+    print(bulk_flight_deets)   
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 def gate_info(request,main_query):
@@ -129,20 +129,64 @@ def gate_info(request,main_query):
 def flight_deets(request, query):
     # given a flight number it returns its, gates, scheduled and actual times of departure and arrival
 
+    print(query)
     flt_info = Pull_flight_info()           # from dep_des.py file
-    bulk_flight_deets = flt_info.pull_UA(query)
+    weather = Weather_display()         # from MET_TAF_parse.py
 
-    def weather_req(airport):
-        weather = Weather_display()         # from MET_TAF_parse.py
-        weather = weather.scrape(airport)
-        return weather
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        futures1 = executor.submit(flt_info.pull_UA, query)
+        futures2 = executor.submit(flt_info.flight_aware_data, query)
+        futures_dep_des = executor.submit(flt_info.united_flight_status_info_scrape, query)
+    
+    results = []
+    for future in as_completed([futures1,futures2, futures_dep_des]):
+        results.append(future.result())
+    bulk_flight_deets = {}
+    for i in results:
+        if 'origin' in i.keys():
+            flight_aware_data_pull = i
+        else:
+            bulk_flight_deets.update(i)
+    
+    # print(bulk_flight_deets.keys())
+    # if 'origin' in list(results[0].keys()):
+        # flight_aware_data_pull, bulk_flight_deets = results
+    # else:
+        # bulk_flight_deets, flight_aware_data_pull = results
 
-    dep_weather = weather_req(bulk_flight_deets['departure_ID'])
-    dest_weather = weather_req(bulk_flight_deets['destination_ID'])
-    weather = {'dep_weather':dep_weather, 'dest_weather': dest_weather}
+    # print(1111,results)
+    # flight_aware_data_pull = futures2.result()
+    # bulk_flight_deets = futures1.result()
+    # print(bulk_flight_deets)
+
+    departure_ID, destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
+    fa_departure_ID, fa_destination_ID = flight_aware_data_pull['origin'], flight_aware_data_pull['destination']
+
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        futures3 = executor.submit(weather.scrape, departure_ID)
+        futures4 = executor.submit(weather.scrape, destination_ID)
+        futures5 = executor.submit(flt_info.gs_sorting, departure_ID, destination_ID) # NAS
+        futures6 = executor.submit(flt_info.pull_dep_des, query, departure_ID) # Takes forever to load
     
-    bulk_flight_deets.update(weather)
+    for future in as_completed([futures5,futures6]):
+        bulk_flight_deets.update(future.result())
+    bulk_flight_deets['dep_weather'] = futures3.result()
+    bulk_flight_deets['dest_weather'] = futures4.result()
+    # dep_weather = futures3.result()
+    # dest_weather = futures4.result()
+    # nas_packet = futures5.result()
+    # gate_info = futures6.result()
+    # dep_weather, dest_weather, nas_packet, gate_info = results
+
+    if  departure_ID != fa_departure_ID and destination_ID != fa_destination_ID:
+        for keys in flight_aware_data_pull.keys():
+            flight_aware_data_pull[keys]= None
+
+    # bulk_flight_deets.update(gate_info)
     
+    # bulk_flight_deets.update({'nas_packet': nas_packet,
+                            #   'dep_weather':dep_weather, 'dest_weather': dest_weather})
+    bulk_flight_deets.update(flight_aware_data_pull)
     # extracting a for a dummy file
     # with open('lifr.pkl', 'wb') as f:
         # pickle.dump(bulk_flight_deets, f)

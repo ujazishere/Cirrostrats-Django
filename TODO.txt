@@ -4,7 +4,10 @@ Practice readibility and simplicity. Include description and documentation for o
     
         
 **UV:   
-        Add skyvector map
+        fix massive bug on flight_aware route date time conflict with real scheduled_time.
+            currently it senses the most recent route that is not None type probs giving future date
+            use: if scheduled_out is current_utc and route is not none:
+                but current utc date_time has source latency.   
         Extract all airports D-Atis info during all wewather conditinos for analyses and classification
             Add thunderstorm, freezing and such symbols on title.
             Add departure/approach runways in use.
@@ -144,3 +147,4 @@ weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf',
         DONE!! Include departure and arrival times in zulu as well as the local timem in the flight deet page.
         DONE! Delay/GS from the faa.gov on the ground stop.
         DONE! google type flight_deet box
+        DONE! Add skyvector map
