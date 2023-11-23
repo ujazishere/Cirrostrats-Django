@@ -6,7 +6,7 @@ body {
 }
 
 .gmt-clock {
-  position: sticky;
+  position: fixed;
   top: 65px; /* Adjust the top position as needed */
   right: 10px; /* Adjust the right position as needed */
   background-color: rgba(0, 0, 0, 0.5); /* Background color */
@@ -14,8 +14,7 @@ body {
   padding: 5px 10px; /* Padding for the clock */
   border-radius: 5px; /* Rounded corners */
   font-size: 14px; /* Font size */
-  z-index: 999;
-
+  z-index: 9999; /* Set a higher value for stacking order */
 }
 
 .dark-mode-switch {
