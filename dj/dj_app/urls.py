@@ -20,6 +20,8 @@ urlpatterns = [
     path('guide', views.guide, name = 'guide'), #guide page. 
     path('report', views.report_an_issue, name = 'report'), #report page.
     path('live_map', views.live_map, name = 'live_map'), #live_map page.
+    path('dummy2', views.dummy2, name = 'dummy2'), #live_map page.
+
  
 ]
 

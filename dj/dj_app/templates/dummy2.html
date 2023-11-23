@@ -1,0 +1,41 @@
+{% extends "dj_app/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- dummy2.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dummy Page</title>
+</head>
+<body>
+
+<h1 id="name-placeholder">Loading...</h1>
+
+<script>
+    // Set initial content when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        var nameElement = document.getElementById('name-placeholder');
+        nameElement.innerHTML = "Initial Content";
+        
+        // Fetch data asynchronously after a delay (2 seconds)
+        setTimeout(function() {
+            fetch('/path/to/dummy2/')
+                .then(response => response.json())
+                .then(data => {
+                    // Update the content with the actual data
+                    nameElement.innerHTML = "Name: " + data.name;
+                })
+                .catch(error => console.error('Error:', error));
+        }, 2000);  // 2000 milliseconds = 2 seconds
+    });
+</script>
+
+</body>
+</html>
+
+  
+  {% endblock %}
