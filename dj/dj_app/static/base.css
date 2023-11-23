@@ -6,7 +6,7 @@ body {
 }
 
 .gmt-clock {
-  position: fixed;
+  position: sticky;
   top: 65px; /* Adjust the top position as needed */
   right: 10px; /* Adjust the right position as needed */
   background-color: rgba(0, 0, 0, 0.5); /* Background color */
@@ -14,6 +14,8 @@ body {
   padding: 5px 10px; /* Padding for the clock */
   border-radius: 5px; /* Rounded corners */
   font-size: 14px; /* Font size */
+  z-index: 999;
+
 }
 
 .dark-mode-switch {
@@ -33,35 +35,25 @@ body {
   position: relative;
   transition: background-color 0.3s ease-in-out;
   overflow: hidden;
-  
 }
 
-.dark-mode-switch button .sun {
-  display: none;
-}
 
-.dark-mode-switch button.moon .sun {
+
+.dark-mode-switch button::before {
+  content: ""; /* Clear the content */
   display: block;
+  width: 18px; /* Adjust the width of your image */
+  height: 18px; /* Adjust the height of your image */
+  background-size: cover;
 }
 
-.dark-mode-switch button.sun .moon {
-  display: none;
+.dark-mode-switch button.sun::before {
+  background-image: url('/Cirrostrats/logo/sun.png'); /* Path to your sun image */
 }
 
-body.dark-mode .dark-mode-switch button {
-  background-color: #22272E;
+.dark-mode-switch button.moon::before {
+  background-image: url('/Cirrostrats/logo/moon.png'); /* Path to your moon image */
 }
-
-body.dark-mode .dark-mode-switch button .sun {
-  display: block;
-}
-
-body.dark-mode .dark-mode-switch button .moon {
-  display: none;
-}
-
-
-
 
 body.dark-mode {
   background-color: #22272E;
