@@ -12,6 +12,8 @@
 
 {% if flight_number %}
 
+<div id="loading"></div>
+
 <table class="summary-table">
     <thead>
         <tr>
@@ -195,5 +197,79 @@ Empty search returns information on all gates for United flights in KEWR.
     <button type="submit">Search</button>
 </form>
 </div>
+
+<script>
+    function toggleAccordion(contentId) {
+      var content = document.getElementById(contentId);
+      var tbody = content.querySelector("tbody"); // Select the tbody element inside the content
+      
+      if (tbody.style.display === "none" || tbody.style.display === "") {
+        tbody.style.display = "table-row-group"; // Show the content
+      } else {
+        tbody.style.display = "none"; // Hide the content
+      }
+    }
+  
+    function showMap(mapUrl) {
+          // Get the container div
+          var mapContainer = document.getElementById('map-container');
+  
+          // Clear any existing content in the container
+          mapContainer.innerHTML = '';
+  
+          // Create an iframe element
+          var iframe = document.createElement('iframe');
+  
+          // Set the source of the iframe to the SkyVector map URL
+          iframe.src = mapUrl;
+  
+          // Set the width and height of the iframe (adjust as needed)
+          iframe.width = '800';
+          iframe.height = '600';
+  
+          // Append the iframe to the container
+          mapContainer.appendChild(iframe);
+      }
+  
+      document.addEventListener('DOMContentLoaded', function() {
+    // Define nameElement
+    var nameElement = document.getElementById('nameElement');
+    // Define loadingElement
+    var loadingElement = document.getElementById('loading');
+
+    // Set initial content when the page loads
+    nameElement.innerHTML = "Initial Content";
+
+    // Fetch data asynchronously after the page has loaded
+    setTimeout(function() {
+        fetch('data_v')
+            .then(response => response.json())
+            .then(data => {
+                // Update the content with the actual data
+                nameElement.innerHTML = data.flight_deets;
+                // Hide the loading indicator
+                loadingElement.style.display = 'none';
+            })
+            .catch(error => console.error('Error:', error));
+    }, 3000); // 3000 milliseconds = 3 seconds
+});
+
+  
+  </script>
+
+  
+  
+  <style>
+    .comparison-table thead th{
+      position: sticky;
+      top: 0;
+      background-color: #474350;
+      z-index: 1;
+    }
+    
+    .header-button {
+      cursor: pointer;
+    }
+  </style>
 
 {% endblock %}
