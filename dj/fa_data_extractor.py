@@ -2,34 +2,33 @@ import requests
 from time import time,sleep
 import pickle
 
-# The script scrapes massive amounts of flight_aware united flight
+# the script scrapes massive amounts of flight_aware united flight
     # individual flights pulled every 5 seconds which allows
     # complies with the '10 pulls in a minute' pull timer.
 
 
-import requests
 query = "1217"
 apiKey = "V2M5XJKNC5L1oJb0Dxukt0HJ7c8cxXDQ"
 apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
 auth_header = {'x-apikey':apiKey}
 
-responses = {}
+new_responses = {}
 other_responses = {}
 count = 1
 count_res_200 = 1
-for query in range(15,1000):
-    start_time = int(time())
-    response = requests.get(apiUrl + f"flights/UAL{query}", headers=auth_header)
+start_time = int(time())
+for query in range(999,2000):
+    response = requests.get(apiUrl + f"flights/ual{query}", headers=auth_header)
     count += 1
     if response.status_code == 200:
-        responses.update({query:response})
-        success_stop = int(time.time())
+        new_responses.update({query:response})
+        success_stop = int(time())
         sleep(6)
         print(f'done: {count,query}',f'et:{success_stop-start_time}')
     else:
-        responses.update({query:response})
-        print(f'not_done{count,query}')
-        stop = int(time.time())
+        new_responses.update({query:response})
+        print('not done')
+        stop = int(time())
         print(f'unsuccessful_time: {stop-start_time}')
         sleep(5)
 

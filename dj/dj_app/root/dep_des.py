@@ -18,7 +18,7 @@ class Pull_flight_info(Root_class):
         super().__init__()
 
 
-    def pull_UA(self, query):
+    def fs_dep_arr_timezone_pull(self, query):
         if type(query) == list:
              query = query[1]
             
@@ -30,11 +30,8 @@ class Pull_flight_info(Root_class):
         #  TODO: pull information on flight numners from the info web and use that to pull info through flightview.
         # attempt to only pull departure and destination from the united from the info web.
         # TODO: Use Flightstats for scheduled times conversion
-        flight_view = "https://www.flightview.com/flight-tracker/UA/492?date=20230702&depapt=EWR"   # check pull_dep_des 
-
         flight_stats_url = f"https://www.flightstats.com/v2/flight-tracker/UA/{flt_num}?year={date[:4]}&month={date[4:6]}&date={date[-2:]}"
         soup_fs = self.request(flight_stats_url)
-        
         
         # fs_juice = soup_fs.select('[class*="TicketContainer"]')     # This is the whole packet not needed now
         fs_time_zone = soup_fs.select('[class*="TimeGroupContainer"]')
@@ -46,28 +43,12 @@ class Pull_flight_info(Root_class):
             arrival_time_zone = "STA " + arrival_time_zone[9:18]
             # arrival_estimated_or_actual = arrival_time_zone[18:]
         else:
-            departure_time_zone = None
-            arrival_time_zone = None
+            departure_time_zone,arrival_time_zone = [None]*2
 
-        # info = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
-        # soup = self.request(info)
-        # Airport distance and duration can be misleading. Be careful with using these. 
-        # airport_id = soup.find_all('div', {'class': 'a2_ak'})
-        # airport_id = [i.text for i in airport_id if 'ICAO' in i.text]
-        # departure_ID = airport_id[0].split()[2]
-        # destination_ID = airport_id[1].split()[2]
-
-        
-        # fa_data = self.flight_aware_data(query)     # TODO: This shouldn't be here. move it to views.py 
-
-        # Matching flightaware departure and destination with base for accuracy
         print('Success at pull_UA for scheduled_dep and arr with time zone')
         bulk_flight_deet = {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
-                #  'departure_ID': departure_ID,          # From united-flights.info web.
-                #  'destination_ID':destination_ID,       # From united-flights.info web.
-
-                 'scheduled_departure_time': departure_time_zone,
-                 'scheduled_arrival_time': arrival_time_zone,
+                            'scheduled_departure_time': departure_time_zone,
+                            'scheduled_arrival_time': arrival_time_zone,
                                             }
 
         return bulk_flight_deet
@@ -80,23 +61,25 @@ class Pull_flight_info(Root_class):
         soup = self.request(info)
         # Airport distance and duration can be misleading. Be careful with using these. 
         # table = soup.find('div', {'class': 'a2'})
-        airport_id = soup.find_all('div', {'class': 'a2_ak'})
-        airport_id = [i.text for i in airport_id if 'ICAO' in i.text]
-        departure_ID = airport_id[0].split()[2]
-        destination_ID = airport_id[1].split()[2]
-        print('Success at united_flight_stat scrape for dep and des ID')
+        try: 
+            airport_id = soup.find_all('div', {'class': 'a2_ak'})
+            airport_id = [i.text for i in airport_id if 'ICAO' in i.text]
+            departure_ID = airport_id[0].split()[2]
+            destination_ID = airport_id[1].split()[2]
+            print('Success at united_flight_stat scrape for dep and des ID')
+        except:
+            departure_ID, destination_ID = [None]*2
 
         return {'departure_ID': departure_ID,
                 'destination_ID': destination_ID}
 
 
-
-    def gs_sorting(self,dep_ID, dest_ID):
+    def nas_final_packet(self,dep_ID, dest_ID):
         # TODO: airport closures remaining
         departure_ID = dep_ID[1:]       # Stripping off the 'K' since NAS uses 3 letter airport ID
         destination_ID = dest_ID[1:]
 
-        nas_delays = self.nas_status()          # Doing the scraping here
+        nas_delays = self.nas_packet_pull()          # Doing the scraping here
         airport_closures = nas_delays['Airport Closure']
         ground_stop_packet = nas_delays['ground_stop_packet']
         ground_delay_packet = nas_delays['ground_delay_packet']
@@ -199,7 +182,7 @@ class Pull_flight_info(Root_class):
                 'destination_affected': destination_affected}
 
 
-    def nas_status(self):
+    def nas_packet_pull(self):
         '''
         import pickle
         with open('et_root_eg_1.pkl', 'wb') as f:
@@ -275,7 +258,7 @@ class Pull_flight_info(Root_class):
                 }
 
 
-    def pull_dep_des(self, query, airport=None):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
+    def flight_view_gate_info(self, query, airport=None):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
 
         flt_num = query
 
@@ -415,7 +398,7 @@ class Pull_flight_info(Root_class):
                             rh = ''.join(rh)
                         sv = f"https://skyvector.com/?fpl=%20{origin}{rh}%20{destination}"
 
-                        sv = f"https://skyvector.com/api/lchart?fpl=%20{origin}{rh}%20{destination}"
+                        # sv = f"https://skyvector.comi/api/lchart?fpl=%20{origin}{rh}%20{destination}"
                         print(sv)     
 
                         break

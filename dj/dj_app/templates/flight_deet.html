@@ -87,7 +87,7 @@
 
 <table class="route">
     <tr>
-        <th>ROUTE (<a href="#" onclick="showMap('{{ sv }}'); return false;">MAP</a>)</th>
+        <th>ROUTE (<a href="{{ sv }}" target="_blank">MAP</a>)</th>
     </tr>
     <tr>
         <td>({{ filed_altitude }})  {{ route }}  (ETE {{ filed_ete }})</td>
@@ -195,56 +195,5 @@ Empty search returns information on all gates for United flights in KEWR.
     <button type="submit">Search</button>
 </form>
 </div>
-
-<script>
-  function toggleAccordion(contentId) {
-    var content = document.getElementById(contentId);
-    var tbody = content.querySelector("tbody"); // Select the tbody element inside the content
-    
-    if (tbody.style.display === "none" || tbody.style.display === "") {
-      tbody.style.display = "table-row-group"; // Show the content
-    } else {
-      tbody.style.display = "none"; // Hide the content
-    }
-  }
-
-  function showMap(mapUrl) {
-        // Get the container div
-        var mapContainer = document.getElementById('map-container');
-
-        // Clear any existing content in the container
-        mapContainer.innerHTML = '';
-
-        // Create an iframe element
-        var iframe = document.createElement('iframe');
-
-        // Set the source of the iframe to the SkyVector map URL
-        iframe.src = mapUrl;
-
-        // Set the width and height of the iframe (adjust as needed)
-        iframe.width = '800';
-        iframe.height = '600';
-
-        // Append the iframe to the container
-        mapContainer.appendChild(iframe);
-    }
-
-
-</script>
-
-
-<style>
-  .comparison-table thead th{
-    position: sticky;
-    top: 0;
-    background-color: #474350;
-    z-index: 1;
-  }
-  
-  .header-button {
-    cursor: pointer;
-  }
-</style>
-
 
 {% endblock %}

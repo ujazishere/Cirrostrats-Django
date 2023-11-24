@@ -11,7 +11,8 @@ import json
 
 class Weather_display:
     def __init__(self) -> None:
-        pass
+        self.red_html_highlight = r'<span class="highlight-red">\1\2</span>'
+        self.BKN_OVC_PATTERN = r"(BKN|OVC)(0[0-1]\d)"
     
     def scrape(self, query=None):
         
@@ -34,10 +35,9 @@ class Weather_display:
         if type(datis) == list and 'datis' in datis[0].keys():
             datis_raw = datis[0]['datis']
 
-        html_data = r'<span class="highlight-red">\1\2</span>'
 
-        highlighted_metar = re.sub(r'(BKN|OVC)(0[0-1]\d)', html_data, metar_raw)
-        highlighted_taf = re.sub(r'(BKN|OVC)(0[0-1]\d)', html_data, taf_raw)
+        highlighted_metar = re.sub(self.BKN_OVC_PATTERN, self.red_html_highlight, metar_raw)
+        highlighted_taf = re.sub(self.BKN_OVC_PATTERN, self.red_html_highlight, taf_raw)
         highlighted_taf = highlighted_taf.replace("FM", "<br>\xa0\xa0\xa0\xa0FM")   # line break for FM section in TAF for HTML
 
         return dict({ 'D-ATIS': datis_raw, 'METAR': highlighted_metar, 'TAF': highlighted_taf})

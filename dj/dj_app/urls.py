@@ -21,6 +21,7 @@ urlpatterns = [
     path('report', views.report_an_issue, name = 'report'), #report page.
     path('live_map', views.live_map, name = 'live_map'), #live_map page.
     path('dummy2', views.dummy2, name = 'dummy2'), #live_map page.
+    path('data_v', views.data_v, name = 'data_v'), #live_map page.
 
  
 ]
