@@ -1,6 +1,15 @@
 Practice readibility and simplicity. Include description and documentation for others to read and make changes to it
 
 **IS:   
+
+        summery box shadow and expand/collapse (fast)animation.
+        Move `Show on SkyVector Map` to the right end and grey it out a tiny bit and decrease font.
+        
+        Workout 401 forbidden error; CSFR token issues on main web.
+        **understand JavaScript <script> tag** and how its implemented with views.py and urls.py
+            Implement asynchronous loading of the data on the flight_deet page.
+                Load data incrementally so as to avoid waiting for all data to be fetched.
+        Explore vim manoeuvers
     
         
 **UV:   
@@ -13,7 +22,6 @@ Practice readibility and simplicity. Include description and documentation for o
             Add departure/approach runways in use.
         integrate EDCT info  from https://www.fly.faa.gov/edct/jsp/edctLookUp.jsp
         Remove sql database and create own for seamless lightweight version.
-        401 forbidden error; CSFR token issues.
         Fix bug that takes in 2 flight routes for singular flight number.
             Add option to scroll left and right for dates. 
         Implement asynchronous loading of the data on the flight_deet page.

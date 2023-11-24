@@ -239,32 +239,16 @@ def live_map(request):
 def dummy2(request):
     return(render(request, 'dummy2.html'))
 
+# This function gets loaded within the dummy2 page whilst dummy2 func gets rendered.
 @require_GET
-def data_v(request):
-    sleep(2)
+def data_v(request):        
+    sleep(1)
     data = {
         'name': 'John',
         'age': 25,
         'city': 'New York',
         'occupation': 'Software Engineer',
         'is_student': False
-    }
-
-    return JsonResponse(data)
-
-def data_v(request):
-    sleep(2)
-    
-    # Assuming you have a specific query parameter that identifies the flight number
-    # You need to replace 'YOUR_FLIGHT_NUMBER' with the actual parameter name
-    flight_number = request.GET.get('flight_number')
-
-    # Call the flight_deets function to get the data for the specified flight number
-    bulk_flight_deets = flight_deets(request, flight_number)
-
-    # Create the data dictionary for JSON response
-    data = {
-        'flight_deets': bulk_flight_deets
     }
 
     return JsonResponse(data)

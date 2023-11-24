@@ -12,25 +12,23 @@
     <title>Dummy Page</title>
 </head>
 <body>
-    <h1 id="name-placeholder">Loading...</h1>
+    <h1 id="name-placeholder"></h1> <!-- The text does not show up, instead nameElement.innerHTML's value shows up-->
 
     <script>
         var nameElement = document.getElementById('name-placeholder');
 
         // Set initial content when the page loads
         document.addEventListener('DOMContentLoaded', function() {
-            nameElement.innerHTML = "Initial Content";
+            nameElement.innerHTML = "Loading...";
 
             // Fetch data asynchronously after the page has loaded
-            setTimeout(function() {
-                fetch('data_v')
-                    .then(response => response.json())
-                    .then(data => {
-                        // Update the content with the actual data
-                        nameElement.innerHTML = "Name: " + data.name;
-                    })
-                    .catch(error => console.error('Error:testtt', error));
-            }, 3000); // 3000 milliseconds = 3 seconds
+            fetch('data_v')
+                .then(response => response.json())
+                .then(data => {
+                    // Update the content with the actual data
+                    nameElement.innerHTML = "Name: " + data.name;
+                })
+                .catch(error => console.error('Error:testtt', error));
         });
     </script>
 </body>
