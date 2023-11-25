@@ -6,12 +6,24 @@ body {
 .accordion-content {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 1.2s ease;
+  transition: max-height 0.3s ease;
 }
 
 .accordion-content.active {
   max-height: 1000px; 
   width: 100%;
+}
+
+.accordion-header {
+  /* Style for the header goes here */
+}
+
+.accordion-button.animate {
+  transition: transform 0.3s ease; /* Adjust the transition property based on your needs */
+}
+
+.accordion-button.animate.active {
+  transform: rotate(180deg); /* Adjust the transformation based on your needs */
 }
 
 
@@ -42,6 +54,11 @@ body {
   border-radius: 5px;
   outline: none; /* Remove outline on focus */
   background-color: #2D333B;
+  transition: transform 0.3s ease; /* Add transition property */
+}
+
+.accordion-button.active {
+  transform: rotate(180deg);
 }
 
 .accordion-button-container {
@@ -195,6 +212,12 @@ p {
   box-shadow: 0 0 0 1px #000000;
   border: 5px;
   border-collapse: collapse; /* Added border-collapse property */
+}
+
+.route a {
+  font-size: smaller;
+  margin-left: 10px; /* Adjust the margin-left as needed */
+  color: rgb(158, 156, 155); /* Change the color to your preference */
 }
 
 .dark-mode .route {

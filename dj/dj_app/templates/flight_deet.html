@@ -81,20 +81,17 @@
     </div>
 </div>
 
-<style>
-    .route a {
-        color: rgb(255, 93, 93); /* Change the color to your preference */
-    }
-</style>
+
 
 <table class="route">
     <tr>
-        <th>ROUTE (<a href="{{ sv }}" target="_blank">Show on SkyVector Map</a>)</th>
+        <th>ROUTE <a href="{{ sv }}" target="_blank">Show on SkyVector Map</a></th>
     </tr>
     <tr>
-        <td>({{ filed_altitude }})  {{ route }}</td>        <!-- ETE is removed beacuse it shows inaccurate info-->
+        <td>({{ filed_altitude }})  {{ route }}</td>
     </tr>
 </table>
+
 
 {% if nas_departure_affected %}
 <div class="table-wrapper">
@@ -213,20 +210,5 @@ Empty search returns information on all gates for United flights in KEWR.
 
   
 </script>
-
-  
-  
-  <style>
-    .comparison-table thead th{
-      position: sticky;
-      top: 0;
-      background-color: #474350;
-      z-index: 1;
-    }
-    
-    .header-button {
-      cursor: pointer;
-    }
-  </style>
 
 {% endblock %}
