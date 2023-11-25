@@ -96,13 +96,13 @@
     </tr>
 </table>
 
-{% if nas_packet.departure_affected %}
+{% if nas_departure_affected %}
 <div class="table-wrapper">
     <table class="another-table">
         <thead>
         </thead>
         <tbody>
-            {% for d1_key, d1_value in nas_packet.departure_affected.items %}
+            {% for d1_key, d1_value in nas_departure_affected.items %}
             <tr>
                 <td colspan="2">{{ d1_key }}</td>
             </tr>
@@ -152,13 +152,13 @@
     </div>
 </div>
 
-{% if nas_packet.destination_affected %}
+{% if nas_destination_affected %}
 <div class="table-wrapper">
     <table class="another-table">
         <thead>
         </thead>
         <tbody>
-            {% for d1_key, d1_value in nas_packet.destination_affected.items %}
+            {% for d1_key, d1_value in nas_destination_affected.items %}
             <tr>
                 <td colspan="2">{{ d1_key }}</td>
             </tr>

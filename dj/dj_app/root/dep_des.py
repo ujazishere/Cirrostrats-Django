@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as bs4
 from .root_class import Root_class
+from .flight_aware_data_pull import fa_data_pull_test
 import xml.etree.ElementTree as ET
 import re
 import pytz
@@ -177,9 +178,9 @@ class Pull_flight_info(Root_class):
                                                 'Maximum': max_delay,
                                                 'Trend': trend}})
 
-        print('Done NAS through gs_sorting')
-        return {'departure_affected': departure_affected,
-                'destination_affected': destination_affected}
+        print('Providing NAS final packet dict through nas_final_packet', departure_affected, destination_affected)
+        return {'nas_departure_affected': departure_affected,
+                'nas_destination_affected': destination_affected}
 
 
     def nas_packet_pull(self):
@@ -215,6 +216,7 @@ class Pull_flight_info(Root_class):
         affected_airports = [i.text for i in root.iter('ARPT')]
         affected_airports = list(set(affected_airports))
         affected_airports.sort()
+        print(affected_airports)
 
         airport_closures = []
         closure = root.iter('Airport_Closure_List')
@@ -248,7 +250,7 @@ class Pull_flight_info(Root_class):
                     for a in x:
                         arr_dep_del_list.append([a.tag, a.text])
         
-        print('done NAS pull through nas_status')
+        print('Done NAS pull through nas_packet_pull')
         return {'update_time': update_time,
                 'affected_airports': affected_airports,
                 'ground_stop_packet': ground_stop_packet, 
@@ -313,122 +315,6 @@ class Pull_flight_info(Root_class):
         
         # print(departure, destination)
 
-    def flight_aware_data(self, query):
-
-        apiKey = "V2M5XJKNC5L1oJb0Dxukt0HJ7c8cxXDQ"
-        apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
-        auth_header = {'x-apikey':apiKey}
-
-        """
-        airport = 'KSFO'
-        payload = {'max_pages': 2}
-        auth_header = {'x-apikey':apiKey}
-        response = requests.get(apiUrl + f"airports/{airport}/flights",
-            params=payload, headers=auth_header)
-        
-        # fa_flight_id = ""
-        # response = requests.get(apiUrl + f"flights/{fa_flight_id}/route", headers=auth_header)
-        
-        """
-
-        response = requests.get(apiUrl + f"flights/UAL{query}", headers=auth_header)
-
-        route = None        # Declaring not available unless available throught flights
-        filed_altitude, filed_ete = None, None
-        if response.status_code == 200:
-            flights = response.json()['flights']
-
-            """
-            # these flights are across 10 days and hence iter across them
-            for i in range(len(flights)):
-                fa_flight_id = flights[i]['fa_flight_id']
-                origin = flights[i]['origin']['code_icao']
-                destination = flights[i]['destination']['code_icao']
-                scheduled_out = flights[i]['scheduled_out']
-                estimated_out = flights[i]['estimated_out']
-                actual_out = flights[i]['actual_out']
-                scheduled_off = flights[i]['scheduled_off']
-                estimated_off = flights[i]['estimated_off']
-                actual_off = flights[i]['actual_off']
-                scheduled_on = flights[i]['scheduled_on']
-                estimated_on = flights[i]['estimated_on']
-                actual_on = flights[i]['actual_on']
-                scheduled_in = flights[i]['scheduled_in']
-                estimated_in = flights[i]['estimated_in']
-                actual_in = flights[i]['actual_in']
-                
-                route = flights[i]['route']
-                gate_origin = flights[i]['gate_origin']
-                gate_destination = flights[i]['gate_destination']
-                terminal_origin = flights[i]['terminal_origin']
-                terminal_destination = flights[i]['terminal_destination']
-                registration = flights[i]['registration']
-                departure_delay = flights[i]['departure_delay']
-                arrival_delay = flights[i]['arrival_delay']
-                filed_ete = flights[i]['filed_ete']
-                filed_altitude = flights[i]['filed_altitude']
-            """
-
-            if flights:
-                for i in range(3):
-                    if flights[i]['route']:
-                        origin = flights[i]['origin']['code_icao']
-                        destination = flights[i]['destination']['code_icao']
-                        registration = flights[i]['registration']
-                        print(origin)
-                        scheduled_out_fa = flights[i]['scheduled_out']
-                        scheduled_out = re.search("T(\d{2}:\d{2})", scheduled_out_fa).group(1).replace(":","") + "Z"
-                        estimated_out = flights[i]['estimated_out']
-                        estimated_out = re.search("T(\d{2}:\d{2})", estimated_out).group(1).replace(":","") + "Z"
-
-                        scheduled_in = flights[i]['scheduled_in']
-                        scheduled_in = re.search("T(\d{2}:\d{2})", scheduled_in).group(1).replace(":","") + "Z"
-                        estimated_in = flights[i]['estimated_in']
-                        estimated_in = re.search("T(\d{2}:\d{2})", estimated_in).group(1).replace(":","") + "Z"
-
-                        route = flights[i]['route']
-                        filed_altitude =  "FL" + str(flights[i]['filed_altitude'])
-                        filed_ete = flights[i]['filed_ete']
-
-                        rs = route.split()
-                        if len(rs) > 1:
-                            rh = []
-                            for i in rs:
-                                rh.append(f"%20{rs[rs.index(i)]}")
-                            rh = ''.join(rh)
-                        sv = f"https://skyvector.com/?fpl=%20{origin}{rh}%20{destination}"
-
-                        # sv = f"https://skyvector.comi/api/lchart?fpl=%20{origin}{rh}%20{destination}"
-                        print(sv)     
-
-                        break
-
-                    else:
-                        filed_ete, filed_altitude, route, estimated_in = [None] * 4
-                        scheduled_in, estimated_out, scheduled_out = [None] * 3
-                        registration, destination, origin, sv = [None] * 4
-
-            else:
-                filed_ete, filed_altitude, route, estimated_in = [None] * 4
-                scheduled_in, estimated_out, scheduled_out = [None] * 3
-                registration, destination, origin, sv = [None] * 4
-
-            print('done f_a_data')
-            return {
-                    'origin':origin, 
-                    'destination':destination, 
-                    'registration':registration, 
-                    'scheduled_out':scheduled_out, 
-                    'estimated_out':estimated_out, 
-                    'scheduled_in':scheduled_in, 
-                    'estimated_in':estimated_in, 
-                    'route':route, 
-                    'filed_altitude':filed_altitude, 
-                    'filed_ete':filed_ete,
-                    'sv': sv,
-                    # 'scheduled_out_fa': scheduled_out_fa
-                            }
-                           
-        else:
-            print(response.status_code)
-        
+    
+    def fa_data_pull_test(self, query):
+        return fa_data_pull_test(query)

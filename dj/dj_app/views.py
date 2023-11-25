@@ -151,7 +151,7 @@ def flight_deets(request, query):
 
     with ThreadPoolExecutor(max_workers=3) as executor:
         futures1 = executor.submit(flt_info.fs_dep_arr_timezone_pull, query)
-        futures2 = executor.submit(flt_info.flight_aware_data, query)
+        futures2 = executor.submit(flt_info.fa_data_pull_test, query)
         futures_dep_des = executor.submit(flt_info.united_flight_status_info_scrape, query)
     
     results = []

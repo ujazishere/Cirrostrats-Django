@@ -17,8 +17,8 @@ class Root_class():
         now = datetime.now(eastern)
         latest_time = now.strftime("%#I:%M%p, %b %d.")
         if raw_utc:
-            raw_utc = pytz.timezone('UTC')
-            return datetime.now(raw_utc)
+            raw_UTC_instant = str(datetime.utcnow())[:10].replace('-','')  # Format is YYYYMMDD
+            return raw_UTC_instant
         elif raw:         # format yyyymmdd
             return now.strftime('%Y%m%d')       # date format yyyymmdd
         elif viewable:
