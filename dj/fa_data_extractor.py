@@ -56,6 +56,45 @@ for a,resp in responses.items():
 print(tots)
 # >>> dict : 998
 
+# The amount of flights. typically 15.
+tots = {}
+for key, val in responses.items():
+    all_flights = responses[key].json()['flights']
+    fifty_three_typicals = len(all_flights)
+    tots[fifty_three_typicals] = tots.get(fifty_three_typicals, 0) +1
+
+# check how many dictionaries are within the `flight` list type
+tots = {}       # Column 0 is the ammount of dictionaries and column 1 is their occurances
+for i in range(2000):
+    try:
+        print(i)
+        all_flights = responses[i].json()['flights']
+        fifty_three_typicals = len(all_flights)
+        if fifty_three_typicals == 0:
+            fifty_three_typicals = "Non"
+        tots[fifty_three_typicals] = tots.get(fifty_three_typicals, 0) +1
+    except:
+        print(i)
+        all_flights = responses[i].json()['flights']
+        print(len(all_flights))
+        break
+print(tots)
+
+# flatten out all dictionaries within the `flights``
+all_dictionaries = []
+for key, val in responses.items():
+    # Each flight with have upto 15 dictionaries in list form.
+    all_flights = responses[key].json()['flights']  
+    # Hence, all_flights is a list type that contains upto 15 dictionaries
+    
+    tot_in_flights_list = len(all_flights)
+    if tot_in_flights_list != 0:    # Some of these lists are empty
+        for five_three_dicts in all_flights:    # iter through all dictionaries
+            all_dictionaries.append(five_three_dicts)        
+
+
+
+
 # Look up the 0th item in the associated list. In this case `flights`
 list(list(responses.values())[0].json().keys())[0]
 # >>> 'flights'

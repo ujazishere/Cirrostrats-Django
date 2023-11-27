@@ -30,7 +30,6 @@ def home(request):
     # Homepage first skips a "POST", goes to else and returns home.html since the query is not submitted yet.
     if request.method == "POST":
         main_query = request.POST.get('query','')
-        print('1 main_qqq', main_query)
         
         # This one adds similar queries to the admin panel in SearchQuerys.
         # Make it such that the duplicates are grouped using maybe unique.
@@ -44,13 +43,12 @@ def home(request):
 
 
 def parse_query(request, main_query):
-    print('iside parser query')
     main_query = main_query
     query_in_list_form = []     # Global variable since it is used outside of the if statement in case it was not triggered. purpose: Handeling Error
                                     # if .split() method is used outside here it can return since empty strings cannot be split.
                                     
     if main_query == '':        # query is empty then return all gates
-        print('insde just prior to the gate_info func')
+        print('Empty query: Inside just prior to the gate_info func')
         return gate_info(request, main_query='')
     if 'DUMM' in main_query.upper():
         return dummy(request)
@@ -60,16 +58,17 @@ def parse_query(request, main_query):
     if main_query != '':
         query_in_list_form = main_query.split()
         if len(query_in_list_form) == 1:            # If query is only one word or item  
-            print(2)
             query = query_in_list_form[0].upper()           # this is string form instead of list
-            if query[:2] == 'UA':
-                flight_initials = query[:2]
-                flgiht_digits = query[2:]
-                return flight_deets(request, flgiht_digits)
-            elif 'A' in query or 'B' in query or 'C' in query or len(query)==1:     # Accounting for 1 letter only
+            if query[:2] == 'UA' or query[:3] == 'GJS':         # Here you can also account for other airlines
+                airline_code = None         
+                if query[0] == 'G':
+                    airline_code, flgiht_digits = query[:3], query[3:]          # Its GJS
+                else:
+                    flgiht_digits = query[2:]       # Its UA
+                print('\nSearching for:', airline_code,flgiht_digits)
+                return flight_deets(request, airline_code=airline_code,query=flgiht_digits)
+            elif 'A' in query or 'B' in query or 'C' in query or len(query) == 1:     # Accounting for 1 letter only
                 # When the length of query_in_list_form is only 1 it returns gates table for that particular query.
-                print(3)
-            elif 'A' in query or 'B' in query or 'C' in query or len(query) == 1:
                 gate_query = query
                 return gate_info(request, main_query=gate_query)
             elif len(query) == 4 or len(query) == 3 or len(query) == 2:
@@ -78,7 +77,7 @@ def parse_query(request, main_query):
                     if 1 <= query <= 35 or 40 <= query <= 136:
                         return gate_info(request, main_query=str(query))
                     else:
-                        return flight_deets(request, query)
+                        return flight_deets(request,airline_code=None,query=query)
                 else:
                     return gate_info(request, main_query=str(query))
             else:
@@ -94,7 +93,7 @@ def parse_query(request, main_query):
             return metar_display(request, weather_query_airport)
 
         if first_letter == 'I':        
-            return flight_deets(request, query_in_list_form)
+            return flight_deets(request,airline_code=None,query_in_list_form=query_in_list_form)
         else:       # If the query is not recognized:
             return gate_info(request, main_query=main_query)
             '''
@@ -142,16 +141,15 @@ def gate_info(request, main_query):
         return render(request, 'flight_info.html', {'gate': gate})
 
 
-def flight_deets(request, query):
+def flight_deets(request,airline_code=None, query=None):
     # given a flight number it returns its, gates, scheduled and actual times of departure and arrival
 
-    print(query)
     flt_info = Pull_flight_info()           # from dep_des.py file
     weather = Weather_display()         # from MET_TAF_parse.py
-
+    
     with ThreadPoolExecutor(max_workers=3) as executor:
         futures1 = executor.submit(flt_info.fs_dep_arr_timezone_pull, query)
-        futures2 = executor.submit(flt_info.fa_data_pull_test, query)
+        futures2 = executor.submit(flt_info.fa_data_pull_test, airline_code, query)
         futures_dep_des = executor.submit(flt_info.united_flight_status_info_scrape, query)
     
     results = []
@@ -166,7 +164,7 @@ def flight_deets(request, query):
     
     departure_ID, destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
     fa_departure_ID, fa_destination_ID = flight_aware_data_pull['origin'], flight_aware_data_pull['destination']
-
+    
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures3 = executor.submit(weather.scrape, departure_ID)
         futures4 = executor.submit(weather.scrape, destination_ID)

@@ -1,7 +1,7 @@
 import requests
+import pickle
 from .root_class import Root_class
 import re
-
 
 class Flight_aware_pull(Root_class):
     def __init__(self) -> None:
@@ -11,7 +11,7 @@ class Flight_aware_pull(Root_class):
         self.attrs = dict(zip(attrs,[None]*len(attrs)))
         self.current_utc = self.date_time(raw_utc=True)
 
-    def initial_pull(self, query):
+    def initial_pull(self, airline_code=None, query=None):
         apiKey = "V2M5XJKNC5L1oJb0Dxukt0HJ7c8cxXDQ"
         apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
         auth_header = {'x-apikey':apiKey}
@@ -26,22 +26,40 @@ class Flight_aware_pull(Root_class):
         # response = requests.get(apiUrl + f"flights/{fa_flight_id}/route", headers=auth_header)
         
         """
-
-        response = requests.get(apiUrl + f"flights/UAL{query}", headers=auth_header) 
+        if not airline_code:
+            airline_code = 'UAL'
+        response = requests.get(apiUrl + f"flights/{airline_code}{query}", headers=auth_header) 
         
         if response.status_code == 200:
             return response.json()['flights']
         else:
             print('RESPONSE STATUS CODE NOT 200!!!', response.status_code)
             return None    
+
+
+def flight_aware_data_pull(airline_code=None, query=None,):
     
-        
-def fa_data_pull_test(query,):
-    print('in fa_data_pulllll')
-    flights = Flight_aware_pull().initial_pull(query)
+    
+    if not airline_code:
+        airline_code = 'UAL'
+    pull_dummy = False
+
+    if pull_dummy:
+        # Use this to recall a dummy flight packet:
+        print('\n CALLING DUMMY FILE IN flight_aware_data_pull \n')
+        with open ('dummy_flight_aware_packet.pkl', 'rb') as f:
+            flights = pickle.load(f)
+    else:
+        flights = Flight_aware_pull().initial_pull(airline_code=airline_code,query=query)
+    
     current_UTC = Flight_aware_pull().current_utc
     route = None        # Declaring not available unless available throught flights
     filed_altitude, filed_ete = None, None
+    
+    # Use this to dump a dummy flight packet:
+    # with open('dummy_flight_aware_packet.pkl', 'wb') as f:
+        # pickle.dump(flights,f)
+
 
     """
     # these flights are across 10 days and hence iter across them
@@ -76,14 +94,25 @@ def fa_data_pull_test(query,):
 
     if flights:
         for i in range(3):      # There are typically 15 of these for multiple dates
+            scheduled_out_raw_fa = flights[i]['scheduled_out']
+            date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time
+
             if flights[i]['route']:
+                
                 origin = flights[i]['origin']['code_icao']
                 destination = flights[i]['destination']['code_icao']
                 registration = flights[i]['registration']
-                scheduled_out_fa = flights[i]['scheduled_out']
-                print(scheduled_out_fa)
-                scheduled_out = re.search("T(\d{2}:\d{2})", scheduled_out_fa).group(1).replace(":","") + "Z"
-                estimated_out = flights[i]['estimated_out']
+
+                scheduled_out_raw_fa = flights[i]['scheduled_out']
+                date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time
+                print('Current_UTC', current_UTC)
+                print('Date_out', date_out)
+                
+                if current_UTC == date_out:
+                    pass
+
+                scheduled_out = re.search("T(\d{2}:\d{2})", scheduled_out_raw_fa).group(1).replace(":","") + "Z"
+                estimated_out = flights[i]['estimated_out']     # Rename this to date or time or both 
                 estimated_out = re.search("T(\d{2}:\d{2})", estimated_out).group(1).replace(":","") + "Z"
 
                 scheduled_in = flights[i]['scheduled_in']
@@ -103,21 +132,24 @@ def fa_data_pull_test(query,):
                     rh = ''.join(rh)
                 sv = f"https://skyvector.com/?fpl=%20{origin}{rh}%20{destination}"
 
-                # sv = f"https://skyvector.comi/api/lchart?fpl=%20{origin}{rh}%20{destination}"
+                # sv = f"https://skyvector.comi/api/lchart?fpl=%20{origin}{rh}%20{destination}"     # This is for api
 
+                print('\n Successfully completed FlightAware pull ')
                 break
 
             else:
                 filed_ete, filed_altitude, route, estimated_in = [None] * 4
                 scheduled_in, estimated_out, scheduled_out = [None] * 3
                 registration, destination, origin, sv = [None] * 4
+                print('FLIGHT_AWARE_DATA UNSUCCESSFUL')
 
     else:
         filed_ete, filed_altitude, route, estimated_in = [None] * 4
         scheduled_in, estimated_out, scheduled_out = [None] * 3
         registration, destination, origin, sv = [None] * 4
+        print('FLIGHT_AWARE_DATA UNSUCCESSFUL')
 
-    print('done f_a_data')
+
     return {
             'origin':origin, 
             'destination':destination, 
@@ -130,7 +162,7 @@ def fa_data_pull_test(query,):
             'filed_altitude':filed_altitude, 
             'filed_ete':filed_ete,
             'sv': sv,
-            # 'scheduled_out_fa': scheduled_out_fa
+            # 'scheduled_out_raw_fa': scheduled_out_raw_fa
                     }
                        
     

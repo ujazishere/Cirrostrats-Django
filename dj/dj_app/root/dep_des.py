@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as bs4
 from .root_class import Root_class
-from .flight_aware_data_pull import fa_data_pull_test
+from .flight_aware_data_pull import flight_aware_data_pull
 import xml.etree.ElementTree as ET
 import re
 import pytz
@@ -55,8 +55,7 @@ class Pull_flight_info(Root_class):
         return bulk_flight_deet
 
 
-    def united_flight_status_info_scrape(self, query):
-
+    def united_flight_status_info_scrape(self, query=None):
         flt_num = query
         info = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
         soup = self.request(info)
@@ -178,7 +177,7 @@ class Pull_flight_info(Root_class):
                                                 'Maximum': max_delay,
                                                 'Trend': trend}})
 
-        print('Providing NAS final packet dict through nas_final_packet', departure_affected, destination_affected)
+        print('Providing NAS final packet dict through nas_final_packet')
         return {'nas_departure_affected': departure_affected,
                 'nas_destination_affected': destination_affected}
 
@@ -216,7 +215,7 @@ class Pull_flight_info(Root_class):
         affected_airports = [i.text for i in root.iter('ARPT')]
         affected_airports = list(set(affected_airports))
         affected_airports.sort()
-        print(affected_airports)
+        print('NAS affected airports:', affected_airports)
 
         airport_closures = []
         closure = root.iter('Airport_Closure_List')
@@ -299,7 +298,7 @@ class Pull_flight_info(Root_class):
                 departure_gate = None
             if 'min' in arrival_gate:
                 arrival_gate = None
-            print('success at pull_dep_des for gate info')
+            print('Success at pull_dep_des for gate info')
             return {'departure_gate': departure_gate,
                     'arrival_gate': arrival_gate,
                     }
@@ -316,5 +315,5 @@ class Pull_flight_info(Root_class):
         # print(departure, destination)
 
     
-    def fa_data_pull_test(self, query):
-        return fa_data_pull_test(query)
+    def fa_data_pull_test(self, airline_code=None,query=None):
+        return flight_aware_data_pull(airline_code=airline_code,query=query)
