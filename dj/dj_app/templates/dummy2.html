@@ -12,21 +12,70 @@
     <title>Dummy Page</title>
 </head>
 <body>
-    <h1 id="name-placeholder"></h1> <!-- The text does not show up, instead nameElement.innerHTML's value shows up-->
-
+    <link rel="stylesheet" type="text/css" href="{% static 'flight_deet.css' %}">
+    
+    <meta name="format-detection" content="telephone=no">
+    
+    <h3>United Flight Information</h3>
+    <h4 id="flight_number"> Results for </h4>
+    
+    
+    
+    <div id="loading"></div>
+    
+    <table class="summary-table">
+        <thead>
+            <tr>
+                <th colspan="2">Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            <td colspan="2" style="text-align: center;">
+                <span style="font-size: 18px;">{{ flight_number }}</span> <br>
+                {{ registration }}
+            </td>
+            <tr>
+                <td>{{ departure_ID }}</td>
+                <td>{{ destination_ID }}</td>
+            </tr>
+            <tr>
+                <td>{{ departure_gate }}</td>
+                <td>{{ arrival_gate }}</td>
+            </tr>
+            <tr>
+                <td>
+                    {{ scheduled_departure_time}} <br>
+                    STD {{ scheduled_out }} <br>
+                    ETD {{ estimated_out }}
+                </td>
+                <td>
+                    {{  scheduled_arrival_time }} <br>
+                    STA {{ scheduled_in }} <br>
+                    ETA {{ estimated_in }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h4 id="flight_number"> Results for </h4>
+    <h1 id="scheduled_departure_time"></h1> 
+    
     <script>
-        var nameElement = document.getElementById('name-placeholder');
+        var flight_number = document.getElementById('flight_number');
+        var scheduled_departure_time = document.getElementById('scheduled_departure_time');
 
         // Set initial content when the page loads
         document.addEventListener('DOMContentLoaded', function() {
-            nameElement.innerHTML = "Loading...";
+            flight_number.innerHTML = "Loading...";
+            scheduled_departure_time.innerHTML = "";
 
             // Fetch data asynchronously after the page has loaded
             fetch('data_v')
                 .then(response => response.json())
                 .then(data => {
                     // Update the content with the actual data
-                    nameElement.innerHTML = "Name: " + data;
+                    flight_number.innerHTML = data.flight_number;
+                    scheduled_departure_time.innerHTML = data.scheduled_departure_time;
                 })
                 .catch(error => console.error('Error:testtt', error));
         });

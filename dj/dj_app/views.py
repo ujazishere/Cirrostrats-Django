@@ -244,17 +244,47 @@ def dummy2(request):
 # This function gets loaded within the dummy2 page whilst dummy2 func gets rendered.
 @require_GET
 def data_v(request):        
-    sleep(1)
-    data = {
-        'name': 'John',
-        'age': 25,
-        'city': 'New York',
-        'occupation': 'Software Engineer',
-        'is_student': False
-    }
-    try:
-        bulk_flight_deets = pickle.load(open('dummy_flight_deet.pkl', 'rb'))
-    except:
-        bulk_flight_deets = pickle.load(open('/Users/ismailsakhani/Desktop/Cirrostrats/dj/dummy_flight_deet.pkl', 'rb'))
-    print(bulk_flight_deets)
+
+    airline_code = None
+    query = '4433'
+    flt_info = Pull_flight_info()           # from dep_des.py file
+    weather = Weather_display()         # from MET_TAF_parse.py
+    
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        futures1 = executor.submit(flt_info.fs_dep_arr_timezone_pull, query)
+        futures2 = executor.submit(flt_info.fa_data_pull_test, airline_code, query)
+        futures_dep_des = executor.submit(flt_info.united_flight_status_info_scrape, query)
+    
+    results = []
+    for future in as_completed([futures1,futures2, futures_dep_des]):
+        results.append(future.result())
+    bulk_flight_deets = {}
+    for i in results:
+        if 'origin' in i.keys():
+            flight_aware_data_pull = i
+        else:
+            bulk_flight_deets.update(i)
+    
+    departure_ID, destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
+    fa_departure_ID, fa_destination_ID = flight_aware_data_pull['origin'], flight_aware_data_pull['destination']
+    
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        futures3 = executor.submit(weather.scrape, departure_ID)
+        futures4 = executor.submit(weather.scrape, destination_ID)
+        futures5 = executor.submit(flt_info.nas_final_packet, departure_ID, destination_ID) # NAS
+        futures6 = executor.submit(flt_info.flight_view_gate_info, query, departure_ID) # Takes forever to load
+    
+    for future in as_completed([futures5,futures6]):
+        bulk_flight_deets.update(future.result())
+    bulk_flight_deets['dep_weather'] = futures3.result()
+    bulk_flight_deets['dest_weather'] = futures4.result()
+    
+    if  departure_ID != fa_departure_ID and destination_ID != fa_destination_ID:
+        for keys in flight_aware_data_pull.keys():
+            flight_aware_data_pull[keys]= None
+
+    bulk_flight_deets.update(flight_aware_data_pull)
+    for i in bulk_flight_deets.keys():
+        print(i)
+
     return JsonResponse(bulk_flight_deets)
