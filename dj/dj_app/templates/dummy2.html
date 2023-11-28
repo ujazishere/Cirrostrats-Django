@@ -31,11 +31,11 @@
         </thead>
         <tbody>
             <td colspan="2" style="text-align: center;">
-                <span style="font-size: 18px;">{{ flight_number }}</span> <br>
+                <span id= "flight_number" style="font-size: 18px;"></span> <br>
                 {{ registration }}
             </td>
             <tr>
-                <td>{{ departure_ID }}</td>
+                <td id="departure_ID"></td>
                 <td>{{ destination_ID }}</td>
             </tr>
             <tr>
@@ -63,11 +63,13 @@
     <script>
         var flight_number = document.getElementById('flight_number');
         var scheduled_departure_time = document.getElementById('scheduled_departure_time');
+        var departure_ID = document.getElementById('departure_ID')
 
         // Set initial content when the page loads
         document.addEventListener('DOMContentLoaded', function() {
             flight_number.innerHTML = "Loading...";
             scheduled_departure_time.innerHTML = "";
+            departure_ID.innerHTML = "";
 
             // Fetch data asynchronously after the page has loaded
             fetch('data_v')
@@ -76,6 +78,7 @@
                     // Update the content with the actual data
                     flight_number.innerHTML = data.flight_number;
                     scheduled_departure_time.innerHTML = data.scheduled_departure_time;
+                    departure_ID.innerHTML = data.departure_ID
                 })
                 .catch(error => console.error('Error:testtt', error));
         });
