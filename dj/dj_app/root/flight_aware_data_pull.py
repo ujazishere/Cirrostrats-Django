@@ -8,7 +8,9 @@ class Flight_aware_pull(Root_class):
         attrs = ['origin','destination','registration',
                  'scheduled_out','estimated_out','scheduled_in',
                  'estimated_in','route','filed_altitude','filed_ete','sv',]
+        
         self.attrs = dict(zip(attrs,[None]*len(attrs)))
+        
         self.current_utc = self.date_time(raw_utc=True)
 
     def initial_pull(self, airline_code=None, query=None):
@@ -42,6 +44,7 @@ def flight_aware_data_pull(airline_code=None, query=None,):
     
     if not airline_code:
         airline_code = 'UAL'
+    
     pull_dummy = False
 
     if pull_dummy:
@@ -50,7 +53,8 @@ def flight_aware_data_pull(airline_code=None, query=None,):
         with open ('dummy_flight_aware_packet.pkl', 'rb') as f:
             flights = pickle.load(f)
     else:
-        flights = Flight_aware_pull().initial_pull(airline_code=airline_code,query=query)
+        fa_object = Flight_aware_pull()
+        flights = fa_object.initial_pull(airline_code=airline_code,query=query)
     
     current_UTC = Flight_aware_pull().current_utc
     route = None        # Declaring not available unless available throught flights
@@ -60,6 +64,31 @@ def flight_aware_data_pull(airline_code=None, query=None,):
     # with open('dummy_flight_aware_packet.pkl', 'wb') as f:
         # pickle.dump(flights,f)
 
+    """
+    Prototype for reducing the code
+        You will need to delete the 'sv' key since its not associated with flight_aware.
+        this will associate all keys with associated flight_aware values as long as 
+            neither of them are None. if either value is None it'll clean all values back to none 
+
+    for i in range(len(flights)):
+        print(i)
+        for a, b in flights[i].items():     #looping through each of ~15 dicts within a list
+            if a in fa_object.attrs.keys():
+                if type(b) == dict:
+                    fa_object.attrs[a] = b['code'] 
+                else:
+                    fa_object.attrs[a] = b
+        if not None in  fa_object.attrs.values():
+            print(i)
+            break
+        for keys,vals in fa_object.attrs.items():
+            if not vals:
+                print(keys, vals)
+                print('vals are none')
+                for y in fa_object.attrs.keys():
+                    fa_object.attrs[y]=None 
+        
+    """
 
     """
     # these flights are across 10 days and hence iter across them
@@ -92,7 +121,7 @@ def flight_aware_data_pull(airline_code=None, query=None,):
         filed_altitude = flights[i]['filed_altitude']
     """
 
-    if flights:
+    if flights:     # sometimes flights returns empty list.
         for i in range(3):      # There are typically 15 of these for multiple dates
             scheduled_out_raw_fa = flights[i]['scheduled_out']
             date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time
@@ -138,15 +167,11 @@ def flight_aware_data_pull(airline_code=None, query=None,):
                 break
 
             else:
-                filed_ete, filed_altitude, route, estimated_in = [None] * 4
-                scheduled_in, estimated_out, scheduled_out = [None] * 3
-                registration, destination, origin, sv = [None] * 4
+                return fa_object.attrs
                 print('FLIGHT_AWARE_DATA UNSUCCESSFUL')
 
     else:
-        filed_ete, filed_altitude, route, estimated_in = [None] * 4
-        scheduled_in, estimated_out, scheduled_out = [None] * 3
-        registration, destination, origin, sv = [None] * 4
+        return fa_object.attrs
         print('FLIGHT_AWARE_DATA UNSUCCESSFUL')
 
 

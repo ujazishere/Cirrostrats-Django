@@ -13,6 +13,8 @@ Practice readibility and simplicity. Include description and documentation for o
     
         
 **UV:   
+        learn about multiprocessing vs multithreading and implement on flight_deet
+        prepare search query logic for disecting
         fix massive bug on flight_aware route date time conflict with real scheduled_time.
             currently it senses the most recent route that is not None type probs giving future date
             use: if scheduled_out is current_utc and route is not none:
@@ -26,6 +28,8 @@ Practice readibility and simplicity. Include description and documentation for o
             Add option to scroll left and right for dates. 
         Implement asynchronous loading of the data on the flight_deet page.
             Load data incrementally so as to avoid waiting for all data to be fetched.
+        consolidate menu pages within the Menu_page class in views.py
+        Fix up weather page and include ability to pull multiple airports
 
         App:
             swift language

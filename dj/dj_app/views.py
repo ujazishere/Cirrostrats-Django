@@ -182,7 +182,7 @@ def flight_deets(request,airline_code=None, query=None):
 
     bulk_flight_deets.update(flight_aware_data_pull)
     
-    # extracting a for a dummy file
+    # extracting metar for a dummy file
     # with open('lifr.pkl', 'wb') as f:
         # pickle.dump(bulk_flight_deets, f)
     
@@ -200,6 +200,10 @@ def metar_display(request,weather_query):
     return render(request, 'metar_info.html', {'airport': airport, 'weather': weather})
 
 
+class Menu_pages:
+    def __init__(self) -> None:
+        pass
+    
 def contact(request):
     return render(request, 'contact.html')
 
@@ -248,5 +252,9 @@ def data_v(request):
         'occupation': 'Software Engineer',
         'is_student': False
     }
-
-    return JsonResponse(data)
+    try:
+        bulk_flight_deets = pickle.load(open('dummy_flight_deet.pkl', 'rb'))
+    except:
+        bulk_flight_deets = pickle.load(open('/Users/ismailsakhani/Desktop/Cirrostrats/dj/dummy_flight_deet.pkl', 'rb'))
+    print(bulk_flight_deets)
+    return JsonResponse(bulk_flight_deets)

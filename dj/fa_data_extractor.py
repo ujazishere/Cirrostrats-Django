@@ -43,10 +43,17 @@ for response in other_responses.items():
 with open(r"C:\Users\ujasv\OneDrive\Desktop\fa_data_2023_11_21.pkl", "rb") as f:
     responses = pickle.load(f)
 
+# *********************************
+#************** VVI ***************
+# ********* PLEASE READ ***********
+# *********************************
+
 # In responses.items() the key is flight number, val is the status code.
 # val .json() is a dict type item whose keys are flights, links and num_pages
-# value of flights is a USUALLY a list type item. it can be an empty list as well
-    # This list usually contains 12-15 items each of them is a dict of 53 items
+# value of flights is a USUALLY a list type item. it can also be an empty list
+# This list usually contains 12-15 items each of them is a dict of 53 items
+# keys of this 53 item dict is a string and value can be a string or dict or null
+
 
 # Check all type of items and how many of then are there in tots
 tots = {}
@@ -56,7 +63,7 @@ for a,resp in responses.items():
 print(tots)
 # >>> dict : 998
 
-# The amount of flights. typically 15.
+# The amount of flights(dict form) and their occourances. typically 15.
 tots = {}
 for key, val in responses.items():
     all_flights = responses[key].json()['flights']
@@ -64,21 +71,6 @@ for key, val in responses.items():
     tots[fifty_three_typicals] = tots.get(fifty_three_typicals, 0) +1
 
 # check how many dictionaries are within the `flight` list type
-tots = {}       # Column 0 is the ammount of dictionaries and column 1 is their occurances
-for i in range(2000):
-    try:
-        print(i)
-        all_flights = responses[i].json()['flights']
-        fifty_three_typicals = len(all_flights)
-        if fifty_three_typicals == 0:
-            fifty_three_typicals = "Non"
-        tots[fifty_three_typicals] = tots.get(fifty_three_typicals, 0) +1
-    except:
-        print(i)
-        all_flights = responses[i].json()['flights']
-        print(len(all_flights))
-        break
-print(tots)
 
 # flatten out all dictionaries within the `flights``
 all_dictionaries = []
@@ -91,6 +83,14 @@ for key, val in responses.items():
     if tot_in_flights_list != 0:    # Some of these lists are empty
         for five_three_dicts in all_flights:    # iter through all dictionaries
             all_dictionaries.append(five_three_dicts)        
+
+# get rid of all key values pairs whose values are null:
+x = {}
+example_flights = responses[0].json()['flights']
+for a,b in flights[0].items():
+    if type(b) != dict:
+        if b:
+            x.update({a:b})
 
 
 

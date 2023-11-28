@@ -26,7 +26,7 @@
                 .then(response => response.json())
                 .then(data => {
                     // Update the content with the actual data
-                    nameElement.innerHTML = "Name: " + data.name;
+                    nameElement.innerHTML = "Name: " + data;
                 })
                 .catch(error => console.error('Error:testtt', error));
         });
