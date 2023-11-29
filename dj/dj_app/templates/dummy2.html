@@ -36,49 +36,95 @@
             </td>
             <tr>
                 <td id="departure_ID"></td>
-                <td>{{ destination_ID }}</td>
+                <td id="destination_ID"></td>
             </tr>
             <tr>
-                <td>{{ departure_gate }}</td>
-                <td>{{ arrival_gate }}</td>
+                <td id="departure_gate"></td>
+                <td id="arrival_gate"></td>
             </tr>
             <tr>
                 <td>
-                    {{ scheduled_departure_time}} <br>
-                    STD {{ scheduled_out }} <br>
-                    ETD {{ estimated_out }}
+                    <span id="scheduled_departure_time"></span> <br>
+                    <span id="scheduled_out"></span> <br>
+                    <span id="estimated_out"></span>
                 </td>
                 <td>
-                    {{  scheduled_arrival_time }} <br>
-                    STA {{ scheduled_in }} <br>
-                    ETA {{ estimated_in }}
+                    <span id="scheduled_arrival_time"></span> <br>
+                    <span id="scheduled_in"></span> <br>
+                    <span id="estimated_in"></span>
                 </td>
             </tr>
+            
         </tbody>
     </table>
-    
-    <h4 id="flight_number"> Results for </h4>
-    <h1 id="scheduled_departure_time"></h1> 
-    
+
+    <div id="departure-container" class="table-container">
+        <div class="accordion-button-container">
+        <div class="accordion-content active" id="departure-content-{{ departure_ID }}">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="header-button" onclick="toggleAccordion('departure-content-{{ departure_ID }}')">
+                                &#9660; Departure
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <td style="width: 100%; text-align: left;">
+                        <span style="float: left; width: 33%;">{{ scheduled_departure_time }} ({{scheduled_out}})</span>
+                        <span style="float: left; width: 33%; text-align: center;">{{ departure_ID }}</span>
+                        <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }} ({{registration}})</span>
+                    </td>
+                    
+                    <tr>{% for metar_taf_title, metar_taf_data in dep_weather.items %}</tr>
+                    <tr>
+                        <td>{{ metar_taf_title }}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-family: Menlo, monospace;">{{ metar_taf_data|safe }}</td>                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
     <script>
         var flight_number = document.getElementById('flight_number');
-        var scheduled_departure_time = document.getElementById('scheduled_departure_time');
-        var departure_ID = document.getElementById('departure_ID')
+        var departure_ID = document.getElementById('departure_ID');
+        var destination_ID = document.getElementById('destination_ID')
+        var departure_gate = document.getElementById('departure_gate')
+        var arrival_gate = document.getElementById('arrival_gate')
+        var scheduled_departure_time = document.getElementById('scheduled_departure_time')
+        var scheduled_out = document.getElementById('scheduled_out')
+        var estimated_out = document.getElementById('estimated_out')
+        var scheduled_arrival_time = document.getElementById('scheduled_arrival_time') 
+        var scheduled_in = document.getElementById('scheduled_in') 
+        var scheduled_in = document.getElementById('scheduled_in') 
+
 
         // Set initial content when the page loads
         document.addEventListener('DOMContentLoaded', function() {
             flight_number.innerHTML = "Loading...";
-            scheduled_departure_time.innerHTML = "";
             departure_ID.innerHTML = "";
+            departure_ID.innerHTML = "";
+            destination_ID.innerHTML = "";
+            departure_gate.innerHTML = "";
+            arrival_gate.innerHTML = "";
+            scheduled_departure_time.innerHTML = "";
+            scheduled_out.innerHTML = "";
+            estimated_out.innerHTML = "";
+            scheduled_arrival_time.innerHTML = ""
+            scheduled_in.innerHTML = "";
+
 
             // Fetch data asynchronously after the page has loaded
             fetch('data_v')
                 .then(response => response.json())
                 .then(data => {
                     // Update the content with the actual data
-                    flight_number.innerHTML = data.flight_number;
-                    scheduled_departure_time.innerHTML = data.scheduled_departure_time;
-                    departure_ID.innerHTML = data.departure_ID
+                    flight_number.innerHTML = data.flight_number; departure_ID.innerHTML = data.departure_ID; destination_ID.innerHTML = data.destination_ID; departure_gate.innerHTML = data.departure_gate; arrival_gate.innerHTML = data.arrival_gate; scheduled_departure_time.innerHTML = data.scheduled_departure_time; scheduled_out.innerHTML = data.scheduled_out; estimated_out.innerHTML = data.estimated_out; scheduled_arrival_time.innerHTML = data.scheduled_arrival_time; scheduled_in.innerHTML = data.scheduled_in;
                 })
                 .catch(error => console.error('Error:testtt', error));
         });
