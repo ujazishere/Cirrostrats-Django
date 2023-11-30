@@ -30,8 +30,8 @@
         </thead>
         <tbody>
             <td colspan="2" style="text-align: center;">
-                <span id= "flight_number" style="font-size: 18px;"></span> <br>
-                {{ registration }}
+                <span id="flight_number_registration" style="font-size: 18px;"></span> <br>
+                {{ flight_number }} {{ registration }}
             </td>
             <tr>
                 <td id="departure_ID"></td>
@@ -72,9 +72,10 @@
                 </thead>
                 <tbody>
                     <td style="width: 100%; text-align: left;">
-                        <span style="float: left; width: 33%;">{{ scheduled_departure_time }} ({{scheduled_out}})</span>
-                        <span style="float: left; width: 33%; text-align: center;">{{ departure_ID }}</span>
-                        <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }} ({{registration}})</span>
+                        <span id="scheduled_departure_time" style="float: left; width: 33%;"></span>
+                        <span id="departure_ID" style="float: left; width: 33%; text-align: center;"></span>
+                        <span id="departure_gate_registration" style="float: right; width: 33%; text-align: right;"></span>
+
                     </td>
                     
                     <tr>{% for metar_taf_title, metar_taf_data in dep_weather.items %}</tr>
@@ -82,12 +83,25 @@
                         <td>{{ metar_taf_title }}</td>
                     </tr>
                     <tr>
-                        <td style="text-align: left; font-family: Menlo, monospace;">{{ metar_taf_data|safe }}</td>                {% endfor %}
+                        <td style="text-align: left; font-family: Menlo, monospace;">{{ metar_taf_data|safe }}</td>                           
+                        {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 
+
+    <table class="route">
+        <tr>
+            <th id="sv">ROUTE <a href="#" target="_blank">Show on SkyVector Map</a></th>
+        </tr>
+        <tr>
+            <td id="filed_altitude"></td>
+        </tr>
+        <tr>   
+            <td id="route"></td>
+        </tr>
+    </table>
 
     <script>
         var flight_number = document.getElementById('flight_number');
@@ -100,7 +114,16 @@
         var estimated_out = document.getElementById('estimated_out')
         var scheduled_arrival_time = document.getElementById('scheduled_arrival_time') 
         var scheduled_in = document.getElementById('scheduled_in') 
-        var scheduled_in = document.getElementById('scheduled_in') 
+        var estimated_in = document.getElementById('estimated_in')
+        var sv = document.getElementById('sv')
+        var filed_altitude = document.getElementById('filed_altitude')
+        var route = document.getElementById('route')
+        var scheduledDepartureTimeElement = document.getElementById('scheduled_departure_time');
+    var departureIdElement = document.getElementById('departure_ID');
+    var departureGateRegistrationElement = document.getElementById('departure_gate_registration');
+    var metar_taf_data = document.getElementById ('metar_taf_data')
+ 
+        
 
 
         // Set initial content when the page loads
@@ -116,17 +139,42 @@
             estimated_out.innerHTML = "";
             scheduled_arrival_time.innerHTML = ""
             scheduled_in.innerHTML = "";
+            estimated_in.innerHTML = "";
+            sv.innerHTML = "";
+            route.innerHTML = "";
+            scheduledDepartureTimeElement.innerHTML = "";
+        departureIdElement.innerHTML = "";
+        departureGateRegistrationElement.innerHTML = "";
 
 
-            // Fetch data asynchronously after the page has loaded
+
+
             fetch('data_v')
-                .then(response => response.json())
-                .then(data => {
-                    // Update the content with the actual data
-                    flight_number.innerHTML = data.flight_number; departure_ID.innerHTML = data.departure_ID; destination_ID.innerHTML = data.destination_ID; departure_gate.innerHTML = data.departure_gate; arrival_gate.innerHTML = data.arrival_gate; scheduled_departure_time.innerHTML = data.scheduled_departure_time; scheduled_out.innerHTML = data.scheduled_out; estimated_out.innerHTML = data.estimated_out; scheduled_arrival_time.innerHTML = data.scheduled_arrival_time; scheduled_in.innerHTML = data.scheduled_in;
-                })
-                .catch(error => console.error('Error:testtt', error));
-        });
+        .then(response => response.json())
+        .then(data => {
+            flight_number.innerHTML = data.flight_number;
+            departure_ID.innerHTML = data.departure_ID;
+            destination_ID.innerHTML = data.destination_ID;
+            departure_gate.innerHTML = data.departure_gate;
+            arrival_gate.innerHTML = data.arrival_gate;
+            scheduled_departure_time.innerHTML = data.scheduled_departure_time;
+            scheduled_out.innerHTML = data.scheduled_out;
+            estimated_out.innerHTML = data.estimated_out;
+            scheduled_arrival_time.innerHTML = data.scheduled_arrival_time;
+            scheduled_in.innerHTML = data.scheduled_in;
+            estimated_in.innerHTML = data.estimated_in;
+            filed_altitude.innerHTML = data.filed_altitude;
+            route.innerHTML = data.route;
+            sv.innerHTML = data.sv;
+                scheduledDepartureTimeElement.innerHTML = data.scheduled_departure_time;
+                departureIdElement.innerHTML = data.departure_ID;
+                departureGateRegistrationElement.innerHTML = data.departure_gate;
+
+            // Update the content for the SkyVector link
+            sv.href = data.sv;
+        })
+        .catch(error => console.error('Error:testtt', error));
+});
     </script>
 </body>
 </html>
