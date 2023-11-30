@@ -14,7 +14,7 @@ Practice readibility and simplicity. Include description and documentation for o
         
 **UV:   
         learn about multiprocessing vs multithreading and implement on flight_deet
-        prepare search query logic for disecting
+        prepare search query logic for disecting typical searches
         fix massive bug on flight_aware route date time conflict with real scheduled_time.
             currently it senses the most recent route that is not None type probs giving future date
             use: if scheduled_out is current_utc and route is not none:

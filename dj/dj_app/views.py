@@ -116,7 +116,8 @@ def parse_query(request, main_query):
 
 def dummy(request):
     try:
-        bulk_flight_deets = pickle.load(open('latest_bulk_11_28', 'rb'))
+        bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_28.pkl"
+        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
     except:
         bulk_flight_deets = pickle.load(open('/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_28.pkl', 'rb'))
     print(bulk_flight_deets)   
@@ -251,7 +252,8 @@ def data_v(request):
     print('were here')
     sleep(0.1)
     try:
-        bulk_flight_deets = pickle.load(open('latest_bulk_11_28', 'rb'))
+        bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_28.pkl"
+        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
     except:
         bulk_flight_deets = pickle.load(open('/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_28.pkl', 'rb'))
     for a, b in bulk_flight_deets.items():

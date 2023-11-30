@@ -31,18 +31,64 @@ airport_ID = [i for i in id if len(i) ==3 and i.isalpha()]      # Investigate th
 print(len(airport_ID))
 
 def code_tag(airport_id):
-    TAF = 'on'
+    """
+    # Archieve
     awc_web = f"https://aviationweather.gov/metar/data?ids=K{airport_id}&format=raw&hours=0&taf={TAF}&layout=on"
-
-    response = requests.get(awc_web)
-    soup = bs4(response.content, 'html.parser')
-    code_tag = soup.find_all('code')
+    """
     
-    return code_tag
+    # Metar gives data upto 15 days ago and TAF gives upto 17 days ago
+    # awc_taf_api = f"https://aviationweather.gov/api/data/taf?ids={airport_id}&hours=408"
+    awc_metar_api = f"https://aviationweather.gov/api/data/metar?ids={airport_id}&hours=360"
+    
+    metar_raw = requests.get(awc_metar_api)
+    metar_raw = metar_raw.content
+    metar_raw = metar_raw.decode("utf-8")
+
+    return metar_raw
+
+# Prepending K to 3 leter codes 
+new_id = []
+for i in id:
+    if len(i) == 3:
+        prepend = 'K' + i
+        new_id.append(prepend)
+    else:
+        new_id.append(i)
+
+# seperating id's that contain digit since those mostly dont have associated metars/TAFs
+x = set()
+for i in new_id:
+    for char in i:
+        if char.isdigit():
+            x.add(i)
+ids_with_digit = list(x)
+ids_without_digit = new_id
+for i in ids_with_digit:
+    ids_without_digit.remove(i)
 
 
+# without concurrent futures threadpool executor. Inefficient but stable
+# For somme reason ends up with only 21460 items in the bulky)metar
+count = 0
+bulky_metar = []
+for airport_id in ids_without_digit:
+    count += 1
+    metars = code_tag(airport_id)
+    if not metars:
+        print('no metar', airport_id)
+    else:
+        metars_in_list_form = metars.split('\n')
+        for a_metar in metars_in_list_form:
+            bulky_metar.append(a_metar)
+        if count >30:
+            break
+
+
+
+# The Unstable efficient version that pulls upto 8 indexes for whatever reason
+# Same as the stable inefficient version: ends up with only 21460 items in the list
+airport_ID = ids_without_digit
 met_taf = []        # This is essentially code_tag. Using a seperate variable to avoid clashes
-troubled = []
 with ThreadPoolExecutor(max_workers=500) as executor:
     # First argument in submit method is the function without parenthesis. VVI second is each airport ID
     futures = {executor.submit(code_tag, airport): airport for airport in airport_ID}
@@ -50,18 +96,13 @@ with ThreadPoolExecutor(max_workers=500) as executor:
     for future in as_completed(futures):
         # Again. future here as well is the memory location.
         airport_id_2 = futures[future]
-        try:
-            result = future.result()    # result is the output of the task of the memory location
-            met_taf.append(result)
-        except Exception as e:
-            troubled.append(airport_id_2)
+        result = future.result()    # result is the output of the task of the memory location
+        if result:
+            cleaned = result.split('\n')
+            if cleaned:
+                for each_metar in cleaned:
+                    met_taf.append(each_metar)
 
-code_tag = met_taf
-# stripping off empty list to avoid error
-met_taf = [x for x in met_taf if x]
-# print(met_taf)
-
-# metar_stack = [str(list(i)[0].text) for i in met_taf]
 
 # for each in met_taf(which is essentially a code_tag), if the code_tag is exactly 2 items(one metar and other TAF)
     # then TAF is good if it is only 1 or less item then that item is most probably METAR)

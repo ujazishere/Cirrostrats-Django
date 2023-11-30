@@ -137,7 +137,7 @@ def flight_aware_data_pull(airline_code=None, query=None,):
                 print('Current_UTC', current_UTC)
                 print('Date_out', date_out)
                 
-                if current_UTC == date_out:
+                if current_UTC == date_out:     # zulu time clashes with local time from other source
                     pass
 
                 scheduled_out = re.search("T(\d{2}:\d{2})", scheduled_out_raw_fa).group(1).replace(":","") + "Z"
@@ -167,12 +167,12 @@ def flight_aware_data_pull(airline_code=None, query=None,):
                 break
 
             else:
-                return fa_object.attrs
                 print('FLIGHT_AWARE_DATA UNSUCCESSFUL')
+                return fa_object.attrs
 
     else:
-        return fa_object.attrs
         print('FLIGHT_AWARE_DATA UNSUCCESSFUL')
+        return fa_object.attrs
 
 
     return {
@@ -187,7 +187,6 @@ def flight_aware_data_pull(airline_code=None, query=None,):
             'filed_altitude':filed_altitude, 
             'filed_ete':filed_ete,
             'sv': sv,
-            # 'scheduled_out_raw_fa': scheduled_out_raw_fa
                     }
                        
     
