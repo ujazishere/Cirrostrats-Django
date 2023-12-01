@@ -68,26 +68,34 @@ class Weather_display:
             # print(f"DUMPING RAW WEATHER DATA")
             # pickle.dump(raw_weather_dummy_data, f)
 
-        # LIFR PAttern >>> Anything below 5 to pink
+        # LIFR PAttern >>> Anything below 5 to pink METAR
         low_ifr_metar = re.sub(self.BKN_OVC_PATTERN_LIFR, self.pink_text_color, metar_raw)
-        # LIFR pattern >>> anything below 5 to pink
+        # LIFR pattern >>> anything below 5 to pink TAF 
         low_ifr_taf = re.sub(self.BKN_OVC_PATTERN_LIFR, self.pink_text_color, taf_raw)
+        # LIFR pattern >>> anything below 5 to pink DATIS 
+        low_ifr_datis = re.sub(self.BKN_OVC_PATTERN_LIFR, self.pink_text_color, datis_raw)
 
 
-        # IFR Pattern
+        # IFR Pattern METAR
         ifr_metar = re.sub(self.BKN_OVC_PATTERN_IFR, self.red_text_color, low_ifr_metar)
-        # IFR pattern
-        
+        # IFR pattern TAF
         ifr_taf = re.sub(self.BKN_OVC_PATTERN_IFR, self.red_text_color, low_ifr_taf)
+        # IFR pattern DATIS
+        ifr_datis = re.sub(self.BKN_OVC_PATTERN_IFR, self.red_text_color, low_ifr_datis)
 
         # original metar alternate text color >> NEED HIGHLIGHT FOR ANYTHING BELOW 20
         highlighted_metar = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, ifr_metar)
-        
+
         # original taf alternate text color
         highlighted_taf = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, ifr_taf)
         highlighted_taf = highlighted_taf.replace("FM", "<br>\xa0\xa0\xa0\xa0FM")   # line break for FM section in TAF for HTML
+        
+        
+
+        highlighted_datis = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, ifr_datis) 
+        
+
         print(highlighted_metar,'\n\n', highlighted_taf)
 
-
-
-        return dict({ 'D-ATIS': datis_raw, 'METAR': highlighted_metar, 'TAF': highlighted_taf})
+        return dict({ 'D-ATIS': highlighted_datis, 'METAR': highlighted_metar, 'TAF': highlighted_taf})
+        
