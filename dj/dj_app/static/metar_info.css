@@ -155,20 +155,22 @@ tbody tr:nth-child(odd) {
   }
 }
 
-.highlight-red {    
-    background-color: rgb(255, 0, 0); 
-    padding: 4px; 
-    border-radius: 5px;
+.dark-mode .highlight-red {
+  background-color: #2D333B(159, 26, 26);
+  border-radius: 4px;
+  border: 1px solid #ffffff; /* Specify the border style (solid) and color (#000000) */
+  border-collapse: collapse;
+  
 }
 
 .pink_text_color {
-    color: rgb(255, 0, 255); 
+    color: #be38e1; 
     padding: 4px; 
     border-radius: 5px;
 }
 
 .red_text_color {
-    color: rgb(255, 0, 0); 
+    color: rgb(227, 79, 79); 
     padding: 4px; 
     border-radius: 5px;
 }
