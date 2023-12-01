@@ -89,9 +89,6 @@ class Weather_display:
         # original taf alternate text color
         highlighted_taf = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, ifr_taf)
         highlighted_taf = highlighted_taf.replace("FM", "<br>\xa0\xa0\xa0\xa0FM")   # line break for FM section in TAF for HTML
-        
-        
-
         highlighted_datis = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, ifr_datis) 
         
 

@@ -10,6 +10,9 @@ Practice readibility and simplicity. Include description and documentation for o
             Implement asynchronous loading of the data on the flight_deet page.
                 Load data incrementally so as to avoid waiting for all data to be fetched.
         Explore vim manoeuvers
+        move searchbar on all pages to header of the site
+        dynamic color for text on tables
+        
     
         
 **UV:   
