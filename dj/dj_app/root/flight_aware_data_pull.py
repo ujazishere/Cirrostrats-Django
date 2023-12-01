@@ -1,6 +1,7 @@
 import requests
 import pickle
 from .root_class import Root_class
+# from dj.dj_app.root.root_class import Root_class
 import re
 
 class Flight_aware_pull(Root_class):
@@ -61,7 +62,7 @@ def flight_aware_data_pull(airline_code=None, query=None,):
     filed_altitude, filed_ete = None, None
     
     # Use this to dump a dummy flight packet:
-    # with open('dummy_flight_aware_packet.pkl', 'wb') as f:
+        # with open('dummy_flight_aware_packet.pkl', 'wb') as f:
         # pickle.dump(flights,f)
 
     """
@@ -120,14 +121,12 @@ def flight_aware_data_pull(airline_code=None, query=None,):
         filed_ete = flights[i]['filed_ete']
         filed_altitude = flights[i]['filed_altitude']
     """
-
+    print('trying flights')
     if flights:     # sometimes flights returns empty list.
-        for i in range(3):      # There are typically 15 of these for multiple dates
+        for i in range(len(flights)):      # There are typically 15 of these for multiple dates
             scheduled_out_raw_fa = flights[i]['scheduled_out']
             date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time
-
             if flights[i]['route']:
-                
                 origin = flights[i]['origin']['code_icao']
                 destination = flights[i]['destination']['code_icao']
                 registration = flights[i]['registration']
@@ -163,15 +162,12 @@ def flight_aware_data_pull(airline_code=None, query=None,):
 
                 # sv = f"https://skyvector.comi/api/lchart?fpl=%20{origin}{rh}%20{destination}"     # This is for api
 
-                print('\n Successfully completed FlightAware pull ')
+                print('\nSuccessfully completed FlightAware pull')
                 break
 
-            else:
-                print('FLIGHT_AWARE_DATA UNSUCCESSFUL')
-                return fa_object.attrs
 
     else:
-        print('FLIGHT_AWARE_DATA UNSUCCESSFUL')
+        print('FLIGHT_AWARE_DATA UNSUCCESSFUL, Couldnt find flights')
         return fa_object.attrs
 
 

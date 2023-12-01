@@ -116,11 +116,40 @@ def parse_query(request, main_query):
 
 def dummy(request):
     try:
-        bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_28.pkl"
+        bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
         bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
     except:
-        bulk_flight_deets = pickle.load(open('/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_28.pkl', 'rb'))
-    print(bulk_flight_deets)   
+        bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
+    
+    # print('OLD with html highlights', bulk_flight_deets)
+
+    try: # UJ PC PATH
+        ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
+        ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
+        with open(ind, 'rb') as f:
+            dep_weather = pickle.load(f)
+        with open(ord, 'rb') as f:
+            dest_weather = pickle.load(f)
+        
+        weather = Weather_display()
+        bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
+        weather = Weather_display()
+        bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
+
+    except:     # ISMAIL MAC PATH
+        is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
+        is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
+        with open(is_ind, 'rb') as f:
+            dep_weather = pickle.load(f)
+        with open(is_ord, 'rb') as f:
+            dest_weather = pickle.load(f)
+        weather = Weather_display()
+        bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
+        weather = Weather_display()
+        bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
+    
+    # print('NEW WEATHER WITH NEW HIGHLIGHTS', bulk_flight_deets)
+    
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
@@ -183,8 +212,9 @@ def flight_deets(request,airline_code=None, query=None):
 
     bulk_flight_deets.update(flight_aware_data_pull)
     
-    # extracting metar for a dummy file
+    # Extracting metar for a dummy file
     # with open('latest_bulk_11_28.pkl', 'wb') as f:
+        # print("**DUMPING BULK_FLIGHT_DEETS AS latest_bulk PKL FILE**")
         # pickle.dump(bulk_flight_deets, f)
     # extracting metar for a dummy file
     # with open('lifr.pkl', 'wb') as f:
@@ -249,13 +279,15 @@ def dummy2(request):
 # This function gets loaded within the dummy2 page whilst dummy2 func gets rendered.
 @require_GET
 def data_v(request):        
-    print('were here')
-    sleep(0.1)
+    
+    sleep(0.5)
     try:
-        bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_28.pkl"
+        bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
         bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
     except:
-        bulk_flight_deets = pickle.load(open('/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_28.pkl', 'rb'))
+        bulk_flight_deets = pickle.load(open('/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
     for a, b in bulk_flight_deets.items():
         print(a,type(b))
+        if a=='registration':
+            print(b)
     return JsonResponse(bulk_flight_deets)

@@ -155,7 +155,19 @@ tbody tr:nth-child(odd) {
   }
 }
 
-.highlight-red {
+.highlight-red {    
+    background-color: rgb(255, 0, 0); 
+    padding: 4px; 
+    border-radius: 5px;
+}
+
+.pink_text_color {
+    color: rgb(255, 0, 255); 
+    padding: 4px; 
+    border-radius: 5px;
+}
+
+.red_text_color {
     color: rgb(255, 0, 0); 
     padding: 4px; 
     border-radius: 5px;

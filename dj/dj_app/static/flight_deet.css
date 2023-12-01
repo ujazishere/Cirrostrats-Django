@@ -423,11 +423,23 @@ table.another-table td:first-child {
 
 
 .highlight-red {
-    color: rgb(255, 0, 0); 
+    background-color: rgb(255, 0, 0); 
     padding: 4px; 
     border-radius: 5px;
 }
 
+
+.pink_text_color {
+    color: rgb(255, 0, 255); 
+    padding: 4px; 
+    border-radius: 5px;
+}
+
+.red_text_color {
+    color: rgb(255, 0, 0); 
+    padding: 4px; 
+    border-radius: 5px;
+}
 
 
 @media only screen and (max-width: 600px) {

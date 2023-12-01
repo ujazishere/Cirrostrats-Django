@@ -71,18 +71,20 @@ for i in ids_with_digit:
 # For somme reason ends up with only 21460 items in the bulky)metar
 count = 0
 bulky_metar = []
+no_mets = []
+yes_mets = []
 for airport_id in ids_without_digit:
     count += 1
     metars = code_tag(airport_id)
     if not metars:
-        print('no metar', airport_id)
+        no_mets.append(airport_id)
     else:
         metars_in_list_form = metars.split('\n')
         for a_metar in metars_in_list_form:
             bulky_metar.append(a_metar)
-        if count >30:
-            break
-
+        yes_mets.append(airport_id)
+    if count >30:
+        break
 
 
 # The Unstable efficient version that pulls upto 8 indexes for whatever reason

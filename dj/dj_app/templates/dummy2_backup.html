@@ -103,7 +103,7 @@
 
     <script>    //  Declare the variable
         var flight_number = document.getElementById('flight_number');
-        var registration = document.getElementById('registration');
+        // var registration = document.getElementById('registration');
         var departure_ID = document.getElementById('departure_ID');
         var destination_ID = document.getElementById('destination_ID')
         var departure_gate = document.getElementById('departure_gate')
@@ -153,10 +153,6 @@
         .then(data => {
             console.log(data);
             flight_number.innerHTML = data.flight_number;
-            if(!data.registration) {
-            console.warn('No registration in data'); // warn if missing
-}
-            registration.innerHTML = data.registration;
             departure_ID.innerHTML = data.departure_ID;
             destination_ID.innerHTML = data.destination_ID;
             
