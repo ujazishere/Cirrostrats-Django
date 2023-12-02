@@ -136,7 +136,8 @@ def dummy(request):
         weather = Weather_display()
         bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
 
-    except:     # ISMAIL MAC PATH
+    except Exception as e:     # ISMAIL MAC PATH
+        print(e)
         is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
         is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
         with open(is_ind, 'rb') as f:
@@ -148,7 +149,7 @@ def dummy(request):
         weather = Weather_display()
         bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
     
-    # print('NEW WEATHER WITH NEW HIGHLIGHTS', bulk_flight_deets)
+    # print('NEW WEATHER WITH NEW: HIGHLIGHTS', bulk_flight_deets)
     
     return render(request, 'flight_deet.html', bulk_flight_deets)
 

@@ -17,11 +17,70 @@ class Weather_display:
         self.red_highlight = r'<span class="highlight-red">\1\2</span>'
         
         # first digit between 1-2 then space all of it optional. Then digit and fwrd slash optional then digit then SM
-        self.SM_PATTERN = r"([1-2] )?(\d/)?(\d)?(\d)(SM)"
-        self.SM_PATTERN = r"([1-2] )?(\d/)?(\d)(SM)"    
+        self.SM_PATTERN = r"( [1-2] )?(\d/)?(\d)?(\d)(SM)"       # Matches all Visibilities with trailing SM
+        self.SM_PATTERN_fractions = r"([0-2] )?(\d/\d{1,2})SM"          # maps fractional visibilities between 1 and 3
+        self.SM_PATTERN_two_digit = r"^[0-9]?[0-9]SM"          # valid 1 and 2 digit visibility
+        self.SM_PATTERN_one_digit_ifr = r"^[0-2]SM"          # 0,1 and 2 SM only
         self.BKN_OVC_PATTERN_LIFR = r"(BKN|OVC)(00[0-4])"   # BKN or OVC,first two digit `0`, 3rd digit btwn 0-4
         self.BKN_OVC_PATTERN_IFR = r"(BKN|OVC)(00[5-9])"    # BKN/OVC below 10 but above 5
         self.BKN_OVC_PATTERN_alternate = r"(BKN|OVC)(0[1][0-9])"         # Anything and everything below 20
+
+    def visibility_work(self,incoming_weather_data):
+        def replacement(weather_raw_in, color_code, pattern_in):
+
+            # weather_raw_in is the preprocessed metar taf or datis.
+            # Replace color_code pattern with visibility pattern in it.
+            # Find regex pattern in the data_in. replace data that data_in visibility with processed color coded one
+            
+            local_color_code = str(color_code)
+            weather_raw_in = str(weather_raw_in)
+            
+            color_coded_pattern = local_color_code.replace(r'\1\2',pattern_in)
+
+            package_to_send = weather_raw_in.replace(pattern_in, color_coded_pattern)
+
+            return package_to_send
+
+
+        # CAUTION!!! SM_PATTERN taks into account all SM visibilities including ***leading empty space*** for fractionals
+        visibility_pattern = re.search(self.SM_PATTERN, incoming_weather_data)
+        # Do not use it for replacement in the fractional processing since thats where it might contains leading empty space.
+
+        if visibility_pattern:
+
+            visibility_pattern = visibility_pattern.group()
+            fractional_item = re.search(self.SM_PATTERN_fractions, visibility_pattern)
+
+            # First 4 {1,2} digit LIFR vis. Last 2 are IFR
+            lifr_and_ifr_vis = ['00SM','01SM','0SM','1SM', '02SM', '2SM']       
+            
+            processed_incoming_data = None      # Declaring variable for error handling
+            
+            if fractional_item:     # CAUTION!!! Contains leading empty space.
+                if len(fractional_item.group().split()) == 1:       # This is certainly LIFR
+                    processed_incoming_data = replacement(incoming_weather_data, self.pink_text_color, fractional_item.group())
+                    print('LIFR!!! found LIFR base fractional', fractional_item.group())
+
+                elif len(fractional_item.group().split()) > 1:      # This is IFR. Contains btween 1 and >3 SM in fractions
+                    # This is the fraction with leading empty space.
+                    processed_incoming_data = replacement(incoming_weather_data, self.red_text_color, fractional_item.group())
+                    print('IFR!!! Found leading empty space fractional', fractional_item.group())
+
+            elif visibility_pattern in lifr_and_ifr_vis:        # If not a fractional it is one or two digit SM and does not contain leading empty space
+                if visibility_pattern in lifr_and_ifr_vis[:4]:
+                    # This is LIFR {1,2} digits SM only
+                    print('HEREQQQQQ', type(visibility_pattern),visibility_pattern)
+                    processed_incoming_data = replacement(incoming_weather_data, self.pink_text_color, visibility_pattern)
+                    print('LIFR! {1,2} digit SM')
+                else:
+                    # This is IFR {1,2} diggits SM Only
+                    processed_incoming_data = replacement(incoming_weather_data, self.pink_text_color, visibility_pattern)
+                    print('IFR! {1,2} digit SM')
+        if processed_incoming_data:
+            return processed_incoming_data
+        else:
+            return incoming_weather_data
+        
 
     
     def scrape(self, query=None,dummy=None):
@@ -68,28 +127,38 @@ class Weather_display:
             # print(f"DUMPING RAW WEATHER DATA")
             # pickle.dump(raw_weather_dummy_data, f)
 
-        # LIFR PAttern >>> Anything below 5 to pink METAR
-        low_ifr_metar = re.sub(self.BKN_OVC_PATTERN_LIFR, self.pink_text_color, metar_raw)
-        # LIFR pattern >>> anything below 5 to pink TAF 
-        low_ifr_taf = re.sub(self.BKN_OVC_PATTERN_LIFR, self.pink_text_color, taf_raw)
-        # LIFR pattern >>> anything below 5 to pink DATIS 
-        low_ifr_datis = re.sub(self.BKN_OVC_PATTERN_LIFR, self.pink_text_color, datis_raw)
+        # LIFR PAttern for ceilings >>> Anything below 5 to pink METAR
+        low_ifr_metar_ceilings = re.sub(self.BKN_OVC_PATTERN_LIFR, self.pink_text_color, metar_raw)
+        # LIFR pattern for ceilings >>> anything below 5 to pink TAF 
+        low_ifr_taf_ceilings = re.sub(self.BKN_OVC_PATTERN_LIFR, self.pink_text_color, taf_raw)
+        # LIFR pattern for ceilings >>> anything below 5 to pink DATIS 
+        low_ifr_datis_ceilings = re.sub(self.BKN_OVC_PATTERN_LIFR, self.pink_text_color, datis_raw)
 
 
-        # IFR Pattern METAR
-        ifr_metar = re.sub(self.BKN_OVC_PATTERN_IFR, self.red_text_color, low_ifr_metar)
-        # IFR pattern TAF
-        ifr_taf = re.sub(self.BKN_OVC_PATTERN_IFR, self.red_text_color, low_ifr_taf)
-        # IFR pattern DATIS
-        ifr_datis = re.sub(self.BKN_OVC_PATTERN_IFR, self.red_text_color, low_ifr_datis)
+        # IFR Pattern for ceilings METAR
+        ifr_metar_ceilings = re.sub(self.BKN_OVC_PATTERN_IFR, self.red_text_color, low_ifr_metar_ceilings)
+        # IFR pattern for ceilings TAF
+        ifr_taf_ceilings = re.sub(self.BKN_OVC_PATTERN_IFR, self.red_text_color, low_ifr_taf_ceilings)
+        # IFR pattern for ceilings DATIS
+        ifr_datis_ceilings = re.sub(self.BKN_OVC_PATTERN_IFR, self.red_text_color, low_ifr_datis_ceilings)
+        
+        # ACCOUNT FOR VISIBILITY `1 /2 SM`  mind the space in betwee. SCA had this in TAF and its not accounted for.
 
-        # original metar alternate text color >> NEED HIGHLIGHT FOR ANYTHING BELOW 20
-        highlighted_metar = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, ifr_metar)
+        # LIFR PAttern for visibility >>> Anything below 5 to pink METAR
+        lifr_ifr_metar_visibility = self.visibility_work(ifr_metar_ceilings)
+        # LIFR pattern for visibility >>> anything below 5 to pink TAF 
+        lifr_ifr_taf_visibility = self.visibility_work(ifr_taf_ceilings)
+        # LIFR pattern for visibility >>> anything below 5 to pink DATIS 
+        lifr_ifr_datis_visibility = self.visibility_work(ifr_datis_ceilings)
 
-        # original taf alternate text color
-        highlighted_taf = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, ifr_taf)
+        # original metar alternate for ceilings text color >> NEED HIGHLIGHT FOR ANYTHING BELOW 20
+        highlighted_metar = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, lifr_ifr_metar_visibility)
+
+        # original taf alternate for ceilings text color
+        highlighted_taf = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, lifr_ifr_taf_visibility)
         highlighted_taf = highlighted_taf.replace("FM", "<br>\xa0\xa0\xa0\xa0FM")   # line break for FM section in TAF for HTML
-        highlighted_datis = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, ifr_datis) 
+        highlighted_datis = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, lifr_ifr_datis_visibility)
+
         
 
         print(highlighted_metar,'\n\n', highlighted_taf)
