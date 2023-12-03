@@ -15,7 +15,7 @@ class Weather_display:
         self.pink_text_color = r'<span class="pink_text_color">\1\2</span>'
         self.red_text_color = r'<span class="red_text_color">\1\2</span>'
         self.red_highlight = r'<span class="highlight-red">\1\2</span>'
-        
+
         # first digit between 1-2 then space all of it optional. Then digit and fwrd slash optional then digit then SM
         self.SM_PATTERN = r"( [1-2] )?(\d/)?(\d)?(\d)(SM)"       # Matches all Visibilities with trailing SM
         self.SM_PATTERN_fractions = r"([0-2] )?(\d/\d{1,2})SM"          # maps fractional visibilities between 1 and 3
@@ -26,6 +26,15 @@ class Weather_display:
         self.BKN_OVC_PATTERN_alternate = r"(BKN|OVC)(0[1][0-9])"         # Anything and everything below 20
 
     def visibility_work(self,incoming_weather_data):
+        """
+        import re
+        incoming_weather_data = 'KRIC 022355Z 10SM 0300/0324 00000KT 2SM BR VCSH FEW015 OVC060 TEMPO 0300/0303 1 1/2SM FG BKN015 FM030300 00000KT 1SM -SHRA FG OVC002 FM031300 19005KT 3/4SM BR OVC004 FM031500 23008KT 1/26SM OVC005 FM031800 25010KT 1/4SM OVC015 FM032100 25010KT M1/4SM BKN040'
+        SM_PATTERN = r"( [1-2] )?(\d/)?(\d)?(\d)(SM)"       # Matches all Visibilities with trailing SM
+        visibility_pattern = re.findall(SM_PATTERN, incoming_weather_data)
+        [''.join(i) for i in visibility_pattern]
+
+        """        
+
         def replacement(weather_raw_in, color_code, pattern_in):
 
             # weather_raw_in is the preprocessed metar taf or datis.
@@ -42,19 +51,20 @@ class Weather_display:
             return package_to_send
 
 
-        # CAUTION!!! SM_PATTERN taks into account all SM visibilities including ***leading empty space*** for fractionals
+        # CAUTION!!! SM_PATTERN takes into account all SM visibilities including ***leading empty space*** for fractionals
         visibility_pattern = re.search(self.SM_PATTERN, incoming_weather_data)
         # Do not use it for replacement in the fractional processing since thats where it might contains leading empty space.
 
+        processed_incoming_data = None      # Declaring variable for error handling
         if visibility_pattern:
 
             visibility_pattern = visibility_pattern.group()
+            print(visibility_pattern)
             fractional_item = re.search(self.SM_PATTERN_fractions, visibility_pattern)
 
             # First 4 {1,2} digit LIFR vis. Last 2 are IFR
             lifr_and_ifr_vis = ['00SM','01SM','0SM','1SM', '02SM', '2SM']       
             
-            processed_incoming_data = None      # Declaring variable for error handling
             
             if fractional_item:     # CAUTION!!! Contains leading empty space.
                 if len(fractional_item.group().split()) == 1:       # This is certainly LIFR
@@ -68,14 +78,14 @@ class Weather_display:
 
             elif visibility_pattern in lifr_and_ifr_vis:        # If not a fractional it is one or two digit SM and does not contain leading empty space
                 if visibility_pattern in lifr_and_ifr_vis[:4]:
-                    # This is LIFR {1,2} digits SM only
-                    print('HEREQQQQQ', type(visibility_pattern),visibility_pattern)
+                    # This is L-IFR {1,2} digits SM only
                     processed_incoming_data = replacement(incoming_weather_data, self.pink_text_color, visibility_pattern)
-                    print('LIFR! {1,2} digit SM')
+                    print('LIFR! {1,2} digit SM', visibility_pattern)
                 else:
                     # This is IFR {1,2} diggits SM Only
                     processed_incoming_data = replacement(incoming_weather_data, self.pink_text_color, visibility_pattern)
-                    print('IFR! {1,2} digit SM')
+                    print('IFR! {1,2} digit SM', visibility_pattern)
+        print('processed data', processed_incoming_data)
         if processed_incoming_data:
             return processed_incoming_data
         else:
@@ -91,6 +101,15 @@ class Weather_display:
             metar_raw = dummy['METAR']
             taf_raw = dummy['TAF']
             # print('RAW DUMMY WEATHER', dummy)
+            vis1 = 'FM030500 09004KT 1SM -RA BR OVC004'
+            vis_frac = 'FM031300 19005KT 1 1/2SM BR OVC004'
+            sfc_vis = 'IAD 030102Z 17003KT 0SM R01R/2800V4000FT FG VV002 11/10 A2999 RMK AO2 SFC VIS 1/4 T01110100 $'
+            vis_half = 'FM031000 07004KT 1/2SM -RA FG OVC003'
+            vis_half = 'FM031000 07004KT 1 1/2SM -RA FG OVC003'
+            
+            datis_raw = datis_raw + vis1 + vis_frac 
+            # taf_raw = metar_raw + sfc_vis + vis_half
+            taf_raw = 'KRIC 022355Z 0300/0324 00000KT 2SM BR VCSH FEW015 OVC060 TEMPO 0300/0303 1 1/2SM FG BKN015 FM030300 00000KT 1SM -SHRA FG OVC002 FM031300 19005KT 3/4SM BR OVC004 FM031500 23008KT 1/26SM OVC005 FM031800 25010KT 1/4SM OVC015 FM032100 25010KT M1/4SM BKN040'
 
         else:
         # Find ways to convert raw query input into identifiable airport ID
@@ -161,7 +180,6 @@ class Weather_display:
 
         
 
-        print(highlighted_metar,'\n\n', highlighted_taf)
 
         return dict({ 'D-ATIS': highlighted_datis, 'METAR': highlighted_metar, 'TAF': highlighted_taf})
         
