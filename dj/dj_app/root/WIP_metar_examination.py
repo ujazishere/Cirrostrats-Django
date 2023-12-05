@@ -25,24 +25,72 @@ heavy_met_key = list(met.keys())[0]
 heavy_metar = met[heavy_met_key]
 shortened = heavy_metar[:5000]
 
-# unique visibilities and occourances
-patt = r"( [1-2] )?(\d/)?(\d)?(\d)(SM)"
-tots = {}
+
+"""
+# unique visibilities and occourances. Caution. There are some that contains leading space before `SM`
+ifr_frac_patt = r"(?<= )([1-2] \d/\d)?((0)?[0-2])?(SM)"  This will give you all SM with leading empty spaces
+tots={}
 for each_metar in heavy_metar:
-    item = re.search(patt,each_metar)
+    item = re.search(ifr_frac_patt,each_metar)
     if item:
         item = item.group()
-        tots[item] = tots.get(item,0) + 1
+        if item == 'SM':
+            print(each_metar)
+        tots[item] = tots.get(item,0)+1
+"""
+#pattern that leads with vervbghrtical vis, Auto and KT pattern
+patt = r'(KT )?(\d\d )?(AUTO )?(\d \d/(\d)(\d)?)?(\d/\d)?(\d\d)?(\d)?SM '
+
+kt_patt = r'KT (\d \d/(\d)(\d)?)?(\d/\d)?(\d\d)?(\d)?SM '
+working_pattern = r"( [1-2] )?(\d/)?(\d)?(\d)(SM)"
+ifr_frac_patt = r"(?<= )([1-2] \d/\d)?((0)?[0-2])?(SM)"
+digit_and_fractional = r"(?<= )([1-2] \d/\dSM)(?= )"        # e.g: 2 1/2SM, 1 1/4SM
+tots = {}
+multiple_sm_item_metars = []
+for each_metar in heavy_metar:
+    vis_item = re.search(working_pattern,each_metar)
+    if vis_item:
+        vis_item = vis_item.group()
+        tots[vis_item] = tots.get(vis_item,0) + 1
+        
     else:
-        pass
+        SM_item = re.findall('SM',each_metar)
+        if SM_item:
+            if len(SM_item) == 2:
+                multiple_sm_item_metars.append(each_metar)
+                print('Multiple "SM" items in this metar')
+            elif len(SM_item) == 1:
+                SM_item_index = each_metar.index(SM_item)
+                block_around_SM = each_metar[SM_item_index-7:SM_item_index+10]
+            else:
+                print('IMPOSSIBLE END', each_metar)
+        else:
+            'NO SM ITEM'
 
-all_SM = list(tots.keys())
+all_keys = list(tots.keys())
 
+manageable_ones = []        # Keys that are only upto 200 max items.
+for k,v in tots.items():
+    if v<200:
+        manageable_ones.append(k)
+
+
+
+fancy_match = r"(?<= )(\d\dSM)(?= )"        # This matches preceding and next. essentially look forward and look back
+odd_ball_matches = r"(?<! )(\d\dSM )(?!S)"  # This matches all that does not have a leading space and trailing S
+odd_ball = "KASG 260148Z 13003KT FEW120SM CLR 08/03 A3000"
+leading_space = r"(?<= )"
+trailing_space = r"(?= )"
+two_digit_sm_less_than_10 = r"((?<= )0\dSM(?= ))"
+
+
+fractional_odd_balls = r"(?<! )\d \d/\dSM"       # This one matches all fractionals with space that has a leading digit
+patt_dec_3_latest = r"((?<= )(\d\d)(?= ))?(\d \d/\d)?(\d/\d)?(\d\d)?(SM)"
 # investigate odd looking visibilities
 SM_PATTERN_fractions = r"( [0-2] )?(\d/\d{1,2})SM"          # maps fractional visibilities between 1 and 3
 SM_PATTERN_two_digit = r"^[0-9]?[0-9]SM"          # valid 1 and 2 digit visibility
 odd_ball = []
-for each in all_SM:
+for each in all_keys:
     fractional_item = re.search(SM_PATTERN_fractions, each)
     if fractional_item:
         print('Fractional item:', fractional_item.group())
