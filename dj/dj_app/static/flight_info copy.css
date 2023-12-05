@@ -104,9 +104,6 @@ tbody tr:nth-child(odd) {
   max-width: 300px;
   width: 90%;
   margin: 0 auto;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
 }
 
 .search-form input[type="text"] {
@@ -124,10 +121,6 @@ tbody tr:nth-child(odd) {
   background-color: #2D333B;
   color: #ffffff;
   cursor: pointer;
-}
-
-.search-form.expanded {
-  max-height: 100px; /* Adjust the value based on your content */
 }
 
 @media only screen and (min-width: 600px) {
