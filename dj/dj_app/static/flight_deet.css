@@ -509,3 +509,6 @@ table.another-table td:first-child {
   width: 100%;
 }
 
+body {
+  margin-bottom: 100px;
+}
