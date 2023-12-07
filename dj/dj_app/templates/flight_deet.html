@@ -15,6 +15,10 @@
 
 <div id="loading"></div>
 
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
+</style>
+
 <table class="summary-table">
     <thead>
         <tr>
@@ -22,26 +26,27 @@
         </tr>
     </thead>
     <tbody>
-        <td colspan="2" style="text-align: center;">
-            <span style="font-size: 18px;">{{ flight_number }}</span> <br>
-            {{ registration }}
-        </td>
         <tr>
-            <td style="font-size: 28px;"> {{departure_ID}} </td>
-            <td style="font-size: 28px;"> {{destination_ID}} </td>
+            <td colspan="2" style="text-align: center;">
+            <span style="font-size: 30px; font-family: 'Open Sans', sans-serif; font-weight: 700;">{{ flight_number }}</span> <br> {{ registration }}
+             </td>
+
+        <tr>
+            <td style="font-size: 28px; font-family: 'Open Sans', sans-serif; font-weight: 700;">{{departure_ID}}</td>
+            <td style="font-size: 28px; font-family: 'Open Sans', sans-serif; font-weight: 700; text-align: right;">{{destination_ID}}</td>
         </tr>
         
         <tr>
-            <td style="font-size: 18px"> {{ departure_gate }}</td>
-            <td style="font-size: 18px;"> {{ arrival_gate }}</td>
+            <td style="font-size: 15px"> {{ departure_gate }}</td>
+            <td style="font-size: 15px;"> {{ arrival_gate }}</td>
         </tr>
         <tr>
-            <td style="font-size: 14px;">
+            <td style="font-size: 12px;">
                 {{ scheduled_departure_time}} <br>
                 STD {{ scheduled_out }} <br>
                 ETD {{ estimated_out }}
             </td>
-            <td style="font-size: 14px;">
+            <td style="font-size: 12px;">
                 {{ scheduled_arrival_time }} <br>
                 STA {{ scheduled_in }} <br>
                 ETA {{ estimated_in }}
