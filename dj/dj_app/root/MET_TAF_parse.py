@@ -14,10 +14,11 @@ class Weather_display:
     def __init__(self) -> None:
         self.pink_text_color = r'<span class="pink_text_color">\1\2</span>'
         self.red_text_color = r'<span class="red_text_color">\1\2</span>'
-        self.red_highlight = r'<span class="highlight-red">\1\2</span>'
+        self.yellow_highlight = r'<span class="yellow-highlight">\1\2</span>'
+        self.box_around_text = r'<span class="highlight-red">\1\2</span>'         # Change name to `box_around_text`
 
         # first digit between 1-2 then space all of it optional. Then digit and fwrd slash optional then digit then SM
-        self.lifr_fractional_patt = r'((?<! \d ))((M)?\d/(\d)?\dSM)'
+        self.lifr_fractional_patt = r'((?<! \d ))((M)?\d/(\d)?\dSM)'        # Just the fractional pattern
         self.ifr_fractional_patt = r'((?<!\d))(([0-2] )(\d/\d{1,2})SM)'
         self.lifr_single_or_douple = r'((?<= )0?)(0SM)'
         self.ifr_single_or_douple = r'((?<= )0?)([1,2]SM)'
@@ -30,6 +31,12 @@ class Weather_display:
         self.BKN_OVC_PATTERN_LIFR = r"(BKN|OVC)(00[0-4])"   # BKN or OVC,first two digit `0`, 3rd digit btwn 0-4
         self.BKN_OVC_PATTERN_IFR = r"(BKN|OVC)(00[5-9])"    # BKN/OVC below 10 but above 5
         self.BKN_OVC_PATTERN_alternate = r"(BKN|OVC)(0[1][0-9])"         # Anything and everything below 20
+
+        self.ALTIMETER_PATTERN = r"((?<= )A)(\d{4})"
+        self.FREEZING_TEMPS = r'(00|M\d\d)(/M?\d\d)'
+        self.ATIS_INFO = r"(DEP|ARR|ARR/DEP|ATIS)( INFO [A-Z])"
+
+        self.RW_IN_US = r'(ARRIVALS EXPECT|SIMUL|RUNWAYS|VISUAL|RNAV|ILS(,|RY|))(.*?)\.'
 
     def visibility_color_code(self,incoming_weather_data):
 
@@ -123,15 +130,17 @@ class Weather_display:
         lifr_ifr_datis_visibility = self.visibility_color_code(ifr_datis_ceilings)
 
         # original metar alternate for ceilings text color >> NEED HIGHLIGHT FOR ANYTHING BELOW 20
-        highlighted_metar = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, lifr_ifr_metar_visibility)
+        highlighted_metar = re.sub(self.BKN_OVC_PATTERN_alternate, self.yellow_highlight, lifr_ifr_metar_visibility)
 
         # original taf alternate for ceilings text color
-        highlighted_taf = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, lifr_ifr_taf_visibility)
+        highlighted_taf = re.sub(self.BKN_OVC_PATTERN_alternate, self.yellow_highlight, lifr_ifr_taf_visibility)
         highlighted_taf = highlighted_taf.replace("FM", "<br>\xa0\xa0\xa0\xa0FM")   # line break for FM section in TAF for HTML
-        highlighted_datis = re.sub(self.BKN_OVC_PATTERN_alternate, self.red_highlight, lifr_ifr_datis_visibility)
+        highlighted_datis = re.sub(self.BKN_OVC_PATTERN_alternate, self.yellow_highlight, lifr_ifr_datis_visibility)
 
-        
+        highlighted_datis = re.sub(self.ATIS_INFO, self.box_around_text, highlighted_datis)
+        highlighted_datis = re.sub(self.ALTIMETER_PATTERN, self.box_around_text, highlighted_datis)
+        highlighted_metar = re.sub(self.ALTIMETER_PATTERN, self.box_around_text, highlighted_metar)
 
-
+        print(highlighted_metar)
         return dict({ 'D-ATIS': highlighted_datis, 'METAR': highlighted_metar, 'TAF': highlighted_taf})
         

@@ -1,3 +1,16 @@
+pipeline for associating relevant info:
+The standard is to parse, in the ascending order, the most common pattern to the least common pattern.
+    This will expedite the process of finding relevant information for the majority of the
+    pattern(The common pattern) since the process stops right away after the common pattern is found
+    reducing processing power
+
+The key to find uncommon pattern is to extract and hide the most common patterns.
+
+
+
+IND ATIS INFO I 2054Z. 16004KT 1/2SM BR OVC004 08/08 A2978 (TWO NINER SEVEN EIGHT)
+asd A3033 aA2022
+. PARL ILS RWY 23R AND 23L APPROACHES IN USE. CROSS RUNWAY OPERATIONS MAY BE IN EFFECT. HIWAS. RWY 23R CONDITION CODES. , 5 , 5 , 5 AT 0816Z, RWY 23L CONDITION CODES. , 5 , 5 , 5 AT 0816Z, RWY 14 CONDITION CODES. , 5 , 5 , 5 AT 0816Z. ...ADVS YOU HAVE INFO I.FM030500 09004KT 00SM -RA BR OVC004FM031300 19005KT 1 1/2SM BR OVC004
 
 taf = " 10SM 10 SM 05SM 5SM 05 SM
  5 SM O2SM 2SM 02 SM 2 SM
@@ -50,3 +63,6 @@ KRIC 022355Z 0300/0324 00000KT 2SM BR VCSH FEW015 OVC060 TEMPO 0300/0303 1 1/2SM
     FM031500 23008KT 1/26SM OVC005
     FM031800 25010KT 1/4SM OVC015
     FM032100 25010KT M1/4SM BKN040
+
+
+

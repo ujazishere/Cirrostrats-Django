@@ -207,6 +207,7 @@ def flight_deets(request,airline_code=None, query=None):
     bulk_flight_deets['dep_weather'] = futures3.result()
     bulk_flight_deets['dest_weather'] = futures4.result()
     
+    # This section associates `None` of the origin and destination does not mactch/conflicts with two websites.
     if  departure_ID != fa_departure_ID and destination_ID != fa_destination_ID:
         for keys in flight_aware_data_pull.keys():
             flight_aware_data_pull[keys]= None
