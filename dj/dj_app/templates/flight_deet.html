@@ -27,21 +27,22 @@
             {{ registration }}
         </td>
         <tr>
-            <td>{{ departure_ID }}</td>
-            <td>{{ destination_ID }}</td>
+            <td style="font-size: 28px;"> {{departure_ID}} </td>
+            <td style="font-size: 28px;"> {{destination_ID}} </td>
+        </tr>
+        
+        <tr>
+            <td style="font-size: 18px"> {{ departure_gate }}</td>
+            <td style="font-size: 18px;"> {{ arrival_gate }}</td>
         </tr>
         <tr>
-            <td>{{ departure_gate }}</td>
-            <td>{{ arrival_gate }}</td>
-        </tr>
-        <tr>
-            <td>
+            <td style="font-size: 14px;">
                 {{ scheduled_departure_time}} <br>
                 STD {{ scheduled_out }} <br>
                 ETD {{ estimated_out }}
             </td>
-            <td>
-                {{  scheduled_arrival_time }} <br>
+            <td style="font-size: 14px;">
+                {{ scheduled_arrival_time }} <br>
                 STA {{ scheduled_in }} <br>
                 ETA {{ estimated_in }}
             </td>
