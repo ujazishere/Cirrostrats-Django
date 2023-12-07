@@ -16,42 +16,72 @@
 <div id="loading"></div>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
 </style>
 
 <table class="summary-table">
     <thead>
         <tr>
-            <th colspan="2">Summary</th>
-        </tr>
+            <th colspan="2">{{ flight_number }} <span class="small-text">{{ registration }}</span></th>
+          </tr>
+          <style>
+            .small-text {
+            font-size: 12px; 
+            font-weight: 100;
+            color: gray;
+            }
+          </style>
     </thead>
     <tbody>
-        <tr>
-            <td colspan="2" style="text-align: center;">
-            <span style="font-size: 30px; font-family: 'Open Sans', sans-serif; font-weight: 700;">{{ flight_number }}</span> <br> {{ registration }}
-             </td>
 
-        <tr>
-            <td style="font-size: 28px; font-family: 'Open Sans', sans-serif; font-weight: 700;">{{departure_ID}}</td>
-            <td style="font-size: 28px; font-family: 'Open Sans', sans-serif; font-weight: 700; text-align: right;">{{destination_ID}}</td>
+            <td style="font-size: 28px; font-family: 'Roboto', sans-serif; font-weight: lighter;">{{departure_ID}}</td>
+            <td style="font-size: 28px; font-family: 'Roboto', sans-serif; font-weight: lighter; text-align: right;">{{destination_ID}}</td>
         </tr>
+
         
-        <tr>
-            <td style="font-size: 15px"> {{ departure_gate }}</td>
-            <td style="font-size: 15px;"> {{ arrival_gate }}</td>
+        <tr style="height: 20px; padding: 0;">
+            <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey;">Gate</td>
+            <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey;">Gate</td> 
+          </tr>
+          <tr style="padding-top: 2px;">
+            <td style="font-size: 18px; line-height:1px;">{{ departure_gate }}</td>
+            <td style="font-size: 18px; line-height:1px;">{{ arrival_gate }}</td>
+          </tr>
+
+
+
+          <tr style="height: 20px; padding: 0;">
+            <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey;">Scheduled Local</td>
+            <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey;">Scheduled Local</td> 
+          </tr>
+
+          <tr style="height: fit-content; padding-top: 2px;"> 
+            <td style="font-size: 12px;"> {{ scheduled_departure_time}}
+            </td>
+             <td style="font-size: 12px;"> {{ scheduled_arrival_time }}
+           </td>
+
+
+
         </tr>
-        <tr>
+        <tr style="height: 20px; padding: 0;">
+            <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey;">UTC</td>
+            <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey;">UTC</td> 
+          </tr>
+
+          <tr style="padding-top: 2px;"> 
             <td style="font-size: 12px;">
-                {{ scheduled_departure_time}} <br>
                 STD {{ scheduled_out }} <br>
                 ETD {{ estimated_out }}
             </td>
-            <td style="font-size: 12px;">
-                {{ scheduled_arrival_time }} <br>
+             <td style="font-size: 12px;">
                 STA {{ scheduled_in }} <br>
                 ETA {{ estimated_in }}
             </td>
         </tr>
+
+
     </tbody>
 </table>
 

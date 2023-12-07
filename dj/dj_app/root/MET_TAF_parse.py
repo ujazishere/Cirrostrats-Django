@@ -14,8 +14,8 @@ class Weather_display:
     def __init__(self) -> None:
         self.pink_text_color = r'<span class="pink_text_color">\1\2</span>'
         self.red_text_color = r'<span class="red_text_color">\1\2</span>'
-        self.yellow_highlight = r'<span class="yellow-highlight">\1\2</span>'
-        self.box_around_text = r'<span class="highlight-red">\1\2</span>'         # Change name to `box_around_text`
+        self.yellow_highlight = r'<span class="yellow_highlight">\1\2</span>'
+        self.box_around_text = r'<span class="box_around_text">\1\2</span>'         # Change name to `box_around_text`
 
         # first digit between 1-2 then space all of it optional. Then digit and fwrd slash optional then digit then SM
         self.lifr_fractional_patt = r'((?<! \d ))((M)?\d/(\d)?\dSM)'        # Just the fractional pattern
@@ -45,6 +45,7 @@ class Weather_display:
         lifr_digits = re.sub(self.lifr_single_or_douple,self.pink_text_color,ifr_frac)
         ifr_digits = re.sub(self.ifr_single_or_douple,self.red_text_color,lifr_digits)
         processed_incoming_data = ifr_digits
+
 
 
         if processed_incoming_data:

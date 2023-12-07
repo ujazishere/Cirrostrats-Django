@@ -155,12 +155,11 @@ tbody tr:nth-child(odd) {
   }
 }
 
-.dark-mode .highlight-red {
+.dark-mode .box_around_text {
   background-color: #2D333B(159, 26, 26);
   border-radius: 4px;
   border: 1px solid #ffffff; /* Specify the border style (solid) and color (#000000) */
   border-collapse: collapse;
-  
 }
 
 .pink_text_color {
@@ -174,3 +173,8 @@ tbody tr:nth-child(odd) {
     padding: 4px; 
     border-radius: 5px;
 }
+
+.yellow_highlight {
+  color: rgba(254, 254, 184, 0);
+}
+

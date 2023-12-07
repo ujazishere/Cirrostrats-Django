@@ -38,10 +38,10 @@ class Pull_flight_info(Root_class):
         fs_time_zone = soup_fs.select('[class*="TimeGroupContainer"]')
         if fs_time_zone:
             departure_time_zone = fs_time_zone[0].get_text()        #  format is HH:MM XXX timezone(eg.EST)
-            departure_time_zone = "STD " + departure_time_zone[9:18]
+            departure_time_zone = departure_time_zone[9:18]
             # departure_estimated_or_actual = departure_time_zone[18:]
             arrival_time_zone = fs_time_zone[1].get_text()
-            arrival_time_zone = "STA " + arrival_time_zone[9:18]
+            arrival_time_zone = arrival_time_zone[9:18]
             # arrival_estimated_or_actual = arrival_time_zone[18:]
         else:
             departure_time_zone,arrival_time_zone = [None]*2
