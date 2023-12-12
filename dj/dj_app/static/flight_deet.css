@@ -16,16 +16,12 @@ body {
   width: 100%;
 }
 
-.accordion-header {
-  /* Style for the header goes here */
-}
-
 .accordion-button.animate {
-  transition: transform 0.3s ease; /* Adjust the transition property based on your needs */
+  transition: transform 0.3s ease; 
 }
 
 .accordion-button.animate.active {
-  transform: rotate(180deg); /* Adjust the transformation based on your needs */
+  transform: rotate(180deg);
 }
 
 
@@ -54,9 +50,9 @@ body {
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  outline: none; /* Remove outline on focus */
+  outline: none; 
   background-color: #2D333B;
-  transition: transform 0.3s ease; /* Add transition property */
+  transition: transform 0.3s ease; 
 }
 
 .accordion-button.active {
@@ -213,13 +209,13 @@ p {
   overflow: hidden;
   box-shadow: 0 0 0 1px #000000;
   border: 1px;
-  border-collapse: collapse; /* Added border-collapse property */
+  border-collapse: collapse; 
 }
 
 .route a {
   font-size: smaller;
-  margin-left: 10px; /* Adjust the margin-left as needed */
-  color: rgb(158, 156, 155); /* Change the color to your preference */
+  margin-left: 10px;
+  color: rgb(158, 156, 155); 
 }
 
 .dark-mode .route {
@@ -229,11 +225,11 @@ p {
 }
 
 .route th {
-  padding: 10px 5px; /* Adjusted padding */
+  padding: 10px 5px; 
   text-align: center;
   background-color: #2D333B;
   color: #ffffff;
-  border-radius: 10px; /* Added border-radius */
+  border-radius: 10px;
 }
 
 .dark-mode .route th {
@@ -268,8 +264,7 @@ table.comparison-table {
 }
 
 .comparison-table {
-  width: 100%; /* Adjust the width as needed */
-  /* Add any other styling for your table */
+  width: 100%; 
 }
 
 table.comparison-table th {
@@ -323,36 +318,11 @@ table.summary-table {
 
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  table.summary-table td {
-      border: 1px solid transparent; /* Set to transparent color */
-      outline: 0;
-  }
-}
 
-@media not all and (min-resolution:.001dpcm) { 
-  @supports (-webkit-appearance:none) {
-      .summary-table td, .summary-table th {
-          border: 1px solid transparent;
-          outline: 0;
-      }
-  }
-}
-
-@media screen and (max-width: 767px) {
-  table.summary-table td,
-  table.summary-table th {
-      border: 1px solid transparent; /* Set to transparent color */
-      outline: 0;
-  }
-}
-
-
-
-table.summary-table th, table.summary-table td {
+table.summary-table th, table.summary-table td, table.summary-table tr{
   padding: 10px;
-  background-color: #FFFFFF; /* Adjust as needed */  
-  border: 1px solid transparent; /* Set to transparent color */
+  background-color: #FFFFFF; 
+  border: 1px solid transparent; 
   outline: 0;
  }
 
@@ -366,6 +336,8 @@ table.summary-table td {
   border-color: #FFFFFF;
 }
 
+
+
 table.summary-table td:first-child {
   font-weight: bold;
 }
@@ -373,7 +345,7 @@ table.summary-table td:first-child {
 table.summary-table td {
   width: 50%;
   padding: 10px;
-  color: #24292E; /* Set the desired text color */
+  color: #24292E; 
   border-color: #FFFFFF;
 }
 
@@ -383,7 +355,7 @@ table.summary-table td:nth-child(odd) {
 
 table.summary-table td:nth-child(even) {
   text-align: right;
-  font-weight: bold; /* Add this line to make the text bold */
+  font-weight: bold; 
 }
 
 .dark-mode table.summary-table thead th {
@@ -417,8 +389,6 @@ table.summary-table td:nth-child(even) {
 }
 
 
-
-/* Apply styling to the "another-table" */
 table.another-table {
   margin: 20px auto;
   width: 80%;
@@ -434,14 +404,14 @@ table.another-table th {
   text-align: center;
   background-color: #fa6767;
   color: #2D333B;
-  border: 1px solid #000000; /* Add border for headers */
+  border: 1px solid #000000; 
 }
 
 table.another-table td {
   padding: 10px;
   text-align: center;
   background-color: #fa6767;
-  border: 1px solid #000000; /* Add border for data cells */
+  border: 1px solid #000000; 
 }
 
 
@@ -461,15 +431,15 @@ table.another-table td:first-child {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 25vh; /* Adjust the minimum height as needed */
-  margin: 0 auto; /* Center horizontally by setting left and right margin to "auto" */
-  max-width: 800px; /* Adjust the maximum width as needed */
+  min-height: 25vh; 
+  margin: 0 auto; 
+  max-width: 800px; 
 }
 
 
 .box_around_text {
   border-radius: 4px;
-  border: 1px solid #2D333B; /* Specify the border style (solid) and color (#000000) */
+  border: 1px solid #2D333B; 
   border-collapse: collapse;
   padding-left: 2px;
   padding-right: 2px;
@@ -480,7 +450,7 @@ table.another-table td:first-child {
 .dark-mode .box_around_text {
   background-color: #2D333B(159, 26, 26);
   border-radius: 4px;
-  border: 1px solid #ffffff; /* Specify the border style (solid) and color (#000000) */
+  border: 1px solid #ffffff; 
   border-collapse: collapse;
 }
 
