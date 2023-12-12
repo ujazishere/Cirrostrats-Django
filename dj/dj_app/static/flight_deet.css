@@ -330,6 +330,15 @@ table.summary-table {
   }
 }
 
+@media not all and (min-resolution:.001dpcm) { 
+  @supports (-webkit-appearance:none) {
+      .summary-table td, .summary-table th {
+          border: 1px solid transparent;
+          outline: 0;
+      }
+  }
+}
+
 @media screen and (max-width: 767px) {
   table.summary-table td,
   table.summary-table th {
@@ -342,8 +351,9 @@ table.summary-table {
 
 table.summary-table th, table.summary-table td {
   padding: 10px;
-  background-color: #FFFFFF; /* Adjust as needed */
-  
+  background-color: #FFFFFF; /* Adjust as needed */  
+  border: 1px solid transparent; /* Set to transparent color */
+  outline: 0;
  }
 
 table.summary-table th {
