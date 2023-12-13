@@ -10,7 +10,7 @@ import json
             # compare all unique values and group identical ones
             # analyze data for format patterns to make a template for output
 
-class Weather_display:
+class Metar_taf_parse:
     def __init__(self) -> None:
         self.pink_text_color = r'<span class="pink_text_color">\1\2</span>'
         self.red_text_color = r'<span class="red_text_color">\1\2</span>'

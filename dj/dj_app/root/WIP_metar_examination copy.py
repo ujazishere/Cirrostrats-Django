@@ -1,4 +1,5 @@
 import re
+import torch
 import pickle
 import os
 from collections import Counter
@@ -24,6 +25,39 @@ with open(even_bulkier_metar_path, 'rb') as f:
 heavy_met_key = list(met.keys())[0]
 heavy_metar = met[heavy_met_key]
 shortened = heavy_metar[:5000]
+
+# WIP
+N = torch.zeros((3000,35),dtype=float)
+P = torch.zeros((3000,35),dtype=float)
+mm = heavy_metar
+tots = {}
+patt_stack = []
+count = 0
+for ind in range(len(mm)):
+    each_metar = mm[ind]
+    each_patt = []
+    each_split = each_metar.split()
+    for split_ind in range(len(each_split)):
+        each_item = each_split[split_ind]
+        
+        digs = len(each_item)
+        each_patt.append(digs)
+        N[ind,split_ind] = digs # This one still needs to be tested. WIP
+
+    if not each_patt in patt_stack:     # if each pattern is not in patt_stach then add it
+        # patt_stack is declared and used as a bank of uniques
+        patt_stack.append(each_patt)
+        N[count,0] = mm.index(each_metar)      #add 0th column the index ofthat metar
+        for i in range(len(each_patt)):         #1st column and on patt length
+            N[count,i+1] = each_patt[i]
+        count+= 1
+    else:                               # if it is in patt_stack: add to its count
+        
+        # P[:,:]
+
+        # add count to the unique patts.
+        thing = str(each_patt)
+        tots[thing] = tots.get(thing,0)+1       
 
 
 """

@@ -4,6 +4,10 @@ from .root_class import Root_class
 # from dj.dj_app.root.root_class import Root_class
 import re
 
+# TODO: Fix wrong flights showing up. One way is to make the flight aware data prominent
+            # But that wwill cause utc and local time clashes. 
+            # Maybe crosscheck it with other source as primary rathar than other  way around.
+
 class Flight_aware_pull(Root_class):
     def __init__(self) -> None:
         attrs = ['origin','destination','registration',
@@ -126,7 +130,9 @@ def flight_aware_data_pull(airline_code=None, query=None,):
         for i in range(len(flights)):      # There are typically 15 of these for multiple dates
             scheduled_out_raw_fa = flights[i]['scheduled_out']
             date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time
+            print('within flights',i)
             if flights[i]['route']:
+                print('within route', i)
                 origin = flights[i]['origin']['code_icao']
                 destination = flights[i]['destination']['code_icao']
                 registration = flights[i]['registration']

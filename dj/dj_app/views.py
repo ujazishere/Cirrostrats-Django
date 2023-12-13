@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .root.gate_checker import Gate_checker
 from .root.gate_scrape import Gate_scrape_thread
-from .root.MET_TAF_parse import Weather_display
+from .root.MET_TAF_parse import Metar_taf_parse
 from .root.dep_des import Pull_flight_info
 from time import sleep
 from django.shortcuts import render
@@ -66,7 +66,7 @@ def parse_query(request, main_query):
                 else:
                     flgiht_digits = query[2:]       # Its UA
                 print('\nSearching for:', airline_code,flgiht_digits)
-                return flight_deets(request, airline_code=airline_code,query=flgiht_digits)
+                return flight_deets(request, airline_code=airline_code,flight_number_query=flgiht_digits)
             elif 'A' in query or 'B' in query or 'C' in query or len(query) == 1:     # Accounting for 1 letter only
                 # When the length of query_in_list_form is only 1 it returns gates table for that particular query.
                 gate_query = query
@@ -77,7 +77,7 @@ def parse_query(request, main_query):
                     if 1 <= query <= 35 or 40 <= query <= 136:
                         return gate_info(request, main_query=str(query))
                     else:
-                        return flight_deets(request,airline_code=None,query=query)
+                        return flight_deets(request,airline_code=None,flight_number_query=query)
                 else:
                     return gate_info(request, main_query=str(query))
             else:
@@ -131,9 +131,9 @@ def dummy(request):
         with open(ord, 'rb') as f:
             dest_weather = pickle.load(f)
         
-        weather = Weather_display()
+        weather = Metar_taf_parse()
         bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
-        weather = Weather_display()
+        weather = Metar_taf_parse()
         bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
 
     except Exception as e:     # ISMAIL MAC PATH
@@ -144,9 +144,9 @@ def dummy(request):
             dep_weather = pickle.load(f)
         with open(is_ord, 'rb') as f:
             dest_weather = pickle.load(f)
-        weather = Weather_display()
+        weather = Metar_taf_parse()
         bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
-        weather = Weather_display()
+        weather = Metar_taf_parse()
         bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
     
     # print('NEW WEATHER WITH NEW: HIGHLIGHTS', bulk_flight_deets)
@@ -172,16 +172,16 @@ def gate_info(request, main_query):
         return render(request, 'flight_info.html', {'gate': gate})
 
 
-def flight_deets(request,airline_code=None, query=None):
+def flight_deets(request,airline_code=None, flight_number_query=None):
     # given a flight number it returns its, gates, scheduled and actual times of departure and arrival
 
     flt_info = Pull_flight_info()           # from dep_des.py file
-    weather = Weather_display()         # from MET_TAF_parse.py
+    weather = Metar_taf_parse()         # from MET_TAF_parse.py
     
     with ThreadPoolExecutor(max_workers=3) as executor:
-        futures1 = executor.submit(flt_info.fs_dep_arr_timezone_pull, query)
-        futures2 = executor.submit(flt_info.fa_data_pull_test, airline_code, query)
-        futures_dep_des = executor.submit(flt_info.united_flight_status_info_scrape, query)
+        futures1 = executor.submit(flt_info.fs_dep_arr_timezone_pull, flight_number_query)
+        futures2 = executor.submit(flt_info.fa_data_pull, airline_code, flight_number_query)
+        futures_dep_des = executor.submit(flt_info.united_departure_destination_scrape, flight_number_query)
     
     results = []
     for future in as_completed([futures1,futures2, futures_dep_des]):
@@ -193,24 +193,24 @@ def flight_deets(request,airline_code=None, query=None):
         else:
             bulk_flight_deets.update(i)
     
-    departure_ID, destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
+    UA_departure_ID, UA_destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
     fa_departure_ID, fa_destination_ID = flight_aware_data_pull['origin'], flight_aware_data_pull['destination']
     
     with ThreadPoolExecutor(max_workers=4) as executor:
-        futures3 = executor.submit(weather.scrape, departure_ID)
-        futures4 = executor.submit(weather.scrape, destination_ID)
-        futures5 = executor.submit(flt_info.nas_final_packet, departure_ID, destination_ID) # NAS
-        futures6 = executor.submit(flt_info.flight_view_gate_info, query, departure_ID) # Takes forever to load
+        futures3 = executor.submit(weather.scrape, fa_departure_ID)
+        futures4 = executor.submit(weather.scrape, fa_destination_ID)
+        futures5 = executor.submit(flt_info.nas_final_packet, fa_departure_ID, fa_destination_ID) # NAS
+        futures6 = executor.submit(flt_info.flight_view_gate_info, flight_number_query, fa_departure_ID) # Takes forever to load
     
     for future in as_completed([futures5,futures6]):
         bulk_flight_deets.update(future.result())
     bulk_flight_deets['dep_weather'] = futures3.result()
     bulk_flight_deets['dest_weather'] = futures4.result()
     
-    # This section associates `None` of the origin and destination does not mactch/conflicts with two websites.
-    if  departure_ID != fa_departure_ID and destination_ID != fa_destination_ID:
+    # Here associating None values for fa_data seems unnecessary. could rather use it and dump unreliable data.
+    if  UA_departure_ID != fa_departure_ID and UA_destination_ID != fa_destination_ID:
         for keys in flight_aware_data_pull.keys():
-            flight_aware_data_pull[keys]= None
+            flight_aware_data_pull[keys]= 'N/A'
 
     bulk_flight_deets.update(flight_aware_data_pull)
     
@@ -230,7 +230,7 @@ def metar_display(request,weather_query):
     weather_query = weather_query.strip()       # remove leading and trailing spaces. Seems precautionary.
     airport = weather_query[-4:]
     
-    weather = Weather_display()
+    weather = Metar_taf_parse()
     weather = weather.scrape(weather_query)
     
     return render(request, 'metar_info.html', {'airport': airport, 'weather': weather})

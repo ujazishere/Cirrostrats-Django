@@ -55,7 +55,7 @@ class Pull_flight_info(Root_class):
         return bulk_flight_deet
 
 
-    def united_flight_status_info_scrape(self, query=None):
+    def united_departure_destination_scrape(self, query=None):
         flt_num = query
         info = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
         soup = self.request(info)
@@ -69,7 +69,7 @@ class Pull_flight_info(Root_class):
             print('Success at united_flight_stat scrape for dep and des ID')
         except:
             departure_ID, destination_ID = [None]*2
-
+        print('united_flight_stat', departure_ID, destination_ID)
         return {'departure_ID': departure_ID,
                 'destination_ID': destination_ID}
 
@@ -302,11 +302,11 @@ class Pull_flight_info(Root_class):
             return {'departure_gate': departure_gate,
                     'arrival_gate': arrival_gate,
                     }
-            
+
         except :
             empty_soup = {'departure_gate': 'None',
                           'arrival_gate': 'None'} 
-            print('unsuccessful at pull_dep_des for gate info')
+            print('!!!UNSUCCESSFUL at flight_view_gate_info for gate info')
             return empty_soup
 
         # typically 9th index of scripts is where departure and destination is.
@@ -315,5 +315,5 @@ class Pull_flight_info(Root_class):
         # print(departure, destination)
 
     
-    def fa_data_pull_test(self, airline_code=None,query=None):
+    def fa_data_pull(self, airline_code=None,query=None):
         return flight_aware_data_pull(airline_code=airline_code,query=query)
