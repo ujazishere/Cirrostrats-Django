@@ -51,7 +51,7 @@ class Metar_taf_parse:
         if processed_incoming_data:
             return processed_incoming_data
         else:
-            print('Nothing to process in visibility_work_func')
+            print('Nothing to process in visibility_color_code func')
             return incoming_weather_data
         
 

@@ -1,8 +1,12 @@
 import requests
 import pickle
-from .root_class import Root_class
+try:
+    from .root_class import Root_class
+except:
+    from dj.dj_app.root.root_class import Root_class
 # from dj.dj_app.root.root_class import Root_class
 import re
+import stomp
 
 # TODO: Fix wrong flights showing up. One way is to make the flight aware data prominent
             # But that wwill cause utc and local time clashes. 
@@ -40,10 +44,61 @@ class Flight_aware_pull(Root_class):
         if response.status_code == 200:
             return response.json()['flights']
         else:
-            print('RESPONSE STATUS CODE NOT 200!!!', response.status_code)
+            print('FLIGHT_AWARE RESPONSE STATUS CODE NOT 200!!!', response.status_code)
             return None    
 
 
+    def trial(self):        # This is for swift portal.
+        
+        # checkout for knowledge https://www.faa.gov/air_traffic/technology/swim/swift
+        api_url = 'API_URL'
+        params = {
+            'providerUrl': 'tcps://ems1.swim.faa.gov:55443',
+            'queue': 'ujasvaghani.yahoo.com.FDPS.0f5efc2e-f47e-4e6a-a6c8-7fb338b8a76f.OUT',
+            'connectionFactory': 'ujasvaghani.yahoo.com.CF',
+            'username': 'ujasvaghani.yahoo.com',
+            'password': 'MxciGP1zQ760UpxdDoL-ew',
+            'vpn': 'FDPS',
+        }
+        
+        response = requests.get(api_url, params=params)
+        
+        if response.status_code == 200:
+            data = response.json()  # Assuming the data is in JSON format
+
+    def jms_trial(self):
+        class SolaceJMSClient:
+            def __init__(self, config):
+                self.config = config
+                self.connection = stomp.Connection([(config['jms_connection_url'], 55443)])  # Assuming default port 61613
+        
+            def connect(self):
+                self.connection.connect(self.config['username'], self.config['password'], wait=True)        # code breaks here.
+                self.connection.subscribe(destination=f"/queue/{self.config['queue_name']}", id=1, ack="auto")
+        
+            def send_message(self, message):
+                self.connection.send(body=message, destination=f"/queue/{self.config['queue_name']}")
+        
+            def disconnect(self):
+                self.connection.disconnect()
+        
+        # Example usage
+        solace_config = {
+                    'jms_connection_url': 'tcps://ems1.swim.faa.gov:55443',
+                    'queue_name': 'ujasvaghani.yahoo.com.FDPS.0f5efc2e-f47e-4e6a-a6c8-7fb338b8a76f.OUT',
+                    'connectionFactory': 'ujasvaghani.yahoo.com.CF',
+                    'username': 'ujasvaghani.yahoo.com',
+                    'password': 'MxciGP1zQ760UpxdDoL-ew',
+                    'vpn': 'FDPS',
+        }
+        
+        solace_client = SolaceJMSClient(solace_config)
+        solace_client.connect()
+        
+        solace_client.send_message("Hello, Solace JMS!")
+        
+        solace_client.disconnect()
+        
 def flight_aware_data_pull(airline_code=None, query=None,):
     
     

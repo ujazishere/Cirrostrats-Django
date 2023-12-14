@@ -12,18 +12,18 @@ Practice readibility and simplicity. Include description and documentation for o
         Explore vim manoeuvers
         move searchbar on all pages to header of the site
         dynamic color for text on tables
-        
-    
-        
+
+
+
 **UV:   
-        seperate out sv from flight_aware.
         learn about multiprocessing vs multithreading and implement on flight_deet
         prepare search query logic for disecting typical searches
         fix massive bug on flight_aware route date time conflict with real scheduled_time.
+            maybe include search with date, time or display info with date
             currently it senses the most recent route that is not None type probs giving future date
             use: if scheduled_out is current_utc and route is not none:
                 but current utc date_time has source latency.   
-        Extract all airports D-Atis info during all wewather conditinos for analyses and classification
+        Extract all airports D-Atis info during all weather conditinos for analyses and classification
             Add thunderstorm, freezing and such symbols on title.
             Add departure/approach runways in use.
         integrate EDCT info  from https://www.fly.faa.gov/edct/jsp/edctLookUp.jsp
@@ -35,6 +35,10 @@ Practice readibility and simplicity. Include description and documentation for o
         consolidate menu pages within the Menu_page class in views.py
         Fix up weather page and include ability to pull multiple airports
 
+        fix freeze bug on the EC2. After running lengthy scrape for a few days cmd seems to get stuck.
+            Discard while loop instead use:use a task scheduling library like Celery with a task queue such as RabbitMQ or Redis to handle the scheduled tasks asynchronously.
+            Utilize webhooks or event-driven architectures: Instead of pulling data in a loop, you can set up webhooks or use event-driven architectures to receive notifications or updates from the sources you want to scrape. This way, you can fetch data only when it becomes available or when an event is triggere.
+        seperate out sv from flight_aware.
         App:
             swift language
             with search capability such that most frequest searches are stored for quick access.
@@ -58,9 +62,6 @@ Practice readibility and simplicity. Include description and documentation for o
 
         Gotta be able to get the route from the web.
 
-        fix freeze bug on the EC2. After running lengthy scrape for a few days cmd seems to get stuck.
-            Discard while loop instead use:use a task scheduling library like Celery with a task queue such as RabbitMQ or Redis to handle the scheduled tasks asynchronously.
-            Utilize webhooks or event-driven architectures: Instead of pulling data in a loop, you can set up webhooks or use event-driven architectures to receive notifications or updates from the sources you want to scrape. This way, you can fetch data only when it becomes available or when an event is triggere.
 
         flight deet packet:
             Make a seperate expand/collapse section for NAS packet.

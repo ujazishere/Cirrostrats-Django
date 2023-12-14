@@ -24,10 +24,15 @@
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
 </style>
 
+<!-- This is the summery table that contains dep/des, gates, flight num, registration and scheduled/estimated times -->
 <table class="summary-table">
     <thead>
         <tr>
+            {% if registration %}
             <th colspan="2">{{ flight_number }} <span class="small-text">{{ registration }}</span></th>
+            {% else %}
+            <th colspan="2">{{ flight_number }} </span></th>
+            {% endif %}
           </tr>
           <style>
             .small-text {
@@ -77,6 +82,7 @@
             <td style="font-size: 1px; line-height: 1px; border-collapse: collapse;">&nbsp;</td>
         </tr>
 
+        {% if scheduled_out %}
         <tr style="height: 20px; padding: 0;">
             <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey; border-collapse: collapse;">UTC</td>
             <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey; border-collapse: collapse;">UTC</td>
@@ -85,11 +91,12 @@
             <td style="font-size: 16px; border-collapse: collapse;">STD{{scheduled_out}}<br>ETD{{estimated_out}}</td>
             <td style="font-size: 16px; border-collapse: collapse;">STA{{scheduled_in}}<br>ETA{{estimated_in}}</td>
         </tr>
+        {% endif %}
     </tbody>
 </table>
 
 
-
+<!-- This is the departure box that contains D-Atis, metar and taf. titles include scheduled time and  -->
 <div id="departure-container" class="table-container">
     <div class="accordion-button-container">
     <div class="accordion-content active" id="departure-content-{{ departure_ID }}">
@@ -105,9 +112,9 @@
             </thead>
             <tbody>
                 <td style="width: 100%; text-align: left;">
-                    <span style="float: left; width: 33%;">{{ scheduled_departure_time }} ({{scheduled_out}})</span>
-                    <span style="float: left; width: 33%; text-align: center;">{{ origin }}</span>
-                    <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }} ({{registration}})</span>
+                    <span style="float: left; width: 33%;">{{ scheduled_departure_time }}</span>
+                    <span style="float: left; width: 33%; text-align: center;">{{ departure_ID }}</span>
+                    <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }}</span>
                 </td>
                 
                 <tr>{% for metar_taf_title, metar_taf_data in dep_weather.items %}</tr>
@@ -121,18 +128,19 @@
     </div>
 </div>
 
+<!-- This is the route section that includes skyvector map hyperlink -->
+{% if route %}
+    <table class="route">
+        <tr>
+            <th>ROUTE <a href="{{ sv }}" target="_blank">Show on SkyVector Map</a></th>
+        </tr>
+        <tr>
+            <td>({{ filed_altitude }})  {{ route }}</td>
+        </tr>
+    </table>
+{% endif %}
 
-
-<table class="route">
-    <tr>
-        <th>ROUTE <a href="{{ sv }}" target="_blank">Show on SkyVector Map</a></th>
-    </tr>
-    <tr>
-        <td>({{ filed_altitude }})  {{ route }}</td>
-    </tr>
-</table>
-
-
+<!-- NAS (departures only) table in red-->
 {% if nas_departure_affected %}
 <div class="table-wrapper">
     <table class="another-table">
@@ -157,6 +165,8 @@
 </div>
 </div>
 
+
+<!-- This is the destination table that contains D-ATIS, METAR and TAF -->
 <div id="destination-container" class="table-container">
     <div class="accordion-button-container">
         <div class="accordion-content active" id="destination-content-{{ destination_ID }}">
@@ -174,7 +184,7 @@
                     <tbody>
                         <tr>
                             <td style="width: 100%; text-align: left;">
-                                <span style="float: left; width: 33%;">{{scheduled_arrival_time}} ({{scheduled_in}})</span>
+                                <span style="float: left; width: 33%;">{{scheduled_arrival_time}}</span>
                                 <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
                                 <span style="float: right; width: 33%; text-align: right;">{{ arrival_gate }}</span>
                             </td>
@@ -196,6 +206,7 @@
 
 
 
+<!-- NAS (destination only) table in red-->
 {% if nas_destination_affected %}
 <div class="table-wrapper">
     <table class="another-table">

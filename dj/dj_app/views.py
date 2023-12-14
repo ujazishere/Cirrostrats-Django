@@ -115,6 +115,7 @@ def parse_query(request, main_query):
 
 
 def dummy(request):
+
     try:
         bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
         bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
@@ -122,7 +123,6 @@ def dummy(request):
         bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
     
     # print('OLD with html highlights', bulk_flight_deets)
-
     try: # UJ PC PATH
         ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
         ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
@@ -197,10 +197,10 @@ def flight_deets(request,airline_code=None, flight_number_query=None):
     fa_departure_ID, fa_destination_ID = flight_aware_data_pull['origin'], flight_aware_data_pull['destination']
     
     with ThreadPoolExecutor(max_workers=4) as executor:
-        futures3 = executor.submit(weather.scrape, fa_departure_ID)
-        futures4 = executor.submit(weather.scrape, fa_destination_ID)
-        futures5 = executor.submit(flt_info.nas_final_packet, fa_departure_ID, fa_destination_ID) # NAS
-        futures6 = executor.submit(flt_info.flight_view_gate_info, flight_number_query, fa_departure_ID) # Takes forever to load
+        futures3 = executor.submit(weather.scrape, UA_departure_ID)
+        futures4 = executor.submit(weather.scrape, UA_destination_ID)
+        futures5 = executor.submit(flt_info.nas_final_packet, UA_departure_ID, UA_destination_ID) # NAS
+        futures6 = executor.submit(flt_info.flight_view_gate_info, flight_number_query, UA_departure_ID) # Takes forever to load
     
     for future in as_completed([futures5,futures6]):
         bulk_flight_deets.update(future.result())
@@ -210,7 +210,7 @@ def flight_deets(request,airline_code=None, flight_number_query=None):
     # Here associating None values for fa_data seems unnecessary. could rather use it and dump unreliable data.
     if  UA_departure_ID != fa_departure_ID and UA_destination_ID != fa_destination_ID:
         for keys in flight_aware_data_pull.keys():
-            flight_aware_data_pull[keys]= 'N/A'
+            flight_aware_data_pull[keys]= None
 
     bulk_flight_deets.update(flight_aware_data_pull)
     

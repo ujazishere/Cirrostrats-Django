@@ -17,7 +17,7 @@ from collections import Counter
 
 # Be careful these paths. Shortened path is only local to the vs code terminal but doesnt work on the main cmd terminal
 metar_stack_pkl_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\dj_app\root\pkl\METAR_stack.pkl"
-even_bulkier_metar_path = r"C:\Users\ujasv\OneDrive\Desktop\BULK_METAR_NOV_2023_.pkl"
+even_bulkier_metar_path = r"C:\Users\ujasv\OneDrive\Desktop\pickles\BULK_METAR_NOV_2023_.pkl"
 with open(even_bulkier_metar_path, 'rb') as f:         
     met = pickle.load(f)
 

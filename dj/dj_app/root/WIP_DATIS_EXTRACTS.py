@@ -12,12 +12,15 @@ atis_info = r'(ATIS|ARR/DEP|DEP|ARR) INFO [A-Z] '
 time_in_zulu = r'(\d{1,4}Z(\.| ))'        #4 digits followed by `Z`
 special_or_not = r'(SPECIAL\.)? '    #SPECIAL then `.` or just `.`
 winds = r'((\d{5}(G|KT)(\d{2}KT)?)|VRB\d\dKT) '    # winds that account for regular, variable and gusts
+variable_wind_direction = r'(\d{3}V\d{3} )?'
 SM = r'M?\d{1,2}SM '            # DOESNT ACCOUNT FOR FRACTIONALS
 TSRA_kind = r'(-|\+)?(RA|SN|TSRA)?(( )?BR)?( )?'
 # Right after SM there are light or heavy RA SN DR BR and vertical visibilities that need to be accounted for
 sky_condition = r'((FEW|CLR|BKN|OVC|SCT)(\d{3})? ){1,10}'       
 temperature = r'(M?\d\d/M?\d\d )'
 altimeter = r'A\d{4} \(([A-Z]{3,5}( |\))){1,4}(\. | )'      # Accounts for dictated bracs and trailing `. ` or just ` `
+RMK = r'(RMK(.*?)\. )?'
+# If the first word is RMK investigate upto the .
 
 # Needs a lot of work
 rw_in_use = r'(RNAV|((ARVNG|LNDG) AND )?DEPG|LANDING|ILS(/VA)?|(ARRIVALS )?EXPECT|VISUAL (APCH)) (.*?)(IN USE|((RWY|RY|RUNWAY|APCH|ILS|DEP|,) )(\d{1,2}(R|L|C)?)\.)'
@@ -50,12 +53,14 @@ def pull_datis():
     
     return datis_info_stack
 
+all_76_datis = pull_datis()
 # extract datis with dates in the filename
 YYYYMMDD = Root_class().date_time(raw_utc=True)
-with open(f'datis_info_stack_{YYYYMMDD}.pkl', 'wb') as f:
-    pickle.dump(pull_datis(),f)
+path = rf'C:\Users\ujasv\OneDrive\Desktop\pickles\datis_info_stack_{YYYYMMDD}.pkl'
+with open(path, 'wb') as f:
+    pickle.dump(all_76_datis,f)
 
-# reach th
+# loadthem all
 datis_extracts = r'C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\datis_info_stack_20231206.pkl'
 with open(datis_extracts, 'rb') as f:
     datis_extracts = pickle.load(f)
