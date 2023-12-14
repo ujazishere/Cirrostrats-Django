@@ -6,7 +6,6 @@ except:
     from dj.dj_app.root.root_class import Root_class
 # from dj.dj_app.root.root_class import Root_class
 import re
-import stomp
 
 # TODO: Fix wrong flights showing up. One way is to make the flight aware data prominent
             # But that wwill cause utc and local time clashes. 
