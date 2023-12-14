@@ -6,13 +6,19 @@
 
 <head>
     <meta content='width=device-width; initial-scale=1.0;' name='viewport' />
+
+
 </head>
 <link rel="stylesheet" type="text/css" href="{% static 'flight_deet.css' %}">
 
 <meta name="format-detection" content="telephone=no">
 
+<div class="data-warning">
+    <p>Data may be unreliable. Report any inconsistencies.</p>
+</div>
+
+
 <h3>United Flight Information</h3>
-<h4>Results for {{ flight_number }}</h4>
 
 
 {% if flight_number %}
@@ -29,7 +35,7 @@
     <thead>
         <tr>
             {% if registration %}
-            <th colspan="2">{{ flight_number }} <span class="small-text">{{ registration }}</span></th>
+            <th colspan="2" class="sticky">{{ flight_number }} <span class="small-text">{{ registration }}</span></th>
             {% else %}
             <th colspan="2">{{ flight_number }} </span></th>
             {% endif %}
@@ -40,12 +46,18 @@
             font-weight: 100;
             color: gray;
             }
+
+            .sticky{
+            position: sticky;
+            top: 0;
+            background-color: #fff; /* You can set the background color as needed */
+            }
           </style>
     </thead>
     <tbody>
         <tr>
-            <td style="font-size: 28px; font-family: 'Roboto', sans-serif; font-weight: lighter; border-collapse: collapse;">{{departure_ID}}</td>
-            <td style="font-size: 28px; font-family: 'Roboto', sans-serif; font-weight: lighter; text-align: right; border-collapse: collapse;">{{destination_ID}}</td>
+            <td style="font-size: 36px; font-family: 'Roboto', sans-serif; font-weight: lighter; border-collapse: collapse;">{{departure_ID}}</td>
+            <td style="font-size: 36px; font-family: 'Roboto', sans-serif; font-weight: lighter; text-align: right; border-collapse: collapse;">{{destination_ID}}</td>
         </tr>
 
         <tr style="height: 10px;">
@@ -58,8 +70,8 @@
             <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey; border-collapse: collapse;">Gate</td> 
         </tr>
         <tr style="padding-top: 0;"> <!-- Adjusted padding-top value -->
-            <td style="font-size: 18px; line-height:1px; border-collapse: collapse;">{{ departure_gate }}</td>
-            <td style="font-size: 18px; line-height:1px; border-collapse: collapse;">{{ arrival_gate }}</td>
+            <td style="font-size: 20px; line-height:1px; border-collapse: collapse;">{{ departure_gate }}</td>
+            <td style="font-size: 20px; line-height:1px; border-collapse: collapse;">{{ arrival_gate }}</td>
         </tr>
          
         <tr style="height: 10px;">
@@ -72,9 +84,9 @@
             <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey; border-collapse: collapse;">Scheduled Local</td> 
         </tr>
         
-        <tr style="padding-top: 0;"> <!-- Adjusted padding-top value -->
-            <td style="font-size: 16px; line-height:1px; border-collapse: collapse;">{{ scheduled_departure_time }}</td>
-            <td style="font-size: 16px; line-height:1px; border-collapse: collapse;">{{ scheduled_arrival_time }}</td>
+        <tr style="padding-top: 0;"> 
+            <td style="font-size: 20px; line-height:1px; border-collapse: collapse;">{{ scheduled_departure_time }}</td>
+            <td style="font-size: 20px; line-height:1px; border-collapse: collapse;">{{ scheduled_arrival_time }}</td>
         </tr>
 
         <tr style="height: 10px;">
@@ -88,8 +100,8 @@
             <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey; border-collapse: collapse;">UTC</td>
         </tr>
         <tr style="padding-top: 0;">
-            <td style="font-size: 16px; border-collapse: collapse;">STD{{scheduled_out}}<br>ETD{{estimated_out}}</td>
-            <td style="font-size: 16px; border-collapse: collapse;">STA{{scheduled_in}}<br>ETA{{estimated_in}}</td>
+            <td style="font-size: 20px; border-collapse: collapse;">STD{{scheduled_out}}<br>ETD{{estimated_out}}</td>
+            <td style="font-size: 20px; border-collapse: collapse;">STA{{scheduled_in}}<br>ETA{{estimated_in}}</td>
         </tr>
         {% endif %}
     </tbody>

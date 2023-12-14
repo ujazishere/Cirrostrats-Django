@@ -5,6 +5,8 @@ body {
   font-family: 'Roboto', Menlo, monospace;
 }
 
+
+
 .gmt-clock {
   position: fixed;
   top: 65px; /* Adjust the top position as needed */
@@ -16,6 +18,10 @@ body {
   font-size: 14px; /* Font size */
   z-index: 9999; /* Set a higher value for stacking order */
 }
+
+
+
+
 
 .dark-mode-switch {
   position: absolute;
@@ -105,7 +111,7 @@ body.dark-mode thead {
   top: 15px;
   left: 20px;
   z-index: 999;
-  font-size: 20px;
+  font-size: 28px;
   font-weight: bold;
   color: #24292E;
   text-decoration: none;

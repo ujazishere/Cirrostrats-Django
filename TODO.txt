@@ -12,9 +12,10 @@ Practice readibility and simplicity. Include description and documentation for o
         Explore vim manoeuvers
         move searchbar on all pages to header of the site
         dynamic color for text on tables
-
-
-
+        flight deet page / comparison table make the title grey and remove the borders from inside of the table
+        
+    
+        
 **UV:   
         learn about multiprocessing vs multithreading and implement on flight_deet
         prepare search query logic for disecting typical searches

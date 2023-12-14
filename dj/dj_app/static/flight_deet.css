@@ -5,6 +5,25 @@ body {
   padding: 0;
 }
 
+div.data-warning p {
+  position: fixed;
+  top: 7%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  font-weight: bold;
+  animation: flashWarning 1s infinite;
+  color: red; /* Set the initial color */
+  white-space: nowrap; /* Prevent text from wrapping */
+  z-index: 9999;
+}
+
+@keyframes flashWarning {
+  50% {
+      color: yellow; /* Change the color at 50% of the animation */
+  }
+}
+
 .accordion-content {
   max-height: 0;
   overflow: hidden;
@@ -266,6 +285,10 @@ table.comparison-table {
 .comparison-table {
   width: 100%; 
 }
+.comparison-table tr {
+border-collapse: collapse;
+}
+
 
 table.comparison-table th {
   padding: 10px;
@@ -285,6 +308,7 @@ table.comparison-table td {
 table.comparison-table thead {
   background-color: #2D333B;
   color: #ffffff;
+
 }
 
 table.comparison-table th:first-child,
@@ -298,6 +322,8 @@ table.comparison-table th {
 
 table.comparison-table td {
   width: 15%;
+  border-collapse: collapse;
+
 }
 
 table.summary-table {
@@ -315,7 +341,7 @@ table.summary-table {
   outline: none;
   border-color: #ffffff;
   box-sizing: border-box;
-
+  position: relative;
 }
 
 
@@ -328,6 +354,7 @@ table.summary-table th, table.summary-table td, table.summary-table tr{
 
 table.summary-table th {
   background-color: #2D333B;
+  position: sticky;
 }
 
 table.summary-table td {
@@ -362,6 +389,7 @@ table.summary-table td:nth-child(even) {
   background-color: rgb(255, 255, 255);
   color: #ADBAC7;
   background-color: #2D333B;
+  position: sticky;
 }
 
 .dark-mode table.summary-table {
