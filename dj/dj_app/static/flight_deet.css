@@ -406,6 +406,7 @@ table.summary-table td {
   padding: 10px;
   background-color: #FFFFFF;
   border: 1px solid #FFFFFF; /* Set border color to match the background color */
+  outline: 1px solid #FFFFFF;
 }
 
 table.summary-table th {
@@ -451,6 +452,7 @@ table.summary-table thead th {
   background-color: #22272E;
   color: #ADBAC7;
   border: 1px solid #22272E; /* Set border color for dark mode */
+  outline: 1px solid #22272E;
 }
 
 .small-text {
@@ -555,6 +557,7 @@ table.summary-table thead th {
   table.summary-table tr {
     border: 1px solid #FFFFFF; /* Set border color to match the background color */
     border-collapse: collapse;
-
   }
+
 }
+
