@@ -549,4 +549,12 @@ table.summary-table thead th {
 }
 
 
+@media (max-width: 767px) {
+  table.summary-table th,
+  table.summary-table td,
+  table.summary-table tr {
+    border: 1px solid #FFFFFF; /* Set border color to match the background color */
+    border-collapse: collapse;
 
+  }
+}
