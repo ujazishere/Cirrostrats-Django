@@ -394,7 +394,6 @@ table.summary-table {
   box-shadow: 0 0 0 1px #000000;
   color: #ffffff;
   font-family: 'Roboto', Menlo, monospace;
-  border-collapse: collapse;
   outline: none;
   box-sizing: border-box;
   position: relative;
@@ -409,7 +408,7 @@ table.summary-table tr {
   padding: 10px;
   background-color: #FFFFFF;
   outline: 0;
-  border: 1px solid transparent; 
+  border-bottom: 1px solid #FFFFFF;
 }
 
 table.summary-table th {
@@ -450,15 +449,13 @@ table.summary-table td:nth-child(even) {
 .dark-mode table.summary-table th {
   background-color: #2D333B;
   color: #ADBAC7;
-  border-top: 1px solid white;
+  border-bottom: 1px solid #22272E;
 }
 
 .dark-mode table.summary-table td {
   background-color: #22272E;
   color: #ADBAC7;
-  border-color: #22272E;
-  border-top: 1px solid #22272E;
-  border-bottom: 1px solid #22272E;
+  border: 1px solid #22272E; 
 }
 
 .small-text {
@@ -467,18 +464,6 @@ table.summary-table td:nth-child(even) {
   color: gray;
 }
 
-table.summary-table th,
-table.summary-table td {
-  /* ... Your existing styles ... */
-  border-bottom: 1px #ffffff; /* Set the border color to transparent */
-}
-
-/* Add the following styles for dark mode as well */
-
-.dark-mode table.summary-table th,
-.dark-mode table.summary-table td {
-  border-bottom: 1px #22272E; /* Set the border color to transparent for dark mode */
-}
 
 
 
