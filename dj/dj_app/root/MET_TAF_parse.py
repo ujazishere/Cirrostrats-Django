@@ -36,7 +36,8 @@ class Metar_taf_parse:
         self.FREEZING_TEMPS = r'(00|M\d\d)(/M?\d\d)'
         self.ATIS_INFO = r"(DEP|ARR|ARR/DEP|ATIS)( INFO [A-Z])"
 
-        self.RW_IN_US = r'(ARRIVALS EXPECT|SIMUL|RUNWAYS|VISUAL|RNAV|ILS(,|RY|))(.*?)\.'
+        # self.RW_IN_US = r'(ARRIVALS EXPECT|SIMUL|RUNWAYS|VISUAL|RNAV|ILS(,|RY|))(.*?)\.'
+        self.RW_IN_USE = r'()((SIMUL([A-Z]*)?,?|VISUAL (AP(P)?(ROA)?CH(E)?(S)?)|(ILS(/VA|,)?|(ARRIVALS )?EXPECT|RNAV|((ARVNG|LNDG) AND )?DEPG|LANDING)) (.*?)(IN USE\.|((RWY|RY|RUNWAY|APCH|ILS|DEP|VIS) )(\d{1,2}(R|L|C)?)\.))'
 
     def visibility_color_code(self,incoming_weather_data):
 
@@ -142,6 +143,7 @@ class Metar_taf_parse:
         highlighted_datis = re.sub(self.ALTIMETER_PATTERN, self.box_around_text, highlighted_datis)
         highlighted_metar = re.sub(self.ALTIMETER_PATTERN, self.box_around_text, highlighted_metar)
 
-        print(highlighted_metar)
+        highlighted_datis = re.sub(self.RW_IN_USE, self.box_around_text,highlighted_datis)
+
         return dict({ 'D-ATIS': highlighted_datis, 'METAR': highlighted_metar, 'TAF': highlighted_taf})
         

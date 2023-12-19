@@ -177,7 +177,22 @@ def flight_deets(request,airline_code=None, flight_number_query=None):
 
     flt_info = Pull_flight_info()           # from dep_des.py file
     weather = Metar_taf_parse()         # from MET_TAF_parse.py
+    def without_futures():
+        bulk_flight_deets = {}
+        bulk_flight_deets.update(flt_info.fs_dep_arr_timezone_pull(flight_number_query))
+        bulk_flight_deets.update(flt_info.fa_data_pull(airline_code,flight_number_query))
+        bulk_flight_deets.update(flt_info.united_departure_destination_scrape(flight_number_query))
+        print(bulk_flight_deets)
+        UA_departure_ID, UA_destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
+        bulk_flight_deets['dep_weaather'] = weather.scrape(UA_departure_ID)
+        bulk_flight_deets['dest_weather'] = weather.scrape(UA_destination_ID)
+        bulk_flight_deets.update(flt_info.nas_final_packet(UA_departure_ID, UA_destination_ID))
+        bulk_flight_deets.update(flt_info.flight_view_gate_info(flight_number_query, UA_departure_ID))
+        return bulk_flight_deets
     
+    bulk_flight_deets = without_futures()
+
+    """
     with ThreadPoolExecutor(max_workers=3) as executor:
         futures1 = executor.submit(flt_info.fs_dep_arr_timezone_pull, flight_number_query)
         futures2 = executor.submit(flt_info.fa_data_pull, airline_code, flight_number_query)
@@ -192,28 +207,34 @@ def flight_deets(request,airline_code=None, flight_number_query=None):
             flight_aware_data_pull = i
         else:
             bulk_flight_deets.update(i)
-    
+    """
+
+    """
     UA_departure_ID, UA_destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
-    fa_departure_ID, fa_destination_ID = flight_aware_data_pull['origin'], flight_aware_data_pull['destination']
-    
+
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures3 = executor.submit(weather.scrape, UA_departure_ID)
         futures4 = executor.submit(weather.scrape, UA_destination_ID)
         futures5 = executor.submit(flt_info.nas_final_packet, UA_departure_ID, UA_destination_ID) # NAS
         futures6 = executor.submit(flt_info.flight_view_gate_info, flight_number_query, UA_departure_ID) # Takes forever to load
-    
+
     for future in as_completed([futures5,futures6]):
         bulk_flight_deets.update(future.result())
     bulk_flight_deets['dep_weather'] = futures3.result()
     bulk_flight_deets['dest_weather'] = futures4.result()
-    
+
+    """
+
+    """
+    fa_departure_ID, fa_destination_ID = flight_aware_data_pull['origin'], flight_aware_data_pull['destination']
     # Here associating None values for fa_data seems unnecessary. could rather use it and dump unreliable data.
     if  UA_departure_ID != fa_departure_ID and UA_destination_ID != fa_destination_ID:
         for keys in flight_aware_data_pull.keys():
             flight_aware_data_pull[keys]= None
 
     bulk_flight_deets.update(flight_aware_data_pull)
-    
+    """
+
     # Extracting metar for a dummy file
     # with open('latest_bulk_11_28.pkl', 'wb') as f:
         # print("**DUMPING BULK_FLIGHT_DEETS AS latest_bulk PKL FILE**")
