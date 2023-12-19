@@ -399,6 +399,8 @@ table.summary-table {
   box-sizing: border-box;
   position: relative;
   border-color: #ffffff;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 table.summary-table th,
@@ -463,6 +465,19 @@ table.summary-table td:nth-child(even) {
   font-size: 12px;
   font-weight: 100;
   color: gray;
+}
+
+table.summary-table th,
+table.summary-table td {
+  /* ... Your existing styles ... */
+  border-bottom: 1px #ffffff; /* Set the border color to transparent */
+}
+
+/* Add the following styles for dark mode as well */
+
+.dark-mode table.summary-table th,
+.dark-mode table.summary-table td {
+  border-bottom: 1px #22272E; /* Set the border color to transparent for dark mode */
 }
 
 
