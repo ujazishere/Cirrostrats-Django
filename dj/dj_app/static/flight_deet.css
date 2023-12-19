@@ -397,25 +397,21 @@ table.summary-table {
   outline: none;
   box-sizing: border-box;
   position: relative;
-  border-color: #ffffff;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-color: #FFFFFF; /* Set border color to match the background color */
+  border-collapse: collapse; /* Ensure consistent border handling */
 }
 
 table.summary-table th,
-table.summary-table td,
-table.summary-table tr {
+table.summary-table td {
   padding: 10px;
   background-color: #FFFFFF;
-  outline: 0;
-  border-bottom: 1px solid #FFFFFF;
+  border: 1px solid #FFFFFF; /* Set border color to match the background color */
 }
 
 table.summary-table th {
   background-color: #2D333B;
   position: sticky;
 }
-
 
 table.summary-table td {
   background-color: #ffffff;
@@ -433,7 +429,7 @@ table.summary-table td:nth-child(even) {
   font-weight: bold;
 }
 
-.dark-mode table.summary-table thead th {
+table.summary-table thead th {
   background-color: #2D333B;
   color: #ADBAC7;
   position: sticky;
@@ -442,7 +438,6 @@ table.summary-table td:nth-child(even) {
 .dark-mode table.summary-table {
   background-color: #2D333B !important;
   box-shadow: 0 0 0 1px #ffffff;
-  border-collapse: collapse;
   color: #ADBAC7;
 }
 
@@ -455,7 +450,7 @@ table.summary-table td:nth-child(even) {
 .dark-mode table.summary-table td {
   background-color: #22272E;
   color: #ADBAC7;
-  border: 1px solid #22272E; 
+  border: 1px solid #22272E; /* Set border color for dark mode */
 }
 
 .small-text {
@@ -463,6 +458,9 @@ table.summary-table td:nth-child(even) {
   font-weight: 100;
   color: gray;
 }
+
+
+
 
 
 
