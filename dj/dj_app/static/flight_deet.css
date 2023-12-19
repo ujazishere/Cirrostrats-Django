@@ -397,7 +397,6 @@ table.summary-table {
   outline: none;
   box-sizing: border-box;
   position: relative;
-  border-color: #FFFFFF; /* Set border color to match the background color */
   border-collapse: collapse; /* Ensure consistent border handling */
 }
 
