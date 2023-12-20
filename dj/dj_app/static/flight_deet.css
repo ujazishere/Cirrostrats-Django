@@ -405,7 +405,7 @@ table.summary-table td {
   padding: 10px;
   background-color: #FFFFFF;
   border: 1px solid #FFFFFF; /* Set border color to match the background color */
-  outline: 1px solid #FFFFFF;
+  outline: 1px solid #ffffff;
 }
 
 table.summary-table th {

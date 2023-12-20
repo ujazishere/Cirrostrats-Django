@@ -184,7 +184,7 @@ def flight_deets(request,airline_code=None, flight_number_query=None):
         bulk_flight_deets.update(flt_info.united_departure_destination_scrape(flight_number_query))
         print(bulk_flight_deets)
         UA_departure_ID, UA_destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
-        bulk_flight_deets['dep_weaather'] = weather.scrape(UA_departure_ID)
+        bulk_flight_deets['dep_weather'] = weather.scrape(UA_departure_ID)
         bulk_flight_deets['dest_weather'] = weather.scrape(UA_destination_ID)
         bulk_flight_deets.update(flt_info.nas_final_packet(UA_departure_ID, UA_destination_ID))
         bulk_flight_deets.update(flt_info.flight_view_gate_info(flight_number_query, UA_departure_ID))
