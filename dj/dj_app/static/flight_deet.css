@@ -389,34 +389,22 @@ table.summary-table {
   margin: 20px auto;
   width: 80%;
   max-width: 800px;
-  background-color: #2D333B;
   text-align: center;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 0 0 1px #000000;
   color: #ffffff;
-  font-family: 'Roboto', Menlo, monospace;
   outline: none;
   box-sizing: border-box;
   position: relative;
   border-collapse: collapse; /* Ensure consistent border handling */
 }
 
-table.summary-table th,
-table.summary-table td {
-  padding: 10px;
-  background-color: #FFFFFF;
-  border: 1px solid #FFFFFF; /* Set border color to match the background color */
-}
 
 table.summary-table th {
   background-color: #2D333B;
   position: sticky;
-}
-
-table.summary-table tr {
-  background-color: #FFFFFF;
-  border: 1px solid #FFFFFF;
+  padding: 10px;
 }
 
 table.summary-table td {
@@ -424,6 +412,7 @@ table.summary-table td {
   color: #24292E;
   width: 50%;
   text-align: left;
+  padding: 10px;
 }
 
 table.summary-table td:first-child {
@@ -439,6 +428,7 @@ table.summary-table thead th {
   background-color: #2D333B;
   color: #ADBAC7;
   position: sticky;
+  border: 1px solid black;
 }
 
 .dark-mode table.summary-table {
@@ -450,13 +440,13 @@ table.summary-table thead th {
 .dark-mode table.summary-table th {
   background-color: #2D333B;
   color: #ADBAC7;
-  border-bottom: 1px solid #22272E;
+  border-bottom: 1px solid #FFFFFF;
 }
 
 .dark-mode table.summary-table td {
   background-color: #22272E;
   color: #ADBAC7;
-  border: 1px solid #22272E; /* Set border color for dark mode */
+  border: 1px solid #22272E ;
 }
 
 .small-text {
@@ -466,7 +456,7 @@ table.summary-table thead th {
 }
 
 .table-cell {
-  font-size: 36px;
+  font-size: 34px;
   font-family: 'Roboto', sans-serif;
   font-weight: lighter;
 }
@@ -501,7 +491,7 @@ table.summary-table thead th {
 }
 
 .gate-cell {
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1px;
 }
 
@@ -522,12 +512,12 @@ table.summary-table thead th {
 }
 
 .scheduled-time-cell {
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1px;
 }
 
 .utc-row {
-  height: 20px;
+  height: 10px;
   padding: 0;
 }
 
