@@ -40,53 +40,57 @@
     </thead>
     <tbody>
         <tr>
-            <td style="font-size: 36px; font-family: 'Roboto', sans-serif; font-weight: lighter;">{{departure_ID}}</td>
-            <td style="font-size: 36px; font-family: 'Roboto', sans-serif; font-weight: lighter; text-align: right;">{{destination_ID}}</td>
-        </tr>
-
-        <tr style="height: 10px;">
-            <td style="font-size: 1px; line-height: 1px;">&nbsp;</td>
-            <td style="font-size: 1px; line-height: 1px;">&nbsp;</td>
-        </tr>
-
-        <tr style="height: 20px; padding: 0;">
-            <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey;">Gate</td>
-            <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey;">Gate</td> 
-        </tr>
-        <tr style="padding-top: 0;"> 
-            <td style="font-size: 20px; line-height:1px;">{{ departure_gate }}</td>
-            <td style="font-size: 20px; line-height:1px;">{{ arrival_gate }}</td>
-        </tr>
-         
-        <tr style="height: 10px;">
-            <td style="font-size: 1px; line-height: 1px;">&nbsp;</td>
-            <td style="font-size: 1px; line-height: 1px;">&nbsp;</td>
-        </tr>
-
-        <tr style="height: 20px; padding: 0;">
-            <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey;">Scheduled Local</td>
-            <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey;">Scheduled Local</td> 
+            <td class="table-cell">{{departure_ID}}</td>
+            <td class="table-cell text-align-right">{{destination_ID}}</td>
         </tr>
         
-        <tr style="padding-top: 0;"> 
-            <td style="font-size: 20px; line-height:1px;">{{ scheduled_departure_time }}</td>
-            <td style="font-size: 20px; line-height:1px;">{{ scheduled_arrival_time }}</td>
+        <tr class="spacer-row">
+            <td class="spacer-cell">&nbsp;</td>
+            <td class="spacer-cell">&nbsp;</td>
         </tr>
 
-        <tr style="height: 10px;">
-            <td style="font-size: 1px; line-height: 1px;">&nbsp;</td>
-            <td style="font-size: 1px; line-height: 1px;">&nbsp;</td>
+        <tr class="info-row">
+            <td class="info-cell">Gate</td>
+            <td class="info-cell">Gate</td>
+        </tr>
+
+        <tr class="gate-row">
+            <td class="gate-cell">{{ departure_gate }}</td>
+            <td class="gate-cell">{{ arrival_gate }}</td>
+        </tr>
+         
+        <tr class="spacer-row">
+            <td class="spacer-cell">&nbsp;</td>
+            <td class="spacer-cell">&nbsp;</td>
+        </tr>
+
+        <tr class="scheduled-row">
+            <td class="scheduled-cell">Scheduled Local</td>
+            <td class="scheduled-cell">Scheduled Local</td>
+        </tr>
+        
+        <tr class="scheduled-time-row">
+            <td class="scheduled-time-cell">{{ scheduled_departure_time }}</td>
+            <td class="scheduled-time-cell">{{ scheduled_arrival_time }}</td>
+        </tr>
+
+        <tr class="spacer-row">
+            <td class="spacer-cell">&nbsp;</td>
+            <td class="spacer-cell">&nbsp;</td>
         </tr>
 
         {% if scheduled_out %}
-        <tr style="height: 20px; padding: 0;">
-            <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey;">UTC</td>
-            <td style="font-weight: lighter; line-height:1px;font-size: 12px; color: grey;">UTC</td>
+
+        <tr class="utc-row">
+            <td class="utc-cell">UTC</td>
+            <td class="utc-cell">UTC</td>
         </tr>
-        <tr style="padding-top: 0;">
-            <td style="font-size: 20px;">STD{{scheduled_out}}<br>ETD{{estimated_out}}</td>
-            <td style="font-size: 20px;">STA{{scheduled_in}}<br>ETA{{estimated_in}}</td>
+
+        <tr class="flight-status-row">
+            <td class="flight-status-cell">STD{{scheduled_out}}<br>ETD{{estimated_out}}</td>
+            <td class="flight-status-cell">STA{{scheduled_in}}<br>ETA{{estimated_in}}</td>
         </tr>
+
         {% endif %}
     </tbody>
 </table>

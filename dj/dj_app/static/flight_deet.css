@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
 
 body {
   margin: 0;
@@ -463,6 +465,88 @@ table.summary-table thead th {
   color: gray;
 }
 
+.table-cell {
+  font-size: 36px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: lighter;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.spacer-row {
+  height: 10px;
+}
+
+.spacer-cell {
+  font-size: 1px;
+  line-height: 1px;
+}
+
+.info-row {
+  height: 20px;
+  padding: 0;
+}
+
+.info-cell {
+  font-weight: lighter;
+  line-height: 1px;
+  font-size: 12px;
+  color: grey;
+}
+
+.gate-row {
+  padding-top: 0;
+}
+
+.gate-cell {
+  font-size: 20px;
+  line-height: 1px;
+}
+
+.scheduled-row {
+  height: 20px;
+  padding: 0;
+}
+
+.scheduled-cell {
+  font-weight: lighter;
+  line-height: 1px;
+  font-size: 12px;
+  color: grey;
+}
+
+.scheduled-time-row {
+  padding-top: 0;
+}
+
+.scheduled-time-cell {
+  font-size: 20px;
+  line-height: 1px;
+}
+
+.utc-row {
+  height: 20px;
+  padding: 0;
+}
+
+.utc-cell {
+  font-weight: lighter;
+  line-height: 1px;
+  font-size: 12px;
+  color: grey;
+}
+
+.flight-status-row {
+  padding-top: 0;
+}
+
+.flight-status-cell {
+  font-size: 20px;
+}
+
+
 
 
 
@@ -562,4 +646,3 @@ table.summary-table thead th {
   }
 
 }
-
