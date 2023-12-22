@@ -83,35 +83,20 @@ tbody tr:nth-child(odd) {
   color: #ADBAC7;
 }
 
-.search-form-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 10px;
-  background-color: rgba(251, 242, 231, 0.0);
-  z-index: 100;
-  margin-bottom: 20px;
-}
-
 .search-form {
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 300px;
-  width: 90%;
-  margin: 0 auto;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
+  margin-top: 20px;
+  border: black;
+  border-radius: 5px;
+  margin-bottom: 20px;
 }
 
 .search-form input[type="text"] {
   padding: 10px;
-  width: 100%;
+  width: 300px;
+  border: none;
   border: 1px solid black;
   border-radius: 5px;
   margin-right: 10px;
@@ -126,32 +111,12 @@ tbody tr:nth-child(odd) {
   cursor: pointer;
 }
 
-.search-form.expanded {
-  max-height: 100px; /* Adjust the value based on your content */
-}
 
 @media only screen and (min-width: 600px) {
-  .search-form-wrapper {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: fit-content;
-    padding: 10px;
-    background-color: rgba(251, 242, 231, 0.0);
-    z-index: 100;
-  }
-
-  .search-form {
-    width: 100%;
-    max-width: 300px;
-  }
-
   .search-form input[type="text"] {
-    width: 100%;
+    width: 200px;
   }
 }
-
 table {
   margin: 0 auto;
   border-collapse: collapse;
@@ -160,4 +125,11 @@ table {
 
 body {
   margin-bottom: 100px;
+}
+
+@media only screen and (max-width: 400px) {
+ 
+  .search-form input[type="text"] {
+    width: 150px;
+  }
 }

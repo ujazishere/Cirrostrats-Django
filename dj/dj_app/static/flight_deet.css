@@ -76,7 +76,7 @@ div.data-warning p {
 }
 
 
-/***************** this code is for accordion button *******************/ 
+/***************** this code is for accordion button *******************/
 
 .accordion-content {
   max-height: 0;
@@ -89,14 +89,6 @@ div.data-warning p {
   width: 100%;
 }
 
-.accordion-button.animate {
-  transition: transform 0.3s ease; 
-}
-
-.accordion-button.animate.active {
-  transform: rotate(180deg);
-}
-
 .accordion-button {
   background: none;
   cursor: pointer;
@@ -107,7 +99,7 @@ div.data-warning p {
   border-radius: 5px;
   outline: none; 
   background-color: #2D333B;
-  transition: transform 0.3s ease; 
+  transition: transform 0.3s; 
 }
 
 .accordion-button.active {
@@ -132,7 +124,9 @@ div.data-warning p {
 .header-button {
   cursor: pointer;
   width: 100%;
+  color: #ADBAC7;
 }
+
 
 .dark-mode .accordion-button {
   color: white;
@@ -360,7 +354,7 @@ table.another-table td:first-child {
   padding: 10px 5px; 
   text-align: center;
   background-color: #2D333B;
-  color: #ffffff;
+  color: #ADBAC7;
   border-radius: 10px;
 }
 
@@ -536,12 +530,6 @@ table.summary-table thead th {
 .flight-status-cell {
   font-size: 20px;
 }
-
-
-
-
-
-
 
 
 

@@ -2,12 +2,16 @@ Practice readibility and simplicity. Include description and documentation for o
 
 **IS:   
 
-        WIP - summery box shadow and expand/collapse (fast)animation.  
-
-        WIP - understand JavaScript <script> tag** and how its implemented with views.py and urls.py
-        WIP - Implement asynchronous loading of the data on the flight_deet page. Load data incrementally so as to avoid waiting for all data to be fetched.
-        WIP - dynamic color for text on tables 
-        ** i removed the borders and it looked really weird and not orgnized hence got the borders back and made them as thin as possible 
+        summery box shadow and expand/collapse (fast)animation.
+        Move `Show on SkyVector Map` to the right end and grey it out a tiny bit and decrease font.
+        
+        Workout 401 forbidden error; CSFR token issues on main web.
+        **understand JavaScript <script> tag** and how its implemented with views.py and urls.py
+            Implement asynchronous loading of the data on the flight_deet page.
+                Load data incrementally so as to avoid waiting for all data to be fetched.
+        Explore vim manoeuvers
+        move searchbar on all pages to header of the site
+        dynamic color for text on tables
         flight deet page / comparison table make the title grey and remove the borders from inside of the table
         
     
@@ -162,6 +166,3 @@ weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf',
         DONE! Delay/GS from the faa.gov on the ground stop.
         DONE! google type flight_deet box
         DONE! Add skyvector map
-        DONE! Move `Show on SkyVector Map` to the right end and grey it out a tiny bit and decrease font.
-        DONE! THIS IS ALREADY FIXED THOUGH CLOUDFLARE Workout 401 forbidden error; CSFR token issues on main web.
-        **** move searchbar on all pages to header of the site - I tried this and it looked really weird and not usable at all hence for now kept the searchbar as it is

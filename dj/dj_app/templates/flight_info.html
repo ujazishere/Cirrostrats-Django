@@ -4,15 +4,7 @@
 {% block content %}
   <h2>Flight Gate Information</h2>
   <link rel="stylesheet" type="text/css" href="{% static 'flight_info.css' %}">
-  
-  <div class="search-form-wrapper">
-    <form method="post" class="search-form" id="search-form">
-      {% csrf_token %}
-      <label for="query"></label>
-      <input type="text" name="query" id="query" placeholder="Search">
-      <button type="submit">Search</button>
-    </form>
-    <button id="toggle-search">+</button>
+
   </div>
 
   {% if gate_data_table %}
@@ -42,15 +34,14 @@
     <h3>No Results for {{gate}}.</h3>
   {% endif %}
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const searchForm = document.getElementById("search-form");
-      const toggleSearchButton = document.getElementById("toggle-search");
+  <!-- Search box-->
+<div class="search-form-wrapper">
+  <form method="post" class="search-form">
+      {% csrf_token %}
+      <label for="query"></label>
+      <input type="text" name="query" id="query">
+      <button type="submit">Search</button>
+  </form> 
+  </div>
 
-      toggleSearchButton.addEventListener("click", function() {
-        searchForm.classList.toggle("expanded");
-        document.getElementById("query").focus();
-      });
-    });
-  </script>
 {% endblock %}
