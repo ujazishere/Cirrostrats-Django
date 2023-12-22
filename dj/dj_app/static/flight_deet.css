@@ -367,6 +367,7 @@ table.another-table td:first-child {
 .dark-mode .route th {
   background-color: #2D333B;
   color: #ADBAC7;
+  border-bottom: 1px solid white;
 }
 
 .route td {
