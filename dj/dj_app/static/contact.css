@@ -5,6 +5,8 @@ body {
   text-align: center;
 }
 
+/************** this code is for text *************/
+
 h1 {
   font-size: 35px;
   font-weight: bold;
@@ -19,6 +21,11 @@ h2 {
   font-weight: bold;
 }
 
+.dark-mode h4 {
+  color: white;
+}
+
+/************** this code is for form *************/
 
 form label {
   display: block;
@@ -49,10 +56,6 @@ form .form-group {
 }
 
 .dark-mode .form-group {
-  color: white;
-}
-
-.dark-mode h4 {
   color: white;
 }
 

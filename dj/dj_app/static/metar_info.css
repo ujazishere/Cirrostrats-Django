@@ -3,19 +3,13 @@ body {
   padding: 0;
 }
 
-body.dark-mode {
-  background-color: #22272E;
-}
+
+/************** this code is for table *************/
+
 
 body.dark-mode thead{
   color: #FFFFFF;
-}
-
-
-
-.dark-mode .search-form button{
-  border: 1px solid white;
-  background-color: #2D333B;
+ 
 }
 
 .dark-mode tr:nth-child(odd) {
@@ -28,34 +22,14 @@ body.dark-mode thead{
 }
 
 .dark-mode .table {
+  margin: 0 auto;
+  text-align: center;
+  width: 80%;
+  max-width: 550px;
   background-color: #2D333B;
-  border-collapse: separate;
-  border: 1px solid #ADBAC7;
+  border: 1px solid #ffffff;
   border-radius: 15px;
   overflow: hidden;
-}
-
-
-h1 {
-  font-size: 10;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 50px;
-  color: #ADBAC7;
-}
-
-h3 {
-  font-size: 50;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 50px;
-}
-
-p {
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 30px;
 }
 
 .table {
@@ -65,10 +39,9 @@ p {
   width: 80%;
   max-width: 550px;
   background-color: #2D333B;
-  border: 2px solid #000000;
+  border: 1px solid #ffffff;
   border-radius: 15px;
   overflow: hidden;
-  overflow: black;
 }
 
 th, td {
@@ -99,6 +72,35 @@ tbody tr:nth-child(odd) {
 }
 
 
+
+/************** this code is for text *************/
+
+
+h1 {
+  font-size: 10;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 50px;
+  color: #ADBAC7;
+}
+
+h3 {
+  font-size: 50;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 50px;
+}
+
+p {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 30px;
+}
+
+/************** this code is for searchbar *************/
+
+
 .search-form {
   display: flex;
   justify-content: center;
@@ -125,6 +127,17 @@ tbody tr:nth-child(odd) {
   background-color: #2D333B;
   color: #ffffff;
   cursor: pointer;
+}
+
+.dark-mode .search-form input[type="text"] {
+  border: 1px solid rgb(255, 255, 255); 
+  background-color: #2D333B;
+  color: white;
+}
+
+.dark-mode .search-form button{
+  border: 1px solid white;
+  background-color: #2D333B;
 }
 
 @media only screen and (max-width: 600px) {

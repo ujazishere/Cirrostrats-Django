@@ -3,17 +3,10 @@ body {
   padding: 0;
 }
 
+/************** this code is for link container *************/
+
   .dark-mode .links-container a {
     color: white;
-  }
-
-  .dark-mode .search-form button{
-    border: 1px solid white;
-    background-color: #2D333B;
-  }
-  
-  .dark-mode h3 a {
-    color: #ADBAC7 !important;
   }
   
 .links-container {
@@ -36,6 +29,8 @@ body {
   text-decoration: underline; 
   font-size: 18px; 
 }
+
+/************** this code is for styles *************/
 
 h1 {
   font-size: 35px;
@@ -69,7 +64,12 @@ p {
   margin-top: 40px;
 }
 
-/* Search form styles */
+.dark-mode h3 a {
+  color: #ADBAC7 !important;
+}
+
+/************** this code is for search bar *************/
+
 .search-form {
   display: flex;
   justify-content: center;
@@ -89,9 +89,10 @@ p {
 }
 
 .dark-mode .search-form input[type="text"] {
-  border: 1px solid white; /* Specify the style and color of the border */
+  border: 1px solid rgb(255, 255, 255); 
+  background-color: #2D333B;
+  color: white;
 }
-
 
 .search-form button {
   padding: 10px;
@@ -101,6 +102,12 @@ p {
   color: #ffffff;
   cursor: pointer;
 }
+
+.dark-mode .search-form button{
+  border: 1px solid white;
+  background-color: #2D333B;
+}
+
 
 /* Media queries for responsiveness */
 @media only screen and (max-width: 600px) {
@@ -117,12 +124,17 @@ p {
   }
 }
 
-
+h1 {
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 50px;
+}
 
 
 @media only screen and (max-width: 400px) {
   h1 {
-    font-size: 16px;
+    font-size: 35px;
   }
 
   p {
@@ -135,3 +147,9 @@ p {
 }
 
 
+h1 {
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 50px;
+}

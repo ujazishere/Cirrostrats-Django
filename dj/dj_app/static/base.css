@@ -5,23 +5,21 @@ body {
   font-family: 'Roboto', Menlo, monospace;
 }
 
-
+/************** this code is for clock *************/
 
 .gmt-clock {
   position: fixed;
-  top: 65px; /* Adjust the top position as needed */
-  right: 10px; /* Adjust the right position as needed */
-  background-color: rgba(0, 0, 0, 0.5); /* Background color */
-  color: white; /* Text color */
-  padding: 5px 10px; /* Padding for the clock */
-  border-radius: 5px; /* Rounded corners */
-  font-size: 14px; /* Font size */
-  z-index: 9999; /* Set a higher value for stacking order */
+  top: 65px; 
+  right: 10px; 
+  background-color: rgba(0, 0, 0, 0.5); 
+  color: white; 
+  padding: 5px 10px; 
+  border-radius: 5px; 
+  font-size: 14px; 
+  z-index: 9999; 
 }
 
-
-
-
+/************** this code is for dark/light mode button *************/
 
 .dark-mode-switch {
   position: absolute;
@@ -42,23 +40,24 @@ body {
   overflow: hidden;
 }
 
-
-
 .dark-mode-switch button::before {
-  content: ""; /* Clear the content */
+  content: ""; 
   display: block;
-  width: 18px; /* Adjust the width of your image */
-  height: 18px; /* Adjust the height of your image */
+  width: 18px; 
+  height: 18px; 
   background-size: cover;
 }
 
 .dark-mode-switch button.sun::before {
-  background-image: url('/Cirrostrats/logo/sun.png'); /* Path to your sun image */
+  background-image: url('/Cirrostrats/logo/sun.png'); 
 }
 
 .dark-mode-switch button.moon::before {
-  background-image: url('/Cirrostrats/logo/moon.png'); /* Path to your moon image */
+  background-image: url('/Cirrostrats/logo/moon.png'); 
+
 }
+
+/************** this code is for dark/light mode color *************/
 
 body.dark-mode {
   background-color: #22272E;
@@ -87,6 +86,8 @@ body.dark-mode .sticky-header {
 body.dark-mode thead {
   font: #FFFFFF;
 }
+
+/************** this code is for header *************/
 
 .sticky-header {
   position: sticky;
@@ -117,6 +118,8 @@ body.dark-mode thead {
   text-decoration: none;
 }
 
+/************** this code is for burger menu *************/
+
 .burger-menu {
   position: absolute;
   top: 15px;
@@ -132,6 +135,8 @@ body.dark-mode thead {
   background-color: #ffffff;
   margin-bottom: 5px;
 }
+
+/************** this code is for sidebar *************/
 
 .sidebar {
   position: fixed;
@@ -168,11 +173,8 @@ body.dark-mode thead {
   font-weight: bold;
 }
 
-h1 {
-  font-size: 35px;
-  margin-top: 10px;
-  color: #24292E;
-}
+/************** this code is for text *************/
+
 
 h2 {
   margin-top: 20px;
@@ -191,6 +193,8 @@ p {
   margin-top: 20px;
   color: #24292E;
 }
+
+
 
 @media only screen and (max-width: 600px) {
   .sidebar {

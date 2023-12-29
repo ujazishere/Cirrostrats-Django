@@ -43,7 +43,7 @@ h3 {
   font-size: 20px;
   font-weight: bold;
   text-align: center;
-  margin-top: 25px;
+  padding: 30px;
 }
 
 p {
@@ -320,6 +320,16 @@ table.another-table td:first-child {
   background-color: #2D333B;
   color: #ffffff;
   cursor: pointer;
+}
+
+.dark-mode .search-form input[type="text"] {
+  border: 1px solid rgb(255, 255, 255); 
+  background-color: #2D333B;
+  color: white;
+}
+
+.dark-mode .search-form button{
+  border: 1px solid white
 }
 
 
