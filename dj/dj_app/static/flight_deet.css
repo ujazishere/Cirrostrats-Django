@@ -440,7 +440,6 @@ table.summary-table thead th {
   background-color: #2D333B !important;
   box-shadow: 0 0 0 1px #ffffff;
   color: #ADBAC7;
-  border-collapse: collapse;
 }
 
 .dark-mode table.summary-table th {
@@ -453,10 +452,12 @@ table.summary-table thead th {
   background-color: #22272E;
   color: #ADBAC7;
   border: none;
+
  }
 
  .dark-mode table.summary-table tr {
-  border: none;
+  border: 1px #22272E;
+
  }
 
 .small-text {
@@ -470,29 +471,24 @@ table.summary-table thead th {
   font-size: 34px;
   font-family: 'Roboto', sans-serif;
   font-weight: lighter;
-  border-collapse: collapse;
 }
 
 .text-align-right {
   text-align: right;
-  border-collapse: collapse;
 }
 
 .spacer-row {
   height: 10px;
-  border-collapse: collapse;
 }
 
 .spacer-cell {
   font-size: 1px;
   line-height: 1px;
-  border-collapse: collapse;
 }
 
 .info-row {
   height: 20px;
   padding: 0;
-  border-collapse: collapse;
 }
 
 .info-cell {
@@ -500,24 +496,20 @@ table.summary-table thead th {
   line-height: 1px;
   font-size: 12px;
   color: grey;
-  border-collapse: collapse;
 }
 
 .gate-row {
   padding-top: 0;
-  border-collapse: collapse;
 }
 
 .gate-cell {
   font-size: 22px;
   line-height: 1px;
-  border-collapse: collapse;
 }
 
 .scheduled-row {
   height: 20px;
   padding: 0;
-  border-collapse: collapse;
 }
 
 .scheduled-cell {
@@ -525,24 +517,20 @@ table.summary-table thead th {
   line-height: 1px;
   font-size: 12px;
   color: grey;
-  border-collapse: collapse;
 }
 
 .scheduled-time-row {
   padding-top: 0;
-  border-collapse: collapse;
 }
 
 .scheduled-time-cell {
   font-size: 22px;
   line-height: 1px;
-  border-collapse: collapse;
 }
 
 .utc-row {
   height: 20px;
   padding: 0;
-  border-collapse: collapse;
 }
 
 .utc-cell {
@@ -550,17 +538,14 @@ table.summary-table thead th {
   line-height: 1px;
   font-size: 12px;
   color: grey;
-  border-collapse: collapse;
 }
 
 .flight-status-row {
   padding-top: 0;
-  border-collapse: collapse;
 }
 
 .flight-status-cell {
   font-size: 20px;
-  border-collapse: collapse;
 }
 
 
