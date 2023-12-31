@@ -451,11 +451,11 @@ table.summary-table thead th {
 .dark-mode table.summary-table td {
   background-color: #22272E;
   color: #ADBAC7;
-  border: 1px #22272E !important;
+  border: none;
  }
 
  .dark-mode table.summary-table tr {
-  border: 1px #22272E !important;
+  border: none;
  }
 
 .small-text {
