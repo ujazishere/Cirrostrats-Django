@@ -451,20 +451,17 @@ table.summary-table thead th {
 .dark-mode table.summary-table td {
   background-color: #22272E;
   color: #ADBAC7;
-  border: none;
-
+  border: 1px #22272E !important;
  }
 
  .dark-mode table.summary-table tr {
-  border: 1px #22272E;
-
+  border: 1px #22272E !important;
  }
 
 .small-text {
   font-size: 12px;
   font-weight: 100;
   color: gray;
-  border-collapse: collapse;
 }
 
 .table-cell {
