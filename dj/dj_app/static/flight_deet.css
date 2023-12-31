@@ -402,7 +402,7 @@ table.summary-table {
   outline: none;
   box-sizing: border-box;
   position: relative;
-  border-collapse: collapse; /* Ensure consistent border handling */
+  border-collapse: collapse; 
 }
 
 
@@ -440,6 +440,7 @@ table.summary-table thead th {
   background-color: #2D333B !important;
   box-shadow: 0 0 0 1px #ffffff;
   color: #ADBAC7;
+  border-collapse: collapse;
 }
 
 .dark-mode table.summary-table th {
