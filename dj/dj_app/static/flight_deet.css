@@ -599,16 +599,14 @@ table.summary-table thead th {
     width: 200px;
   }
 
-  table.summary-table th,
   table.summary-table td,
   table.summary-table tr {
     border: 1px solid #FFFFFF; /* Set border color to match the background color */
   }
 
-  .dark-mode.summary-table th,
   .dark-mode.summary-table td,
   .dark-mode.summary-table tr {
-    border: 1px solid #22272E; /* Set border color to match the background color */
+    border: 1px solid #2D333B; /* Set border color to match the background color */
   }
 }
 
@@ -640,29 +638,25 @@ table.summary-table thead th {
     background-color: #FFFFFF;
   }
 
-  table.summary-table th,
   table.summary-table td,
   table.summary-table tr {
     border: 1px solid #FFFFFF; /* Set border color to match the background color */
   }
 
-  .dark-mode.summary-table th,
   .dark-mode.summary-table td,
   .dark-mode.summary-table tr {
-    border: 1px solid #22272E; /* Set border color to match the background color */
+    border: 1px solid #2D333B; /* Set border color to match the background color */
   }
 
 }
 
 
 @media (max-width: 767px) {
-  table.summary-table th,
   table.summary-table td,
   table.summary-table tr {
     border: 1px solid #FFFFFF; /* Set border color to match the background color */
   }
 
-  .dark-mode.summary-table th,
   .dark-mode.summary-table td,
   .dark-mode.summary-table tr {
     border: 1px solid #2D333B; /* Set border color to match the background color */
