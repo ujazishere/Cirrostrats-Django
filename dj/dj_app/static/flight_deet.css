@@ -58,7 +58,7 @@ p {
 
 div.data-warning p {
   position: fixed;
-  top: 7%;
+  top: 10%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 11px;
@@ -599,15 +599,6 @@ table.summary-table thead th {
     width: 200px;
   }
 
-  table.summary-table td,
-  table.summary-table tr {
-    border: none; /* Set border color to match the background color */
-  }
-
-  .dark-mode.summary-table td,
-  .dark-mode.summary-table tr {
-    border: none; /* Set border color to match the background color */
-  }
 }
 
 @media only screen and (max-width: 400px) {
@@ -638,29 +629,11 @@ table.summary-table thead th {
     background-color: #FFFFFF;
   }
 
-  table.summary-table td,
-  table.summary-table tr {
-    border: none; /* Set border color to match the background color */
-  }
-
-  .dark-mode.summary-table td,
-  .dark-mode.summary-table tr {
-    border: none; /* Set border color to match the background color */
-  }
-
 }
 
 
 @media (max-width: 767px) {
-  table.summary-table td,
-  table.summary-table tr {
-    border: none; /* Set border color to match the background color */
-  }
 
-  .dark-mode.summary-table td,
-  .dark-mode.summary-table tr {
-    border: none; /* Set border color to match the background color */
-  }
 
 
 }
