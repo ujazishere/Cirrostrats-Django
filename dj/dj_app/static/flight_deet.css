@@ -598,7 +598,7 @@ table.summary-table thead th {
   .search-form input[type="text"] {
     width: 200px;
   }
-  
+
   table.summary-table th,
   table.summary-table td,
   table.summary-table tr {
@@ -670,7 +670,7 @@ table.summary-table thead th {
   .dark-mode.summary-table th,
   .dark-mode.summary-table td,
   .dark-mode.summary-table tr {
-    border: 1px solid #22272E; /* Set border color to match the background color */
+    border: 1px solid #2D333B; /* Set border color to match the background color */
     border-collapse: collapse;
   }
 
