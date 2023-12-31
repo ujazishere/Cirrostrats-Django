@@ -603,14 +603,12 @@ table.summary-table thead th {
   table.summary-table td,
   table.summary-table tr {
     border: 1px solid #FFFFFF; /* Set border color to match the background color */
-    border-collapse: collapse;
   }
 
   .dark-mode.summary-table th,
   .dark-mode.summary-table td,
   .dark-mode.summary-table tr {
     border: 1px solid #22272E; /* Set border color to match the background color */
-    border-collapse: collapse;
   }
 }
 
@@ -646,14 +644,12 @@ table.summary-table thead th {
   table.summary-table td,
   table.summary-table tr {
     border: 1px solid #FFFFFF; /* Set border color to match the background color */
-    border-collapse: collapse;
   }
 
   .dark-mode.summary-table th,
   .dark-mode.summary-table td,
   .dark-mode.summary-table tr {
     border: 1px solid #22272E; /* Set border color to match the background color */
-    border-collapse: collapse;
   }
 
 }
@@ -664,14 +660,12 @@ table.summary-table thead th {
   table.summary-table td,
   table.summary-table tr {
     border: 1px solid #FFFFFF; /* Set border color to match the background color */
-    border-collapse: collapse;
   }
 
   .dark-mode.summary-table th,
   .dark-mode.summary-table td,
   .dark-mode.summary-table tr {
     border: 1px solid #2D333B; /* Set border color to match the background color */
-    border-collapse: collapse;
   }
 
 
