@@ -22,7 +22,7 @@ class Flight_aware_pull(Root_class):
         self.current_utc = self.date_time(raw_utc=True)
 
     def initial_pull(self, airline_code=None, query=None):
-        apiKey = "V2M5XJKNC5L1oJb0Dxukt0HJ7c8cxXDQ"
+        apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"
         apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
         auth_header = {'x-apikey':apiKey}
         """
