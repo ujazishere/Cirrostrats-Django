@@ -243,9 +243,44 @@ altimeter_setting = r"\w{1}\d{4})"
 
 # The following will allow for extracting unique items and their count.
 
-counter = Counter(x.not_auto)
-unique = counter.keys()
+# counter = Counter(x.not_auto)
+# unique = counter.keys()
 
+"""
+metar MakeMore version using Andrej's technique
+mm= 0   # this is dummy replace with acgual metar data. 
+N = torch.zeros((3000,35),dtype=float)
+P = torch.zeros((3000,35),dtype=float)
+
+tots = {}
+patt_stack = []
+count = 0
+for ind in range(len(mm)):
+    each_metar = mm[ind]
+    each_patt = []
+    each_split = each_metar.split()
+    for split_ind in range(len(each_split)):
+        each_item = each_split[split_ind]
+        
+        digs = len(each_item)
+        each_patt.append(digs)
+        # N[ind,split_ind] = digs # This one still needs to be tested.
+
+    if not each_patt in patt_stack:     # if each pattern is not in patt_stach then add it
+        # patt_stack is declared and used as a bank of uniques
+        patt_stack.append(each_patt)
+        N[count,0] = mm.index(each_metar)      #add 0th column the index ofthat metar
+        for i in range(len(each_patt)):         #1st column and on patt length
+            N[count,i+1] = each_patt[i]
+        count+= 1
+    else:                               # if it is in patt_stack: add to its count
+        
+        # P[:,:]
+
+        # add count to the unique patts.
+        thing = str(each_patt)
+        tots[thing] = tots.get(thing,0)+1       
+"""
 
 # Seems unnecessary. 
 class Typical_met:                          # analyzing the first metar in the bulk metar list

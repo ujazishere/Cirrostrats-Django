@@ -270,6 +270,7 @@ class Pull_flight_info(Root_class):
         else:
             date = str(self.date_time(raw=True))     # Root_class inheritance format yyyymmdd
         flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport[1:]}"
+        print(flight_view)
         soup = self.request(flight_view)
         try :
             leg_data = soup.find_all('div', class_='leg')   # Has all the departure and destination data

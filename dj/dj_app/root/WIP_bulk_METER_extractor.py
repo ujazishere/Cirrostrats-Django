@@ -28,7 +28,8 @@ airport_ID = [i for i in id if len(i) ==3 and i.isalpha()]      # Investigate th
 # Use this to shorten the list for trial
 # airport_ID = airport_ID[:10]
 
-print(len(airport_ID))
+print('alphabetic airport ID',len(airport_ID))
+print('all airport ID as imported',len(id))
 
 def code_tag(airport_id):
     """
@@ -47,48 +48,68 @@ def code_tag(airport_id):
     return metar_raw
 
 # Prepending K to 3 leter codes 
-new_id = []
-for i in id:
-    if len(i) == 3:
-        prepend = 'K' + i
-        new_id.append(prepend)
-    else:
-        new_id.append(i)
+def export_airports_without_digits():
+    new_id = []
+    for i in id:    # Using all airport ID's
+        if len(i) == 3:
+            prepend = 'K' + i
+            new_id.append(prepend)
+        else:
+            new_id.append(i)
 
-# seperating id's that contain digit since those mostly dont have associated metars/TAFs
-x = set()
-for i in new_id:
-    for char in i:
-        if char.isdigit():
-            x.add(i)
-ids_with_digit = list(x)
-ids_without_digit = new_id
-for i in ids_with_digit:
-    ids_without_digit.remove(i)
+    # seperating id's that contain digit since those mostly dont have associated metars/TAFs
+    x = set()
+    for i in new_id:
+        for char in i:
+            if char.isdigit():
+                x.add(i)
+    ids_with_digit = list(x)
+    ids_without_digit = new_id      # declaring the variable
+    for i in ids_with_digit:
+        ids_without_digit.remove(i)
+    return ids_with_digit, ids_without_digit
+
+ids_with_digit, ids_without_digit = export_airports_without_digits()
 
 
-# without concurrent futures threadpool executor. Inefficient but stable
-# For somme reason ends up with only 21460 items in the bulky)metar
+with open(r'C:\Users\ujasv\OneDrive\Desktop\pickles\no_mets.pkl', 'rb') as f:
+    no_mets = pickle.load(f)
+
+ids_without_digit_with_no_mets_ecluded = [i for i in ids_without_digit if i not in no_mets]
+
+# This is without the concurrent futures threadpool executor. Inefficient but stable
 count = 0
 bulky_metar = []
 no_mets = []
 yes_mets = []
-for airport_id in ids_without_digit:
+# half_index = int(len(ids_without_digit)/2)     # use this to split pulls into two sections.
+for airport_id in ids_without_digit_with_no_mets_ecluded:
     count += 1
     metars = code_tag(airport_id)
     if not metars:
         no_mets.append(airport_id)
+        print('no_met', airport_id, count)
     else:
-        metars_in_list_form = metars.split('\n')
+        metars_in_list_form = metars.split('\n')    # Delete this for TAF.
         for a_metar in metars_in_list_form:
-            bulky_metar.append(a_metar)
+            if a_metar:         # since, there are empty metar lines.
+                bulky_metar.append(a_metar)
         yes_mets.append(airport_id)
-    if count >30:
+    print(count)
+    # use this to test how long it takes to pull and if the pull is even working.
+    # Comment it out if you plan to use the whole thing.
+    if count >5:
+        print('Test done! no_mets/yes_meta: ', len(no_mets),'/', len(yes_mets))
         break
 
+# dump metar to desktop pickles
+def dump_bulky_weather(bulky_metar):
+    with open(r'C:\Users\ujasv\OneDrive\Desktop\pickles\BULK_METAR_JAN_2024_.pkl', 'wb') as f:
+        pickle.dump(bulky_metar, f)
+dump_bulky_weather(bulky_metar)
 
-# The Unstable efficient version that pulls upto 8 indexes for whatever reason
-# Same as the stable inefficient version: ends up with only 21460 items in the list
+
+# This is the Unstable efficient version that pulls upto 8 indexes for whatever reason
 airport_ID = ids_without_digit
 met_taf = []        # This is essentially code_tag. Using a seperate variable to avoid clashes
 with ThreadPoolExecutor(max_workers=500) as executor:

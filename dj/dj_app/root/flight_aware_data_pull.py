@@ -97,10 +97,11 @@ class Flight_aware_pull(Root_class):
         solace_client.send_message("Hello, Solace JMS!")
         
         solace_client.disconnect()
-        
+
 def flight_aware_data_pull(airline_code=None, query=None,):
-    
-    
+
+    # This returns bypass all and return prefabricated None vals
+    # return Flight_aware_pull().attrs
     if not airline_code:
         airline_code = 'UAL'
     
@@ -179,14 +180,11 @@ def flight_aware_data_pull(airline_code=None, query=None,):
         filed_ete = flights[i]['filed_ete']
         filed_altitude = flights[i]['filed_altitude']
     """
-    print('trying flights')
     if flights:     # sometimes flights returns empty list.
         for i in range(len(flights)):      # There are typically 15 of these for multiple dates
             scheduled_out_raw_fa = flights[i]['scheduled_out']
             date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time
-            print('within flights',i)
             if flights[i]['route']:
-                print('within route', i)
                 origin = flights[i]['origin']['code_icao']
                 destination = flights[i]['destination']['code_icao']
                 registration = flights[i]['registration']

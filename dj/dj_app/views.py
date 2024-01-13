@@ -11,11 +11,13 @@ from .root.dep_des import Pull_flight_info
 from time import sleep
 from django.shortcuts import render
 from django.http import JsonResponse
+import smtplib
 
 '''
 views.py runs as soon as the base web is requested. Hence, GateCheckerThread() is run in the background right away.
 It will then run 
 '''
+
 run_lengthy_web_scrape = False 
 
 if run_lengthy_web_scrape:
@@ -34,7 +36,27 @@ def home(request):
         # This one adds similar queries to the admin panel in SearchQuerys.
         # Make it such that the duplicates are grouped using maybe unique.
         # search_query = SearchQuery(query=main_query)      # Adds search queries to the database
-        # search_query.save()                               # you've got to save it otherwise it wont save
+        # search_query.save()       # you've got to save it otherwise it wont save
+
+        # This bit will send an email notification with the query. Catered for EC2 deployment only!
+        # For this to work on google you have to switch on two factor auth
+            # You also need to go into the security--> 2factor auth--> app password and generate password for it  
+        if run_lengthy_web_scrape:
+            smtp_server = "smtp.gmail.com"
+            smtp_port = 587  # Use 587 for TLS
+            smtp_user = "publicuj@gmail.com"
+            smtp_password = "dsxi rywz jmxn qwiz"
+            to_email = ['ujasvaghani@gmail.com']
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                # Start TLS for security
+                server.starttls()
+            
+                # Login to the email account
+                server.login(smtp_user, smtp_password)
+            
+                # Send the email
+                server.sendmail(smtp_user, to_email, main_query)
+            print('SENT EMAIL!!!!!!!!!!!!!')
         
         return parse_query(request, main_query)
 
@@ -173,17 +195,23 @@ def gate_info(request, main_query):
 
 
 def flight_deets(request,airline_code=None, flight_number_query=None):
-    # given a flight number it returns its, gates, scheduled and actual times of departure and arrival
+    
 
     flt_info = Pull_flight_info()           # from dep_des.py file
     weather = Metar_taf_parse()         # from MET_TAF_parse.py
+    
+    # """
     def without_futures():
         bulk_flight_deets = {}
         bulk_flight_deets.update(flt_info.fs_dep_arr_timezone_pull(flight_number_query))
         bulk_flight_deets.update(flt_info.fa_data_pull(airline_code,flight_number_query))
         bulk_flight_deets.update(flt_info.united_departure_destination_scrape(flight_number_query))
-        print(bulk_flight_deets)
-        UA_departure_ID, UA_destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
+        # This is to assign flight_aware origin and destinal as feed in for weather, NAS and gate.
+            # united dep and destination airports are in accurate at times.
+        if bulk_flight_deets['origin']:
+            UA_departure_ID,UA_destination_ID = bulk_flight_deets['origin'], bulk_flight_deets['destination']
+        else:        
+            UA_departure_ID, UA_destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
         bulk_flight_deets['dep_weather'] = weather.scrape(UA_departure_ID)
         bulk_flight_deets['dest_weather'] = weather.scrape(UA_destination_ID)
         bulk_flight_deets.update(flt_info.nas_final_packet(UA_departure_ID, UA_destination_ID))
@@ -191,8 +219,12 @@ def flight_deets(request,airline_code=None, flight_number_query=None):
         return bulk_flight_deets
     
     bulk_flight_deets = without_futures()
+    # """
 
     """
+    # This code is the parallel processing futures implementation. 
+        # It is creating issues on EC2 as of 12/21/2023. Hence it is commented out.
+
     with ThreadPoolExecutor(max_workers=3) as executor:
         futures1 = executor.submit(flt_info.fs_dep_arr_timezone_pull, flight_number_query)
         futures2 = executor.submit(flt_info.fa_data_pull, airline_code, flight_number_query)
@@ -207,9 +239,7 @@ def flight_deets(request,airline_code=None, flight_number_query=None):
             flight_aware_data_pull = i
         else:
             bulk_flight_deets.update(i)
-    """
-
-    """
+    
     UA_departure_ID, UA_destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
 
     with ThreadPoolExecutor(max_workers=4) as executor:
@@ -223,9 +253,6 @@ def flight_deets(request,airline_code=None, flight_number_query=None):
     bulk_flight_deets['dep_weather'] = futures3.result()
     bulk_flight_deets['dest_weather'] = futures4.result()
 
-    """
-
-    """
     fa_departure_ID, fa_destination_ID = flight_aware_data_pull['origin'], flight_aware_data_pull['destination']
     # Here associating None values for fa_data seems unnecessary. could rather use it and dump unreliable data.
     if  UA_departure_ID != fa_departure_ID and UA_destination_ID != fa_destination_ID:
