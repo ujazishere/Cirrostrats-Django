@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup as bs4
 from datetime import datetime
 import pytz
 import pickle
+import smtplib
 import os
 
 class Root_class():
@@ -12,6 +13,25 @@ class Root_class():
             pass
 
 
+    def send_email(self, body_to_send):
+        
+        smtp_server = "smtp.gmail.com"
+        smtp_port = 587  # Use 587 for TLS
+        smtp_user = "publicuj@gmail.com"
+        smtp_password = "dsxi rywz jmxn qwiz"
+        to_email = ['ujasvaghani@gmail.com']
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            # Start TLS for security
+            server.starttls()
+        
+            # Login to the email account
+            server.login(smtp_user, smtp_password)
+        
+            # Send the email
+            server.sendmail(smtp_user, to_email, body_to_send)
+        print('SENT EMAIL!!!!!!!!!!!!!')
+
+        
     def date_time(self, raw=None, viewable=None, raw_utc=None):
         eastern = pytz.timezone('US/eastern')
         now = datetime.now(eastern)

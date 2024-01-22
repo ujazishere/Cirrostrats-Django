@@ -2,7 +2,7 @@ import requests
 import pickle
 try:
     from .root_class import Root_class
-except:
+except:     # Just so it's easier to import outside of django
     from dj.dj_app.root.root_class import Root_class
 # from dj.dj_app.root.root_class import Root_class
 import re
@@ -22,7 +22,7 @@ class Flight_aware_pull(Root_class):
         self.current_utc = self.date_time(raw_utc=True)
 
     def initial_pull(self, airline_code=None, query=None):
-        apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"
+        apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # New Key from Ismail
         apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
         auth_header = {'x-apikey':apiKey}
         """
@@ -69,17 +69,17 @@ class Flight_aware_pull(Root_class):
         class SolaceJMSClient:
             def __init__(self, config):
                 self.config = config
-                self.connection = stomp.Connection([(config['jms_connection_url'], 55443)])  # Assuming default port 61613
+                # self.connection = stomp.Connection([(config['jms_connection_url'], 55443)])  # Assuming default port 61613
         
-            def connect(self):
-                self.connection.connect(self.config['username'], self.config['password'], wait=True)        # code breaks here.
-                self.connection.subscribe(destination=f"/queue/{self.config['queue_name']}", id=1, ack="auto")
+            # def connect(self):
+                # self.connection.connect(self.config['username'], self.config['password'], wait=True)        # code breaks here.
+                # self.connection.subscribe(destination=f"/queue/{self.config['queue_name']}", id=1, ack="auto")
         
-            def send_message(self, message):
-                self.connection.send(body=message, destination=f"/queue/{self.config['queue_name']}")
+            # def send_message(self, message):
+                # self.connection.send(body=message, destination=f"/queue/{self.config['queue_name']}")
         
-            def disconnect(self):
-                self.connection.disconnect()
+            # def disconnect(self):
+                # self.connection.disconnect()
         
         # Example usage
         solace_config = {
@@ -91,12 +91,12 @@ class Flight_aware_pull(Root_class):
                     'vpn': 'FDPS',
         }
         
-        solace_client = SolaceJMSClient(solace_config)
-        solace_client.connect()
+        # solace_client = SolaceJMSClient(solace_config)
+        # solace_client.connect()
         
-        solace_client.send_message("Hello, Solace JMS!")
+        # solace_client.send_message("Hello, Solace JMS!")
         
-        solace_client.disconnect()
+        # solace_client.disconnect()
 
 def flight_aware_data_pull(airline_code=None, query=None,):
 

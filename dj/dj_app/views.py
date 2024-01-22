@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from django.shortcuts import render
 from django.http import HttpResponse
 from .root.gate_checker import Gate_checker
+from .root.root_class import Root_class
 from .root.gate_scrape import Gate_scrape_thread
 from .root.MET_TAF_parse import Metar_taf_parse
 from .root.dep_des import Pull_flight_info
@@ -42,22 +43,7 @@ def home(request):
         # For this to work on google you have to switch on two factor auth
             # You also need to go into the security--> 2factor auth--> app password and generate password for it  
         if run_lengthy_web_scrape:
-            smtp_server = "smtp.gmail.com"
-            smtp_port = 587  # Use 587 for TLS
-            smtp_user = "publicuj@gmail.com"
-            smtp_password = "dsxi rywz jmxn qwiz"
-            to_email = ['ujasvaghani@gmail.com']
-            with smtplib.SMTP(smtp_server, smtp_port) as server:
-                # Start TLS for security
-                server.starttls()
-            
-                # Login to the email account
-                server.login(smtp_user, smtp_password)
-            
-                # Send the email
-                server.sendmail(smtp_user, to_email, main_query)
-            print('SENT EMAIL!!!!!!!!!!!!!')
-        
+            Root_class().send_email(body_to_send=main_query)
         return parse_query(request, main_query)
 
     else:
@@ -81,7 +67,7 @@ def parse_query(request, main_query):
         query_in_list_form = main_query.split()
         if len(query_in_list_form) == 1:            # If query is only one word or item  
             query = query_in_list_form[0].upper()           # this is string form instead of list
-            if query[:2] == 'UA' or query[:3] == 'GJS':         # Here you can also account for other airlines
+            if query[:2] == 'UA' or query[:3] == 'GJS':         # Accounting for flight number query with leads 
                 airline_code = None         
                 if query[0] == 'G':
                     airline_code, flgiht_digits = query[:3], query[3:]          # Its GJS
@@ -89,19 +75,26 @@ def parse_query(request, main_query):
                     flgiht_digits = query[2:]       # Its UA
                 print('\nSearching for:', airline_code,flgiht_digits)
                 return flight_deets(request, airline_code=airline_code,flight_number_query=flgiht_digits)
-            elif 'A' in query or 'B' in query or 'C' in query or len(query) == 1:     # Accounting for 1 letter only
+            elif 'A' in query or 'B' in query or 'C' in query or len(query) == 1:     # Accounting for 1 letter only. Gate query.
                 # When the length of query_in_list_form is only 1 it returns gates table for that particular query.
                 gate_query = query
                 return gate_info(request, main_query=gate_query)
             elif len(query) == 4 or len(query) == 3 or len(query) == 2:
                 if query.isdigit():
                     query = int(query)
-                    if 1 <= query <= 35 or 40 <= query <= 136:
+                    if 1 <= query <= 35 or 40 <= query <= 136:              # Accounting for EWR gates for gate query
                         return gate_info(request, main_query=str(query))
-                    else:
+                    else:                                                   # Accounting for fligh number
                         return flight_deets(request,airline_code=None,flight_number_query=query)
                 else:
-                    return gate_info(request, main_query=str(query))
+                    if len(query) == 4 and query[0] == 'K':
+                        weather_query_airport  = query
+                        weather_query_airport = weather_query_airport.upper()       # Making query uppercase for it to be compatible
+                        return metar_display(request, weather_query_airport)
+                    else:    
+                        print('impossible gate query return')
+                        Root_class().send_email(body_to_send=f"impossible gate query return: `{main_query}`")
+                        return gate_info(request, main_query=str(query))
             else:
                 gate_query = query
                 return gate_info(request, main_query=gate_query)
