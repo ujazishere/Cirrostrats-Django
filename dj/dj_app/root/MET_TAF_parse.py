@@ -57,7 +57,7 @@ class Metar_taf_parse:
         
 
 
-    def scrape(self, query=None,dummy=None):
+    def scrape(self, query=None,dummy=None, datis_arr=None):
         
         if dummy:
             
@@ -75,6 +75,10 @@ class Metar_taf_parse:
         else:
         # Find ways to convert raw query input into identifiable airport ID
             airport_id = query
+            awc_metar_api = f"https://aviationweather.gov/api/data/metar?ids={airport_id}"
+            metar_raw = requests.get(awc_metar_api)
+            metar_raw = metar_raw.content
+            metar_raw = metar_raw.decode("utf-8")
             awc_metar_api = f"https://aviationweather.gov/api/data/metar?ids={airport_id}"
             metar_raw = requests.get(awc_metar_api)
             metar_raw = metar_raw.content
@@ -99,8 +103,11 @@ class Metar_taf_parse:
             datis_raw = 'N/A'
             if type(datis) == list and 'datis' in datis[0].keys():
                 datis_raw = datis[0]['datis']
+                if len(datis) == 2:         # This is probably two item dep/arr datis.
+                    if datis_arr:       #   Check if it works with philly departure/arrival
+                        datis_raw = datis[1]['datis']
+                
         
-
         # Exporting raw weather data for color code processing
         # raw_weather_dummy_data = { 'D-ATIS': datis_raw, 'METAR': metar_raw, 'TAF': taf_raw} 
         # with open(f'raw_weather_dummy_data{airport_id}.pkl', 'wb') as f:

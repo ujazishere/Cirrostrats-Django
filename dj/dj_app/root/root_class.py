@@ -16,7 +16,7 @@ class Root_class():
     def send_email(self, body_to_send):
         
         smtp_server = "smtp.gmail.com"
-        smtp_port = 587  # Use 587 for TLS
+        smtp_port = 587  # Use 587 for TLS port
         smtp_user = "publicuj@gmail.com"
         smtp_password = "dsxi rywz jmxn qwiz"
         to_email = ['ujasvaghani@gmail.com']

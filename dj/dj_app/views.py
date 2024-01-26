@@ -19,6 +19,7 @@ views.py runs as soon as the base web is requested. Hence, GateCheckerThread() i
 It will then run 
 '''
 
+# TODO: move this out so EC2 deployment is is streamlined without having to change this everytime
 run_lengthy_web_scrape = False 
 
 if run_lengthy_web_scrape:
@@ -187,8 +188,9 @@ def gate_info(request, main_query):
         return render(request, 'flight_info.html', {'gate': gate})
 
 
-def flight_deets(request,airline_code=None, flight_number_query=None):
+def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=False):
     
+    # bypass_fa = True
 
     flt_info = Pull_flight_info()           # from dep_des.py file
     weather = Metar_taf_parse()         # from MET_TAF_parse.py
@@ -197,16 +199,22 @@ def flight_deets(request,airline_code=None, flight_number_query=None):
     def without_futures():
         bulk_flight_deets = {}
         bulk_flight_deets.update(flt_info.fs_dep_arr_timezone_pull(flight_number_query))
-        bulk_flight_deets.update(flt_info.fa_data_pull(airline_code,flight_number_query))
+        if not bypass_fa:       # bypassing flight_aware pull if bypass data == True
+            bulk_flight_deets.update(flt_info.fa_data_pull(airline_code,flight_number_query))
+        else:
+            print("BYPASSING FLIGHTAWARE DATA")
+            bulk_flight_deets['origin'] = ''
         bulk_flight_deets.update(flt_info.united_departure_destination_scrape(flight_number_query))
-        # This is to assign flight_aware origin and destinal as feed in for weather, NAS and gate.
+
+        # This is to assign flight_aware origin and destination as feed in for weather, NAS and gate.
             # united dep and destination airports are in accurate at times.
         if bulk_flight_deets['origin']:
             UA_departure_ID,UA_destination_ID = bulk_flight_deets['origin'], bulk_flight_deets['destination']
         else:        
             UA_departure_ID, UA_destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
         bulk_flight_deets['dep_weather'] = weather.scrape(UA_departure_ID)
-        bulk_flight_deets['dest_weather'] = weather.scrape(UA_destination_ID)
+        # datis_arr as true in this case since its for the destination/arr datis.
+        bulk_flight_deets['dest_weather'] = weather.scrape(UA_destination_ID,datis_arr=None)
         bulk_flight_deets.update(flt_info.nas_final_packet(UA_departure_ID, UA_destination_ID))
         bulk_flight_deets.update(flt_info.flight_view_gate_info(flight_number_query, UA_departure_ID))
         return bulk_flight_deets
@@ -272,7 +280,9 @@ def metar_display(request,weather_query):
     airport = weather_query[-4:]
     
     weather = Metar_taf_parse()
-    weather = weather.scrape(weather_query)
+    # TODO: Need to be able to add the ability to see the departure as well as the arrival datis
+    # weather = weather.scrape(weather_query, datis_arr=True)
+    weather = weather.scrape(weather_query, )
     
     return render(request, 'metar_info.html', {'airport': airport, 'weather': weather})
 
@@ -281,6 +291,7 @@ class Menu_pages:
     def __init__(self) -> None:
         pass
     
+
 def contact(request):
     return render(request, 'contact.html')
 
@@ -316,14 +327,18 @@ def live_map(request):
     return render(request, 'live_map.html')
 
 def dummy2(request):
+    # This page is returned by using `ext d` in the search bar
     print("dummy2 area")
+    # Renders the page and html states it gets the data from data_v
     return(render(request, 'dummy2.html'))
+    
+
 
 # This function gets loaded within the dummy2 page whilst dummy2 func gets rendered.
 @require_GET
 def data_v(request):        
     
-    sleep(0.5)
+    sleep(0.9)
     try:
         bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
         bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))

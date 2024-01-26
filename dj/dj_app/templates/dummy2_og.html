@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<!-- dummy2.html -->
+<!-- Works as is just need to rename to dummy2.html. current dummy2 is the function operation -->
 
 <!DOCTYPE html>
 <html>
@@ -16,10 +16,10 @@
     
     <meta name="format-detection" content="telephone=no">
     
-    <h3>United Flight Information</h3>
+    <h3>United Flight Information</h3>          <!-- -->
+    <!-- Cannot use id more than once. It will throw an error -->
+    <!-- id will bring in the variable thats been declared in JavaScript -->
     <h4 id="flight_number"></h4>    <!--Text within wont be shown since its being overwritten-->
-    
-    <div id="loading"></div>
     
     <table class="summary-table">
         <thead>
@@ -29,7 +29,7 @@
         </thead>
         <tbody>
             <td colspan="2" style="text-align: center;">
-                <span id="flight_number" style="font-size: 18px;"></span> <br>
+                <span id="registration" style="font-size: 18px;"></span> <br>
             </td>
             <tr>
                 <td id="departure_ID"></td>
@@ -70,9 +70,9 @@
                 </thead>
                 <tbody>
                     <td style="width: 100%; text-align: left;">
-                        <span id="scheduled_departure_time" style="float: left; width: 33%;"></span>
+                        <span id="scheduled_departure_time_weather_box" style="float: left; width: 33%;"></span>
                         <span id="departure_ID" style="float: left; width: 33%; text-align: center;"></span>
-                        <span id="departure_gate_registration" style="float: right; width: 33%; text-align: right;"></span>
+                        <span id="departure_gate_weather_box" style="float: right; width: 33%; text-align: right;"></span>
 
                     </td>
                     
@@ -101,9 +101,13 @@
         </tr>
     </table>
 
-    <script>    //  Declare the variable
-        var flight_number = document.getElementById('flight_number');
-        // var registration = document.getElementById('registration');
+    
+
+    <script>    // When the data is available then push the data to the html side.
+        // CAUTIOIN! Cannot use same variable from here multiple times in the html 
+        // document is the whole of html. .getElement gets that ID tag and assigns it to the variable flight_number
+        var flight_number = document.getElementById('flight_number');       
+        var registration = document.getElementById('registration');
         var departure_ID = document.getElementById('departure_ID');
         var destination_ID = document.getElementById('destination_ID')
         var departure_gate = document.getElementById('departure_gate')
@@ -119,16 +123,16 @@
         var route = document.getElementById('route')
         var scheduledDepartureTimeElement = document.getElementById('scheduled_departure_time');
     var departureIdElement = document.getElementById('departure_ID');
-    var departureGateRegistrationElement = document.getElementById('departure_gate_registration');
+    var departureGateRegistrationElement = document.getElementById('departure_gate_weather_box');
     var metar_taf_data = document.getElementById ('metar_taf_data')
         
 
 
-        // Set initial content when the page loads
+        //This is where the code starts. it grabs the html Id's and assigns it a pre-assigned value before it is replced by the var
+        // Set initial content when the page loads. Basically the string is what will be shown when data is not available yet
         document.addEventListener('DOMContentLoaded', function() {
-            flight_number.innerHTML = "Loading...";
-            // registration.innerHTML = "";
-            departure_ID.innerHTML = "";
+            flight_number.innerHTML = "Grabbing...";         // If flight number is not available yet it will show loading.
+            registration.innerHTML = "Grabbing Registration";
             departure_ID.innerHTML = "";
             destination_ID.innerHTML = "";
             departure_gate.innerHTML = "";
@@ -142,24 +146,31 @@
             // sv.innerHTML = "";
             route.innerHTML = "";
             scheduledDepartureTimeElement.innerHTML = "";
-        departureIdElement.innerHTML = "";
+        // departureIdElement.innerHTML = "";
         departureGateRegistrationElement.innerHTML = "";
 
 
 
-
+// This is where the data is pulled from the views function data_v. This is the first point of access.
             fetch('data_v')
         .then(response => response.json())
-        .then(data => {
+        .then(data => {             // data is a variable that pulls in data_v's bulk_flight_deet dictionary
             console.log(data);
-            flight_number.innerHTML = data.flight_number;
+            flight_number.innerHTML = data.flight_number;       // flight number gets sent to flight_number.innerHTML
+            if(!data.registration) {
+            console.warn('No registration in data'); // warn if missing
+}
+            registration.innerHTML = data.registration;
             departure_ID.innerHTML = data.departure_ID;
+
+            // departure_ID_weather_box.innerHTML = data.departure_ID;
             destination_ID.innerHTML = data.destination_ID;
             
             departure_gate.innerHTML = data.departure_gate;
             arrival_gate.innerHTML = data.arrival_gate;
             
             scheduled_departure_time.innerHTML = data.scheduled_departure_time;
+            scheduled_departure_time_weather_box.innerHTML = data.scheduled_departure_time;
             scheduled_out.innerHTML = data.scheduled_out;
             estimated_out.innerHTML = data.estimated_out;
             scheduled_arrival_time.innerHTML = data.scheduled_arrival_time;

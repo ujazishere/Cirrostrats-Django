@@ -7,9 +7,7 @@ import re
 import pytz
 
 '''
-This Script pulls the departur and destination when provided with the flight number.
-An attempt to extract clearance route has been initiated but unreliable.
-    Beter to work with API or XML see TODO UV** 
+This Script pulls the departure and destination when provided with the flight number.
 '''
 
 class Pull_flight_info(Root_class):
