@@ -165,8 +165,19 @@ def dummy(request):
         weather = Metar_taf_parse()
         bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
     
-    # print('NEW WEATHER WITH NEW: HIGHLIGHTS', bulk_flight_deets)
-    
+    # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
+    dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
+    dep_metar = bulk_flight_deets['dep_weather']['METAR']
+    dep_taf = bulk_flight_deets['dep_weather']['TAF']
+    bulk_flight_deets['dep_datis']= dep_atis
+    bulk_flight_deets['dep_metar']= dep_metar
+    bulk_flight_deets['dep_taf']= dep_taf
+    dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
+    dest_metar = bulk_flight_deets['dest_weather']['METAR']
+    dest_taf = bulk_flight_deets['dest_weather']['TAF']
+    bulk_flight_deets['dest_datis']= dest_datis
+    bulk_flight_deets['dest_metar']= dest_metar
+    bulk_flight_deets['dest_taf']= dest_taf
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
@@ -190,12 +201,13 @@ def gate_info(request, main_query):
 
 def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=False):
     
-    # bypass_fa = True
+    bypass_fa = False
 
     flt_info = Pull_flight_info()           # from dep_des.py file
     weather = Metar_taf_parse()         # from MET_TAF_parse.py
     
-    # """
+    # This is a inefficient fucntion to bypass the futures error.
+    # TODO: sort this out for async feature and parallel processing 
     def without_futures():
         bulk_flight_deets = {}
         bulk_flight_deets.update(flt_info.fs_dep_arr_timezone_pull(flight_number_query))
@@ -215,8 +227,26 @@ def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=
         bulk_flight_deets['dep_weather'] = weather.scrape(UA_departure_ID)
         # datis_arr as true in this case since its for the destination/arr datis.
         bulk_flight_deets['dest_weather'] = weather.scrape(UA_destination_ID,datis_arr=None)
+        print(bulk_flight_deets['dep_weather'])
         bulk_flight_deets.update(flt_info.nas_final_packet(UA_departure_ID, UA_destination_ID))
         bulk_flight_deets.update(flt_info.flight_view_gate_info(flight_number_query, UA_departure_ID))
+        
+        # This whole area removes the need for for loop making it easier to 
+        dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
+        dep_metar = bulk_flight_deets['dep_weather']['METAR']
+        dep_taf = bulk_flight_deets['dep_weather']['TAF']
+        
+        bulk_flight_deets['dep_datis']= dep_atis
+        bulk_flight_deets['dep_metar']= dep_metar
+        bulk_flight_deets['dep_taf']= dep_taf
+        
+        dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
+        dest_metar = bulk_flight_deets['dest_weather']['METAR']
+        dest_taf = bulk_flight_deets['dest_weather']['TAF']
+        
+        bulk_flight_deets['dest_datis']= dest_datis
+        bulk_flight_deets['dest_metar']= dest_metar
+        bulk_flight_deets['dest_taf']= dest_taf
         return bulk_flight_deets
     
     bulk_flight_deets = without_futures()
@@ -283,6 +313,7 @@ def metar_display(request,weather_query):
     # TODO: Need to be able to add the ability to see the departure as well as the arrival datis
     # weather = weather.scrape(weather_query, datis_arr=True)
     weather = weather.scrape(weather_query, )
+    
     
     return render(request, 'metar_info.html', {'airport': airport, 'weather': weather})
 
