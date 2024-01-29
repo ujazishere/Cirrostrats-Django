@@ -116,20 +116,28 @@
                 </td>
                 <!-- Here got rid of for loops and makes it easier to work with design. -->
                 <tr>
-                    <td>D-ATIS<td>
+                    <td>D-ATIS</td>
                 </tr>
+
                 <tr>
                     <td style="text-align: left; font-family: Menlo, monospace;">{{dep_datis |safe}}</td>
-                <tr>
-                    <td>METAR<td>
                 </tr>
+
+     		    <tr>
+                    <td>METAR</td>
+                </tr>
+
                 <tr>
                     <td style="text-align: left; font-family: Menlo, monospace;">{{dep_metar |safe}}</td>
-                <tr>
-                    <td>TAF<td>
                 </tr>
+
+		        <tr>
+                    <td>TAF</td>
+                </tr>
+
                 <tr>
                     <td style="text-align: left; font-family: Menlo, monospace;">{{dep_taf |safe}}</td>
+                </tr>        
             </tbody>
         </table>
     </div>
@@ -170,6 +178,7 @@
 </div>
 {% endif %}
 </div>
+
 </div>
 
 
@@ -195,20 +204,31 @@
                                 <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
                                 <span style="float: right; width: 33%; text-align: right;">{{ arrival_gate }}</span>
                             </td>
-                        </tr>
-                            <td>D-ATIS</td>
-                        <tr>
-                            <td style="text-align: left; font-family: Menlo, monospace;">{{dest_datis | safe}}</td>
-                        </tr>
-                        </tr>
-                            <td>METAR</td>
-                        <tr>
-                            <td style="text-align: left; font-family: Menlo, monospace;">{{dest_metar | safe}}</td>
-                        </tr>
-                        </tr>
-                            <td>TAF</td>
-                        <tr>
-                            <td style="text-align: left; font-family: Menlo, monospace;">{{ dest_taf | safe }}</td>
+                          
+
+                            <tr>
+                                <td>D-ATIS</td>
+                            </tr>
+
+                            <tr>
+                                <td style="text-align: left; font-family: Menlo, monospace;">{{dest_datis | safe}}</td>
+                            </tr>
+
+                            <tr>
+                                <td>METAR</td>
+                            </tr>
+
+                            <tr>
+                                <td style="text-align: left; font-family: Menlo, monospace;">{{dest_metar | safe}}</td>
+                            </tr>
+
+                            <tr>
+                                <td>TAF</td>
+                            </tr>
+
+                            <tr>
+                                <td style="text-align: left; font-family: Menlo, monospace;">{{ dest_taf | safe }}</td>
+                            </tr>
                         </tr>
                     </tbody>
                 </table>
