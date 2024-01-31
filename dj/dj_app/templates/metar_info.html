@@ -7,25 +7,34 @@
 <link rel="stylesheet" type="text/css" href="{% static 'metar_info.css' %}">
 <div class="search-form-wrapper">
   <h3> Weather for {{airport}}</h3>
-  {% if weather %}
   <table class="table">
     <tbody>
-      {% for title, raw_data in weather.items %}
       <tr>
         <th>
-          <p class="text-center" style="font-size: 14px; margin-bottom: 0; margin-top: 0; color: white;">{{ title }}</p>
+          <p class="text-center" style="font-size: 14px; margin-bottom: 0; margin-top: 0; color: white;">D-ATIS</p>
         </th>
       </tr>
       <tr>
-        <td>{{ raw_data|safe }}</td>
+        <td>{{ datis|safe }}</td>
+      </ttr>
+        <th>
+          <p class="text-center" style="font-size: 14px; margin-bottom: 0; margin-top: 0; color: white;">METAR</p>
+        </th>
       </tr>
-      {% endfor %}
+      <tr>
+        <td>{{ metar|safe }}</td>
+      </ttr>
+        <th>
+          <p class="text-center" style="font-size: 14px; margin-bottom: 0; margin-top: 0; color: white;">TAF</p>
+        </th>
+      </tr>
+      <tr>
+        <td>{{ taf | safe}}</td>
+      </tr>
     </tbody>
   </table>
-  {% else %}
     <p>No weather informamtion found for {{airport}}. Try `w kewr`</p>
 
-  {% endif %}
   {% csrf_token %}
     <form method="post" class="search-form">
         {% csrf_token %}

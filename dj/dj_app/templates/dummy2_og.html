@@ -101,6 +101,29 @@
         </tr>
     </table>
 
+    <script>    
+        // CAUTIOIN! Cannot use same `id` at multiple places within html.
+        function updatefunc(data,data_item_arg) {
+            console.log(5555)
+            console.log(data)
+            //queryselectorall gets all the similar class items. mind the `.` that needs to be prepended to the class item I suppose.
+            document.querySelectorAll(data_item_arg).forEach(element => {            // each element is each of the html class item to be used
+                // element.innerHTML = data.flight_number || 'Grabbing Flight Number...' ;      //This was initially used but since now the elements are going to be constructed this is commented out
+                let h4 = element.querySelector('h4');       // declaring h4 if it exists.
+
+                if(!h4) {               // If it does not exist then create it and append it to the parent element.
+                h4 = document.createElement('h4');
+                element.appendChild(h4);
+                    }
+                    // By this point h4 should already exist and hence h4 is outside of the if statement.
+                h4.innerHTML = data || 'Grabbing Departure Weather...' ;      
+                // TODO: Setup Grabbing flight as a variable that is passed in as argument in the function.
+                // This will allow for reuse of the function. You could also probs pass the argument of queryselectorall as a variable to complete reuse. 
+
+                
+            });
+        }
+    </script>
     
 
     <script>    // When the data is available then push the data to the html side.

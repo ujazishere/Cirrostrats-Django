@@ -218,8 +218,9 @@ def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=
             bulk_flight_deets['origin'] = ''
         bulk_flight_deets.update(flt_info.united_departure_destination_scrape(flight_number_query))
 
-        # This is to assign flight_aware origin and destination as feed in for weather, NAS and gate.
-            # united dep and destination airports are in accurate at times.
+        # united dep and destination airports are inaccurate at times. This assigns flight_aware origin and destination
+            # as feed in for weather, NAS and gate instead of UA dep and des feed thats to be
+            # used in case flightaware cannot be accessed.
         if bulk_flight_deets['origin']:
             UA_departure_ID,UA_destination_ID = bulk_flight_deets['origin'], bulk_flight_deets['destination']
         else:        
@@ -231,7 +232,8 @@ def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=
         bulk_flight_deets.update(flt_info.nas_final_packet(UA_departure_ID, UA_destination_ID))
         bulk_flight_deets.update(flt_info.flight_view_gate_info(flight_number_query, UA_departure_ID))
         
-        # This whole area removes the need for for loop making it easier to 
+        # This whole area removes the need for for loop in html making it easier to 
+            # work with css styling and readibility.
         dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
         dep_metar = bulk_flight_deets['dep_weather']['METAR']
         dep_taf = bulk_flight_deets['dep_weather']['TAF']
@@ -314,8 +316,14 @@ def metar_display(request,weather_query):
     # weather = weather.scrape(weather_query, datis_arr=True)
     weather = weather.scrape(weather_query, )
     
+    weather_page_data = {}
     
-    return render(request, 'metar_info.html', {'airport': airport, 'weather': weather})
+    weather_page_data['airport'] = airport
+    weather_page_data['datis'] = weather['D-ATIS']
+    weather_page_data['metar'] = weather['METAR']
+    weather_page_data['taf'] = weather['TAF']
+    
+    return render(request, 'metar_info.html', weather_page_data)
 
 
 class Menu_pages:
@@ -375,6 +383,21 @@ def data_v(request):
         bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
     except:
         bulk_flight_deets = pickle.load(open('/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
+    dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
+    dep_metar = bulk_flight_deets['dep_weather']['METAR']
+    dep_taf = bulk_flight_deets['dep_weather']['TAF']
+    
+    bulk_flight_deets['dep_datis']= dep_atis
+    bulk_flight_deets['dep_metar']= dep_metar
+    bulk_flight_deets['dep_taf']= dep_taf
+    
+    dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
+    dest_metar = bulk_flight_deets['dest_weather']['METAR']
+    dest_taf = bulk_flight_deets['dest_weather']['TAF']
+    
+    bulk_flight_deets['dest_datis']= dest_datis
+    bulk_flight_deets['dest_metar']= dest_metar
+    bulk_flight_deets['dest_taf']= dest_taf
     for a, b in bulk_flight_deets.items():
         print(a,type(b))
         if a=='registration':

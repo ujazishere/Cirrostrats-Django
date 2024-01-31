@@ -10,12 +10,12 @@ Practice readibility and simplicity. Include description and documentation for o
         WIP - Implement asynchronous loading of the data on the flight_deet page. Load data incrementally so as to avoid waiting for all data to be fetched.
         WIP - dynamic color for text on tables 
         work on script to extract data- aviation_stack_data_pull.py
+        Separate datis to account for arr vs dep atis. and hide section when N/A instead of showing N/A
         
     
         
 **UV:   
         Integrate weather page with  the flight deet page--> reduce duplication
-        Separate datis to account for arr vs dep atis. and hide section when N/A instead of showing N/A
         learn about multiprocessing vs multithreading and implement on flight_deet
         Implement asynchronous loading of the data on the flight_deet page.
         prepare search query logic for disecting typical searches. Implement ML and NN. X vs ground truth vals.
@@ -28,6 +28,7 @@ Practice readibility and simplicity. Include description and documentation for o
             Add thunderstorm, freezing and such symbols on title.
             Add departure/approach runways in use.
         integrate EDCT info  from https://www.fly.faa.gov/edct/jsp/edctLookUp.jsp
+        
         Remove sql database and create own for seamless lightweight version.
         Fix bug that takes in 2 flight routes for singular flight number.
             Add option to scroll left and right for dates.
