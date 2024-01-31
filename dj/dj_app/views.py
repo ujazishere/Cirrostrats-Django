@@ -370,6 +370,7 @@ def dummy2(request):
     print("dummy2 area")
     # Renders the page and html states it gets the data from data_v
     return(render(request, 'dummy2.html'))
+
     
 
 
@@ -382,22 +383,51 @@ def data_v(request):
         bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
         bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
     except:
-        bulk_flight_deets = pickle.load(open('/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
+        bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
+    
+    # print('OLD with html highlights', bulk_flight_deets)
+    try: # UJ PC PATH
+        ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
+        ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
+        with open(ind, 'rb') as f:
+            dep_weather = pickle.load(f)
+        with open(ord, 'rb') as f:
+            dest_weather = pickle.load(f)
+        
+        weather = Metar_taf_parse()
+        bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
+        weather = Metar_taf_parse()
+        bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
+
+    except Exception as e:     # ISMAIL MAC PATH
+        print(e)
+        is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
+        is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
+        with open(is_ind, 'rb') as f:
+            dep_weather = pickle.load(f)
+        with open(is_ord, 'rb') as f:
+            dest_weather = pickle.load(f)
+        weather = Metar_taf_parse()
+        bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
+        weather = Metar_taf_parse()
+        bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
+    
+    # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
     dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
     dep_metar = bulk_flight_deets['dep_weather']['METAR']
     dep_taf = bulk_flight_deets['dep_weather']['TAF']
-    
     bulk_flight_deets['dep_datis']= dep_atis
     bulk_flight_deets['dep_metar']= dep_metar
     bulk_flight_deets['dep_taf']= dep_taf
-    
     dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
     dest_metar = bulk_flight_deets['dest_weather']['METAR']
     dest_taf = bulk_flight_deets['dest_weather']['TAF']
-    
     bulk_flight_deets['dest_datis']= dest_datis
     bulk_flight_deets['dest_metar']= dest_metar
     bulk_flight_deets['dest_taf']= dest_taf
-    for a, b in bulk_flight_deets.items():
-        print(a,type(b))
+    
+    for key,value in bulk_flight_deets.items():
+        print(key,value)
+    
+
     return JsonResponse(bulk_flight_deets)

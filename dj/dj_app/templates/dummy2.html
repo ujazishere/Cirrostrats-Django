@@ -12,7 +12,7 @@
     <title>Dummy Page</title>
 </head>
 <body>
-    <link rel="stylesheet" type="text/css" href="{% static 'flight_deet.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'dummy2.css' %}">
     
     <meta name="format-detection" content="telephone=no">
     
@@ -25,21 +25,17 @@
     <thead>
         <tr>
             <!-- Investigate if having multiple attributes within an element tag is causing issues -->
-            <!-- Apparently it spits out flight_number seemlesly,
-                 then spitting out registrtation and onwards gives undefined error for other ones-->
-            <th colspan="2" class="flight_number"> Grabbing Flight Number...        <!-- the inner html will be changed-->
-                <!-- TODO: Registration isn't visible. Data avaible but not visible. Seems like an html problem. 
-                    js seems to work and logs on console when used outside of this nest -->
-                <span class="small-text" class="registration"> Registration... </span>
-            </th>
-            <!-- TODO:This needs to be an else statement if the registration isn't found -->
-            <!-- <th colspan="2" class="flight_number"> </span></th> -->
-          </tr>
-    </thead>
+            <th colspan="2" class="flight_number">...</th>
+        </tr>
+        <tr>
+            <th colspan="2" class="registration">...</th>
+        </tr>
+
+     </thead>
     <tbody>
         <tr>
-            <td class="table-cell" class="departure_ID">Grabbing Departure ID...</td>
-            <td class="table-cell text-align-right">{{destination_ID}}</td>
+            <td class="table-cell departure_ID">...</td>
+            <td class="table-cell text-align-right destination_ID">...</td>
         </tr>
         
         <tr class="spacer-row">
@@ -53,8 +49,8 @@
         </tr>
 
         <tr class="gate-row">
-            <td class="gate-cell">{{ departure_gate }}</td>
-            <td class="gate-cell">{{ arrival_gate }}</td>
+            <td class="gate-cell departure_gate">...</td>
+            <td class="gate-cell arrival_gate">...</td>
         </tr>
          
         <tr class="spacer-row">
@@ -68,8 +64,8 @@
         </tr>
         
         <tr class="scheduled-time-row">
-            <td class="scheduled-time-cell">{{ scheduled_departure_time }}</td>
-            <td class="scheduled-time-cell">{{ scheduled_arrival_time }}</td>
+            <td class="scheduled-time-cell scheduled_departure_time ">...</td>
+            <td class="scheduled-time-cell scheduled_arrival_time ">...</td>
         </tr>
 
         <tr class="spacer-row">
@@ -77,19 +73,21 @@
             <td class="spacer-cell">&nbsp;</td>
         </tr>
 
-        {% if scheduled_out %}
-
         <tr class="utc-row">
             <td class="utc-cell">UTC</td>
             <td class="utc-cell">UTC</td>
         </tr>
 
         <tr class="flight-status-row">
-            <td class="flight-status-cell">STD{{scheduled_out}}<br>ETD{{estimated_out}}</td>
-            <td class="flight-status-cell">STA{{scheduled_in}}<br>ETA{{estimated_in}}</td>
+            <td class="flight-status-cell scheduled_out"></td> 
+            <td class="flight-status-cell estimated_out"></td>
         </tr>
 
-        {% endif %}
+        <tr class="flight-status-row">
+            <td class="flight-status-cell scheduled_in"></td>
+            <td class="flight-status-cell estimated_in"></td>
+        </tr>
+
     </tbody>
 </table>
 
@@ -116,114 +114,109 @@
                 </td>
                 <!-- Here got rid of for loops and makes it easier to work with design. -->
                 <tr>
-                    <td>D-ATIS<td>
+                    <td>D-ATIS</td>
                 </tr>
                 <tr>
-                    <td style="text-align: left; font-family: Menlo, monospace;" class="dep_datis">Grabbing D-ATIS...</td>
+                    <td style="text-align: left; font-family: Menlo, monospace;" class="dep_datis">...</td>
                 <tr>
-                    <td>METAR<td>
+                    <td>METAR</td>
                 </tr>
                 <tr>
-                    <td style="text-align: left; font-family: Menlo, monospace;" class="dep_metar">Grabbing METAR...</td>
+                    <td style="text-align: left; font-family: Menlo, monospace;" class="dep_metar">...</td>
                 <tr>
-                    <td>TAF<td>
+                    <td>TAF</td>
                 </tr>
                 <tr>
-                    <td style="text-align: left; font-family: Menlo, monospace;">{{dep_taf |safe}}</td>
+                    <td style="text-align: left; font-family: Menlo, monospace;" class = "dep_taf">...</td>
             </tbody>
         </table>
     </div>
 </div>
 
 
-    
-    <table class="summary-table">
-        <thead>
-            <tr>
-                <th colspan="2">Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            <td colspan="2" style="text-align: center;">
-                <span id="registration" style="font-size: 18px;"></span> <br>
-            </td>
-            <tr>
-                <td class="departure_ID"></td>
-                <td id="destination_ID"></td>
-            </tr>
-            <tr>
-                <td id="departure_gate"></td>
-                <td id="arrival_gate"></td>
-            </tr>
-            <tr>
-                <td>
-                    <span id="scheduled_departure_time"></span> <br>
-                    <span id="scheduled_out"></span> <br>
-                    <span id="estimated_out"></span>
-                </td>
-                <td>
-                    <span id="scheduled_arrival_time"></span> <br>
-                    <span id="scheduled_in"></span> <br>
-                    <span id="estimated_in"></span>
-                </td>
-            </tr>
-            
-        </tbody>
-    </table>
+<table class="route_table">
+    <tr>
+        <th class="sv">ROUTE <a href="#" target="_blank">Show on SkyVector Map</a></th>
+    </tr>
+    <tr>
+        <td class="filed_altitude"></td>
+    </tr>
+    <tr>   
+        <td class="route"></td>
+    </tr>
+</table>
 
-    <div id="departure-container" class="table-container">
-        <div class="accordion-button-container">
-        <div class="accordion-content active" id="departure-content-{{ departure_ID }}">
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>
-                            <div class="header-button" onclick="toggleAccordion('departure-content-{{ departure_ID }}')">
-                                &#9660; Departure
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="width: 100%; text-align: left;">
-                            <span style="float: left; width: 33%;"></span>
-                            <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
-                            <span style="float: right; width: 33%; text-align: right;">{{ arrival_gate }}</span>
-                        </td>
-                    </tr>
-                        <td>D-ATIS</td>
-                    <tr>
-                        <td style="text-align: left; font-family: Menlo, monospace;"><div class="dep_datis"></div></td>
-                        <!-- This works. Just need to replicate this elsewhere. -->
-                    </tr>
-                    </tr>
-                        <td>METAR</td>
-                    <tr>
-                        <td style="text-align: left; font-family: Menlo, monospace;">{{dest_metar | safe}}</td>
-                    </tr>
-                    </tr>
-                        <td>TAF</td>
-                    <tr>
-                        <td style="text-align: left; font-family: Menlo, monospace;">{{ dest_taf | safe }}</td>
-                    </tr>
-                </tbody>
-            </table>
+    
+<div id="destination-container" class="table-container">
+    <div class="accordion-button-container">
+        <div class="accordion-content active" id="destination-content-{{ destination_ID }}">
+            <div class="custom-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="header-button" onclick="toggleAccordion('destination-content-{{ destination_ID }}')">
+                                    &#9660; Destination
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="width: 100%; text-align: left;">
+                                <span style="float: left; width: 33%;">{{scheduled_arrival_time}}</span>
+                                <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
+                                <span style="float: right; width: 33%; text-align: right;">{{ arrival_gate }}</span>
+                            </td>
+                            <tr>
+                                <td>D-ATIS</td>
+                            </tr>
+
+                            <tr>
+                                <td style="text-align: left; font-family: Menlo, monospace;" class="dest_datis">...</td>
+                            <tr>
+                                <td>METAR</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; font-family: Menlo, monospace;" class="dest_metar">...</td>
+                            <tr>
+                                <td>TAF</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; font-family: Menlo, monospace;" class = "dest_taf">...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+</div>
 
 
-    <table class="route">
-        <tr>
-            <th id="sv">ROUTE <a href="#" target="_blank">Show on SkyVector Map</a></th>
-        </tr>
-        <tr>
-            <td id="filed_altitude"></td>
-        </tr>
-        <tr>   
-            <td id="route"></td>
-        </tr>
+<!-- NAS (departures only) table in red-->
+<div class="table-wrapper">
+    <table class="another-table">
+        <thead>
+        </thead>
+        <tbody>
+            {% for d1_key, d1_value in nas_departure_affected.items %}
+            <tr>
+                <td colspan="2">{{ d1_key }}</td>
+            </tr>
+            {% for d2_key, d2_value in d1_value.items %}
+            <tr>
+                <td>{{ d2_key }}</td>
+                <td>{{ d2_value }}</td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+        </tbody>
     </table>
+</div>
+</div>
+
+
+
 
     <!-- This is the blueprint for using js func to create elements(start and end tags)/attributes(h1-4,id,class,p,a,) within html elements as child (div or span)
         here this function is called initially that returns `Grabbing Flight Number` then once data is found it returns the data -->
@@ -272,8 +265,11 @@ document.addEventListener('DOMContentLoaded', function() {
             flight_number = data.flight_number
             updatefunc(individual_data=flight_number,data_item_arg='.flight_number')
             console.log('finished putting out flight_number')
+
             registration = data.registration
-            updatefunc(individual_data=registration,data_item_arg='.registration')
+            console.log('Registration:', registration)
+            updatefunc(individual_data=registration, data_item_arg='.registration')
+
             
             origin = data.origin
             destination = data.destination

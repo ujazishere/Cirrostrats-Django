@@ -1,0 +1,641 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-height: 100%;
+}
+
+/************** this code is for heading and other texts *************/
+
+h5 {
+  text-align: center;
+}
+
+.dark-mode h4 {
+  color: #515A65;
+}
+
+.dark-mode h5 {
+  color: white;
+}
+
+h1 {
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 30px;
+}
+
+h4 {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 25px;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 30px;
+}
+
+p {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 30px;
+}
+
+ 
+/*************** this code is for warning on top of the page ******************/
+
+div.data-warning p {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  font-weight: bold;
+  animation: flashWarning 1s infinite;
+  color: red; 
+  white-space: nowrap; 
+  z-index: 9999;
+}
+
+@keyframes flashWarning {
+  50% {
+      color: yellow; 
+  }
+}
+
+
+/***************** this code is for accordion button *******************/
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.accordion-content.active {
+  max-height: 1000px; 
+  width: 100%;
+}
+
+.accordion-button {
+  background: none;
+  cursor: pointer;
+  font-size: inherit;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  outline: none; 
+  background-color: #2D333B;
+  transition: transform 0.3s; 
+}
+
+.accordion-button.active {
+  transform: rotate(180deg);
+}
+
+.accordion-button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.dark-mode .toggle-button {
+  background-color: #2D333B;
+  color: #FFFFFF;
+}
+
+.toggle-button.active {
+  transform: rotate(180deg);
+}
+
+.header-button {
+  cursor: pointer;
+  width: 100%;
+  color: #ADBAC7;
+}
+
+
+.dark-mode .accordion-button {
+  color: white;
+  border-color: white;
+}
+
+
+/************** this code is for comparison table *************/
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: none;
+}
+
+.comparison-table th:first-child,
+.comparison-table td:first-child {
+  border-left: 1px solid black;
+}
+
+.comparison-table th:last-child,
+.comparison-table td:last-child {
+  border-right: 1px solid black;
+}
+
+.comparison-table tr:first-child th,
+.comparison-table tr:last-child td {
+  border-bottom: 1px solid black;
+}
+
+.comparison-table tr:not(:first-child) th,
+.comparison-table tr:not(:last-child) td {
+  border-top: 1px solid black;
+}
+
+table.comparison-table {
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  background-color: #2D333B;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 0px #000000;
+  color: inherit;
+  text-decoration: inherit;
+}
+
+table.comparison-table th,
+table.comparison-table td {
+  padding: 10px;
+  text-align: center;
+}
+
+table.comparison-table th {
+  background-color: #2D333B;
+  color: #ffffff;
+  width: 20%;
+}
+
+table.comparison-table td {
+  background-color: #ffffff;
+  color: #24292E;
+  width: 15%;
+}
+
+table.comparison-table thead {
+  background-color: #2D333B;
+  color: #ffffff;
+}
+
+table.comparison-table th:first-child,
+table.comparison-table td:first-child {
+  font-weight: bold;
+}
+
+.dark-mode table.comparison-table thead th {
+  background-color: #2D333B;
+  color: #ADBAC7;
+}
+
+.dark-mode table.comparison-table {
+  background-color: #2D333B !important;
+  box-shadow: 0 0 0 1px #ffffff;
+  color: #ADBAC7;
+}
+
+.dark-mode table.comparison-table th,
+.dark-mode table.comparison-table td {
+  background-color: #22272E;
+  color: #ADBAC7;
+  border-color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+.dark-mode table.comparison-table th:first-child,
+.dark-mode table.comparison-table td:first-child {
+  border-left: 1px solid black;
+}
+
+.dark-mode table.comparison-table th:last-child,
+.dark-mode table.comparison-table td:last-child {
+  border-right: 1px solid black;
+}
+
+
+
+/**************** this code is for red table ****************/
+
+.dark-mode table.another-table {
+  box-shadow: 0 0 0 1px #ffffff;
+  border-color: #ffffff;
+  border-collapse: collapse;
+}
+
+.dark-mode table.another-table th,
+.dark-mode table.another-table td {
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+}
+
+table.another-table {
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  background-color: #000000;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+table.another-table th,
+table.another-table td {
+  padding: 10px;
+  text-align: center;
+  background-color: #fa6767;
+  border: 1px;
+  border-color: black;
+}
+
+table.another-table thead {
+  background-color: #fa6767;
+  color: #000000;
+}
+
+table.another-table th:first-child,
+table.another-table td:first-child {
+  font-weight: 600;
+}
+
+.table-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 25vh;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+/************ this code is for searchbar *************/
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  border: black;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.search-form input[type="text"] {
+  padding: 10px;
+  width: 300px;
+  border: none;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.search-form button {
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #2D333B;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.dark-mode .search-form input[type="text"] {
+  border: 1px solid rgb(255, 255, 255); 
+  background-color: #2D333B;
+  color: white;
+}
+
+.dark-mode .search-form button{
+  border: 1px solid white
+}
+
+
+/******** this code is for route table *********/
+
+.route_table {
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  background-color: #ffffff;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px #000000;
+  border: 1px;
+  border-collapse: collapse; 
+}
+
+.route a {
+  font-size: smaller;
+  margin-left: 10px;
+  color: rgb(158, 156, 155); 
+}
+
+.dark-mode .route {
+  background-color: #22272E;
+  color: #ADBAC7;
+  box-shadow: 0 0 0 1px #ffffff;
+}
+
+.route th {
+  padding: 10px 5px; 
+  text-align: center;
+  background-color: #2D333B;
+  color: #ADBAC7;
+  border-radius: 10px;
+}
+
+.dark-mode .route th {
+  background-color: #2D333B;
+  color: #ADBAC7;
+  border-bottom: 1px solid white;
+}
+
+.route td {
+  padding: 10px;
+  text-align: center;
+}
+
+.route tr:first-child {
+  border-radius: 10px 10px 0 0;
+}
+
+.route tr:last-child {
+  border-radius: 0 0 10px 10px;
+}
+
+
+/************* this code is for summary table ***********/
+
+table.summary-table {
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px #000000;
+  color: #ffffff;
+  outline: none;
+  box-sizing: border-box;
+  position: relative;
+  border-collapse: collapse; 
+}
+
+
+table.summary-table th {
+  background-color: #2D333B;
+  position: sticky;
+  padding: 10px;
+}
+
+table.summary-table td {
+  background-color: #ffffff;
+  color: #24292E;
+  width: 50%;
+  text-align: left;
+  padding: 10px;
+}
+
+table.summary-table td:first-child {
+  font-weight: bold;
+}
+
+table.summary-table td:nth-child(even) {
+  text-align: right;
+  font-weight: bold;
+}
+
+table.summary-table thead th {
+  background-color: #2D333B;
+  color: #ADBAC7;
+  position: sticky;
+  border: 1px solid black;
+}
+
+.dark-mode table.summary-table {
+  background-color: #2D333B !important;
+  box-shadow: 0 0 0 1px #ffffff;
+  color: #ADBAC7;
+}
+
+.dark-mode table.summary-table th {
+  background-color: #2D333B;
+  color: #ADBAC7;
+  border-bottom: 1px solid #FFFFFF;
+}
+
+.dark-mode table.summary-table td {
+  background-color: #22272E;
+  color: #ADBAC7;
+  border: none;
+ }
+
+ .dark-mode table.summary-table tr {
+  border: none;
+ }
+
+.small-text {
+  font-size: 12px;
+  font-weight: 100;
+  color: gray;
+}
+
+.table-cell {
+  font-size: 34px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: lighter;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.spacer-row {
+  height: 10px;
+}
+
+.spacer-cell {
+  font-size: 1px;
+  line-height: 1px;
+}
+
+.info-row {
+  height: 20px;
+  padding: 0;
+}
+
+.info-cell {
+  font-weight: lighter;
+  line-height: 1px;
+  font-size: 12px;
+  color: grey;
+}
+
+.gate-row {
+  padding-top: 0;
+}
+
+.gate-cell {
+  font-size: 22px;
+  line-height: 1px;
+}
+
+.scheduled-row {
+  height: 20px;
+  padding: 0;
+}
+
+.scheduled-cell {
+  font-weight: lighter;
+  line-height: 1px;
+  font-size: 12px;
+  color: grey;
+}
+
+.scheduled-time-row {
+  padding-top: 0;
+}
+
+.scheduled-time-cell {
+  font-size: 22px;
+  line-height: 1px;
+}
+
+.utc-row {
+  height: 20px;
+  padding: 0;
+}
+
+.utc-cell {
+  font-weight: lighter;
+  line-height: 1px;
+  font-size: 12px;
+  color: grey;
+}
+
+.flight-status-row {
+  padding-top: 0;
+}
+
+.flight-status-cell {
+  font-size: 20px;
+}
+
+
+
+/*************** this code is for design for text inside the metar/taf text ***************/
+
+
+.box_around_text {
+  border-radius: 4px;
+  border: 1px solid #2D333B; 
+  border-collapse: collapse;
+  padding-left: 2px;
+  padding-right: 2px;
+
+}
+
+.dark-mode .box_around_text {
+  background-color: #2D333B(159, 26, 26);
+  border-radius: 4px;
+  border: 1px solid #ffffff; 
+  border-collapse: collapse;
+}
+
+.pink_text_color {
+    color: #be38e1; 
+    padding: 4px; 
+    border-radius: 5px;
+}
+
+.red_text_color {
+    color: rgb(227, 79, 79); 
+    padding: 4px; 
+    border-radius: 5px;
+}
+
+.yellow_highlight {
+  background-color: rgba(251, 118, 118, 0.847);
+}
+
+
+/************* this code is for responsivness *************/
+
+
+@media only screen and (max-width: 600px) {
+  h1 {
+    font-size: 36px;
+  }
+  
+  p {
+    font-size: 18px;
+  }
+  
+  .search-form input[type="text"] {
+    width: 200px;
+  }
+
+}
+
+@media only screen and (max-width: 400px) {
+  h1 {
+    font-size: 24px;
+  }
+  
+  p {
+    font-size: 16px;
+  }
+  
+  .search-form input[type="text"] {
+    width: 150px;
+  }
+
+  .toggle-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-left: auto;
+    margin-right: 70px;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border: 0.1px;
+    background-color: #FFFFFF;
+  }
+
+}
+
+
+@media (max-width: 767px) {
+
+
+
+}
+
+
