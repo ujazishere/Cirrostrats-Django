@@ -377,7 +377,7 @@ def dummy2(request):
 @require_GET
 def data_v(request):        
     
-    sleep(0.9)
+    sleep(3)
     try:
         bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
         bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
@@ -400,6 +400,4 @@ def data_v(request):
     bulk_flight_deets['dest_taf']= dest_taf
     for a, b in bulk_flight_deets.items():
         print(a,type(b))
-        if a=='registration':
-            print(b)
     return JsonResponse(bulk_flight_deets)

@@ -27,7 +27,7 @@
             <!-- Investigate if having multiple attributes within an element tag is causing issues -->
             <!-- Apparently it spits out flight_number seemlesly,
                  then spitting out registrtation and onwards gives undefined error for other ones-->
-            <th colspan="2" class="flight_number"> Grabbing Flight Number... 
+            <th colspan="2" class="flight_number"> Grabbing Flight Number...        <!-- the inner html will be changed-->
                 <!-- TODO: Registration isn't visible. Data avaible but not visible. Seems like an html problem. 
                     js seems to work and logs on console when used outside of this nest -->
                 <span class="small-text" class="registration"> Registration... </span>
@@ -38,7 +38,7 @@
     </thead>
     <tbody>
         <tr>
-            <td class="table-cell" class="departure_ID"></td>
+            <td class="table-cell" class="departure_ID">Grabbing Departure ID...</td>
             <td class="table-cell text-align-right">{{destination_ID}}</td>
         </tr>
         
@@ -119,12 +119,12 @@
                     <td>D-ATIS<td>
                 </tr>
                 <tr>
-                    <td style="text-align: left; font-family: Menlo, monospace;" class="dep_datis"></td>
+                    <td style="text-align: left; font-family: Menlo, monospace;" class="dep_datis">Grabbing D-ATIS...</td>
                 <tr>
                     <td>METAR<td>
                 </tr>
                 <tr>
-                    <td style="text-align: left; font-family: Menlo, monospace;">{{dep_metar |safe}}</td>
+                    <td style="text-align: left; font-family: Menlo, monospace;" class="dep_metar">Grabbing METAR...</td>
                 <tr>
                     <td>TAF<td>
                 </tr>
@@ -231,11 +231,11 @@
         <!-- <element attribute_name="attribute_value"></element> -->
     <script>    
         // CAUTIOIN! Cannot use same `id` at multiple places within html.
-        function updatefunc(data,data_item_arg) {
+        function updatefunc(individual_data,data_item_arg) {
             //queryselectorall gets all the similar class items. mind the `.` that needs to be prepended to the class item I suppose.
             document.querySelectorAll(data_item_arg).forEach(element => {            // each element is each of the html class item to be used
-                console.log('inside updatefunc',data)
-                element.innerHTML = data || 'Grabbing...' ;      //This was initially used but since now the elements are going to be constructed this is commented out
+                console.log('inside updatefunc',individual_data)
+                element.innerHTML = individual_data ;      //This was initially used but since now the elements are going to be constructed this is commented out
                   
 // section start
                 // This is to make the div what you want it to look like
@@ -267,62 +267,62 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {             // data is a variable that pulls in data_v's bulk_flight_deet dictionary
 
-            console.log('data is printed:',data)
+            console.log('bulk_flight_deet as data:',data)
             
             flight_number = data.flight_number
+            updatefunc(individual_data=flight_number,data_item_arg='.flight_number')
+            console.log('finished putting out flight_number')
             registration = data.registration
-            updatefunc(data=flight_number,data_item_arg='.flight_number')
-            console.log('registration',registration)
-            updatefunc(data=registration,data_item_arg='.registration')
+            updatefunc(individual_data=registration,data_item_arg='.registration')
             
             origin = data.origin
             destination = data.destination
-            updatefunc(data=origin,data_item_arg='.origin')
-            updatefunc(data=destination,data_item_arg='.destination')
+            updatefunc(individual_data=origin,data_item_arg='.origin')
+            updatefunc(individual_data=destination,data_item_arg='.destination')
             
             scheduled_out = data.scheduled_out
             estimated_out = data.estimated_out
             scheduled_in = data.scheduled_in
             estimated_in = data.estimated_in
-            updatefunc(data=scheduled_out,data_item_arg='.scheduled_out')
-            updatefunc(data=estimated_out,data_item_arg='.estimated_out')
-            updatefunc(data=scheduled_in,data_item_arg='.scheduled_in')
-            updatefunc(data=estimated_in,data_item_arg='.estimated_in')
+            updatefunc(individual_data=scheduled_out,data_item_arg='.scheduled_out')
+            updatefunc(individual_data=estimated_out,data_item_arg='.estimated_out')
+            updatefunc(individual_data=scheduled_in,data_item_arg='.scheduled_in')
+            updatefunc(individual_data=estimated_in,data_item_arg='.estimated_in')
             
             departure_ID = data.departure_ID
             destination_ID = data.destination_ID
             scheduled_departure_time = data.scheduled_departure_time
             scheduled_arrival_time = data.scheduled_arrival_time
-            updatefunc(data=departure_ID,data_item_arg='.departure_ID')
-            updatefunc(data=destination_ID,data_item_arg='.destination_ID')
-            updatefunc(data=scheduled_departure_time,data_item_arg='.scheduled_departure_time')
-            updatefunc(data=scheduled_arrival_time,data_item_arg='.scheduled_arrival_time')
+            updatefunc(individual_data=departure_ID,data_item_arg='.departure_ID')
+            updatefunc(individual_data=destination_ID,data_item_arg='.destination_ID')
+            updatefunc(individual_data=scheduled_departure_time,data_item_arg='.scheduled_departure_time')
+            updatefunc(individual_data=scheduled_arrival_time,data_item_arg='.scheduled_arrival_time')
 
             departure_gate = data.departure_gate
             arrival_gate = data.arrival_gate
-            updatefunc(data=departure_gate,data_item_arg='.departure_gate')
-            updatefunc(data=arrival_gate,data_item_arg='.arrival_gate')
+            updatefunc(individual_data=departure_gate,data_item_arg='.departure_gate')
+            updatefunc(individual_data=arrival_gate,data_item_arg='.arrival_gate')
 
             route = data.route
             filed_altitude = data.filed_altitude
             filed_ete = data.filed_ete
             sv = data.sv
-            updatefunc(data=route,data_item_arg='.route')
-            updatefunc(data=filed_altitude,data_item_arg='.filed_altitude')
-            updatefunc(data=filed_ete,data_item_arg='.filed_ete')
-            updatefunc(data=sv,data_item_arg='.sv')
+            updatefunc(individual_data=route,data_item_arg='.route')
+            updatefunc(individual_data=filed_altitude,data_item_arg='.filed_altitude')
+            updatefunc(individual_data=filed_ete,data_item_arg='.filed_ete')
+            updatefunc(individual_data=sv,data_item_arg='.sv')
 
             nas_departure_affected = data.nas_departure_affected
             nas_destination_affected = data.nas_destination_affected
-            updatefunc(data=nas_departure_affected,data_item_arg='.nas_departure_affected')
-            updatefunc(data=nas_destination_affected,data_item_arg='.nas_destination_affected')
+            updatefunc(individual_data=nas_departure_affected,data_item_arg='.nas_departure_affected')
+            updatefunc(individual_data=nas_destination_affected,data_item_arg='.nas_destination_affected')
 
             dep_datis = data.dep_datis
             dep_metar = data.dep_metar
             dep_taf = data.dep_taf
-            updatefunc(data=dep_datis,data_item_arg='.dep_datis')
-            updatefunc(data=dep_metar,data_item_arg='.dep_metar')
-            updatefunc(data=dep_taf,data_item_arg='.dep_taf')
+            updatefunc(individual_data=dep_datis,data_item_arg='.dep_datis')
+            updatefunc(individual_data=dep_metar,data_item_arg='.dep_metar')
+            updatefunc(individual_data=dep_taf,data_item_arg='.dep_taf')
 
             dest_datis = data.dest_datis
             dest_metar = data.dest_metar
