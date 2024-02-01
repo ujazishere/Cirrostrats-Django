@@ -7,32 +7,40 @@
 <link rel="stylesheet" type="text/css" href="{% static 'metar_info.css' %}">
 <div class="search-form-wrapper">
   <h3> Weather for {{airport}}</h3>
-  <table class="table">
-    <tbody>
-      <tr>
-        <th>
-          <p class="text-center" style="font-size: 14px; margin-bottom: 0; margin-top: 0; color: white;">D-ATIS</p>
-        </th>
-      </tr>
-      <tr>
-        <td>{{ datis|safe }}</td>
-      </ttr>
-        <th>
-          <p class="text-center" style="font-size: 14px; margin-bottom: 0; margin-top: 0; color: white;">METAR</p>
-        </th>
-      </tr>
-      <tr>
-        <td>{{ metar|safe }}</td>
-      </ttr>
-        <th>
-          <p class="text-center" style="font-size: 14px; margin-bottom: 0; margin-top: 0; color: white;">TAF</p>
-        </th>
-      </tr>
-      <tr>
-        <td>{{ taf | safe}}</td>
-      </tr>
-    </tbody>
-  </table>
+
+
+<!-- This is the departure box that contains D-Atis, metar and taf. titles include scheduled time and  -->
+      <table class="comparison-table">
+          <tbody>
+              <tr>
+                  <td>D-ATIS</td>
+              </tr>
+
+              <tr>
+                  <td style="text-align: left; font-family: Menlo, monospace;">{{datis|safe}}</td>
+              </tr>
+
+              <tr>
+                  <td>METAR</td>
+              </tr>
+
+              <tr>
+                  <td style="text-align: left; font-family: Menlo, monospace;">{{metar|safe}}</td>
+              </tr>
+
+              <tr>
+                  <td>TAF</td>
+              </tr>
+
+              <tr>
+                  <td style="text-align: left; font-family: Menlo, monospace;">{{taf|safe}}</td>
+              </tr>        
+          </tbody>
+      </table>
+  </div>
+</div>
+  
+
     <p>No weather informamtion found for {{airport}}. Try `w kewr`</p>
 
   {% csrf_token %}
@@ -42,4 +50,6 @@
         <input type="text" name="query" id="query">
         <button type="submit">Search</button>
     </form>
+
+
 {% endblock %}

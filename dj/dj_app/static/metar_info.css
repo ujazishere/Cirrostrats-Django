@@ -3,83 +3,114 @@ body {
   padding: 0;
 }
 
+/************** this code is for comparison table *************/
 
-/************** this code is for table *************/
-
-
-body.dark-mode thead{
-  color: #FFFFFF;
-  border: 1px solid #ffffff; /* Change border color */
-}
-
-.dark-mode tr:nth-child(odd) {
-  color: #ffffff;
-  border: 1px solid #ffffff; /* Change border color */
-}
-
-.dark-mode tr:nth-child(even) {
-  color: #ADBAC7;
-  background-color: #22272E;
-  border: 1px solid #ffffff; /* Change border color */
-}
-
-.table {
-  margin: 0 auto;
-  text-align: center;
+.comparison-table {
+  width: 100%;
   border-collapse: collapse;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: none;
+}
+
+.comparison-table th:first-child,
+.comparison-table td:first-child {
+  border-left: 1px solid black;
+}
+
+.comparison-table th:last-child,
+.comparison-table td:last-child {
+  border-right: 1px solid black;
+}
+
+.comparison-table tr:first-child th,
+.comparison-table tr:last-child td {
+  border-bottom: 1px solid black;
+}
+
+.comparison-table tr:not(:first-child) th,
+.comparison-table tr:not(:last-child) td {
+  border-top: 1px solid black;
+}
+
+table.comparison-table {
+  margin: 20px auto;
   width: 80%;
-  max-width: 550px;
+  max-width: 800px;
   background-color: #2D333B;
-  border: 1px solid #ffffff; /* Border for the entire table */
-  border-radius: 15px;
-  overflow: hidden; 
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 0px #000000;
+  color: inherit;
+  text-decoration: inherit;
+  border: 10px;
 }
 
-.dark-mode .table {
+table.comparison-table th,
+table.comparison-table td {
+  padding: 10px;
+  text-align: center;
+}
+
+table.comparison-table th {
   background-color: #2D333B;
-  border: 1px solid #ffffff; /* Border for the entire table in dark mode */
-  border-radius: 15px; /* Border radius for dark mode */
-  border-collapse: collapse;
-  border-top: #ffffff;
-  border-left: #ffffff;
-  border-right: #ffffff;
-  border-bottom: #ffffff;
-}
-
-
-th{
-  padding: 10px;
-  border: 1px solid #000000;
-}
-
-td {
-  padding: 10px;
-  text-align: left;
-  border: 1px solid #000000;
-}
-
-thead {
   color: #ffffff;
+  width: 20%;
+  border-color: rgb(0, 0, 0);
+  border-top: 1px solid rgb(0, 0, 0);
+  border-bottom: 1px solid rgb(0, 0, 0);
 }
 
-.dark-mode thead {
-  color: #ADBAC7;
-  border: 1px solid #ffffff;
-}
-
-.dark-mode th, .dark-mode td {
-  color: #ADBAC7;
-  border: 1px solid #ffffff;
-}
-
-
-tbody tr:nth-child(even) {
+table.comparison-table td {
   background-color: #ffffff;
+  color: #24292E;
+  width: 15%;
+  border-color: rgb(0, 0, 0);
+  border-top: 1px solid rgb(0, 0, 0);
+  border-bottom: 1px solid rgb(0, 0, 0);
 }
 
-
-tbody tr:nth-child(odd) {
+table.comparison-table thead {
+  background-color: #2D333B;
   color: #ffffff;
+}
+
+table.comparison-table th:first-child,
+table.comparison-table td:first-child {
+  font-weight: bold;
+}
+
+.dark-mode table.comparison-table thead th {
+  background-color: #2D333B;
+  color: #ADBAC7;
+}
+
+.dark-mode table.comparison-table {
+  background-color: #2D333B !important;
+  box-shadow: 0 0 0 1px #ffffff;
+  color: #ADBAC7;
+}
+
+.dark-mode table.comparison-table th,
+.dark-mode table.comparison-table td {
+  background-color: #22272E;
+  color: #ADBAC7;
+  border-color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+.dark-mode table.comparison-table th:first-child,
+.dark-mode table.comparison-table td:first-child {
+  border-left: 1px solid black;
+}
+
+.dark-mode table.comparison-table th:last-child,
+.dark-mode table.comparison-table td:last-child {
+  border-right: 1px solid black;
 }
 
 
