@@ -1,0 +1,64 @@
+{% extends "dj_app/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'weather_info.css' %}">
+<div class="search-form-wrapper">
+  <h3> Weather for {{airport}}</h3>
+{% if D_ATIS or METAR or TAF %}
+<!-- This is the departure box that contains D-Atis, metar and taf. titles include scheduled time and  -->
+      <table class="comparison-table">
+          <tbody>
+
+              {% if D_ATIS %}
+              <tr>
+                  <td>D-ATIS @ {{D_ATIS_zt}}</td>
+              </tr>
+              <tr>
+                  <td style="text-align: left; font-family: Menlo, monospace;">{{D_ATIS|safe}}</td>
+              </tr>
+              {% endif %}  
+              
+
+              {% if METAR %}
+              <tr>
+                  <td>METAR @ {{METAR_zt}}</td>
+              </tr>
+              <tr>
+                  <td style="text-align: left; font-family: Menlo, monospace;">{{METAR|safe}}</td>
+              </tr>
+              {% endif %}  
+
+
+              {% if TAF %}
+              <tr>
+                  <td>TAF @ {{TAF_zt}}</td>
+              </tr>
+
+              <tr>
+                  <td style="text-align: left; font-family: Menlo, monospace;">{{TAF|safe}}</td>
+              </tr>        
+              {% endif %}  
+          
+          </tbody>
+      </table>
+  </div>
+</div>
+
+
+{% else %}
+    <p>No weather informamtion found for {{airport}}. Try `w kewr`</p>
+
+{% endif %}
+
+{% csrf_token %}
+<form method="post" class="search-form">
+    {% csrf_token %}
+    <label for="query"></label>
+    <input type="text" name="query" id="query">
+    <button type="submit">Search</button>
+</form>
+
+{% endblock %}

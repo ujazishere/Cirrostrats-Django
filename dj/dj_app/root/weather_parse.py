@@ -10,7 +10,7 @@ import json
             # compare all unique values and group identical ones
             # analyze data for format patterns to make a template for output
 
-class Metar_taf_parse:
+class Weather_parse:
     def __init__(self) -> None:
         self.pink_text_color = r'<span class="pink_text_color">\1\2</span>'
         self.red_text_color = r'<span class="red_text_color">\1\2</span>'
@@ -79,19 +79,6 @@ class Metar_taf_parse:
             metar_raw = requests.get(awc_metar_api)
             metar_raw = metar_raw.content
             metar_raw = metar_raw.decode("utf-8")
-            awc_metar_api = f"https://aviationweather.gov/api/data/metar?ids={airport_id}"
-            metar_raw = requests.get(awc_metar_api)
-            metar_raw = metar_raw.content
-            metar_raw = metar_raw.decode("utf-8")
-            metar_list_form = metar_raw.split()
-            for each_item in metar_list_form:
-                if 'SM' in each_item and each_item[0] != 'K' and each_item != '10SM':
-                    pass
-                # The logic is if forward slash exists e.g `1/2SM` then look for previous item.
-                    # if previous item is contains single `1` or `2` then its a visibility
-                    # ([1-2] )(\d/)?(\d)(SM) This regex is for 
-                    
-            
             awc_taf_api = f"https://aviationweather.gov/api/data/taf?ids={airport_id}"
             taf_raw = requests.get(awc_taf_api)
             taf_raw = taf_raw.content
@@ -107,6 +94,18 @@ class Metar_taf_parse:
                     if datis_arr:       #   Check if it works with philly departure/arrival
                         datis_raw = datis[1]['datis']
                 
+            def zulu_extracts(item,datis=None):
+                if datis:
+                    aa = re.findall('[0-9]{4}Z', item)
+                else:
+                    aa = re.findall('[0-9]{6}Z', item)
+                    
+                if aa:
+                    extracts = aa[0]
+                else:
+                    extracts = 'N/A'
+                return extracts
+
         
         # Exporting raw weather data for color code processing
         # raw_weather_dummy_data = { 'D-ATIS': datis_raw, 'METAR': metar_raw, 'TAF': taf_raw} 
@@ -152,5 +151,13 @@ class Metar_taf_parse:
 
         highlighted_datis = re.sub(self.RW_IN_USE, self.box_around_text,highlighted_datis)
 
-        return dict({ 'D-ATIS': highlighted_datis, 'METAR': highlighted_metar, 'TAF': highlighted_taf})
+        return dict({ 'D-ATIS': highlighted_datis,
+                      'D-ATIS_zt': zulu_extracts(datis_raw,datis=True),
+                      
+                      'METAR': highlighted_metar, 
+                      'METAR_zt': zulu_extracts(metar_raw),
+
+                      'TAF': highlighted_taf,
+                      'TAF_zt': zulu_extracts(taf_raw),
+                      })
         

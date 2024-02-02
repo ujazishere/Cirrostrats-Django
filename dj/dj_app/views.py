@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from .root.gate_checker import Gate_checker
 from .root.root_class import Root_class
 from .root.gate_scrape import Gate_scrape_thread
-from .root.MET_TAF_parse import Metar_taf_parse
+from .root.weather_parse import Weather_parse
 from .root.dep_des import Pull_flight_info
 from time import sleep
 from django.shortcuts import render
@@ -76,10 +76,6 @@ def parse_query(request, main_query):
                     flgiht_digits = query[2:]       # Its UA
                 print('\nSearching for:', airline_code,flgiht_digits)
                 return flight_deets(request, airline_code=airline_code,flight_number_query=flgiht_digits)
-            elif 'A' in query or 'B' in query or 'C' in query or len(query) == 1:     # Accounting for 1 letter only. Gate query.
-                # When the length of query_in_list_form is only 1 it returns gates table for that particular query.
-                gate_query = query
-                return gate_info(request, main_query=gate_query)
             elif len(query) == 4 or len(query) == 3 or len(query) == 2:
                 if query.isdigit():
                     query = int(query)
@@ -91,11 +87,15 @@ def parse_query(request, main_query):
                     if len(query) == 4 and query[0] == 'K':
                         weather_query_airport  = query
                         weather_query_airport = weather_query_airport.upper()       # Making query uppercase for it to be compatible
-                        return metar_display(request, weather_query_airport)
-                    else:    
-                        print('impossible gate query return')
-                        Root_class().send_email(body_to_send=f"impossible gate query return: `{main_query}`")
+                        print('hereresfhn')
+                        return weather_display(request, weather_query_airport)
+                    else:           # tpical gate query with length of 2-4 alphanumerics
+                        print('gate query')
                         return gate_info(request, main_query=str(query))
+            elif 'A' in query or 'B' in query or 'C' in query or len(query) == 1:     # Accounting for 1 letter only. Gate query.
+                # When the length of query_in_list_form is only 1 it returns gates table for that particular query.
+                gate_query = query
+                return gate_info(request, main_query=gate_query)
             else:
                 gate_query = query
                 return gate_info(request, main_query=gate_query)
@@ -106,7 +106,7 @@ def parse_query(request, main_query):
         if first_letter == 'W':
             weather_query_airport  = query_in_list_form[1]
             weather_query_airport = weather_query_airport.upper()       # Making query uppercase for it to be compatible
-            return metar_display(request, weather_query_airport)
+            return weather_display(request, weather_query_airport)
 
         if first_letter == 'I':        
             return flight_deets(request,airline_code=None,query_in_list_form=query_in_list_form)
@@ -147,9 +147,9 @@ def dummy(request):
         with open(ord, 'rb') as f:
             dest_weather = pickle.load(f)
         
-        weather = Metar_taf_parse()
+        weather = Weather_parse()
         bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
-        weather = Metar_taf_parse()
+        weather = Weather_parse()
         bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
 
     except Exception as e:     # ISMAIL MAC PATH
@@ -160,9 +160,9 @@ def dummy(request):
             dep_weather = pickle.load(f)
         with open(is_ord, 'rb') as f:
             dest_weather = pickle.load(f)
-        weather = Metar_taf_parse()
+        weather = Weather_parse()
         bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
-        weather = Metar_taf_parse()
+        weather = Weather_parse()
         bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
     
     # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
@@ -201,10 +201,10 @@ def gate_info(request, main_query):
 
 def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=False):
     
-    bypass_fa = False
+    bypass_fa = False           # to restrict fa api use: for local use keep it False. 
 
     flt_info = Pull_flight_info()           # from dep_des.py file
-    weather = Metar_taf_parse()         # from MET_TAF_parse.py
+    weather = Weather_parse()         # from MET_TAF_parse.py
     
     # This is a inefficient fucntion to bypass the futures error.
     # TODO: sort this out for async feature and parallel processing 
@@ -234,21 +234,36 @@ def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=
         
         # This whole area removes the need for for loop in html making it easier to 
             # work with css styling and readibility.
-        dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
-        dep_metar = bulk_flight_deets['dep_weather']['METAR']
-        dep_taf = bulk_flight_deets['dep_weather']['TAF']
-        
-        bulk_flight_deets['dep_datis']= dep_atis
-        bulk_flight_deets['dep_metar']= dep_metar
-        bulk_flight_deets['dep_taf']= dep_taf
-        
-        dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
-        dest_metar = bulk_flight_deets['dest_weather']['METAR']
-        dest_taf = bulk_flight_deets['dest_weather']['TAF']
-        
-        bulk_flight_deets['dest_datis']= dest_datis
-        bulk_flight_deets['dest_metar']= dest_metar
-        bulk_flight_deets['dest_taf']= dest_taf
+        def nested_weather_dict_explosion():
+            dep_datis = bulk_flight_deets['dep_weather']['D-ATIS']
+            dep_metar = bulk_flight_deets['dep_weather']['METAR']
+            dep_taf = bulk_flight_deets['dep_weather']['TAF']
+            bulk_flight_deets['dep_datis']= dep_datis
+            bulk_flight_deets['dep_metar']= dep_metar
+            bulk_flight_deets['dep_taf']= dep_taf
+            
+            dep_datis_zt = bulk_flight_deets['dep_weather']['D-ATIS_zt']
+            dep_metar_zt = bulk_flight_deets['dep_weather']['METAR_zt']
+            dep_taf_zt = bulk_flight_deets['dep_weather']['TAF_zt']
+            bulk_flight_deets['dep_datis_zt']= dep_datis_zt
+            bulk_flight_deets['dep_metar_zt']= dep_metar_zt
+            bulk_flight_deets['dep_taf_zt']= dep_taf_zt
+            
+            dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
+            dest_metar = bulk_flight_deets['dest_weather']['METAR']
+            dest_taf = bulk_flight_deets['dest_weather']['TAF']
+            bulk_flight_deets['dest_datis']= dest_datis
+            bulk_flight_deets['dest_metar']= dest_metar
+            bulk_flight_deets['dest_taf']= dest_taf
+
+            dest_datis_zt = bulk_flight_deets['dest_weather']['D-ATIS_zt']
+            dest_metar_zt = bulk_flight_deets['dest_weather']['METAR_zt']
+            dest_taf_zt = bulk_flight_deets['dest_weather']['TAF_zt']
+            bulk_flight_deets['dest_datis_zt']= dest_datis_zt
+            bulk_flight_deets['dest_metar_zt']= dest_metar_zt
+            bulk_flight_deets['dest_taf_zt']= dest_taf_zt
+            
+        nested_weather_dict_explosion()
         return bulk_flight_deets
     
     bulk_flight_deets = without_futures()
@@ -306,24 +321,29 @@ def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
-def metar_display(request,weather_query):
-    
+def weather_display(request,weather_query):
+
     weather_query = weather_query.strip()       # remove leading and trailing spaces. Seems precautionary.
     airport = weather_query[-4:]
-    
-    weather = Metar_taf_parse()
+
+    weather = Weather_parse()
     # TODO: Need to be able to add the ability to see the departure as well as the arrival datis
     # weather = weather.scrape(weather_query, datis_arr=True)
     weather = weather.scrape(weather_query, )
-    
+
     weather_page_data = {}
-    
+
     weather_page_data['airport'] = airport
-    weather_page_data['datis'] = weather['D-ATIS']
-    weather_page_data['metar'] = weather['METAR']
-    weather_page_data['taf'] = weather['TAF']
+
+    weather_page_data['D_ATIS'] = weather['D-ATIS']
+    weather_page_data['METAR'] = weather['METAR']
+    weather_page_data['TAF'] = weather['TAF']
     
-    return render(request, 'metar_info.html', weather_page_data)
+    weather_page_data['D_ATIS_zt'] = weather['D-ATIS_zt']
+    weather_page_data['METAR_zt'] = weather['METAR_zt']
+    weather_page_data['TAF_zt'] = weather['TAF_zt']
+    print(weather_page_data)
+    return render(request, 'weather_info.html', weather_page_data)
 
 
 class Menu_pages:
@@ -378,7 +398,7 @@ def dummy2(request):
 @require_GET
 def data_v(request):        
     
-    sleep(3)
+    sleep(1)
     try:
         bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
         bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
@@ -394,9 +414,9 @@ def data_v(request):
         with open(ord, 'rb') as f:
             dest_weather = pickle.load(f)
         
-        weather = Metar_taf_parse()
+        weather = Weather_parse()
         bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
-        weather = Metar_taf_parse()
+        weather = Weather_parse()
         bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
 
     except Exception as e:     # ISMAIL MAC PATH
@@ -407,9 +427,9 @@ def data_v(request):
             dep_weather = pickle.load(f)
         with open(is_ord, 'rb') as f:
             dest_weather = pickle.load(f)
-        weather = Metar_taf_parse()
+        weather = Weather_parse()
         bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
-        weather = Metar_taf_parse()
+        weather = Weather_parse()
         bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
     
     # These seperate out all the wather for ease of work for design. for loops are harder to work with in html

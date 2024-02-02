@@ -21,7 +21,7 @@
     <!-- id will bring in the variable thats been declared in JavaScript -->
     <!--Text within wont be shown since its being overwritten-->
     <!-- <div class="flight_number"></div>    -->
-<table class="summary-table">
+<table class="summary-table spacer-row-js-table">
     <thead>
         <tr>
             <!-- Investigate if having multiple attributes within an element tag is causing issues -->
@@ -37,7 +37,7 @@
             <td class="table-cell departure_ID">...</td>
             <td class="table-cell text-align-right destination_ID">...</td>
         </tr>
-        
+
         <tr class="spacer-row">
             <td class="spacer-cell">&nbsp;</td>
             <td class="spacer-cell">&nbsp;</td>
@@ -90,7 +90,6 @@
 
     </tbody>
 </table>
-
 
 <!-- This is the departure box that contains D-Atis, metar and taf. titles include scheduled time and  -->
 <div id="departure-container" class="table-container">
@@ -194,24 +193,7 @@
 
 
 <!-- NAS (departures only) table in red-->
-<div class="table-wrapper">
-    <table class="another-table">
-        <thead>
-        </thead>
-        <tbody>
-            {% for d1_key, d1_value in nas_departure_affected.items %}
-            <tr>
-                <td colspan="2">{{ d1_key }}</td>
-            </tr>
-            {% for d2_key, d2_value in d1_value.items %}
-            <tr>
-                <td>{{ d2_key }}</td>
-                <td>{{ d2_value }}</td>
-            </tr>
-            {% endfor %}
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="table-wrapper" id="nas_table" >
 </div>
 </div>
 
@@ -224,10 +206,11 @@
         <!-- <element attribute_name="attribute_value"></element> -->
     <script>    
         // CAUTIOIN! Cannot use same `id` at multiple places within html.
+        
         function updatefunc(individual_data,data_item_arg) {
             //queryselectorall gets all the similar class items. mind the `.` that needs to be prepended to the class item I suppose.
             document.querySelectorAll(data_item_arg).forEach(element => {            // each element is each of the html class item to be used
-                console.log('inside updatefunc',individual_data)
+                // console.log('inside updatefunc',individual_data)
                 element.innerHTML = individual_data ;      //This was initially used but since now the elements are going to be constructed this is commented out
                   
 // section start
@@ -243,9 +226,9 @@
                 // TODO: Setup Grabbing flight as a variable that is passed in as argument in the function.
                 // This will allow for reuse of the function. You could also probs pass the argument of queryselectorall as a variable to complete reuse. 
 // section end
-                
             });
         }
+
     </script>
     
     <script>   
@@ -260,14 +243,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {             // data is a variable that pulls in data_v's bulk_flight_deet dictionary
 
-            console.log('bulk_flight_deet as data:',data)
             
             flight_number = data.flight_number
             updatefunc(individual_data=flight_number,data_item_arg='.flight_number')
             console.log('finished putting out flight_number')
 
             registration = data.registration
-            console.log('Registration:', registration)
             updatefunc(individual_data=registration, data_item_arg='.registration')
 
             
@@ -310,8 +291,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             nas_departure_affected = data.nas_departure_affected
             nas_destination_affected = data.nas_destination_affected
-            updatefunc(individual_data=nas_departure_affected,data_item_arg='.nas_departure_affected')
-            updatefunc(individual_data=nas_destination_affected,data_item_arg='.nas_destination_affected')
+            console.log('nas stuff', nas_departure_affected)
+            // updatefunc(individual_data=nas_destination_affected,data_item_arg='.nas_destination_affected')
 
             dep_datis = data.dep_datis
             dep_metar = data.dep_metar
@@ -327,6 +308,23 @@ document.addEventListener('DOMContentLoaded', function() {
             updatefunc(data=dest_metar,data_item_arg='.dest_metar')
             updatefunc(data=dest_taf,data_item_arg='.dest_taf')
 
+            function nas_items(individual_data){
+                const table = document.createElement('table');
+                table.className = "another-table"
+                const thread = document.createElement('thread');
+                table.append(thread);
+                const tbody = document.createElement('tbody');
+                table.append(tbody);
+
+                const tr = document.createElement('tr');
+                tbody.append(tr)
+                const td = document.createElement('td');
+                tr.append(td);
+                return table
+            }
+
+            const nas_table = document.getElementById('nas_table')
+            nas_table.appendChild(nas_items(nas_departure_affected))
             // updateFlightNumber(data)
             // console.log('4444',data)
         })

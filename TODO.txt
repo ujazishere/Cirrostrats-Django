@@ -2,7 +2,6 @@ Practice readibility and simplicity. Include description and documentation for o
 
 **IS:   
 
-        Make weather page similar to the flight deet page.
         Make a Date and time box for title. just like you see on the google flight info box.
         Implement loading symbol when searching.
         WIP - summery box shadow and expand/collapse (fast)animation.  
@@ -10,14 +9,19 @@ Practice readibility and simplicity. Include description and documentation for o
         WIP - Implement asynchronous loading of the data on the flight_deet page. Load data incrementally so as to avoid waiting for all data to be fetched.
         WIP - dynamic color for text on tables 
         work on script to extract data- aviation_stack_data_pull.py
-        Separate datis to account for arr vs dep atis. and hide section when N/A instead of showing N/A
         
     
         
 **UV:   
         Integrate weather page with  the flight deet page--> reduce duplication
+        Hide datis table when N/A instead of showing N/A
+        integrate time passed since weather published time.(2 mins ago) and highlight it red when over 52 mins old.
+            taf published time show have- next one in 
+        make -ve temps turquoise
+        box out the associated taf section with respect to ETA. Give pilots freedown
         learn about multiprocessing vs multithreading and implement on flight_deet
         Implement asynchronous loading of the data on the flight_deet page.
+        weather:datis,metar and taf
         prepare search query logic for disecting typical searches. Implement ML and NN. X vs ground truth vals.
         fix massive bug on flight_aware route date time conflict with real scheduled_time.
             maybe include search with date, time or display info with date as zulu time
@@ -168,6 +172,7 @@ weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf',
         DONE! Add skyvector map
         DONE! Move `Show on SkyVector Map` to the right end and grey it out a tiny bit and decrease font.
         DONE! THIS IS ALREADY FIXED THOUGH CLOUDFLARE Workout 401 forbidden error; CSFR token issues on main web.
+        DONE!!! Make weather page similar to the flight deet page.
         **** move searchbar on all pages to header of the site - I tried this and it looked really weird and not usable at all hence for now kept the searchbar as it is
         **** i removed the borders and it looked really weird and not orgnized hence got the borders back and made them as thin as possible 
         flight deet page / comparison table make the title grey and remove the borders from inside of the table

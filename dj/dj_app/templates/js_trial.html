@@ -1,0 +1,122 @@
+
+<table class="summary-table">
+    <thead>
+        <tr>
+            <!-- Investigate if having multiple attributes within an element tag is causing issues -->
+            <th colspan="2" class="flight_number">...</th>
+        </tr>
+        <tr>
+            <th colspan="2" class="registration">...</th>
+        </tr>
+    </thead>
+        <tbody id="tableBody">
+
+            <script>
+                // function generateTableRow(className, cellContent, extra) {
+                //     const row = document.createElement('tr');
+
+                //     if(!extra) {        // This is the first item in the summery table
+                //         const [className1,className2] = className.split(' ')
+                //         const cell1 = document.createElement('td');      // 2 similar items.
+                //         cell1.className = 'table-cell ' + className1
+                //         cell.innerHTML = cellContent
+                //         row.appendChild(cell1)
+                //         const cell2 = document.createElement('td');      // 2 similar items.
+                //         cell1.className = 'table-cell text-align-right' + className2
+                //         cell.innerHTML = cellContent
+                //         row.appendChild(cell2)
+                //     }
+                //     else if(extra){         // This is for spacer, info and utc items
+                //         row.className = className + '-row';
+                //         for (let i = 0; i < 2; i++) {
+                //             const cell = document.createElement('td');      // 2 similar items.
+                //             cell.className = className + '-cell';
+                //             cell.innerHTML = cellContent;
+                //             row.appendChild(cell);
+                //         }
+                //     }
+                //     else {
+                        
+                //     }
+
+                //     return row;
+                // }
+
+                function first_item(className, inner){
+                    const row = document.createElement('tr');
+                    row.innerHTML = inner;
+                    return row;
+                }
+                // Add rows using the function
+                const tableBody = document.getElementById('tableBody');
+                tableBody.appendChild(first_item('departure_ID destination_ID','...'));
+
+                // tableBody.appendChild(generateTableRow('spacer','&nbsp;','spacer'));
+                // tableBody.appendChild(generateTableRow('info', 'Gate'));
+                // tableBody.appendChild(generateTableRow('gate-row departure_gate', '...'));
+                // tableBody.appendChild(generateTableRow('spacer-row', '&nbsp;','spacer'));
+                // tableBody.appendChild(generateTableRow('scheduled-row', 'Scheduled Local'));
+                // tableBody.appendChild(generateTableRow('scheduled-time-row', '...'));
+                // tableBody.appendChild(generateTableRow('spacer-row', '&nbsp;'));
+                // tableBody.appendChild(generateTableRow('utc-row', 'UTC'));
+                // tableBody.appendChild(generateTableRow('flight-status-row', ''));
+                // tableBody.appendChild(generateTableRow('flight-status-row', ''));
+
+            </script>
+        </tbody>
+</table>
+
+
+
+
+<script>
+        function spacer_row_js(data_item_arg) {
+
+            document.querySelectorAll(data_item_arg).forEach(element => {            // each element is each of the html class item to be used
+                const table = element;
+                // sr = element.querySelector()        // Point to particulr class and change its items.
+                // console.log(sr)
+                const row = document.createElement('tr');
+                row.className = 'spacer-row';
+
+                const cell1 = document.createElement('td');
+                cell1.className = 'spacer-cell';
+                cell1.innerHTML = '&nbsp;';
+
+                const cell2 = document.createElement('td'); 
+                cell2.className = 'spacer-cell';
+                cell2.innerHTML = '&nbsp;';
+
+                row.appendChild(cell1);
+                row.appendChild(cell2);
+                
+                table.appendChild(row);
+            })}
+
+        function spacer_row_js_og(individual_data,data_item_arg) {
+            document.querySelectorAll(data_item_arg).forEach(element => {            // each element is each of the html class item to be used
+                
+                // <tr class="spacer-row">
+                    // <td class="spacer-cell">&nbsp;</td>
+                    // <td class="spacer-cell">&nbsp;</td>
+                // </tr>
+
+                let tr = element.querySelector('tr');       // declaring, if it exists.
+
+                if(!tr) {               // If it does not exist then create it and append it to the parent element.
+                tr = document.createElement('tr');
+                element.appendChild(tr);
+                    }
+                tr.innerHTML = individual_data ;
+                // for loop javascript js
+                /* for (let i = 0; i < 2; i++) {
+                    const cell = document.createElement('td');
+                    cell.className = className + '-cell';
+                    cell.innerHTML = cellContent;
+                    row.appendChild(cell);
+                }
+                */
+                
+            });
+        }
+</script>

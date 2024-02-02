@@ -31,17 +31,20 @@ airport_ID = [i for i in id if len(i) ==3 and i.isalpha()]      # Investigate th
 print('alphabetic airport ID',len(airport_ID))
 print('all airport ID as imported',len(id))
 
-def code_tag(airport_id):
+def code_tag(airport_id,taf=None):
     """
     # Archieve
     awc_web = f"https://aviationweather.gov/metar/data?ids=K{airport_id}&format=raw&hours=0&taf={TAF}&layout=on"
     """
     
     # Metar gives data upto 15 days ago and TAF gives upto 17 days ago
-    # awc_taf_api = f"https://aviationweather.gov/api/data/taf?ids={airport_id}&hours=408"
-    awc_metar_api = f"https://aviationweather.gov/api/data/metar?ids={airport_id}&hours=360"
+    if taf:
+        awc_taf_api = f"https://aviationweather.gov/api/data/taf?ids={airport_id}&hours=408"
+        metar_raw = requests.get(awc_taf_api)
+    else:
+        awc_metar_api = f"https://aviationweather.gov/api/data/metar?ids={airport_id}&hours=360"
+        metar_raw = requests.get(awc_metar_api)
     
-    metar_raw = requests.get(awc_metar_api)
     metar_raw = metar_raw.content
     metar_raw = metar_raw.decode("utf-8")
 
@@ -78,36 +81,57 @@ with open(r'C:\Users\ujasv\OneDrive\Desktop\pickles\no_mets.pkl', 'rb') as f:
 ids_without_digit_with_no_mets_ecluded = [i for i in ids_without_digit if i not in no_mets]
 
 # This is without the concurrent futures threadpool executor. Inefficient but stable
+taf_bool = True
 count = 0
-bulky_metar = []
-no_mets = []
-yes_mets = []
+bulky_weather = []
+no_weather_id = []
+yes_weather_id = []
 # half_index = int(len(ids_without_digit)/2)     # use this to split pulls into two sections.
 for airport_id in ids_without_digit_with_no_mets_ecluded:
     count += 1
-    metars = code_tag(airport_id)
+    metars = code_tag(airport_id=airport_id,taf=taf_bool)
     if not metars:
-        no_mets.append(airport_id)
-        print('no_met', airport_id, count)
+        no_weather_id.append(airport_id)
+        print('no_weather_id', airport_id, count)
     else:
         metars_in_list_form = metars.split('\n')    # Delete this for TAF.
         for a_metar in metars_in_list_form:
             if a_metar:         # since, there are empty metar lines.
-                bulky_metar.append(a_metar)
-        yes_mets.append(airport_id)
+                bulky_weather.append(a_metar)
+        yes_weather_id.append(airport_id)
     print(count)
     # use this to test how long it takes to pull and if the pull is even working.
     # Comment it out if you plan to use the whole thing.
     if count >5:
-        print('Test done! no_mets/yes_meta: ', len(no_mets),'/', len(yes_mets))
+        print('Test done! no_weather_id/yes_weather_id: ', len(no_weather_id),'/', len(yes_weather_id))
         break
 
 # dump metar to desktop pickles
-def dump_bulky_weather(bulky_metar):
+# *********CAUTION HARD WRITE*********
+def dump_bulky_weather(bulky_weather):
     with open(r'C:\Users\ujasv\OneDrive\Desktop\pickles\BULK_METAR_JAN_2024_.pkl', 'wb') as f:
-        pickle.dump(bulky_metar, f)
-dump_bulky_weather(bulky_metar)
+        pickle.dump(bulky_weather, f)
+dump_bulky_weather(bulky_weather)
 
+def fix_taf():
+    fixed = []
+    bt = bulky_weather
+    for i in range(len(bt)):
+        initial_two = bt[i][:2]
+        trailing = bt[i][-1]
+        if initial_two != '  ':      # main bod
+            if trailing == ' ':      # last index empty: taf with forecast
+                new_line_break = bt[i][:-1] + '\n'
+            elif trailing != ' ':    # main bod wo taf
+                fixed.append(bt[i])
+        elif initial_two == '  ' and trailing == ' ':    # associated forecast that continues
+            new_line_break += bt[i][:-1] + '\n'
+        elif initial_two == '  ' and trailing != ' ':   # forecast ends
+            new_line_break += bt[i]
+            fixed.append(new_line_break)
+    for i in fixed:
+        print(i)
+    return fixed
 
 # This is the Unstable efficient version that pulls upto 8 indexes for whatever reason
 airport_ID = ids_without_digit

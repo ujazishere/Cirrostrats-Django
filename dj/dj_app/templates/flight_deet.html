@@ -94,7 +94,7 @@
 </table>
 
 
-<!-- This is the departure box that contains D-Atis, metar and taf. titles include scheduled time and  -->
+<!-- Departure box that contains Datis, metar and taf -->
 <div id="departure-container" class="table-container">
     <div class="accordion-button-container">
     <div class="accordion-content active" id="departure-content-{{ departure_ID }}">
@@ -109,14 +109,20 @@
                 </tr>
             </thead>
             <tbody>
+
                 <td style="width: 100%; text-align: left;">
                     <span style="float: left; width: 33%;">{{ scheduled_departure_time }}</span>
                     <span style="float: left; width: 33%; text-align: center;">{{ departure_ID }}</span>
                     <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }}</span>
                 </td>
+                
+
                 <!-- Here got rid of for loops and makes it easier to work with design. -->
+                <!-- TODO: Make it easier to replicate and reuse code without having to duplicate. extract this out to a new file for use one... -->
+                    <!-- Maybe seperate out html alltogether in a different html file using >>> include 'partial_template1.html'  -->
                 <tr>
-                    <td>D-ATIS</td>
+                    <!-- Add ability to see how long ago it was published -->
+                    <td>D-ATIS @ {{dep_datis_zt}}</td>
                 </tr>
 
                 <tr>
@@ -124,7 +130,7 @@
                 </tr>
 
      		    <tr>
-                    <td>METAR</td>
+                    <td>METAR @ {{ dep_metar_zt }}</td>
                 </tr>
 
                 <tr>
@@ -132,7 +138,7 @@
                 </tr>
 
 		        <tr>
-                    <td>TAF</td>
+                    <td>TAF @ {{dep_taf_zt}}</td>
                 </tr>
 
                 <tr>
@@ -142,6 +148,10 @@
         </table>
     </div>
 </div>
+
+
+
+
 
 <!-- This is the route section that includes skyvector map hyperlink -->
 {% if route %}
@@ -155,6 +165,12 @@
     </table>
 {% endif %}
 
+
+
+
+
+
+
 <!-- NAS (departures only) table in red-->
 {% if nas_departure_affected %}
 <div class="table-wrapper">
@@ -166,18 +182,24 @@
             <tr>
                 <td colspan="2">{{ d1_key }}</td>
             </tr>
-            {% for d2_key, d2_value in d1_value.items %}
-            <tr>
-                <td>{{ d2_key }}</td>
-                <td>{{ d2_value }}</td>
-            </tr>
-            {% endfor %}
+                {% for d2_key, d2_value in d1_value.items %}
+                <tr>
+                    <td>{{ d2_key }}</td>
+                    <td>{{ d2_value }}</td>
+                </tr>
+                {% endfor %}
             {% endfor %}
         </tbody>
     </table>
 </div>
 {% endif %}
 </div>
+
+
+
+
+
+
 
 </div>
 
@@ -263,6 +285,8 @@
 {% endif %}
 </div>
 </div>
+
+
 
 {% else %}
 <p>No details found for {{ flight_query }}.</p>
