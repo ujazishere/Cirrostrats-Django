@@ -107,26 +107,22 @@ def parse_query(request, main_query):
             weather_query_airport = weather_query_airport.upper()       # Making query uppercase for it to be compatible
             return weather_display(request, weather_query_airport)
 
-        if first_letter == 'I':        
-            return flight_deets(request,airline_code=None,query_in_list_form=query_in_list_form)
-        else:       # If the query is not recognized:
-            return gate_info(request, main_query=main_query)
-            '''
-            # Attempting to pull all airports for easier search access
-            florida_airports = airports['Florida'][1]
-            for each_airport in florida_airports:
-                if each_query in each_airport:
-                    print(each_airport)
-                flights = Gate_checker().departures_ewr_UA()
-                print(3)
-                for flt in flights:
-                    # print(flt)
-                    if each_query in flt:
-                        print(4)
-                        return flight_deets(request, abs_query, flt)
-                    else:
-                        # return a static html saying no information found for flight number ****
-                        pass'''
+        '''
+        # Attempting to pull all airports for easier search access
+        florida_airports = airports['Florida'][1]
+        for each_airport in florida_airports:
+            if each_query in each_airport:
+                print(each_airport)
+            flights = Gate_checker().departures_ewr_UA()
+            print(3)
+            for flt in flights:
+                # print(flt)
+                if each_query in flt:
+                    print(4)
+                    return flight_deets(request, abs_query, flt)
+                else:
+                    # return a static html saying no information found for flight number ****
+                    pass'''
 
 
 def dummy(request):
@@ -233,6 +229,8 @@ def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=
         # This whole area removes the need for for loop in html making it easier to 
             # work with css styling and readibility.
         def nested_weather_dict_explosion():
+            
+            # Departure weather
             dep_datis = bulk_flight_deets['dep_weather']['D-ATIS']
             dep_metar = bulk_flight_deets['dep_weather']['METAR']
             dep_taf = bulk_flight_deets['dep_weather']['TAF']
@@ -247,6 +245,7 @@ def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=
             bulk_flight_deets['dep_metar_zt']= dep_metar_zt
             bulk_flight_deets['dep_taf_zt']= dep_taf_zt
             
+            # Destionation Weather
             dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
             dest_metar = bulk_flight_deets['dest_weather']['METAR']
             dest_taf = bulk_flight_deets['dest_weather']['TAF']
@@ -265,7 +264,6 @@ def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=
         return bulk_flight_deets
     
     bulk_flight_deets = without_futures()
-    # """
 
     """
     # This code is the parallel processing futures implementation. 
@@ -307,15 +305,6 @@ def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=
 
     bulk_flight_deets.update(flight_aware_data_pull)
     """
-
-    # Extracting metar for a dummy file
-    # with open('latest_bulk_11_28.pkl', 'wb') as f:
-        # print("**DUMPING BULK_FLIGHT_DEETS AS latest_bulk PKL FILE**")
-        # pickle.dump(bulk_flight_deets, f)
-    # extracting metar for a dummy file
-    # with open('lifr.pkl', 'wb') as f:
-        # pickle.dump(bulk_flight_deets, f)
-    
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
@@ -337,9 +326,9 @@ def weather_display(request,weather_query):
     weather_page_data['METAR'] = weather['METAR']
     weather_page_data['TAF'] = weather['TAF']
     
-    weather_page_data['D_ATIS_zt'] = weather['D-ATIS_zt']
-    weather_page_data['METAR_zt'] = weather['METAR_zt']
-    weather_page_data['TAF_zt'] = weather['TAF_zt']
+    weather_page_data['datis_zt'] = weather['D-ATIS_zt']
+    weather_page_data['metar_zt'] = weather['METAR_zt']
+    weather_page_data['taf_zt'] = weather['TAF_zt']
     return render(request, 'weather_info.html', weather_page_data)
 
 

@@ -17,151 +17,180 @@
 
 <h3>United Flight Information</h3>
 
-
 {% if flight_number %}
 
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
-</style>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
+    </style>
 
-<!-- This is the summery table that contains dep/des, gates, flight num, registration and scheduled/estimated times -->
-<table class="summary-table">
-    <thead>
-        <tr>
-            {% if registration %}
-            <th colspan="2">{{ flight_number }} <span class="small-text">{{ registration }}</span></th>
-            {% else %}
-            <th colspan="2">{{ flight_number }} </span></th>
+    <!-- This is the summery table that contains dep/des, gates, flight num, registration and scheduled/estimated times -->
+    <table class="summary-table">
+        <thead>
+            <tr>
+                {% if registration %}
+                <th colspan="2">{{ flight_number }} <span class="small-text">{{ registration }}</span></th>
+                {% else %}
+                <th colspan="2">{{ flight_number }} </span></th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="table-cell">{{departure_ID}}</td>
+                <td class="table-cell text-align-right">{{destination_ID}}</td>
+            </tr>
+            
+            <tr class="spacer-row">
+                <td class="spacer-cell">&nbsp;</td>
+                <td class="spacer-cell">&nbsp;</td>
+            </tr>
+
+            <tr class="info-row">
+                <td class="info-cell">Gate</td>
+                <td class="info-cell">Gate</td>
+            </tr>
+
+            <tr class="gate-row">
+                <td class="gate-cell">{{ departure_gate }}</td>
+                <td class="gate-cell">{{ arrival_gate }}</td>
+            </tr>
+            
+            <tr class="spacer-row">
+                <td class="spacer-cell">&nbsp;</td>
+                <td class="spacer-cell">&nbsp;</td>
+            </tr>
+
+            <tr class="scheduled-row">
+                <td class="scheduled-cell">Scheduled Local</td>
+                <td class="scheduled-cell">Scheduled Local</td>
+            </tr>
+            
+            <tr class="scheduled-time-row">
+                <td class="scheduled-time-cell">{{ scheduled_departure_time }}</td>
+                <td class="scheduled-time-cell">{{ scheduled_arrival_time }}</td>
+            </tr>
+
+            <tr class="spacer-row">
+                <td class="spacer-cell">&nbsp;</td>
+                <td class="spacer-cell">&nbsp;</td>
+            </tr>
+
+            {% if scheduled_out %}
+
+            <tr class="utc-row">
+                <td class="utc-cell">UTC</td>
+                <td class="utc-cell">UTC</td>
+            </tr>
+
+            <tr class="flight-status-row">
+                <td class="flight-status-cell">STD{{scheduled_out}}<br>ETD{{estimated_out}}</td>
+                <td class="flight-status-cell">STA{{scheduled_in}}<br>ETA{{estimated_in}}</td>
+            </tr>
+
             {% endif %}
-          </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="table-cell">{{departure_ID}}</td>
-            <td class="table-cell text-align-right">{{destination_ID}}</td>
-        </tr>
-        
-        <tr class="spacer-row">
-            <td class="spacer-cell">&nbsp;</td>
-            <td class="spacer-cell">&nbsp;</td>
-        </tr>
-
-        <tr class="info-row">
-            <td class="info-cell">Gate</td>
-            <td class="info-cell">Gate</td>
-        </tr>
-
-        <tr class="gate-row">
-            <td class="gate-cell">{{ departure_gate }}</td>
-            <td class="gate-cell">{{ arrival_gate }}</td>
-        </tr>
-         
-        <tr class="spacer-row">
-            <td class="spacer-cell">&nbsp;</td>
-            <td class="spacer-cell">&nbsp;</td>
-        </tr>
-
-        <tr class="scheduled-row">
-            <td class="scheduled-cell">Scheduled Local</td>
-            <td class="scheduled-cell">Scheduled Local</td>
-        </tr>
-        
-        <tr class="scheduled-time-row">
-            <td class="scheduled-time-cell">{{ scheduled_departure_time }}</td>
-            <td class="scheduled-time-cell">{{ scheduled_arrival_time }}</td>
-        </tr>
-
-        <tr class="spacer-row">
-            <td class="spacer-cell">&nbsp;</td>
-            <td class="spacer-cell">&nbsp;</td>
-        </tr>
-
-        {% if scheduled_out %}
-
-        <tr class="utc-row">
-            <td class="utc-cell">UTC</td>
-            <td class="utc-cell">UTC</td>
-        </tr>
-
-        <tr class="flight-status-row">
-            <td class="flight-status-cell">STD{{scheduled_out}}<br>ETD{{estimated_out}}</td>
-            <td class="flight-status-cell">STA{{scheduled_in}}<br>ETA{{estimated_in}}</td>
-        </tr>
-
-        {% endif %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
 
-<!-- Departure box that contains Datis, metar and taf -->
-<div id="departure-container" class="table-container">
-    <div class="accordion-button-container">
-    <div class="accordion-content active" id="departure-content-{{ departure_ID }}">
-        <table class="comparison-table">
+    <!-- Departure box that contains Datis, metar and taf -->
+    <div id="departure-container" class="table-container">
+        <div class="accordion-button-container">
+        <div class="accordion-content active" id="departure-content-{{ departure_ID }}">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="header-button" onclick="toggleAccordion('departure-content-{{ departure_ID }}')">
+                                &#9660; Departure
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <td style="width: 100%; text-align: left;">
+                        <span style="float: left; width: 33%;">{{ scheduled_departure_time }}</span>
+                        <span style="float: left; width: 33%; text-align: center;">{{ departure_ID }}</span>
+                        <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }}</span>
+                    </td>
+                    
+
+                    <!-- Here got rid of for loops, makes it easier to work with design. -->
+                    <!-- TODO: Make it easier to replicate and reuse code without having to duplicate. extract this out to a new file for use one... -->
+                        <!-- Maybe seperate out html alltogether in a different html file using >>> include 'partial_template1.html'  -->
+                    <tr>
+                        <td>D-ATIS <span class="small-text"> {{ dep_datis_zt }} mins ago</span> </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-family: Menlo, monospace;">{{dep_datis |safe}}</td>
+                    </tr>
+
+
+                    <tr>
+                        <td>METAR <span class="small-text"> {{ dep_metar_zt }} mins ago</span> </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-family: Menlo, monospace;">{{dep_metar |safe}}</td>
+                    </tr>
+
+
+                    <tr>
+                        <td>TAF <span class="small-text"> {{ dep_taf_zt }} mins ago</span> </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-family: Menlo, monospace;">{{dep_taf |safe}}</td>
+                    </tr>        
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- This is the route section that includes skyvector map hyperlink -->
+    {% if route %}
+        <table class="route">
+            <tr>
+                <th>ROUTE <a href="{{ sv }}" target="_blank">Show on SkyVector Map</a></th>
+            </tr>
+            <tr>
+                <td>({{ filed_altitude }})  {{ route }}</td>
+            </tr>
+        </table>
+    {% endif %}
+
+
+
+
+
+
+
+    <!-- NAS (departures only) table in red-->
+    {% if nas_departure_affected %}
+    <div class="table-wrapper">
+        <table class="another-table">
             <thead>
-                <tr>
-                    <th>
-                        <div class="header-button" onclick="toggleAccordion('departure-content-{{ departure_ID }}')">
-                            &#9660; Departure
-                        </div>
-                    </th>
-                </tr>
             </thead>
             <tbody>
-
-                <td style="width: 100%; text-align: left;">
-                    <span style="float: left; width: 33%;">{{ scheduled_departure_time }}</span>
-                    <span style="float: left; width: 33%; text-align: center;">{{ departure_ID }}</span>
-                    <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }}</span>
-                </td>
-                
-
-                <!-- Here got rid of for loops, makes it easier to work with design. -->
-                <!-- TODO: Make it easier to replicate and reuse code without having to duplicate. extract this out to a new file for use one... -->
-                    <!-- Maybe seperate out html alltogether in a different html file using >>> include 'partial_template1.html'  -->
+                {% for d1_key, d1_value in nas_departure_affected.items %}
                 <tr>
-                    <td>D-ATIS <span class="small-text"> {{ dep_datis_zt }} mins ago</span> </td>
+                    <td colspan="2">{{ d1_key }}</td>
                 </tr>
-                <tr>
-                    <td style="text-align: left; font-family: Menlo, monospace;">{{dep_datis |safe}}</td>
-                </tr>
-
-
-     		    <tr>
-                    <td>METAR <span class="small-text"> {{ dep_metar_zt }} mins ago</span> </td>
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-family: Menlo, monospace;">{{dep_metar |safe}}</td>
-                </tr>
-
-
-		        <tr>
-                    <td>TAF <span class="small-text"> {{ dep_taf_zt }} mins ago</span> </td>
-                </tr>
-                <tr>
-                    <td style="text-align: left; font-family: Menlo, monospace;">{{dep_taf |safe}}</td>
-                </tr>        
+                    {% for d2_key, d2_value in d1_value.items %}
+                    <tr>
+                        <td>{{ d2_key }}</td>
+                        <td>{{ d2_value }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
             </tbody>
         </table>
     </div>
-</div>
-
-
-
-
-
-<!-- This is the route section that includes skyvector map hyperlink -->
-{% if route %}
-    <table class="route">
-        <tr>
-            <th>ROUTE <a href="{{ sv }}" target="_blank">Show on SkyVector Map</a></th>
-        </tr>
-        <tr>
-            <td>({{ filed_altitude }})  {{ route }}</td>
-        </tr>
-    </table>
-{% endif %}
+    {% endif %}
+    </div>
 
 
 
@@ -169,140 +198,108 @@
 
 
 
-<!-- NAS (departures only) table in red-->
-{% if nas_departure_affected %}
-<div class="table-wrapper">
-    <table class="another-table">
-        <thead>
-        </thead>
-        <tbody>
-            {% for d1_key, d1_value in nas_departure_affected.items %}
-            <tr>
-                <td colspan="2">{{ d1_key }}</td>
-            </tr>
+    <!-- This is the destination table that contains D-ATIS, METAR and TAF -->
+    <div id="destination-container" class="table-container">
+        <div class="accordion-button-container">
+            <div class="accordion-content active" id="destination-content-{{ destination_ID }}">
+                <div class="custom-table-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="header-button" onclick="toggleAccordion('destination-content-{{ destination_ID }}')">
+                                        &#9660; Destination
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="width: 100%; text-align: left;">
+                                    <span style="float: left; width: 33%;">{{scheduled_arrival_time}}</span>
+                                    <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
+                                    <span style="float: right; width: 33%; text-align: right;">{{ arrival_gate }}</span>
+                                </td>
+                            
+
+
+                                <tr>
+                                    <td>D-ATIS <span class="small-text"> {{ dest_datis_zt }} mins ago</span> </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: left; font-family: Menlo, monospace;">{{dest_datis |safe}}</td>
+                                </tr>
+                
+                
+                                <tr>
+                                    <td>METAR <span class="small-text"> {{ dest_metar_zt }} mins ago</span> </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: left; font-family: Menlo, monospace;">{{dest_metar |safe}}</td>
+                                </tr>
+                
+                
+                                <tr>
+                                    <td>TAF <span class="small-text"> {{ dest_taf_zt }} mins ago</span> </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: left; font-family: Menlo, monospace;">{{dest_taf |safe}}</td>
+                                </tr>        
+                                
+
+
+
+
+                                <r>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- NAS (destination only) table in red-->
+    {% if nas_destination_affected %}
+    <div class="table-wrapper">
+        <table class="another-table">
+            <thead>
+            </thead>
+            <tbody>
+                {% for d1_key, d1_value in nas_destination_affected.items %}
+                <tr>
+                    <td colspan="2">{{ d1_key }}</td>
+                </tr>
                 {% for d2_key, d2_value in d1_value.items %}
                 <tr>
                     <td>{{ d2_key }}</td>
                     <td>{{ d2_value }}</td>
                 </tr>
                 {% endfor %}
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% endif %}
-</div>
-
-
-
-
-
-
-
-</div>
-
-
-<!-- This is the destination table that contains D-ATIS, METAR and TAF -->
-<div id="destination-container" class="table-container">
-    <div class="accordion-button-container">
-        <div class="accordion-content active" id="destination-content-{{ destination_ID }}">
-            <div class="custom-table-wrapper">
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>
-                                <div class="header-button" onclick="toggleAccordion('destination-content-{{ destination_ID }}')">
-                                    &#9660; Destination
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="width: 100%; text-align: left;">
-                                <span style="float: left; width: 33%;">{{scheduled_arrival_time}}</span>
-                                <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
-                                <span style="float: right; width: 33%; text-align: right;">{{ arrival_gate }}</span>
-                            </td>
-                          
-
-
-                            <tr>
-                                <td>D-ATIS <span class="small-text"> {{ dest_datis_zt }} mins ago</span> </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: left; font-family: Menlo, monospace;">{{dest_datis |safe}}</td>
-                            </tr>
-            
-            
-                             <tr>
-                                <td>METAR <span class="small-text"> {{ dest_metar_zt }} mins ago</span> </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: left; font-family: Menlo, monospace;">{{dest_metar |safe}}</td>
-                            </tr>
-            
-            
-                            <tr>
-                                <td>TAF <span class="small-text"> {{ dest_taf_zt }} mins ago</span> </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: left; font-family: Menlo, monospace;">{{dest_taf |safe}}</td>
-                            </tr>        
-                            
-
-
-
-
-                            <r>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-</div>
-
-
-
-<!-- NAS (destination only) table in red-->
-{% if nas_destination_affected %}
-<div class="table-wrapper">
-    <table class="another-table">
-        <thead>
-        </thead>
-        <tbody>
-            {% for d1_key, d1_value in nas_destination_affected.items %}
-            <tr>
-                <td colspan="2">{{ d1_key }}</td>
-            </tr>
-            {% for d2_key, d2_value in d1_value.items %}
-            <tr>
-                <td>{{ d2_key }}</td>
-                <td>{{ d2_value }}</td>
-            </tr>
-            {% endfor %}
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% endif %}
-</div>
-</div>
+    {% endif %}
+    </div>
+    </div>
 
 
 
 {% else %}
-<p>No details found for {{ flight_query }}.</p>
-<strong>Try the following Examples:</strong>
-<br><br>
-<em>C71X</em>: Lists all scheduled departures from the requested gate. You can just search for `X` in this case.
-<br><br>
-<em>i 492 ewr:</em> Returns METAR, and TAF at both departure and arrival airports for the given flight number. Use the `i` switch followed by the flight number followed by 3 letter departure code.
-<br><br>
-<em>w KEWR:</em> Returns the latest METAR and TAF for the given airport. Use the `w` switch followed by the 4 letter ICAO identifier of the airport.
-<br><br>
-Empty search returns information on all gates for United flights in KEWR.
+    <p>No details found for {{ flight_query }}.</p>
+    <strong>Try the following Examples:</strong>
+    <br><br>
+    <em>C71X</em>: Lists all scheduled departures from the requested gate. You can just search for `X` in this case.
+    <br><br>
+    <em>i 492 ewr:</em> Returns METAR, and TAF at both departure and arrival airports for the given flight number. Use the `i` switch followed by the flight number followed by 3 letter departure code.
+    <br><br>
+    <em>w KEWR:</em> Returns the latest METAR and TAF for the given airport. Use the `w` switch followed by the 4 letter ICAO identifier of the airport.
+    <br><br>
+    Empty search returns information on all gates for United flights in KEWR.
+
 {% endif %}
 
 

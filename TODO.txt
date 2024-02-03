@@ -13,16 +13,19 @@ Practice readibility and simplicity. Aviod code duplication. Include description
     
         
 **UV:   
-        Integrate weather page with  the flight deet page--> reduce duplication
         Hide datis table when N/A instead of showing N/A
         integrate time passed since weather published time.(2 mins ago) and highlight it red when over 52 mins old.
+            Integrate weather page with  the flight deet page--> reduce duplication--> Maybe use js
             taf published time show have- next one in 
-        make -ve temps turquoise
         box out the associated taf section with respect to ETA. Give pilots freedown
         learn about multiprocessing vs multithreading and implement on flight_deet
         Implement asynchronous loading of the data on the flight_deet page.
-        weather:datis,metar and taf
-        prepare search query logic for disecting typical searches. Implement ML and NN. X vs ground truth vals.
+            weather:datis,metar and taf
+        make -ve temps turquoise
+        prepare search query logic for disecting typical searches.
+            store typical searches server side for quick access and use celery to update
+            Implement ML and NN. X vs ground truth vals.
+
         fix massive bug on flight_aware route date time conflict with real scheduled_time.
             maybe include search with date, time or display info with date as zulu time
             currently it senses the most recent route that is not None type probs giving future date

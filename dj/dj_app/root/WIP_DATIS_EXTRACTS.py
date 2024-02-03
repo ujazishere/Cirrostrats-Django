@@ -22,8 +22,9 @@ def load_em_all():
         'datis_extracts2':base_path+ r"\datis_info_stack_20231209.pkl",
         'datis_extracts3':base_path+ r"\datis_info_stack_20231206.pkl",
         'datis_extracts4':base_path+ r"\datis_info_stack_202312151906.pkl",
-        'datis_extracts4':base_path+ r"\datis_info_stack_202312191708.pkl",
-        'datis_extracts4':base_path+ r"\datis_info_stack_202401122105.pkl",
+        'datis_extracts5':base_path+ r"\datis_info_stack_202312191708.pkl",
+        'datis_extracts6':base_path+ r"\datis_info_stack_202401122105.pkl",
+        'datis_extracts7':base_path+ r"\datis_info_stack_202402032046.pkl",
                     }
     datis_bulk = []
     for i in datis_path.keys():
@@ -231,8 +232,10 @@ def pull_datis():
 
 all_76_datis = pull_datis()
 # extract datis with dates in the filename
-yyyymmdd = Root_class().date_time(raw_utc='HM')
-path = rf'c:\users\ujasv\onedrive\desktop\pickles\datis_info_stack_{yyyymmdd}.pkl'
+yyyymmddhhmm = Root_class().date_time(raw_utc='HM')
+path = rf'c:\users\ujasv\onedrive\desktop\pickles\datis_info_stack_{yyyymmddhhmm}.pkl'
+
+# **********CAUTION!!! HARD WRITE***************
 with open(path, 'wb') as f:
     pickle.dump(all_76_datis,f)
 
