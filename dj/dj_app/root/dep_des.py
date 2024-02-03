@@ -17,12 +17,12 @@ class Pull_flight_info(Root_class):
         super().__init__()
 
 
-    def fs_dep_arr_timezone_pull(self, query):
-        if type(query) == list:
-             query = query[1]
+    def fs_dep_arr_timezone_pull(self, flt_num_query):
+        if type(flt_num_query) == list:
+             flt_num_query = flt_num_query[1]
             
         # flt_num = query.split()[1]
-        flt_num = query
+        flt_num = flt_num_query
         # airport = query.split()[2]        This was for when passing `i flt_num airport` as search
         date = self.date_time(raw=True)     # Root_class inheritance format yyyymmdd
         
@@ -257,9 +257,7 @@ class Pull_flight_info(Root_class):
                 }
 
 
-    def flight_view_gate_info(self, query, airport=None):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
-
-        flt_num = query
+    def flight_view_gate_info(self, flt_num, airport=None):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
 
         # date format in the url is YYYYMMDD. For testing, you can find flt_nums on https://www.airport-ewr.com/newark-departures
         use_custom_dummy_data = False
@@ -268,7 +266,7 @@ class Pull_flight_info(Root_class):
         else:
             date = str(self.date_time(raw=True))     # Root_class inheritance format yyyymmdd
         flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport[1:]}"
-        print(flight_view)
+        print('Pulled gate info from:', flight_view)
         soup = self.request(flight_view)
         try :
             leg_data = soup.find_all('div', class_='leg')   # Has all the departure and destination data

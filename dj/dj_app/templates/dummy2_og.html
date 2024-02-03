@@ -1,0 +1,338 @@
+{% extends "dj_app/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- dummy2.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dummy Page</title>
+</head>
+<body>
+    <link rel="stylesheet" type="text/css" href="{% static 'dummy2.css' %}">
+    
+    <meta name="format-detection" content="telephone=no">
+    
+    <h3>United Flight Information</h3>          <!-- -->
+    <!-- Cannot use id more than once. It will throw an error -->
+    <!-- id will bring in the variable thats been declared in JavaScript -->
+    <!--Text within wont be shown since its being overwritten-->
+    <!-- <div class="flight_number"></div>    -->
+<table class="summary-table spacer-row-js-table">
+    <thead>
+        <tr>
+            <!-- Investigate if having multiple attributes within an element tag is causing issues -->
+            <th colspan="2" class="flight_number">...</th>
+        </tr>
+        <tr>
+            <th colspan="2" class="registration">...</th>
+        </tr>
+
+     </thead>
+    <tbody>
+        <tr>
+            <td class="table-cell departure_ID">...</td>
+            <td class="table-cell text-align-right destination_ID">...</td>
+        </tr>
+
+        <tr class="spacer-row">
+            <td class="spacer-cell">&nbsp;</td>
+            <td class="spacer-cell">&nbsp;</td>
+        </tr>
+
+        <tr class="info-row">
+            <td class="info-cell">Gate</td>
+            <td class="info-cell">Gate</td>
+        </tr>
+
+        <tr class="gate-row">
+            <td class="gate-cell departure_gate">...</td>
+            <td class="gate-cell arrival_gate">...</td>
+        </tr>
+         
+        <tr class="spacer-row">
+            <td class="spacer-cell">&nbsp;</td>
+            <td class="spacer-cell">&nbsp;</td>
+        </tr>
+
+        <tr class="scheduled-row">
+            <td class="scheduled-cell">Scheduled Local</td>
+            <td class="scheduled-cell">Scheduled Local</td>
+        </tr>
+        
+        <tr class="scheduled-time-row">
+            <td class="scheduled-time-cell scheduled_departure_time ">...</td>
+            <td class="scheduled-time-cell scheduled_arrival_time ">...</td>
+        </tr>
+
+        <tr class="spacer-row">
+            <td class="spacer-cell">&nbsp;</td>
+            <td class="spacer-cell">&nbsp;</td>
+        </tr>
+
+        <tr class="utc-row">
+            <td class="utc-cell">UTC</td>
+            <td class="utc-cell">UTC</td>
+        </tr>
+
+        <tr class="flight-status-row">
+            <td class="flight-status-cell scheduled_out"></td> 
+            <td class="flight-status-cell estimated_out"></td>
+        </tr>
+
+        <tr class="flight-status-row">
+            <td class="flight-status-cell scheduled_in"></td>
+            <td class="flight-status-cell estimated_in"></td>
+        </tr>
+
+    </tbody>
+</table>
+
+<!-- This is the departure box that contains D-Atis, metar and taf. titles include scheduled time and  -->
+<div id="departure-container" class="table-container">
+    <div class="accordion-button-container">
+    <div class="accordion-content active" id="departure-content-{{ departure_ID }}">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="header-button" onclick="toggleAccordion('departure-content-{{ departure_ID }}')">
+                            &#9660; Departure
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <td style="width: 100%; text-align: left;">
+                    <span style="float: left; width: 33%;">{{ scheduled_departure_time }}</span>
+                    <span style="float: left; width: 33%; text-align: center;">{{ departure_ID }}</span>
+                    <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }}</span>
+                </td>
+                <!-- Here got rid of for loops and makes it easier to work with design. -->
+                <tr>
+                    <td>D-ATIS</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; font-family: Menlo, monospace;" class="dep_datis">...</td>
+                <tr>
+                    <td>METAR</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; font-family: Menlo, monospace;" class="dep_metar">...</td>
+                <tr>
+                    <td>TAF</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; font-family: Menlo, monospace;" class = "dep_taf">...</td>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<table class="route_table">
+    <tr>
+        <th class="sv">ROUTE <a href="#" target="_blank">Show on SkyVector Map</a></th>
+    </tr>
+    <tr>
+        <td class="filed_altitude"></td>
+    </tr>
+    <tr>   
+        <td class="route"></td>
+    </tr>
+</table>
+
+    
+<div id="destination-container" class="table-container">
+    <div class="accordion-button-container">
+        <div class="accordion-content active" id="destination-content-{{ destination_ID }}">
+            <div class="custom-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="header-button" onclick="toggleAccordion('destination-content-{{ destination_ID }}')">
+                                    &#9660; Destination
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="width: 100%; text-align: left;">
+                                <span style="float: left; width: 33%;">{{scheduled_arrival_time}}</span>
+                                <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
+                                <span style="float: right; width: 33%; text-align: right;">{{ arrival_gate }}</span>
+                            </td>
+                            <tr>
+                                <td>D-ATIS</td>
+                            </tr>
+
+                            <tr>
+                                <td style="text-align: left; font-family: Menlo, monospace;" class="dest_datis">...</td>
+                            <tr>
+                                <td>METAR</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; font-family: Menlo, monospace;" class="dest_metar">...</td>
+                            <tr>
+                                <td>TAF</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; font-family: Menlo, monospace;" class = "dest_taf">...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- NAS (departures only) table in red-->
+<div class="table-wrapper" id="nas_table" >
+</div>
+</div>
+
+
+
+
+    <!-- This is the blueprint for using js func to create elements(start and end tags)/attributes(h1-4,id,class,p,a,) within html elements as child (div or span)
+        here this function is called initially that returns `Grabbing Flight Number` then once data is found it returns the data -->
+        <!-- for example: -->
+        <!-- <element attribute_name="attribute_value"></element> -->
+    <script>    
+        // CAUTIOIN! Cannot use same `id` at multiple places within html.
+        
+        function updatefunc(individual_data,data_item_arg) {
+            //queryselectorall gets all the similar class items. mind the `.` that needs to be prepended to the class item I suppose.
+            document.querySelectorAll(data_item_arg).forEach(element => {            // each element is each of the html class item to be used
+                // console.log('inside updatefunc',individual_data)
+                element.innerHTML = individual_data ;      //This was initially used but since now the elements are going to be constructed this is commented out
+                  
+// section start
+                // This is to make the div what you want it to look like
+                // let h4 = element.querySelector('h4');       // declaring h4 if it exists.
+
+                // if(!h4) {               // If it does not exist then create it and append it to the parent element.
+                // h4 = document.createElement('h4');
+                // element.appendChild(h4);
+                    // }
+                    // By this point h4 should already exist and hence h4 is outside of the if statement.
+                // h4.innerHTML = data || 'Grabbing Departure Weather...' ;      
+                // TODO: Setup Grabbing flight as a variable that is passed in as argument in the function.
+                // This will allow for reuse of the function. You could also probs pass the argument of queryselectorall as a variable to complete reuse. 
+// section end
+            });
+        }
+
+    </script>
+    
+    <script>   
+// This is where the section starts. Seems like the html up above loads then comes down here. 
+// Once here 
+document.addEventListener('DOMContentLoaded', function() {
+            // This loads up right away
+            console.log('here1')
+
+        // This is where the data is pulled from the views function data_v. This is the first point of access.
+            fetch('data_v')
+        .then(response => response.json())
+        .then(data => {             // data is a variable that pulls in data_v's bulk_flight_deet dictionary
+
+            
+            flight_number = data.flight_number
+            updatefunc(individual_data=flight_number,data_item_arg='.flight_number')
+            console.log('finished putting out flight_number')
+
+            registration = data.registration
+            updatefunc(individual_data=registration, data_item_arg='.registration')
+
+            
+            origin = data.origin
+            destination = data.destination
+            updatefunc(individual_data=origin,data_item_arg='.origin')
+            updatefunc(individual_data=destination,data_item_arg='.destination')
+            
+            scheduled_out = data.scheduled_out
+            estimated_out = data.estimated_out
+            scheduled_in = data.scheduled_in
+            estimated_in = data.estimated_in
+            updatefunc(individual_data=scheduled_out,data_item_arg='.scheduled_out')
+            updatefunc(individual_data=estimated_out,data_item_arg='.estimated_out')
+            updatefunc(individual_data=scheduled_in,data_item_arg='.scheduled_in')
+            updatefunc(individual_data=estimated_in,data_item_arg='.estimated_in')
+            
+            departure_ID = data.departure_ID
+            destination_ID = data.destination_ID
+            scheduled_departure_time = data.scheduled_departure_time
+            scheduled_arrival_time = data.scheduled_arrival_time
+            updatefunc(individual_data=departure_ID,data_item_arg='.departure_ID')
+            updatefunc(individual_data=destination_ID,data_item_arg='.destination_ID')
+            updatefunc(individual_data=scheduled_departure_time,data_item_arg='.scheduled_departure_time')
+            updatefunc(individual_data=scheduled_arrival_time,data_item_arg='.scheduled_arrival_time')
+
+            departure_gate = data.departure_gate
+            arrival_gate = data.arrival_gate
+            updatefunc(individual_data=departure_gate,data_item_arg='.departure_gate')
+            updatefunc(individual_data=arrival_gate,data_item_arg='.arrival_gate')
+
+            route = data.route
+            filed_altitude = data.filed_altitude
+            filed_ete = data.filed_ete
+            sv = data.sv
+            updatefunc(individual_data=route,data_item_arg='.route')
+            updatefunc(individual_data=filed_altitude,data_item_arg='.filed_altitude')
+            updatefunc(individual_data=filed_ete,data_item_arg='.filed_ete')
+            updatefunc(individual_data=sv,data_item_arg='.sv')
+
+            nas_departure_affected = data.nas_departure_affected
+            nas_destination_affected = data.nas_destination_affected
+            console.log('nas stuff', nas_departure_affected)
+            // updatefunc(individual_data=nas_destination_affected,data_item_arg='.nas_destination_affected')
+
+            dep_datis = data.dep_datis
+            dep_metar = data.dep_metar
+            dep_taf = data.dep_taf
+            updatefunc(individual_data=dep_datis,data_item_arg='.dep_datis')
+            updatefunc(individual_data=dep_metar,data_item_arg='.dep_metar')
+            updatefunc(individual_data=dep_taf,data_item_arg='.dep_taf')
+
+            dest_datis = data.dest_datis
+            dest_metar = data.dest_metar
+            dest_taf = data.dest_taf
+            updatefunc(data=dest_datis,data_item_arg='.dest_datis')
+            updatefunc(data=dest_metar,data_item_arg='.dest_metar')
+            updatefunc(data=dest_taf,data_item_arg='.dest_taf')
+
+            function nas_items(individual_data){
+                const table = document.createElement('table');
+                table.className = "another-table"
+                const thread = document.createElement('thread');
+                table.append(thread);
+                const tbody = document.createElement('tbody');
+                table.append(tbody);
+
+                const tr = document.createElement('tr');
+                tbody.append(tr)
+                const td = document.createElement('td');
+                tr.append(td);
+                return table
+            }
+
+            const nas_table = document.getElementById('nas_table')
+            nas_table.appendChild(nas_items(nas_departure_affected))
+            // updateFlightNumber(data)
+            // console.log('4444',data)
+        })
+        .catch(error => console.error('Error Console:', error));
+});
+    </script>
+</body>
+</html>
+
+  
+  {% endblock %}

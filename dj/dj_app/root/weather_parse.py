@@ -3,12 +3,16 @@ import pickle
 from bs4 import BeautifulSoup as bs4
 import requests
 import json
+from .root_class import Root_class
+from datetime import datetime
 # from data_access import load_kewr
 # kewr = load_kewr()
 
 # TODO: extract all airpoirts METAR and TAF  in the airport database
             # compare all unique values and group identical ones
             # analyze data for format patterns to make a template for output
+# TODO: seperate raw data from html highlight. 
+        # should have ability to return both raw(for externam use) and highlighted data for use in web.
 
 class Weather_parse:
     def __init__(self) -> None:
@@ -39,6 +43,7 @@ class Weather_parse:
         # self.RW_IN_US = r'(ARRIVALS EXPECT|SIMUL|RUNWAYS|VISUAL|RNAV|ILS(,|RY|))(.*?)\.'
         self.RW_IN_USE = r'()((SIMUL([A-Z]*)?,?|VISUAL (AP(P)?(ROA)?CH(E)?(S)?)|(ILS(/VA|,)?|(ARRIVALS )?EXPECT|RNAV|((ARVNG|LNDG) AND )?DEPG|LANDING)) (.*?)(IN USE\.|((RWY|RY|RUNWAY|APCH|ILS|DEP|VIS) )(\d{1,2}(R|L|C)?)\.))'
 
+
     def visibility_color_code(self,incoming_weather_data):
 
         lifr_frac = re.sub(self.lifr_fractional_patt, self.pink_text_color,incoming_weather_data)
@@ -56,9 +61,56 @@ class Weather_parse:
             return incoming_weather_data
         
 
-
-    def scrape(self, query=None,dummy=None, datis_arr=None):
+    def raw_scrape(self, query=None, datis_arr=None):
         
+        # Find ways to convert raw query input into identifiable airport ID
+            # What does this mean^^?
+        airport_id = query
+        awc_metar_api = f"https://aviationweather.gov/api/data/metar?ids={airport_id}"
+        metar_raw = requests.get(awc_metar_api)
+        metar_raw = metar_raw.content
+        metar_raw = metar_raw.decode("utf-8")
+        awc_taf_api = f"https://aviationweather.gov/api/data/taf?ids={airport_id}"
+        taf_raw = requests.get(awc_taf_api)
+        taf_raw = taf_raw.content
+        taf_raw = taf_raw.decode("utf-8")
+
+        datis_api =  f"https://datis.clowd.io/api/{airport_id}"
+        datis = requests.get(datis_api)
+        datis = json.loads(datis.content.decode('utf-8'))
+        datis_raw = 'N/A'
+
+        # D-ATIS processing for departure vs arrival
+        if type(datis) == list and 'datis' in datis[0].keys():
+            if len(datis) == 1:
+                datis_raw = datis[0]['datis']
+            elif len(datis) == 2:       # Datis arrival and departure have been separated
+                if datis[0]['type'] == 'arr':
+                    print('This is the arr datis111')
+                    arr_datis = datis[0]['datis']
+                else:
+                    arr_datis = datis[1]['datis']
+                if datis[1]['type'] == 'dep':
+                    dep_datis = datis[1]['datis']
+                else:
+                    dep_datis = datis[0]['datis']
+                
+                if datis_arr:
+                    datis_raw = arr_datis
+                else:
+                    datis_raw = dep_datis
+            else:
+                print('Impossible else in DATIS')
+                datis_raw = 'N/A'
+            
+        return dict({ 'datis': datis_raw,
+                        'metar': metar_raw, 
+                        'taf': taf_raw,
+                        })
+    
+
+    def processed_weather(self, query=None, dummy=None, datis_arr=None):
+
         if dummy:
             
             datis_raw = dummy['D-ATIS']
@@ -71,40 +123,29 @@ class Weather_parse:
             datis_raw = datis_raw + vis1 + vis_frac 
             # taf_raw = metar_raw + sfc_vis + vis_half
             taf_raw = 'KRIC 022355Z 0300/0324 00000KT 2SM BR VCSH FEW015 OVC060 TEMPO 0300/0303 1 1/2SM FG BKN015 FM030300 00000KT 1SM -SHRA FG OVC002 FM031300 19005KT 3/4SM BR OVC004 FM031500 23008KT 1/26SM OVC005 FM031800 25010KT 1/4SM OVC015 FM032100 25010KT M1/4SM BKN040'
-
         else:
-        # Find ways to convert raw query input into identifiable airport ID
-            airport_id = query
-            awc_metar_api = f"https://aviationweather.gov/api/data/metar?ids={airport_id}"
-            metar_raw = requests.get(awc_metar_api)
-            metar_raw = metar_raw.content
-            metar_raw = metar_raw.decode("utf-8")
-            awc_taf_api = f"https://aviationweather.gov/api/data/taf?ids={airport_id}"
-            taf_raw = requests.get(awc_taf_api)
-            taf_raw = taf_raw.content
-            taf_raw = taf_raw.decode("utf-8")
+            raw_return = self.raw_scrape(query=query,datis_arr=datis_arr)
+            datis_raw = raw_return['datis']
+            metar_raw = raw_return['metar']
+            taf_raw = raw_return['taf']
 
-            datis_api =  f"https://datis.clowd.io/api/{airport_id}"
-            datis = requests.get(datis_api)
-            datis = json.loads(datis.content.decode('utf-8'))
-            datis_raw = 'N/A'
-            if type(datis) == list and 'datis' in datis[0].keys():
-                datis_raw = datis[0]['datis']
-                if len(datis) == 2:         # This is probably two item dep/arr datis.
-                    if datis_arr:       #   Check if it works with philly departure/arrival
-                        datis_raw = datis[1]['datis']
+        def zulu_extracts(weather_input,datis=None):
+            if datis:
+                zulu_item_re = re.findall('[0-9]{4}Z', weather_input)
+            else:
+                zulu_item_re = re.findall('[0-9]{4}Z', weather_input)
                 
-            def zulu_extracts(item,datis=None):
-                if datis:
-                    aa = re.findall('[0-9]{4}Z', item)
-                else:
-                    aa = re.findall('[0-9]{6}Z', item)
-                    
-                if aa:
-                    extracts = aa[0]
-                else:
-                    extracts = 'N/A'
-                return extracts
+            if zulu_item_re:
+                extracts = zulu_item_re[0][:-1]
+            else:
+                extracts = 'N/A'
+            raw_utc = Root_class().date_time(raw_utc='HM')[-4:]
+            # This could be work intensive. Make your own conversion if you can avoid using datetime
+            item1 = datetime.strptime(raw_utc,"%H%M")
+            item2 = datetime.strptime(extracts,"%H%M")
+            diff = item1-item2
+            diff = int(diff.seconds/60)
+            return diff
 
         
         # Exporting raw weather data for color code processing

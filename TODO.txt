@@ -1,4 +1,4 @@
-Practice readibility and simplicity. Include description and documentation for others to read and make changes to it
+Practice readibility and simplicity. Aviod code duplication. Include description and documentation for others to read and make changes to it
 
 **IS:   
 

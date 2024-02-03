@@ -87,7 +87,6 @@ def parse_query(request, main_query):
                     if len(query) == 4 and query[0] == 'K':
                         weather_query_airport  = query
                         weather_query_airport = weather_query_airport.upper()       # Making query uppercase for it to be compatible
-                        print('hereresfhn')
                         return weather_display(request, weather_query_airport)
                     else:           # tpical gate query with length of 2-4 alphanumerics
                         print('gate query')
@@ -148,9 +147,9 @@ def dummy(request):
             dest_weather = pickle.load(f)
         
         weather = Weather_parse()
-        bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
+        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
         weather = Weather_parse()
-        bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
+        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
 
     except Exception as e:     # ISMAIL MAC PATH
         print(e)
@@ -161,9 +160,9 @@ def dummy(request):
         with open(is_ord, 'rb') as f:
             dest_weather = pickle.load(f)
         weather = Weather_parse()
-        bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
+        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
         weather = Weather_parse()
-        bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
+        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
     
     # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
     dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
@@ -201,7 +200,7 @@ def gate_info(request, main_query):
 
 def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=False):
     
-    bypass_fa = False           # to restrict fa api use: for local use keep it False. 
+    bypass_fa = True           # to restrict fa api use: for local use keep it False. 
 
     flt_info = Pull_flight_info()           # from dep_des.py file
     weather = Weather_parse()         # from MET_TAF_parse.py
@@ -225,10 +224,9 @@ def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=
             UA_departure_ID,UA_destination_ID = bulk_flight_deets['origin'], bulk_flight_deets['destination']
         else:        
             UA_departure_ID, UA_destination_ID = bulk_flight_deets['departure_ID'], bulk_flight_deets['destination_ID']
-        bulk_flight_deets['dep_weather'] = weather.scrape(UA_departure_ID)
+        bulk_flight_deets['dep_weather'] = weather.processed_weather(UA_departure_ID)
         # datis_arr as true in this case since its for the destination/arr datis.
-        bulk_flight_deets['dest_weather'] = weather.scrape(UA_destination_ID,datis_arr=None)
-        print(bulk_flight_deets['dep_weather'])
+        bulk_flight_deets['dest_weather'] = weather.processed_weather(UA_destination_ID,datis_arr=True)
         bulk_flight_deets.update(flt_info.nas_final_packet(UA_departure_ID, UA_destination_ID))
         bulk_flight_deets.update(flt_info.flight_view_gate_info(flight_number_query, UA_departure_ID))
         
@@ -329,7 +327,7 @@ def weather_display(request,weather_query):
     weather = Weather_parse()
     # TODO: Need to be able to add the ability to see the departure as well as the arrival datis
     # weather = weather.scrape(weather_query, datis_arr=True)
-    weather = weather.scrape(weather_query, )
+    weather = weather.processed_weather(weather_query, )
 
     weather_page_data = {}
 
@@ -342,7 +340,6 @@ def weather_display(request,weather_query):
     weather_page_data['D_ATIS_zt'] = weather['D-ATIS_zt']
     weather_page_data['METAR_zt'] = weather['METAR_zt']
     weather_page_data['TAF_zt'] = weather['TAF_zt']
-    print(weather_page_data)
     return render(request, 'weather_info.html', weather_page_data)
 
 
@@ -415,9 +412,9 @@ def data_v(request):
             dest_weather = pickle.load(f)
         
         weather = Weather_parse()
-        bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
+        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
         weather = Weather_parse()
-        bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
+        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
 
     except Exception as e:     # ISMAIL MAC PATH
         print(e)
@@ -428,9 +425,9 @@ def data_v(request):
         with open(is_ord, 'rb') as f:
             dest_weather = pickle.load(f)
         weather = Weather_parse()
-        bulk_flight_deets['dep_weather'] = weather.scrape(dummy=dep_weather)
+        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
         weather = Weather_parse()
-        bulk_flight_deets['dest_weather'] = weather.scrape(dummy=dest_weather)
+        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
     
     # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
     dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
