@@ -183,6 +183,9 @@ table.comparison-table th,
 table.comparison-table td {
   padding: 10px;
   text-align: center;
+  border-color: rgb(0, 0, 0);
+  border-top: 1px solid rgb(0, 0, 0);
+  border-bottom: 1px solid rgb(0, 0, 0);
 }
 
 table.comparison-table th {
@@ -463,6 +466,7 @@ table.summary-table thead th {
   font-weight: 100;
   color: gray;
 }
+
 
 .table-cell {
   font-size: 34px;

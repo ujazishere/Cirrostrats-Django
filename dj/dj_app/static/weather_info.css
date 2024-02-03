@@ -3,6 +3,12 @@ body {
   padding: 0;
 }
 
+.small-text {
+  font-size: 12px;
+  font-weight: 100;
+  color: gray;
+}
+
 /************** this code is for comparison table *************/
 
 .comparison-table {

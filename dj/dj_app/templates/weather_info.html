@@ -14,7 +14,7 @@
 
               {% if D_ATIS %}
               <tr>
-                  <th>D-ATIS @ {{datis_zt}}</th>
+                  <th> D-ATIS @ <span class="small-text"> {{datis_zt}} mins ago</span></th>
               </tr>
               <tr>
                   <td style="text-align: left; font-family: Menlo, monospace;">{{D_ATIS|safe}}</td>
@@ -24,7 +24,7 @@
 
               {% if METAR %}
               <tr>
-                  <th>METAR @ {{metar_zt}}</th>
+                  <th> METAR @ <span class="small-text">  {{metar_zt}} mins ago</span> </th>
               </tr>
               <tr>
                   <td style="text-align: left; font-family: Menlo, monospace;">{{METAR|safe}}</td>
@@ -34,7 +34,7 @@
 
               {% if TAF %}
               <tr>
-                  <th>TAF @ {{taf_zt}}</th>
+                  <th> TAF @ <span class="small-text"> {{taf_zt}} mins ago</span> </th>
               </tr>
 
               <tr>

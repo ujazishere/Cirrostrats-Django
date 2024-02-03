@@ -5,6 +5,9 @@ import requests
 import json
 from .root_class import Root_class
 from datetime import datetime
+from termcolor import colored 
+
+
 # from data_access import load_kewr
 # kewr = load_kewr()
 
@@ -128,6 +131,9 @@ class Weather_parse:
             datis_raw = raw_return['datis']
             metar_raw = raw_return['metar']
             taf_raw = raw_return['taf']
+
+
+            
 
         def zulu_extracts(weather_input,datis=None):
             if datis:
