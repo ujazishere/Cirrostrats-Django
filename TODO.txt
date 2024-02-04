@@ -16,7 +16,6 @@ Practice readibility and simplicity. Aviod code duplication. Include description
         Hide datis table when N/A instead of showing N/A
         integrate time passed since weather published time.(2 mins ago) and highlight it red when over 52 mins old.
             Integrate weather page with  the flight deet page--> reduce duplication--> Maybe use js
-            taf published time show have- next one in 
         box out the associated taf section with respect to ETA. Give pilots freedown
         learn about multiprocessing vs multithreading and implement on flight_deet
         Implement asynchronous loading of the data on the flight_deet page.

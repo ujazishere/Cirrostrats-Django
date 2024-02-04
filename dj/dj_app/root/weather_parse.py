@@ -136,22 +136,26 @@ class Weather_parse:
             
 
         def zulu_extracts(weather_input,datis=None):
+            
+            # This could be work intensive. Make your own conversion if you can avoid using datetime
+            raw_utc = Root_class().date_time(raw_utc='HM')[-4:]
+            raw_utc_dt = datetime.strptime(raw_utc,"%H%M")
+            
             if datis:
                 zulu_item_re = re.findall('[0-9]{4}Z', weather_input)
             else:
                 zulu_item_re = re.findall('[0-9]{4}Z', weather_input)
                 
             if zulu_item_re:
-                extracts = zulu_item_re[0][:-1]
+                zulu_weather = zulu_item_re[0][:-1]
+                zulu_weather_dt = datetime.strptime(zulu_weather,"%H%M")
+                diff = raw_utc_dt - zulu_weather_dt
+                diff = int(diff.seconds/60)
+                return diff
             else:
-                extracts = 'N/A'
-            raw_utc = Root_class().date_time(raw_utc='HM')[-4:]
-            # This could be work intensive. Make your own conversion if you can avoid using datetime
-            item1 = datetime.strptime(raw_utc,"%H%M")
-            item2 = datetime.strptime(extracts,"%H%M")
-            diff = item1-item2
-            diff = int(diff.seconds/60)
-            return diff
+                zulu_weather = 'N/A'
+                return zulu_weather
+            
 
         
         # Exporting raw weather data for color code processing

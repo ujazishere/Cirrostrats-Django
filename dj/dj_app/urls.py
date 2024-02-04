@@ -22,7 +22,10 @@ urlpatterns = [
     path('live_map', views.live_map, name = 'live_map'), #live_map page.
     
     path('dummy2', views.dummy2, name = 'dummy2'), #  Main Page
-    path('data_v', views.data_v, name = 'data_v'), #    This page is loaded along with dummy asynchronously.
+    
+    # This page is a views function that is loaded asynchronously after dummy2 loads up.
+    # the string airport is passed as second argument to the data_v function in views.py
+    path('data_v/<str:airport>/', views.data_v, name = 'data_v'),    
 
  
 ]

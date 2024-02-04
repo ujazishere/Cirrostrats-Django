@@ -1,50 +1,27 @@
-{% extends "dj_app/base.html" %}
 
-{% load static %}
 
-{% block content %}
-
-<!-- dummy2.html -->
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dummy Page</title>
-</head>
-<body>
-    <link rel="stylesheet" type="text/css" href="{% static 'dummy2.css' %}">
-    
-    <meta name="format-detection" content="telephone=no">
-    
-    <h3>Progress Bar</h3>          <!-- -->
-    <!-- Cannot use id more than once. It will throw an error -->
-    <!-- id will bring in the variable thats been declared in JavaScript -->
-    <!--Text within wont be shown since its being overwritten-->
-    <!-- <div class="flight_number"></div>    -->
-
-{% include 'dum_t.html'%}
+<table class="summary-table spacer-row-js-table">
+    <tbody id="tableBody">
+        {{airport}} 
+    </tbody>
+</table>
 
 
 <script>   
-    /*
+ 
     // This is where the section starts. Seems like the html up above loads then comes down here. 
     // Once here 
     document.addEventListener('DOMContentLoaded', function() {
             // This loads up right away
-            console.log('here1')
-
+        
+        var airport ='{{ airport }}' 
+        var url = 'data_v/' + airport +'/'
         // This is where the data is pulled from the views function data_v. This is the first point of access.
-            fetch('data_v')
+            fetch(url)
         .then(response => response.json())
         .then(data => {             // data is a variable that pulls in data_v's bulk_flight_deet dictionary
-            
-            
-            flight_number = data.flight_number
-
-            nas_departure_affected = data.nas_departure_affected
-            nas_destination_affected = data.nas_destination_affected
-
-            function nas_items(individual_data){
+            taf = data.TAF
+            function weather_processing(individual_data){
                 const table = document.createElement('table');
                 table.className = "another-table"
                 const thread = document.createElement('thread');
@@ -54,23 +31,16 @@
 
                 const tr = document.createElement('tr');
                 tbody.append(tr)
+
                 const td = document.createElement('td');
+                td.innerHTML = individual_data
                 tr.append(td);
                 return table
             }
             
             const tableBody = document.getElementById('tableBody')
-            tableBody.appendChild(nas_items(nas_departure_affected))
+            tableBody.appendChild(weather_processing(taf))
         })
         .catch(error => console.error('Error Console:', error));
     });
-    */
 </script>
-
-
-
-</body>
-</html>
-
-  
-  {% endblock %}
