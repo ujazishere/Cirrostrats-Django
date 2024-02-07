@@ -9,6 +9,7 @@
     <meta name="format-detection" content="telephone=no">
 </head>
 
+
 <link rel="stylesheet" type="text/css" href="{% static 'flight_deet.css' %}">
 
 <div class="data-warning">
@@ -124,7 +125,7 @@
                     <!-- TODO: Make it easier to replicate and reuse code without having to duplicate. extract this out to a new file for use one... -->
                         <!-- Maybe seperate out html alltogether in a different html file using >>> include 'partial_template1.html'  -->
                     <tr>
-                        <td>D-ATIS <span class="small-text"> {{ dep_datis_zt }} mins ago</span> </td>
+                        <td>D-ATIS <span class="small-text"> {{ dep_datis_zt|safe }} mins ago</span> </td>
                     </tr>
                     <tr>
                         <td style="text-align: left; font-family: Menlo, monospace;">{{dep_datis |safe}}</td>
@@ -132,7 +133,7 @@
 
 
                     <tr>
-                        <td>METAR <span class="small-text"> {{ dep_metar_zt }} mins ago</span> </td>
+                        <td>METAR <span class="small-text"> {{ dep_metar_zt |safe }} mins ago</span> </td>
                     </tr>
                     <tr>
                         <td style="text-align: left; font-family: Menlo, monospace;">{{dep_metar |safe}}</td>
@@ -140,7 +141,7 @@
 
 
                     <tr>
-                        <td>TAF <span class="small-text"> {{ dep_taf_zt }} mins ago</span> </td>
+                        <td>TAF <span class="small-text"> {{ dep_taf_zt |safe}} mins ago</span> </td>
                     </tr>
                     <tr>
                         <td style="text-align: left; font-family: Menlo, monospace;">{{dep_taf |safe}}</td>
@@ -228,7 +229,7 @@
 
 
                                 <tr>
-                                    <td>D-ATIS <span class="small-text"> {{ dest_datis_zt }} mins ago</span> </td>
+                                    <td>D-ATIS <span class="small-text"> {{ dest_datis_zt |safe}} mins ago</span> </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: left; font-family: Menlo, monospace;">{{dest_datis |safe}}</td>
@@ -236,7 +237,7 @@
                 
                 
                                 <tr>
-                                    <td>METAR <span class="small-text"> {{ dest_metar_zt }} mins ago</span> </td>
+                                    <td>METAR <span class="small-text"> {{ dest_metar_zt |safe}} mins ago</span> </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: left; font-family: Menlo, monospace;">{{dest_metar |safe}}</td>
@@ -244,7 +245,7 @@
                 
                 
                                 <tr>
-                                    <td>TAF <span class="small-text"> {{ dest_taf_zt }} mins ago</span> </td>
+                                    <td>TAF <span class="small-text"> {{ dest_taf_zt |safe}} mins ago</span> </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: left; font-family: Menlo, monospace;">{{dest_taf |safe}}</td>
@@ -329,6 +330,7 @@
         tbody.style.display = "none"; // Hide the content
       }
     }
+
     
 </script>
 

@@ -6,6 +6,7 @@ import json
 from .root_class import Root_class
 from datetime import datetime
 from termcolor import colored 
+from django.utils.safestring import mark_safe
 
 
 # from data_access import load_kewr
@@ -151,6 +152,8 @@ class Weather_parse:
                 zulu_weather_dt = datetime.strptime(zulu_weather,"%H%M")
                 diff = raw_utc_dt - zulu_weather_dt
                 diff = int(diff.seconds/60)
+                if diff > 50:
+                    return '<span style="color: red">{}</span>'.format(diff)
                 return diff
             else:
                 zulu_weather = 'N/A'
