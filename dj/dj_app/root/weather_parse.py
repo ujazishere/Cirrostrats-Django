@@ -151,9 +151,11 @@ class Weather_parse:
                 zulu_weather = zulu_item_re[0][:-1]
                 zulu_weather_dt = datetime.strptime(zulu_weather,"%H%M")
                 diff = raw_utc_dt - zulu_weather_dt
-                diff = int(diff.seconds/60)
-                if diff > 50:
+                diff = int(diff.seconds/60) 
+                if diff > 15:
                     return '<span style="color: red">{}</span>'.format(diff)
+                if diff <  15:
+                    return '<span style="color: green">{}</span>'.format(diff)
                 return diff
             else:
                 zulu_weather = 'N/A'
