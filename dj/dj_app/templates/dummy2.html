@@ -18,6 +18,13 @@
     
     <h3>Progress Bar Here</h3>
 
+
+    {% include 'summary_box.html' %}
+    
+
+
+
+
     <!-- This will include everything from dum_t.html as is-->
     <div id="departure-container" class="table-container">
         <div class="accordion-button-container">
@@ -34,8 +41,40 @@
                 </thead>
                 {% include 'weather_data.html'%}
     
+
+
+
+
     {% include 'nas_data.html'%}
 
+
+
+
+
+
+    <!-- Search box-->
+    <div class="search-form-wrapper">
+        <form method="post" class="search-form">
+            {% csrf_token %}
+            <label for="query"></label>
+            <input type="text" name="query" id="query">
+            <button type="submit">Search</button>
+        </form> 
+    </div>
+
+    <script>      
+    // This script is for departure/destination expand/collapse animation
+        function toggleAccordion(contentId) {
+        var content = document.getElementById(contentId);
+        var tbody = content.querySelector("tbody"); // Select the tbody element inside the content
+        
+        if (tbody.style.display === "none" || tbody.style.display === "") {
+            tbody.style.display = "table-row-group"; // Show the content
+        } else {
+            tbody.style.display = "none"; // Hide the content
+        }
+        }
+    </script>
 
 </body>
 </html>

@@ -29,10 +29,14 @@
     <table class="summary-table">
         <thead>
             <tr>
+                <!-- if registration is available through flight_aware then add it -->
                 {% if registration %}
-                <th colspan="2">{{ flight_number }} <span class="small-text">{{ registration }}</span></th>
+                <th colspan="2">{{ flight_number }} 
+                    <span class="small-text">{{ registration }}</span>
+                </th>
+                <!-- if its not available then just use flight_number without registration -->
                 {% else %}
-                <th colspan="2">{{ flight_number }} </span></th>
+                <th colspan="2">{{ flight_number }} </th>
                 {% endif %}
             </tr>
         </thead>
@@ -125,9 +129,12 @@
                     <!-- Here got rid of for loops, makes it easier to work with design. -->
                     <!-- TODO: Make it easier to replicate and reuse code without having to duplicate. extract this out to a new file for use one... -->
                         <!-- Maybe seperate out html alltogether in a different html file using >>> include 'partial_template1.html'  -->
+
+                    <!-- This is the first section has the zulu time and type of weather -->
                     <tr>
                         <td>D-ATIS <span class="small-text"> {{ dep_datis_zt|safe }} mins ago</span> </td>
                     </tr>
+                    <!-- This is the second section has the weather itself-->
                     <tr>
                         <td style="text-align: left; font-family: Menlo, monospace;">{{dep_datis |safe}}</td>
                     </tr>
@@ -331,8 +338,6 @@
         tbody.style.display = "none"; // Hide the content
       }
     }
-
-    
 </script>
 
 {% endblock %}

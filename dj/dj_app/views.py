@@ -513,7 +513,7 @@ def weather_data(request, airport):
             weather_extracts['dep_weather'].update({'TAF': [bulk_flight_deets['dep_weather']['TAF_zt'], bulk_flight_deets['dep_taf']]})
 
             weather_extracts['dest_weather'] = bulk_flight_deets['dest_weather']
-            print(weather_extracts['dep_weather'])
+            # print(weather_extracts['dep_weather'])
             return weather_extracts
 
 
@@ -550,7 +550,7 @@ def weather_data(request, airport):
 def summary_box(request, airport):
     print('Insidee summary_box func',request, airport)
     airport = 'KEWR'        # declaring it regardless
-    sleep(1)
+    sleep(0.2)
     def bulk_pre_assigned():
         try:
             bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
@@ -585,27 +585,14 @@ def summary_box(request, airport):
             weather = Weather_parse()
             bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
         
+        bulk_flight_deets['registration'] = None
+        return bulk_flight_deets
+        
         # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
-        def bunch():
-            dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
-            dep_metar = bulk_flight_deets['dep_weather']['METAR']
-            dep_taf = bulk_flight_deets['dep_weather']['TAF']
-            bulk_flight_deets['dep_datis']= dep_atis
-            bulk_flight_deets['dep_metar']= dep_metar
-            bulk_flight_deets['dep_taf']= dep_taf
-            dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
-            dest_metar = bulk_flight_deets['dest_weather']['METAR']
-            dest_taf = bulk_flight_deets['dest_weather']['TAF']
-            bulk_flight_deets['dest_datis']= dest_datis
-            bulk_flight_deets['dest_metar']= dest_metar
-            bulk_flight_deets['dest_taf']= dest_taf
-            return bulk_flight_deets
-        return bunch()
-
 
     # data_return = provide_weather()
     data_return = bulk_pre_assigned()
-    # print(data_return.keys())
+    print(data_return.keys())
     
     # return render(request, 'weather_info.html')
     return JsonResponse(data_return)

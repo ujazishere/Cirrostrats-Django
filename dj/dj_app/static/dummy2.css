@@ -170,11 +170,11 @@ table.comparison-table {
   margin: 20px auto;
   width: 80%;
   max-width: 800px;
-  background-color: #2D333B;
+  background-color: #0253bc;
   text-align: center;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 0 0 0px #000000;
+  box-shadow: 0 0 0 0px #ab1313;
   color: inherit;
   text-decoration: inherit;
 }

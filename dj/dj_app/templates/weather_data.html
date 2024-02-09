@@ -28,6 +28,8 @@
             fetch(url)
         .then(response => response.json())
         .then(data => {             // data is a variable that pulls in data_v's bulk_flight_deet dictionary
+            // weather_data is the dictionary provided from views.py essentially a type of 
+            // bulk_flight_deets.
             let weather_data = data.dep_weather;
 
             function createWeatherRows(weather_data) {
@@ -43,11 +45,13 @@
                     let zt = weather_value[0]
                     let actual_data = weather_value[1]
                     
+                    // The first section- has zulu time and type of weather
                     // console.log(zt,actual_data)
                     cell.innerHTML = `${weather_key} <span class="small-text">${zt} mins ago</span>`;
                     row.appendChild(cell);
                     tableBody.appendChild(row);
 
+                    // This is the second section - has the weather itself
                     var row = document.createElement('tr');
                     var cellMessage = document.createElement('td');
 
