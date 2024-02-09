@@ -77,6 +77,7 @@
                 <td class="spacer-cell">&nbsp;</td>
             </tr>
 
+            <!-- if the flight_aware_data is accessible then use their Zulu time: -->
             {% if scheduled_out %}
 
             <tr class="utc-row">
@@ -85,8 +86,8 @@
             </tr>
 
             <tr class="flight-status-row">
-                <td class="flight-status-cell">STD{{scheduled_out}}<br>ETD{{estimated_out}}</td>
-                <td class="flight-status-cell">STA{{scheduled_in}}<br>ETA{{estimated_in}}</td>
+                <td class="flight-status-cell">STD {{scheduled_out}}<br>ETD {{estimated_out}}</td>
+                <td class="flight-status-cell">STA {{scheduled_in}}<br>ETA {{estimated_in}}</td>
             </tr>
 
             {% endif %}

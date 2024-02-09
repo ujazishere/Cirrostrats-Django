@@ -10,6 +10,7 @@ class Newark_departures_scrape(Root_class):
 
 
     def all_newark_departures(self):
+
         #  This code pulls out all the flight numbers departing out of EWR
         
         print('working on united departures out of Newark')
@@ -20,8 +21,8 @@ class Newark_departures_scrape(Root_class):
                          }                                
 
         all_day_EWR_departures = []
-        for time_of_the_day, code in day_times.items():
-            EWR_deps_url = f'https://www.airport-ewr.com/newark-departures{code}'
+        for time_of_the_day, associated_code in day_times.items():
+            EWR_deps_url = f'https://www.airport-ewr.com/newark-departures{associated_code}'
 
             soup = self.request(EWR_deps_url)
             raw_bs4_all_EWR_deps = soup.find_all('div', class_="flight-col flight-col__flight")[1:]
@@ -41,7 +42,9 @@ class Newark_departures_scrape(Root_class):
         
         all_EWR_deps = self.all_newark_departures()
         # extracting all united flights and putting them all in list to return it in the function.
-        united_departures_newark =[each for each in all_EWR_deps if 'UA' in each]
+        united_departures_newark = [each for each in all_EWR_deps if 'UA' in each]
+        
+        # TODO: Log these on a file and setup a scheduler to send email notifications.
         print('Successfully pulled United departures out of Newark at', self.date_time())
         print(f'Total United departures: {len(united_departures_newark)}')
         

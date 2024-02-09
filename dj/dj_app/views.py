@@ -386,9 +386,10 @@ def dummy2(request, airport):
 # the fetch area in js acts as url. it will somehow get plugged into the urls.py's data_v line with the airport
 # that airport then gets plugged in here. request is the WSGI thing and second argument is what you need
 @require_GET
-def data_v(request, airport):        
-    print('here',request, airport)
-
+def nas_data(request, airport):
+    print('within nas_data func',request, airport)
+    airport = 'KEWR'        # declaring it regardless
+    sleep(0.5)
     def bulk_pre_assigned():
         try:
             bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
@@ -437,28 +438,258 @@ def data_v(request, airport):
             bulk_flight_deets['dest_datis']= dest_datis
             bulk_flight_deets['dest_metar']= dest_metar
             bulk_flight_deets['dest_taf']= dest_taf
-        bunch()
-    bulk_pre_assigned()
+            return bulk_flight_deets
+        return bunch()
 
 
-
-    weather = Weather_parse()
-    weather = weather.processed_weather(airport, )
-
-    weather_page_data = {}
-
-    weather_page_data['airport'] = airport
-
-    weather_page_data['D_ATIS'] = weather['D-ATIS']
-    weather_page_data['METAR'] = weather['METAR']
-    weather_page_data['TAF'] = weather['TAF']
-    
-    weather_page_data['datis_zt'] = weather['D-ATIS_zt']
-    weather_page_data['metar_zt'] = weather['METAR_zt']
-    weather_page_data['taf_zt'] = weather['TAF_zt']
-    # weather_page_data['trr'] = weather_page_data
-    
-    print('weather done',weather_page_data['METAR'])
+    # data_return = provide_weather()
+    data_return = bulk_pre_assigned()['nas_departure_affected']
+    # print(data_return.keys())
     
     # return render(request, 'weather_info.html')
-    return JsonResponse(weather_page_data)
+    return JsonResponse(data_return)
+
+
+@require_GET
+def weather_data(request, airport):
+    print('Inside weather_data views func',request, airport)
+    airport = 'KEWR'        # declaring it regardless
+    sleep(1)
+    def bulk_pre_assigned():
+        try:
+            bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
+            bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
+        except:
+            bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
+        
+        # print('OLD with html highlights', bulk_flight_deets)
+        try: # UJ PC PATH
+            ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
+            ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
+            with open(ind, 'rb') as f:
+                dep_weather = pickle.load(f)
+            with open(ord, 'rb') as f:
+                dest_weather = pickle.load(f)
+            
+            weather = Weather_parse()
+            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+            weather = Weather_parse()
+            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+
+        except Exception as e:     # ISMAIL MAC PATH
+            print(e)
+            is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
+            is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
+            with open(is_ind, 'rb') as f:
+                dep_weather = pickle.load(f)
+            with open(is_ord, 'rb') as f:
+                dest_weather = pickle.load(f)
+            weather = Weather_parse()
+            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+            weather = Weather_parse()
+            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+        
+        # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
+        def bunch():
+            dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
+            dep_metar = bulk_flight_deets['dep_weather']['METAR']
+            dep_taf = bulk_flight_deets['dep_weather']['TAF']
+            bulk_flight_deets['dep_datis']= dep_atis
+            bulk_flight_deets['dep_metar']= dep_metar
+            bulk_flight_deets['dep_taf']= dep_taf
+            
+            dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
+            dest_metar = bulk_flight_deets['dest_weather']['METAR']
+            dest_taf = bulk_flight_deets['dest_weather']['TAF']
+            bulk_flight_deets['dest_datis']= dest_datis
+            bulk_flight_deets['dest_metar']= dest_metar
+            bulk_flight_deets['dest_taf']= dest_taf
+
+
+
+            weather_extracts = {}
+            weather_extracts['dep_weather'] = {'D-ATIS': [bulk_flight_deets['dep_weather']['D-ATIS_zt'], bulk_flight_deets['dep_datis']]}
+            weather_extracts['dep_weather'].update({'METAR': [bulk_flight_deets['dep_weather']['METAR_zt'], bulk_flight_deets['dep_metar'],]})
+            weather_extracts['dep_weather'].update({'TAF': [bulk_flight_deets['dep_weather']['TAF_zt'], bulk_flight_deets['dep_taf']]})
+
+            weather_extracts['dest_weather'] = bulk_flight_deets['dest_weather']
+            print(weather_extracts['dep_weather'])
+            return weather_extracts
+
+
+        return bunch()
+
+
+    def provide_weather():
+        weather = Weather_parse()
+        weather = weather.processed_weather(airport, )
+
+        weather_page_data = {}
+
+        weather_page_data['airport'] = airport
+
+        weather_page_data['D_ATIS'] = weather['D-ATIS']
+        weather_page_data['METAR'] = weather['METAR']
+        weather_page_data['TAF'] = weather['TAF']
+        
+        weather_page_data['datis_zt'] = weather['D-ATIS_zt']
+        weather_page_data['metar_zt'] = weather['METAR_zt']
+        weather_page_data['taf_zt'] = weather['TAF_zt']
+        # weather_page_data['trr'] = weather_page_data
+        return weather_page_data
+    
+    # data_return = provide_weather()
+    data_return = bulk_pre_assigned()
+    # print(data_return.keys())
+    
+    # return render(request, 'weather_info.html')
+    return JsonResponse(data_return)
+
+
+@require_GET
+def summary_box(request, airport):
+    print('Insidee summary_box func',request, airport)
+    airport = 'KEWR'        # declaring it regardless
+    sleep(1)
+    def bulk_pre_assigned():
+        try:
+            bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
+            bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
+        except:
+            bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
+        
+        # print('OLD with html highlights', bulk_flight_deets)
+        try: # UJ PC PATH
+            ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
+            ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
+            with open(ind, 'rb') as f:
+                dep_weather = pickle.load(f)
+            with open(ord, 'rb') as f:
+                dest_weather = pickle.load(f)
+            
+            weather = Weather_parse()
+            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+            weather = Weather_parse()
+            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+
+        except Exception as e:     # ISMAIL MAC PATH
+            print(e)
+            is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
+            is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
+            with open(is_ind, 'rb') as f:
+                dep_weather = pickle.load(f)
+            with open(is_ord, 'rb') as f:
+                dest_weather = pickle.load(f)
+            weather = Weather_parse()
+            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+            weather = Weather_parse()
+            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+        
+        # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
+        def bunch():
+            dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
+            dep_metar = bulk_flight_deets['dep_weather']['METAR']
+            dep_taf = bulk_flight_deets['dep_weather']['TAF']
+            bulk_flight_deets['dep_datis']= dep_atis
+            bulk_flight_deets['dep_metar']= dep_metar
+            bulk_flight_deets['dep_taf']= dep_taf
+            dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
+            dest_metar = bulk_flight_deets['dest_weather']['METAR']
+            dest_taf = bulk_flight_deets['dest_weather']['TAF']
+            bulk_flight_deets['dest_datis']= dest_datis
+            bulk_flight_deets['dest_metar']= dest_metar
+            bulk_flight_deets['dest_taf']= dest_taf
+            return bulk_flight_deets
+        return bunch()
+
+
+    # data_return = provide_weather()
+    data_return = bulk_pre_assigned()
+    # print(data_return.keys())
+    
+    # return render(request, 'weather_info.html')
+    return JsonResponse(data_return)
+
+
+@require_GET
+def data_v(request, airport):
+    print('here',request, airport)
+    airport = 'KEWR'        # declaring it regardless
+    sleep(1)
+    def bulk_pre_assigned():
+        try:
+            bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
+            bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
+        except:
+            bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
+        
+        # print('OLD with html highlights', bulk_flight_deets)
+        try: # UJ PC PATH
+            ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
+            ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
+            with open(ind, 'rb') as f:
+                dep_weather = pickle.load(f)
+            with open(ord, 'rb') as f:
+                dest_weather = pickle.load(f)
+            
+            weather = Weather_parse()
+            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+            weather = Weather_parse()
+            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+
+        except Exception as e:     # ISMAIL MAC PATH
+            print(e)
+            is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
+            is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
+            with open(is_ind, 'rb') as f:
+                dep_weather = pickle.load(f)
+            with open(is_ord, 'rb') as f:
+                dest_weather = pickle.load(f)
+            weather = Weather_parse()
+            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+            weather = Weather_parse()
+            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+        
+        # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
+        def bunch():
+            dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
+            dep_metar = bulk_flight_deets['dep_weather']['METAR']
+            dep_taf = bulk_flight_deets['dep_weather']['TAF']
+            bulk_flight_deets['dep_datis']= dep_atis
+            bulk_flight_deets['dep_metar']= dep_metar
+            bulk_flight_deets['dep_taf']= dep_taf
+            dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
+            dest_metar = bulk_flight_deets['dest_weather']['METAR']
+            dest_taf = bulk_flight_deets['dest_weather']['TAF']
+            bulk_flight_deets['dest_datis']= dest_datis
+            bulk_flight_deets['dest_metar']= dest_metar
+            bulk_flight_deets['dest_taf']= dest_taf
+            return bulk_flight_deets
+        return bunch()
+
+
+    def provide_weather():
+        weather = Weather_parse()
+        weather = weather.processed_weather(airport, )
+
+        weather_page_data = {}
+
+        weather_page_data['airport'] = airport
+
+        weather_page_data['D_ATIS'] = weather['D-ATIS']
+        weather_page_data['METAR'] = weather['METAR']
+        weather_page_data['TAF'] = weather['TAF']
+        
+        weather_page_data['datis_zt'] = weather['D-ATIS_zt']
+        weather_page_data['metar_zt'] = weather['METAR_zt']
+        weather_page_data['taf_zt'] = weather['TAF_zt']
+        # weather_page_data['trr'] = weather_page_data
+        return weather_page_data
+    
+    # data_return = provide_weather()
+    data_return = bulk_pre_assigned()
+    # print(data_return.keys())
+    
+    # return render(request, 'weather_info.html')
+    return JsonResponse(data_return)
+

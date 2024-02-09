@@ -75,10 +75,18 @@ class Root_class():
 
 
     def exec(self, input1, multithreader):
-    # TODO: Extract this blueprint for future use.
-    # executor blueprint. In this case input 1 takes in flight numbers and `multithreaders` can be item that needs to be multithreaded.
+    
+    # TODO: VVI: Have a solid understanding and extract this blueprint for future use.
+
+    # executor blueprint: In this case input1 argument of this exec funtion are a bunch of flight numbers in list form while,
+        # `multithreaders` is the task itself. This task will be multiplied by the amount of times of flight numbers.
+            # In this case multithreaders is a function that takes in a flight number and returns its gates and stuff.
+            # if there are 10 flight numbers the multithreader function will be duplicated 10 times.
+        # executor.submit will submit all flight numbers at once to the multithreader function that is the second argument in exec
+            # seems like this creates a task list of all functions and all those functions get sent to work at once altogether.
         # this will take in all the flight numbers at once and perform web scrape(`pick_flight_data()`) on all of them simultaneously
         # Multithreading
+    
         completed = {}
         troubled = set()
             # VVI!!! The dictionary `futures` .value() is the flight number and  key is the the memory location of return from pick_flight_data()
@@ -91,9 +99,9 @@ class Root_class():
                 # second argument is each flt number that goes into that function. Together forming the futures.key()
                 #note no parentheses in the first argument
             futures = {executor.submit(multithreader, flt_num): flt_num for flt_num in
-                        input1}
+                        input1}         # This submit method tasks to do to the executor for concurrent execution.
             # futures .key() is the memory location of the task and the .value() is the flt_num associated with it
-            for future in as_completed(futures):
+            for future in as_completed(futures):    # as_completed is imported with the ThreadPoolExecutor
                 # again, future is the memory location of the task
                 flt_num = futures[future]
                 try:

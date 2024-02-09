@@ -131,15 +131,20 @@ class Gate_Scrape(Root_class):
 
     def activator(self):
         
-        # Extracting all United flight numbers in list form.
+        # Purpose of this file is to dump master_UA file.
+
+        # Extracting all United flight numbers in list form to dump into the exec func
         ewr_departures_UA = Newark_departures_scrape().united_departures()
+
         # Dmping all flight numbers for newark united departures.
         # with open('ewr_departures_UA.pkl', 'wb') as f:
             # pickle.dump(ewr_departures_UA, f)
         
+        # VVI Check exec func for notes on how it works. It takes in function as its second argument without double bracs.
         exec_output = self.exec(ewr_departures_UA, self.pick_flight_data)    # inherited from root_class.Root_class
         completed_flights = exec_output['completed']
         troubled_flights = exec_output['troubled']
+        
         # Cant decide if master should be called or kept empty. When kept empty it saves disk space. When called it keeps track of old information.
         # master = self.load_master()
         master = {}
@@ -158,6 +163,7 @@ class Gate_Scrape(Root_class):
             self.tro()
         
         
+# Mind the threading.Thread inheritance that makes the code run concurrently
 class Gate_scrape_thread(threading.Thread):
     def __init__(self):
         super().__init__()
@@ -170,6 +176,7 @@ class Gate_scrape_thread(threading.Thread):
         # self.gc.activator()
         while True:
             print('Lengthy Scrape  in progress...')
+            # TODO: Investigate this async sorcery
             self.gc.activator()
             
             eastern = pytz.timezone('US/eastern')           # Time stamp is local to this Loop. Avoid moving it around

@@ -1,0 +1,69 @@
+
+
+
+<tbody id="weather_DataBody">
+
+    <td style="width: 100%; text-align: left;">
+        <span style="float: left; width: 33%;">{{ scheduled_departure_time }}</span>
+        <span style="float: left; width: 33%; text-align: center;">{{ departure_ID }}</span>
+        <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }}</span>
+    </td>
+
+</tbody>
+
+
+
+
+
+<script>   
+ 
+    // This is where the section starts. Seems like the html up above loads then comes down here. 
+    // Once here 
+    document.addEventListener('DOMContentLoaded', function() {
+            // This loads up right away
+        
+        var airport ='{{ airport }}' 
+        var url = 'weather_data/' + airport +'/'
+        // This is where the data is pulled from the views function data_v. This is the first point of access.
+            fetch(url)
+        .then(response => response.json())
+        .then(data => {             // data is a variable that pulls in data_v's bulk_flight_deet dictionary
+            let weather_data = data.dep_weather;
+
+            function createWeatherRows(weather_data) {
+                console.log("here", Object.keys(weather_data));
+
+                var tableBody = document.getElementById('weather_DataBody');
+
+                Object.entries(weather_data).forEach(([weather_key, weather_value]) => {
+                    console.log('in func')
+                    var row = document.createElement('tr');
+                    var cell = document.createElement('td');
+
+                    let zt = weather_value[0]
+                    let actual_data = weather_value[1]
+                    
+                    // console.log(zt,actual_data)
+                    cell.innerHTML = `${weather_key} <span class="small-text">${zt} mins ago</span>`;
+                    row.appendChild(cell);
+                    tableBody.appendChild(row);
+
+                    var row = document.createElement('tr');
+                    var cellMessage = document.createElement('td');
+
+                    cellMessage.style.textAlign = 'left';
+                    cellMessage.style.fontFamily = 'Menlo, monospace';
+                    cellMessage.innerHTML = actual_data;
+
+                    row.appendChild(cellMessage);
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            createWeatherRows(weather_data);
+
+
+        })
+        .catch(error => console.error('Error Console:', error));
+    });
+</script>

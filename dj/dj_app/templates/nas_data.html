@@ -1,0 +1,69 @@
+
+
+<!-- Airport: {{airport}}  -->
+<table class="another-table" id="weatherTable">
+    <thead></thead>
+    <tbody id="nas_data_body"></tbody>
+</table>
+
+
+
+
+<script>   
+ 
+    // This is where the section starts. Seems like the html up above loads then comes down here. 
+    // Once here 
+    document.addEventListener('DOMContentLoaded', function() {
+            // This loads up right away
+        
+        var airport ='{{ airport }}' 
+        var url = 'nas_data/' + airport +'/'
+        // This is where the data is pulled from the views function data_v. This is the first point of access.
+            fetch(url)
+        .then(response => response.json())
+        .then(data => {             // data is a variable that pulls in data_v's bulk_flight_deet dictionary
+            let nas_departure_affected = data;
+
+            // get all the keys
+            // let all_keys = Object.keys(bulk_flight_deet)
+            // check length
+            // console.log(all_keys)
+            // console.log(Object.keys(bulk_flight_deet.nas_departure_affected['Ground Delay']))
+            // check type of item
+            // console.log(typeof all_keys)
+
+            function renderNasData(nas_data) {
+            // console.log(nas_data)
+            if (nas_data) {
+                var tableBody = document.getElementById('nas_data_body');
+                tableBody.innerHTML = '';
+                
+                Object.entries(nas_data).forEach(([d1_key, d1_value]) => {
+                var row = document.createElement('tr');
+                var cell = document.createElement('td');
+                cell.colSpan = "2";
+                cell.textContent = d1_key;
+                row.appendChild(cell);
+                tableBody.appendChild(row);
+                
+                Object.entries(d1_value).forEach(([d2_key, d2_value]) => {
+                    var innerRow = document.createElement('tr');
+                    var keyCell = document.createElement('td');
+                    var valueCell = document.createElement('td');
+                    keyCell.textContent = d2_key;
+                    valueCell.textContent = d2_value;
+                    innerRow.appendChild(keyCell);
+                    innerRow.appendChild(valueCell);
+                    tableBody.appendChild(innerRow);
+                });
+                });
+            }
+            } 
+            
+            renderNasData(nas_departure_affected);
+
+
+        })
+        .catch(error => console.error('Error Console:', error));
+    });
+</script>
