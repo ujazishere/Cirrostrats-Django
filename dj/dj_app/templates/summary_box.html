@@ -1,5 +1,9 @@
 
 <table class="summary-table" id="summary_box_js">
+
+    <tbody>
+    </tbody>
+
 </table>
 
 
@@ -21,35 +25,255 @@
         .then(response => response.json())
         .then(data => {             // data is a variable that pulls in data_v's bulk_flight_deet dictionary
             let bulk_flight_deets = data;
+            console.log(bulk_flight_deets)
             let flt_num = bulk_flight_deets.flight_number;
             let registration = bulk_flight_deets.registration;
+            let departure_ID = bulk_flight_deets.departure_ID
+            let destination_ID = bulk_flight_deets.destination_ID
+            let departure_gate = bulk_flight_deets.departure_gate
+            let arrival_gate = bulk_flight_deets.arrival_gate
+            let scheduled_departure_time = bulk_flight_deets.scheduled_departure_time
+            let scheduled_arrival_time = bulk_flight_deets.scheduled_arrival_time
+            let scheduled_out = bulk_flight_deets.scheduled_out
+            let scheduled_in = bulk_flight_deets.scheduled_in
+            let estimated_out = bulk_flight_deets.estimated_out
+            let estimated_in = bulk_flight_deets.estimated_in
+
+
+
+
+
+
             
             function summary_box(bulk_flight_deets) {
-                console.log("here in summary box", );
+                console.log("here in summary box", departure_ID );
 
                 var summary_box_js = document.getElementById('summary_box_js');
 
-
+                // this is for flight_num and registration //
                 var thead = document.createElement('thead');
                 var tr = document.createElement('tr');
                 var th = document.createElement('th');
                 var span = document.createElement('span');
-                
                 span.className = 'small-text';
                 span.innerHTML = registration;
                 th.innerHTML = flt_num;
                 th.colSpan = '2';
-                
                 th.appendChild(span);
                 tr.appendChild(th);
                 thead.appendChild(tr);
                 summary_box_js.appendChild(thead)
 
+
+                // this is for departure and destination ID //
+
+                var tbody_summary_box = document.createElement('tbody');
+                var tr_airportID = document.createElement('tr');
+                var td_departure = document.createElement('td');
+                var td_destination = document.createElement('td');
+                td_destination.className = 'table-cell text-align-right'
+                td_departure.className = 'table-cell';
+                td_departure.innerHTML = departure_ID;
+                td_destination.innerHTML = destination_ID
+                
+                tr_airportID.appendChild(td_departure);
+                tr_airportID.appendChild(td_destination);
+
+                tbody_summary_box.appendChild(tr_airportID);
+                summary_box_js.appendChild(tbody_summary_box)
+
+
+
+
+               // this is for spacer row //
+
+
+                function createSpacerRow() {
+
+                var tr_spacer_row = document.createElement('tr');
+
+                var td_spacer_cell = document.createElement('td');
+                var td_spacer_cell1 = document.createElement('td');
+
+                td_spacer_cell.className = 'spacer-cell';
+                td_spacer_cell1.className = 'spacer-cell';
+
+                td_spacer_cell.innerHTML = '&nbsp;';
+
+                tr_spacer_row.className = 'spacer-row';
+
+                tr_spacer_row.appendChild(td_spacer_cell);
+                tr_spacer_row.appendChild(td_spacer_cell1);
+
+                return tr_spacer_row;
+
+                }
+
+                // Usage:
+
+                var spacerRow = createSpacerRow();
+                tbody_summary_box.appendChild(spacerRow);
+
+                /*
+                var tr_spacer_row = document.createElement('tr');
+                var td_spacer_cell = document.createElement('td');
+                var td_spacer_cell1 = document.createElement('td');
+
+                
+                td_spacer_cell.className = 'spacer-cell';
+                td_spacer_cell1.className = 'spacer-cell';
+                td_spacer_cell.innerHTML = '&nbsp;';
+                tr_spacer_row.className = 'spacer-row';
+                
+                tr_spacer_row.appendChild(td_spacer_cell);
+                tr_spacer_row.appendChild(td_spacer_cell1);
+                tbody_summary_box.appendChild(tr_spacer_row);
+                console.log(tr_spacer_row) */
+
+                
+                // this is for gate row //
+
+                var tr_gate_row = document.createElement('tr');
+                var td_gate_cell = document.createElement('td');
+                var td_gate_cell1 = document.createElement('td');
+
+                
+                td_gate_cell.className = 'info-cell';
+                td_gate_cell1.className = 'info-cell';
+
+                td_gate_cell.innerHTML = 'Gate';
+                td_gate_cell1.innerHTML = 'Gate';
+
+                tr_gate_row.className = 'info-row';
+                
+                tr_gate_row.appendChild(td_gate_cell);
+                tr_gate_row.appendChild(td_gate_cell1);
+                tbody_summary_box.appendChild(tr_gate_row);
+                console.log(tr_gate_row)
+
+
+                // this is for departure and arrival gate //
+
+                var tr_gate = document.createElement('tr');
+                var td_gate_dep = document.createElement('td');
+                var td_gate_arr = document.createElement('td');
+
+                
+                td_gate_dep.className = 'gate-cell';
+                td_gate_arr.className = 'gate-cell';
+
+                td_gate_dep.innerHTML = departure_gate;
+                td_gate_arr.innerHTML = arrival_gate;
+
+                tr_gate.className = 'gate-row';
+                
+                tr_gate.appendChild(td_gate_dep);
+                tr_gate.appendChild(td_gate_arr);
+                tbody_summary_box.appendChild(tr_gate);
+
+
+                // this is for spacer row //
+
+                var spacerRow = createSpacerRow();
+                tbody_summary_box.appendChild(spacerRow);
+
+                
+                // this is for scheduled local text //
+
+
+                var tr_scheduled_row = document.createElement('tr');
+                var td_scheduled_cell = document.createElement('td');
+                var td_scheduled_cell1 = document.createElement('td');
+
+
+                td_scheduled_cell.className = 'scheduled-cell';
+                td_scheduled_cell1.className = 'scheduled-cell';
+
+                td_scheduled_cell.innerHTML = 'Scheduled Local';
+                td_scheduled_cell1.innerHTML = 'Scheduled Local';
+
+                tr_scheduled_row.className = 'scheduled-row';
+                
+                tr_scheduled_row.appendChild(td_scheduled_cell);
+                tr_scheduled_row.appendChild(td_scheduled_cell1);
+                tbody_summary_box.appendChild(tr_scheduled_row);
+
+
+                // this is for scheduled dep/arr time //
+
+                var tr_scheduled_time_row = document.createElement('tr');
+                var td_scheduled_dep = document.createElement('td');
+                var td_scheduled_arr = document.createElement('td');
+
+                
+                td_scheduled_dep.className = 'scheduled-time-cell';
+                td_scheduled_arr.className = 'scheduled-time-cell';
+
+                td_scheduled_dep.innerHTML = scheduled_departure_time;
+                td_scheduled_arr.innerHTML = scheduled_arrival_time;
+
+                tr_scheduled_time_row.className = 'scheduled-time-row';
+                
+                tr_scheduled_time_row.appendChild(td_scheduled_dep);
+                tr_scheduled_time_row.appendChild(td_scheduled_arr);
+                tbody_summary_box.appendChild(tr_scheduled_time_row);
+
+                // this is for spacer row //
+
+                var spacerRow = createSpacerRow();
+                tbody_summary_box.appendChild(spacerRow);
+
+
+                // this is for utc row //
+
+
+                var tr_utc = document.createElement('tr');
+                var td_utc_cell = document.createElement('td');
+                var td_utc_cell1 = document.createElement('td');
+
+
+                td_utc_cell.className = 'utc-cell';
+                td_utc_cell1.className = 'utc-cell';
+
+                td_utc_cell.innerHTML = 'UTC';
+                td_utc_cell1.innerHTML = 'UTC';
+
+                tr_utc.className = 'utc-row';
+                
+                tr_utc.appendChild(td_utc_cell);
+                tr_utc.appendChild(td_utc_cell1);
+                tbody_summary_box.appendChild(tr_utc);
+
+
+                // this is for flight status row //
+
+                var flight_aware_utc = document.createElement('tr');
+                var flight_status_cell = document.createElement('td');
+                var flight_status_cell1 = document.createElement('td');
+
+                
+                flight_status_cell.className = 'flight-status-cell';
+                flight_status_cell1.className = 'flight-status-cell';
+
+                flight_status_cell.innerHTML = 'STD ' + scheduled_out + '<br>' + 'ETD ' + estimated_out 
+                flight_status_cell1.innerHTML = 'STA ' + scheduled_in + '<br>' + 'ETA ' + estimated_in 
+
+                flight_aware_utc.className = 'flight-status-row';
+                
+                flight_aware_utc.appendChild(flight_status_cell);
+                flight_aware_utc.appendChild(flight_status_cell1);
+                tbody_summary_box.appendChild(flight_aware_utc);
+
+                console.log(td_flight_status_cell)
+            
+
+
+
             }
             
             // To use the function you have to use this
-            summary_box(bulk_flight_deets);
 
+            summary_box(bulk_flight_deets)
 
         })
         .catch(error => console.error('Error Console:', error));
