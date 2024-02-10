@@ -41,14 +41,12 @@
 
 
 
-
-
-
             
             function summary_box(bulk_flight_deets) {
                 console.log("here in summary box", departure_ID );
 
                 var summary_box_js = document.getElementById('summary_box_js');
+
 
                 // this is for flight_num and registration //
                 var thead = document.createElement('thead');
@@ -81,6 +79,60 @@
 
                 tbody_summary_box.appendChild(tr_airportID);
                 summary_box_js.appendChild(tbody_summary_box)
+
+
+
+
+
+                function tr_td_section(tr_class_name, 
+                                        td1_class_name, td2_class_name,
+                                        td1_displays, td2_displays) {
+
+                var tr_item = document.createElement('tr');
+
+                var td_spacer_cell1 = document.createElement('td');
+                var td_spacer_cell2 = document.createElement('td');
+                
+                tr_item.className = tr_class_name;
+                
+                td_spacer_cell1.className = td1_class_name;
+                td_spacer_cell2.className = td2_class_name;
+
+                td_spacer_cell1.innerHTML = td1_displays;
+                td_spacer_cell2.innerHTML = td2_displays;
+
+
+                tr_item.appendChild(td_spacer_cell1);
+                tr_item.appendChild(td_spacer_cell2);
+
+                return tr_item;
+
+                };
+
+
+
+                console.log('creating tr td template');
+
+                console.log(tr_td_section(tr_class_name="spacer-row",
+                                td1_class_name="spacer-cell",
+                                td2_class_name="spacer-cell",
+                                td1_displays="&nbsp;",
+                                td2_displays="SOMETHING",
+                ));
+
+                
+                scheduled_section = tr_td_section(tr_class_name="scheduled-row",
+                                td1_class_name="scheduled-cell",
+                                td2_class_name="scheduled-cell",
+                                td1_displays="Scheduled Local",
+                                td2_displays="Scheduled Local",
+                );
+
+                tbody_summary_box.appendChild(scheduled_section);
+
+
+
+
 
 
 

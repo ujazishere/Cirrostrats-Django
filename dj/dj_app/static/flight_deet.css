@@ -242,6 +242,18 @@ table.comparison-table td:first-child {
 
 
 
+
+
+.published-color {
+  color: rgb(16, 20, 234);
+}
+
+
+
+
+
+
+
 /**************** this code is for red table ****************/
 
 .dark-mode table.another-table {

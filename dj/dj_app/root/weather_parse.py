@@ -143,23 +143,28 @@ class Weather_parse:
             raw_utc_dt = datetime.strptime(raw_utc,"%H%M")
             
             if datis:
-                zulu_item_re = re.findall('[0-9]{4}Z', weather_input)
+                zulu_item_re = re.findall('[0-9]{4}Z', weather_input)       # regex zulu
             else:
-                zulu_item_re = re.findall('[0-9]{4}Z', weather_input)
+                # Not necessary if only using 4 digits. Use this if DDHHMM is required.
+                zulu_item_re = re.findall('[0-9]{4}Z', weather_input)       # regex zulu
                 
-            if zulu_item_re:
+            if zulu_item_re:        # regex process
                 zulu_weather = zulu_item_re[0][:-1]
                 zulu_weather_dt = datetime.strptime(zulu_weather,"%H%M")
                 diff = raw_utc_dt - zulu_weather_dt
                 diff = int(diff.seconds/60) 
-                if diff > 15:
-                    return '<span style="color: red">{}</span>'.format(diff)
-                if diff <  15:
-                    return '<span style="color: green">{}</span>'.format(diff)
-                return diff
+                if diff >= 50:
+                    # print(f'<span style="color: red">{diff} mins ago </span>')
+                    return f'<span style="color: red">{diff} mins ago </span>'
+                if diff <=  30:
+                    # print(f'<span style="color: green">{diff} mins ago</span>')
+                    return f'<span class="published-color">{diff} mins ago</span>'
+                else:
+                    return f'{diff} mins ago'
             else:
                 zulu_weather = 'N/A'
                 return zulu_weather
+            
             
 
         

@@ -197,7 +197,7 @@ def gate_info(request, main_query):
 
 def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=False):
     
-    bypass_fa = False           # to restrict fa api use: for local use keep it False. 
+    bypass_fa = True           # to restrict fa api use: for local use keep it False. 
 
     flt_info = Pull_flight_info()           # from dep_des.py file
     weather = Weather_parse()         # from MET_TAF_parse.py
@@ -585,7 +585,6 @@ def summary_box(request, airport):
             weather = Weather_parse()
             bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
         
-        bulk_flight_deets['registration'] = None
         return bulk_flight_deets
         
         # These seperate out all the wather for ease of work for design. for loops are harder to work with in html

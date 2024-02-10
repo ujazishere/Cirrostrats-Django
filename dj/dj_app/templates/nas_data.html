@@ -1,10 +1,6 @@
 
 
 <!-- Airport: {{airport}}  -->
-<table class="another-table" id="weatherTable">
-    <thead></thead>
-    <tbody id="nas_data_body"></tbody>
-</table>
 
 
 
@@ -32,10 +28,13 @@
             // check type of item
             // console.log(typeof all_keys)
 
-            function renderNasData(nas_data) {
+
+
+
+            function renderNasData(nas_data,nas_location) {
             // console.log(nas_data)
             if (nas_data) {
-                var tableBody = document.getElementById('nas_data_body');
+                var tableBody = document.getElementById(nas_location);
                 tableBody.innerHTML = '';
                 
                 Object.entries(nas_data).forEach(([d1_key, d1_value]) => {
@@ -60,7 +59,11 @@
             }
             } 
             
-            renderNasData(nas_departure_affected);
+
+
+            renderNasData(nas_departure_affected,'nas_data_body_departure');
+            // Just need to change this to destination
+            renderNasData(nas_departure_affected,'nas_data_body_destination');
 
 
         })

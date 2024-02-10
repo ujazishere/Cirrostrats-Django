@@ -128,7 +128,7 @@ USE_TZ = True
 STATIC_URL = 'dj_app/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "dj_app" / "static",
+    BASE_DIR / "dj_app" / "static/",
 ]
 
 
