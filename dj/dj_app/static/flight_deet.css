@@ -241,16 +241,26 @@ table.comparison-table td:first-child {
 }
 
 
+/************** this code is for zulu time *************/
 
 
-
-.published-color {
-  color: rgb(16, 20, 234);
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
+.published-color1 {
+  color: rgb(203, 24, 24);
+  font: bold;
+  animation: blink 1s infinite; 
+}
 
-
-
+.published-color2 {
+  color: rgb(47, 144, 28);
+  font: bold;
+  animation: blink 1s infinite; 
+}
 
 
 

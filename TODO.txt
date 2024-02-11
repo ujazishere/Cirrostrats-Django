@@ -7,7 +7,6 @@ Practice readibility and simplicity. Aviod code duplication. Include description
         WIP - Make a Date and time box for title. just like you see on the google flight info box. 
         Implement loading symbol when searching.
         WIP - summery box shadow and expand/collapse (fast)animation.  
-        WIP - understand JavaScript <script> tag** and how its implemented with views.py and urls.py
         WIP - Implement asynchronous loading of the data on the flight_deet page. Load data incrementally so as to avoid waiting for all data to be fetched.
         WIP - dynamic color for text on tables 
         work on script to extract data- aviation_stack_data_pull.py
@@ -183,3 +182,4 @@ weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf',
         **** move searchbar on all pages to header of the site - I tried this and it looked really weird and not usable at all hence for now kept the searchbar as it is
         **** i removed the borders and it looked really weird and not orgnized hence got the borders back and made them as thin as possible 
         flight deet page / comparison table make the title grey and remove the borders from inside of the table
+        DONE! Fixed the coloring for published time 

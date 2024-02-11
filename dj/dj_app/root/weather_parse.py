@@ -153,12 +153,10 @@ class Weather_parse:
                 zulu_weather_dt = datetime.strptime(zulu_weather,"%H%M")
                 diff = raw_utc_dt - zulu_weather_dt
                 diff = int(diff.seconds/60) 
-                if diff >= 50:
-                    # print(f'<span style="color: red">{diff} mins ago </span>')
-                    return f'<span style="color: red">{diff} mins ago </span>'
-                if diff <=  30:
-                    # print(f'<span style="color: green">{diff} mins ago</span>')
-                    return f'<span class="published-color">{diff} mins ago</span>'
+                if diff > 50:
+                    return f'<span class="published-color1">{diff} mins ago </span>'
+                if diff < 50:
+                    return f'<span class="published-color2">{diff} mins ago</span>'
                 else:
                     return f'{diff} mins ago'
             else:
