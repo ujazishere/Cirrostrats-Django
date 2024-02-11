@@ -20,6 +20,7 @@ It will then run
 '''
 
 # TODO: move this out so EC2 deployment is is streamlined without having to change this everytime
+# Before you remove this make sure you account for its use. its also used for sending email notifications
 run_lengthy_web_scrape = False 
 
 if run_lengthy_web_scrape:

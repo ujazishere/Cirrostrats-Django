@@ -4,6 +4,9 @@ import pickle
 from collections import Counter
 import json
 import requests
+import asyncio
+import aiohttp
+import os
 
 # regex notes:
     # . is every character
@@ -14,24 +17,19 @@ import requests
 
 # load all datis
 def load_em_all():
-    import re
-    import pickle
     base_path = r"C:\Users\ujasv\OneDrive\Desktop\pickles"
-    datis_path = {
-        'datis_extracts1': base_path+ r"\datis_info_stack_20231214.pkl",
-        'datis_extracts2':base_path+ r"\datis_info_stack_20231209.pkl",
-        'datis_extracts3':base_path+ r"\datis_info_stack_20231206.pkl",
-        'datis_extracts4':base_path+ r"\datis_info_stack_202312151906.pkl",
-        'datis_extracts5':base_path+ r"\datis_info_stack_202312191708.pkl",
-        'datis_extracts6':base_path+ r"\datis_info_stack_202401122105.pkl",
-        'datis_extracts7':base_path+ r"\datis_info_stack_202402032046.pkl",
-                    }
+    all_pickle_files = os.listdir(base_path)            # get all file names in pickles folder
+    # get just the ones with datis_info_stack in name
+    datis_info_stack_file_names = [i for i in all_pickle_files if 'datis_info_stack' in i]
+
     datis_bulk = []
-    for i in datis_path.keys():
-        with open(datis_path[i], 'rb') as f:
+    for i in datis_info_stack_file_names:
+        path = base_path+"\\"+ i
+        with open(path, 'rb') as f:
             datis_bulk += pickle.load(f)
-            # datis.append(pickle.load(f))
+    print(f'total datis files: {len(datis_info_stack_file_names)}', f'total datis: {len(datis_bulk)}')
     return datis_bulk
+
 datis_bulk = load_em_all()
 
 
@@ -209,9 +207,64 @@ import pickle
 from collections import Counter
 import json
 import requests
+import asyncio
+import aiohttp
 # this function pulls all datis and returns them in list form
+all_datis_airports_path = r'c:\users\ujasv\onedrive\desktop\codes\cirrostrats\all_datis_airports.pkl'
+with open(all_datis_airports_path, 'rb') as f:
+    all_datis_airports = pickle.load(f)
+
+async def get_tasks(session):
+    tasks = []
+    for airport_id in all_datis_airports:
+        url = f"https://datis.clowd.io/api/{airport_id}"
+        tasks.append(asyncio.create_task(session.get(url)))
+    return tasks
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        tasks = await get_tasks(session)
+        # Upto here the tasks are created which is very light.
+
+        # Actual pull work is done using as_completed 
+        datis_resp = []
+        for task in asyncio.as_completed(tasks):
+            resp = await task 
+            jj = await resp.json()
+            datis_raw = 'n/a'
+            if type(jj) == list and 'datis' in jj[0].keys():
+                datis_raw = jj[0]['datis']
+            datis_resp.append(datis_raw)
+        return datis_resp
+
+# Works regardless of the syntax error.
+all_76_datis = await asyncio.ensure_future(main())
+
+
+# extract datis with dates in the filename
+yyyymmddhhmm = Root_class().date_time(raw_utc='HM')
+print(yyyymmddhhmm)
+path = rf'c:\users\ujasv\onedrive\desktop\pickles\datis_info_stack_{yyyymmddhhmm}.pkl'
+
+# **********CAUTION!!! HARD WRITE***************
+with open(path, 'wb') as f:
+    pickle.dump(all_76_datis,f)
+
+
+
+
+
+
+
+
+
+
+
+
+# old synchronous series wise ineficient pull.
 def pull_datis():
-    def datis_info(airport_id):
+
+    def datis_raw_data(airport_id):
         datis_api =  f"https://datis.clowd.io/api/{airport_id}"
         datis = requests.get(datis_api)
         datis = json.loads(datis.content.decode('utf-8'))
@@ -220,22 +273,10 @@ def pull_datis():
             datis_raw = datis[0]['datis']
         return datis_raw
 
-    all_datis_airports_path = r'c:\users\ujasv\onedrive\desktop\codes\cirrostrats\all_datis_airports.pkl'
-    with open(all_datis_airports_path, 'rb') as f:
-        all_datis_airports = pickle.load(f)
 
     datis_info_stack = []
     for each_id in all_datis_airports:
-        datis_info_stack.append(datis_info(each_id))
+        datis_info_stack.append(datis_raw_data(each_id))
     
     return datis_info_stack
-
-all_76_datis = pull_datis()
-# extract datis with dates in the filename
-yyyymmddhhmm = Root_class().date_time(raw_utc='HM')
-path = rf'c:\users\ujasv\onedrive\desktop\pickles\datis_info_stack_{yyyymmddhhmm}.pkl'
-
-# **********CAUTION!!! HARD WRITE***************
-with open(path, 'wb') as f:
-    pickle.dump(all_76_datis,f)
 
