@@ -161,6 +161,17 @@ div.data-warning p {
   border-bottom: 1px solid black;
 }
 
+.comparison-table tr:last-child th:first-child,
+.comparison-table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.comparison-table tr:last-child th:last-child,
+.comparison-table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+
 .comparison-table tr:not(:first-child) th,
 .comparison-table tr:not(:last-child) td {
   border-top: 1px solid black;
