@@ -155,7 +155,7 @@ class Weather_parse:
                 diff = int(diff.seconds/60) 
                 if diff > 50:
                     return f'<span class="published-color1">{diff} mins ago </span>'
-                if diff < 50:
+                if diff < 5:
                     return f'<span class="published-color2">{diff} mins ago</span>'
                 else:
                     return f'{diff} mins ago'
