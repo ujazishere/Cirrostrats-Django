@@ -9,6 +9,51 @@
   <title>LETSLFYSAFE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+
+  <style>
+    /* CSS for toast message */
+
+    .toast {
+      visibility: hidden;
+      position: fixed;
+      width: 80%; 
+      max-width: 600px;
+      background-color: #24292E;
+      color: #fff;
+      text-align: center; /* Center horizontally */
+      border-radius: 8px;
+      padding: 17px;
+      font-size: 17px;
+      left: 50%; /* Center horizontally */
+      transform: translateX(-50%); /* Center horizontally */
+    }
+
+    .dark-mode .toast {
+      background-color: #515A65;
+    }
+
+
+    .show {
+      visibility: visible;
+      -webkit-animation: fadein 0.5s;
+      animation: fadein 0.5s;
+    }
+    @-webkit-keyframes fadein {
+      from {opacity: 0;} 
+      to {opacity: 1;}
+    }
+    @keyframes fadein {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    /* Override link styling */
+    .toast a {
+      color: rgb(255, 255, 255);
+      text-decoration: none;
+      text-decoration: underline;
+    }
+  </style>
+
 </head>
 <body>
 
@@ -32,13 +77,21 @@
       <p></p>
     <h3><a href="{% url 'guide' %}"> Guide </a></h3>
     <h3><a href="{% url 'live_map' %}"> Live Map </a></h3>
-    <h3>
-      !!! Scheduled tests coming up. This is a test server and it may not work during this time. Please save and access the web through: https://cirrostrats.us
-    <br>
-    <br>
-      Please save my number and feel free to reachout for troubleshooting and general questions +1 201-509-9485 
-      -Ujas(UJ)
-    </h3>  
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+      // Function to show toast message
+      function showToast(message) {
+        var toast = document.getElementById("toast");
+        toast.innerHTML = message;
+        toast.className = "toast show";
+      }
+    
+      // Call the showToast function with your desired message
+      showToast("This is a test server and it may not work during this time. Please save and access the main website through: <a href='https://cirrostrats.us'>cirrostrats.us</a>. Please save my number and feel free to reach out for troubleshooting and general questions <a href='tel:+12015099485'>+1 201-509-9485</a> - Ujas (UJ)");
+    </script>
+
   </body>
 
   </html>
