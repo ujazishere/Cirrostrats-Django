@@ -75,7 +75,7 @@
                 var td_spacer_cell1 = document.createElement('td');
                 var td_spacer_cell2 = document.createElement('td');
                 
-                tr_item.className = tr_class_name;
+                    tem.className = tr_class_name;
                 
                 td_spacer_cell1.className = td1_class_name;
                 td_spacer_cell2.className = td2_class_name;
@@ -151,7 +151,6 @@
 
                 tbody_summary_box.appendChild(scheduled__row_section);
 
-                tbody_summary_box.appendChild(scheduled_section);
 
                 flight_aware_UTC = tr_td_section(tr_class_name="flight-status-row",
                                 td1_class_name="flight-status-cell",
@@ -166,91 +165,6 @@
 
 
                 
-                // this is for gate row //
-
-                var tr_gate_row = document.createElement('tr');
-                var td_gate_cell = document.createElement('td');
-                var td_gate_cell1 = document.createElement('td');
-
-                
-                td_gate_cell.className = 'info-cell';
-                td_gate_cell1.className = 'info-cell';
-
-                td_gate_cell.innerHTML = 'Gate';
-                td_gate_cell1.innerHTML = 'Gate';
-
-                tr_gate_row.className = 'info-row';
-                
-                tr_gate_row.appendChild(td_gate_cell);
-                tr_gate_row.appendChild(td_gate_cell1);
-                tbody_summary_box.appendChild(tr_gate_row);
-                console.log(tr_gate_row)
-
-
-                // this is for departure and arrival gate //
-
-                var tr_gate = document.createElement('tr');
-                var td_gate_dep = document.createElement('td');
-                var td_gate_arr = document.createElement('td');
-
-                
-                td_gate_dep.className = 'gate-cell';
-                td_gate_arr.className = 'gate-cell';
-
-                td_gate_dep.innerHTML = departure_gate;
-                td_gate_arr.innerHTML = arrival_gate;
-
-                tr_gate.className = 'gate-row';
-                
-                tr_gate.appendChild(td_gate_dep);
-                tr_gate.appendChild(td_gate_arr);
-                tbody_summary_box.appendChild(tr_gate);
-
-
-
-                
-                // this is for scheduled local text //
-
-
-                var tr_scheduled_row = document.createElement('tr');
-                var td_scheduled_cell = document.createElement('td');
-                var td_scheduled_cell1 = document.createElement('td');
-
-
-                td_scheduled_cell.className = 'scheduled-cell';
-                td_scheduled_cell1.className = 'scheduled-cell';
-
-                td_scheduled_cell.innerHTML = 'Scheduled Local';
-                td_scheduled_cell1.innerHTML = 'Scheduled Local';
-
-                tr_scheduled_row.className = 'scheduled-row';
-                
-                tr_scheduled_row.appendChild(td_scheduled_cell);
-                tr_scheduled_row.appendChild(td_scheduled_cell1);
-                tbody_summary_box.appendChild(tr_scheduled_row);
-
-
-                // this is for scheduled dep/arr time //
-
-                var tr_scheduled_time_row = document.createElement('tr');
-                var td_scheduled_dep = document.createElement('td');
-                var td_scheduled_arr = document.createElement('td');
-
-                
-                td_scheduled_dep.className = 'scheduled-time-cell';
-                td_scheduled_arr.className = 'scheduled-time-cell';
-
-                td_scheduled_dep.innerHTML = scheduled_departure_time;
-                td_scheduled_arr.innerHTML = scheduled_arrival_time;
-
-                tr_scheduled_time_row.className = 'scheduled-time-row';
-                
-                tr_scheduled_time_row.appendChild(td_scheduled_dep);
-                tr_scheduled_time_row.appendChild(td_scheduled_arr);
-                tbody_summary_box.appendChild(tr_scheduled_time_row);
-
-
-
                 // this is for utc row //
 
 
@@ -272,7 +186,7 @@
                 tbody_summary_box.appendChild(tr_utc);
 
 
-                // this is for flight status row //
+                // this is for flight_aware UTC flight status row //
 
                 var flight_aware_utc = document.createElement('tr');
                 var flight_status_cell = document.createElement('td');

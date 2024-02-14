@@ -13,7 +13,7 @@ tatus
 base.ppk
 
 
-# dj/dj_app/root/EC2.py
+dj/dj_app/root/EC2.py
 # dj/master_UA.pkl
 # dj/outlaws.pkl
 
