@@ -12,7 +12,6 @@ from .root.dep_des import Pull_flight_info
 from time import sleep
 from django.shortcuts import render
 from django.http import JsonResponse
-import smtplib
 
 '''
 views.py runs as soon as the base web is requested. Hence, GateCheckerThread() is run in the background right away.
@@ -44,6 +43,7 @@ def home(request):
         # This bit will send an email notification with the query. Catered for EC2 deployment only!
         # For this to work on google you have to switch on two factor auth
             # You also need to go into the security--> 2factor auth--> app password and generate password for it  
+        # TODO: start this on a parallel thread.
         if run_lengthy_web_scrape:
             Root_class().send_email(body_to_send=main_query)
         return parse_query(request, main_query)
@@ -108,6 +108,8 @@ def parse_query(request, main_query):
             weather_query_airport  = query_in_list_form[1]
             weather_query_airport = weather_query_airport.upper()       # Making query uppercase for it to be compatible
             return weather_display(request, weather_query_airport)
+        else:
+            return gate_info(request, main_query=' '.join(query_in_list_form))
 
         '''
         # Attempting to pull all airports for easier search access
@@ -198,7 +200,7 @@ def gate_info(request, main_query):
 
 def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=False):
     
-    bypass_fa = True           # to restrict fa api use: for local use keep it False. 
+    bypass_fa = False           # to restrict fa api use: for local use keep it False. 
 
     flt_info = Pull_flight_info()           # from dep_des.py file
     weather = Weather_parse()         # from MET_TAF_parse.py

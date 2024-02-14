@@ -1,0 +1,1 @@
+EC2_location = "Local Server"

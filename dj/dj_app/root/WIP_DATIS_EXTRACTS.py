@@ -262,7 +262,7 @@ with open(path, 'wb') as f:
 
 
 # old synchronous series wise ineficient pull.
-def pull_datis():
+def datis_scrape():
 
     def datis_raw_data(airport_id):
         datis_api =  f"https://datis.clowd.io/api/{airport_id}"

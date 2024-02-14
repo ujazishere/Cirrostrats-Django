@@ -43,8 +43,10 @@ class Weather_parse:
         self.ALTIMETER_PATTERN = r"((?<= )A)(\d{4})"
         self.FREEZING_TEMPS = r'(00|M\d\d)(/M?\d\d)'
         self.ATIS_INFO = r"(DEP|ARR|ARR/DEP|ATIS)( INFO [A-Z])"
+        self.LLWS = r"()((?<=)(LLWS|WIND|LOW LEVEL ).*?\.)"
 
         # self.RW_IN_US = r'(ARRIVALS EXPECT|SIMUL|RUNWAYS|VISUAL|RNAV|ILS(,|RY|))(.*?)\.'
+        # The empty bracks in the beginning is to make groups as it is easier to work with 2 groups completely different from each other.
         self.RW_IN_USE = r'()((SIMUL([A-Z]*)?,?|VISUAL (AP(P)?(ROA)?CH(E)?(S)?)|(ILS(/VA|,)?|(ARRIVALS )?EXPECT|RNAV|((ARVNG|LNDG) AND )?DEPG|LANDING)) (.*?)(IN USE\.|((RWY|RY|RUNWAY|APCH|ILS|DEP|VIS) )(\d{1,2}(R|L|C)?)\.))'
 
 
@@ -125,6 +127,8 @@ class Weather_parse:
             vis_frac = 'FM031300 19005KT 1 1/2SM BR OVC004'
             
             datis_raw = datis_raw + vis1 + vis_frac 
+            datis_raw = r"DEN ARR INFO L 1953Z. 27025G33KT 10SM FEW080 SCT130 SCT200 01/M19 A2955 (TWO NINER FIVE FIVE) RMK AO2 PK WND 29040/1933 SLP040. LLWS ADZYS IN EFCT. HAZUS WX INFO FOR CO, KS, NE, WY AVBL FM FLT SVC. PIREP 30 SW DEN, 2005Z B58T RPRTD MDT-SVR, TB, BTN 14THSD AND 10 THSD DURD. PIREP DEN AREA,, 1929Z PC24 RPRTD MDT, TB, BTN AND FL 190 DURD. EXPC ILS, RNAV, OR VISUAL APCH, SIMUL APCHS IN USE, RWY 25, RWY 26. NOTICE TO AIR MISSION. S C DEICE PAD CLOSED. DEN DME OTS. BIRD ACTIVITY VICINITY ARPT. ...ADVS YOU HAVE INFO L."
+
             # taf_raw = metar_raw + sfc_vis + vis_half
             taf_raw = 'KRIC 022355Z 0300/0324 00000KT 2SM BR VCSH FEW015 OVC060 TEMPO 0300/0303 1 1/2SM FG BKN015 FM030300 00000KT 1SM -SHRA FG OVC002 FM031300 19005KT 3/4SM BR OVC004 FM031500 23008KT 1/26SM OVC005 FM031800 25010KT 1/4SM OVC015 FM032100 25010KT M1/4SM BKN040'
         else:
@@ -136,7 +140,7 @@ class Weather_parse:
 
             
 
-        def zulu_extracts(weather_input,datis=None):
+        def zulu_extracts(weather_input, datis=None, taf=None):
             
             # This could be work intensive. Make your own conversion if you can avoid using datetime
             raw_utc = Root_class().date_time(raw_utc='HM')[-4:]
@@ -153,12 +157,30 @@ class Weather_parse:
                 zulu_weather_dt = datetime.strptime(zulu_weather,"%H%M")
                 diff = raw_utc_dt - zulu_weather_dt
                 diff = int(diff.seconds/60) 
-                if diff > 50:
-                    return f'<span class="published-color1">{diff} mins ago </span>'
-                if diff < 5:
-                    return f'<span class="published-color2">{diff} mins ago</span>'
+                
+                dummy_published_time = '2152Z'
+                # diff = 56
+                if taf:
+                    if diff > 350:
+                        # diff = dummy_published_time
+                        return f'<span class="published-color1">{diff} mins ago </span>'
+                    if diff < 10:
+                        # diff = dummy_published_time
+                        return f'<span class="published-color2">{diff} mins ago</span>'
+                    else:
+                        # diff = dummy_published_time
+                        return f'{diff} mins ago'
+
                 else:
-                    return f'{diff} mins ago'
+                    if diff > 55:
+                        # diff = dummy_published_time
+                        return f'<span class="published-color1">{diff} mins ago </span>'
+                    if diff <= 5:
+                        # diff = dummy_published_time
+                        return f'<span class="published-color2">{diff} mins ago</span>'
+                    else:
+                        # diff = dummy_published_time
+                        return f'{diff} mins ago'
             else:
                 zulu_weather = 'N/A'
                 return zulu_weather
@@ -206,9 +228,11 @@ class Weather_parse:
 
         highlighted_datis = re.sub(self.ATIS_INFO, self.box_around_text, highlighted_datis)
         highlighted_datis = re.sub(self.ALTIMETER_PATTERN, self.box_around_text, highlighted_datis)
+        highlighted_datis = re.sub(self.LLWS, self.box_around_text, highlighted_datis)
+        highlighted_datis = re.sub(self.RW_IN_USE, self.box_around_text,highlighted_datis)
+        
         highlighted_metar = re.sub(self.ALTIMETER_PATTERN, self.box_around_text, highlighted_metar)
 
-        highlighted_datis = re.sub(self.RW_IN_USE, self.box_around_text,highlighted_datis)
 
         return dict({ 'D-ATIS': highlighted_datis,
                       'D-ATIS_zt': zulu_extracts(datis_raw,datis=True),
@@ -217,6 +241,6 @@ class Weather_parse:
                       'METAR_zt': zulu_extracts(metar_raw),
 
                       'TAF': highlighted_taf,
-                      'TAF_zt': zulu_extracts(taf_raw),
+                      'TAF_zt': zulu_extracts(taf_raw,taf=True),
                       })
         

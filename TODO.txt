@@ -15,9 +15,10 @@ Practice readibility and simplicity. Aviod code duplication. Include description
 
 **UV:   
         Hide datis table when N/A instead of showing N/A
-        integrate time passed since weather published time.(2 mins ago) and highlight it red when over 52 mins old.
-            Integrate weather page with  the flight deet page--> reduce duplication--> use js
+        Put in 'TAF(Ammended)', 'METAR(SPECI)' and D-ATIS(SPECIAL) in their title for special weather published times.
+        Integrate weather page with  the flight deet page--> reduce duplication--> use js
         box out the associated taf section with respect to ETA. Give pilots freedown
+            make airport id and departure time and arrival time consistent like utc throughout the page for ETA on TAF comparison
         learn about multiprocessing vs multithreading and implement on flight_deet
         Implement asynchronous loading of the data on the flight_deet page.
             weather:datis,metar and taf
@@ -183,3 +184,4 @@ weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf',
         flight deet page / comparison table make the title grey and remove the borders from inside of the table
         DONE! Fixed the coloring for published time 
         DONE! fix coloring and table borders on weather and flight deet.
+        DONE! integrate time passed since weather published time.(2 mins ago) and highlight it red when over 52 mins old.

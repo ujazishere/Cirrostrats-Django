@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 dj/dj_app/migrations/__pycache__
+
 *.py[cod]
 *$py.class
 .idea/
@@ -10,6 +11,9 @@ hoq
 q
 tatus
 base.ppk
+
+
+# dj/dj_app/root/EC2.py
 # dj/master_UA.pkl
 # dj/outlaws.pkl
 

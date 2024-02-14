@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from .EC2 import EC2_location
 import requests
 from bs4 import BeautifulSoup as bs4
 from datetime import datetime
@@ -14,12 +15,12 @@ class Root_class():
 
 
     def send_email(self, body_to_send):
-        
+        full_email = f"Subject: {EC2_location}\n\n{body_to_send}"
         smtp_server = "smtp.gmail.com"
         smtp_port = 587  # Use 587 for TLS port
         smtp_user = "publicuj@gmail.com"
         smtp_password = "dsxi rywz jmxn qwiz"
-        to_email = ['ujasvaghani@gmail.com']
+        to_email = ['ujasvaghani@gmail.com', 'ismailsakhani879@gmail.com']
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             # Start TLS for security
             server.starttls()
@@ -28,8 +29,8 @@ class Root_class():
             server.login(smtp_user, smtp_password)
         
             # Send the email
-            server.sendmail(smtp_user, to_email, body_to_send)
-        print('SENT EMAIL!!!!!!!!!!!!!')
+            server.sendmail(smtp_user, to_email, full_email.encode('utf-8'))
+        print('SENT EMAIL!!!!!!!!!!!!!:', body_to_send)
 
         
     def date_time(self, raw=None, viewable=None, raw_utc=None):

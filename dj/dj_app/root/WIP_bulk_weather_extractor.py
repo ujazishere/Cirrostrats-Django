@@ -1,24 +1,29 @@
+import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pickle
 from bs4 import BeautifulSoup as bs4
 import requests
 
 # TODO: TAF is still remianing
-# Extracts METARs. need TAFs. Heavy script with 2000+ airport ID
+# Extracts METARs and TAFs. Heavy pull with 2000+ airport ID and each airport pulls big chunk of data
 # DONT USE THIS SCRIPT IF YOU DONT NEED TO. METAR_stack.pkl has the output for it
-# Shorten the airport_ID list if you are to use it.
+# Shorten the airport_ID list if you are to use it. Get rid of No_mets and no_tafs. Those consists of airports that return null vals.
 # Dont exceed 500 workers. Better 350. It doesn't get much better after 500.
-# TAF is remaining.
-# This is a heavy script with 2600+ airport ID.
-    # Used executor to multi thread the operation
-
-
 
 # 20,296 airport ID in list form. eg ['DAB', 'EWR', 'X50', 'AL44']
-# with open('pkl/airport_identifiers_US.pkl', 'rb') as f:
-    # id = pickle.load(f)
 with open('dj/dj_app/root/pkl/airport_identifiers_US.pkl', 'rb') as f:
     id = pickle.load(f)
+
+
+# list all files
+base_path = r"C:\Users\ujasv\OneDrive\Desktop\pickles"
+all_pickle_files = os.listdir(base_path)            # get all file names in pickles folder
+
+# Loading a perticular file
+Bulk_met_path = r"C:\Users\ujasv\OneDrive\Desktop\pickles\BULK_METAR_JAN_END_2024.pkl" 
+with open(Bulk_met_path, 'rb') as f:
+    w = pickle.load(f)
+print(f'total metar files: {len(w)}')
 
 
 # isalpha returns bool for string if the letters are all alphabets eg. EWR, MCO, MLB, etc.
@@ -113,6 +118,7 @@ def dump_bulky_weather(bulky_weather):
         pickle.dump(bulky_weather, f)
 dump_bulky_weather(bulky_weather)
 
+# Important code. Seemed to take forever to build this
 def fix_taf():
     fixed = []
     bt = bulky_weather
@@ -156,11 +162,3 @@ with ThreadPoolExecutor(max_workers=500) as executor:
     # This is done to avoid IndedxErrors Since not all airports report TAF.
 TAF_stack = [str(list(i)[1].text) for i in met_taf if len(i) == 2]
 
-# with open('METAR_stack.pkl', 'wb') as f:
-    # pickle.dump(metar_stack, f)
-
-with open('TAF_stack.pkl', 'wb') as f:
-    pickle.dump(TAF_stack, f)
-print(len(TAF_stack))
-
-# Some of the TAF stack contains 
