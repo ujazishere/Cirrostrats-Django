@@ -90,7 +90,7 @@ class Root_class():
     
         completed = {}
         troubled = set()
-            # VVI!!! The dictionary `futures` .value() is the flight number and  key is the the memory location of return from pick_flight_data()
+            # VVI!!! The dictionary `futures` .value is the flight number and  key is the the memory location of return from pick_flight_data
             # Used in list comprehension for loop with multiple keys and values in the dictionary. for example:
             # {<Future at 0x7f08f203ec10 state=running>: 'UA123',
                 # <Future at 0x7f08f203ed10 state=running>: 'DL789'

@@ -5,7 +5,6 @@ import requests
 import json
 from .root_class import Root_class
 from datetime import datetime
-from termcolor import colored 
 from django.utils.safestring import mark_safe
 
 

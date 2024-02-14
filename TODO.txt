@@ -1,6 +1,7 @@
 Practice readibility and simplicity. Aviod code duplication. Include description and documentation for others to read and make changes to it
 
 **IS:   
+        when deploying>>****** EC2.py namechange and gitignore; run_lengthy_scrape True; bypass_fa to False; remove homepage text on prod server;
         Make sure to install the color package and `aiohttp` on EC2 and your local and extract them in req.txt
 
         Make sure bypass for fa(view.py line 200) is true while working local and false when deploying on EC2
