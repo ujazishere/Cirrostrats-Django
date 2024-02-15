@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <style>
+        body { 
+            -webkit-transition: background-color 0.5s;
+            transition: background-color 0.5s;
+        }
+        html, body { min-height: 100%; }
+        body.loading {
+            background: #333 url('http://code.jquery.com/mobile/1.3.1/images/ajax-loader.gif') no-repeat 50% 50%;
+            -webkit-transition: background-color 0;
+            transition: background-color 0;
+            opacity: 0;
+            -webkit-transition: opacity 0;
+            transition: opacity 0;
+        }
+    </style>
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&display=swap">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,6 +29,7 @@
 </head>
 <body>
 
+    <div class = "loading">
 
     <div class="gmt-clock">
         UTC: <span id="gmt-time"></span>
@@ -141,6 +159,15 @@ document.addEventListener("DOMContentLoaded", function () {
             updateGMTClock(); // Update the GMT clock initially
             setInterval(updateGMTClock, 1000); // Update it every second
         });
+
+        var body = document.getElementsByTagName('body')[0];
+        var removeLoading = function() {
+        setTimeout(function() {
+        body.className = body.className.replace(/loading/, '');
+        }, 3000);
+        };
+        removeLoading();
+
     </script>
 
     {% block content %}
