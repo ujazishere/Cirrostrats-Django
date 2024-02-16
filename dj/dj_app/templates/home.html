@@ -54,6 +54,27 @@
       text-decoration: underline;
     }
 
+    .loading-spinner {
+      display: none;
+      width: 30px;
+      height: 30px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #24292E;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: relative;
+      left: 10px; /* Adjust as needed to move the spinner to the right */
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .dark-mode .loading-spinner {
+      border-top: 3px solid #2D333B;
+    }
+
 
   </style>
 
@@ -68,14 +89,18 @@
     <p><a href="{% url 'weather' %}">Weather</a></p>
   </div> -->
   {% csrf_token %}
+
   <form method="post" class="search-form">
     {% csrf_token %}
     <form method="post" class="search-form">
       {% csrf_token %}
       <label for="query"></label>
       <input type="text" name="query" id="query">
-      <button type="submit">Search</button>
+      <button type="submit" id="searchButton">Search</button>
+      <div class="loading-spinner" id="loadingSpinner"></div>
     </form>
+    
+
       <p></p>
     <h3><a href="{% url 'guide' %}"> Guide </a></h3>
     <h3><a href="{% url 'live_map' %}"> Live Map </a></h3>
@@ -92,6 +117,20 @@
     
       // Call the showToast function with your desired message
       showToast("!! Scheduled Tests Coming Up! Please save and access the main webapp through: <a href='https://cirrostrats.us'>cirrostrats.us</a>. Also, please save my number and feel free to reach out for troubleshooting and general questions. <a href='tel:+12015099485'>+1 201-509-9485</a> - Ujas (UJ)");
+
+
+      document.getElementById("searchButton").addEventListener("click", function(event) {
+      // Prevent the default form submission behavior
+      event.preventDefault();
+
+      // Show the loading spinner
+      document.getElementById("loadingSpinner").style.display = "block";
+
+      // Submit the form after a short delay to allow the loading spinner to be displayed
+      setTimeout(function() {
+      document.querySelector(".search-form").submit();
+      }, 500); // Adjust the delay as needed
+      });
 
     </script>
 
