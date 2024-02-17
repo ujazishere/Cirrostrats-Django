@@ -297,8 +297,7 @@ table.another-table td {
   padding: 10px;
   text-align: center;
   background-color: #fa6767;
-  border: 1px;
-  border-color: black;
+  border: 1px black
 }
 
 table.another-table thead {
@@ -319,6 +318,8 @@ table.another-table td:first-child {
   margin: 0 auto;
   max-width: 800px;
 }
+
+
 
 /************ this code is for searchbar *************/
 

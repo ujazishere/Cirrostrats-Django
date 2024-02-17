@@ -1,7 +1,7 @@
 Practice readibility and simplicity. Aviod code duplication. Include description and documentation for others to read and make changes to it
 
 **IS:   
-        when deploying>>****** EC2.py namechange and gitignore; run_lengthy_scrape True; bypass_fa to False; remove homepage text on prod server; aiohttp install 
+        when deploying>>****** EC2.py namechange and gitignore; run_lengthy_scrape True; bypass_fa to False;; aiohttp install 
         extract aiohttp in req.txt
 
         PRIORITY!!! loading/spinner symbol for search bar;

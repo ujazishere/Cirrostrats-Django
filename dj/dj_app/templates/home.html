@@ -33,7 +33,6 @@
       color: #dcdcdc;
     }
 
-
     .show {
       visibility: visible;
       -webkit-animation: fadein 0.5s;
@@ -53,6 +52,8 @@
       text-decoration: none;
       text-decoration: underline;
     }
+
+
 
     .loading-spinner {
       display: none;
@@ -90,8 +91,7 @@
   </div> -->
   {% csrf_token %}
 
-  <form method="post" class="search-form">
-    {% csrf_token %}
+  
     <form method="post" class="search-form">
       {% csrf_token %}
       <label for="query"></label>

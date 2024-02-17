@@ -7,6 +7,30 @@
 <head>
     <meta content='width=device-width; initial-scale=1;' name='viewport' />
     <meta name="format-detection" content="telephone=no">
+
+    <style>
+      .loading-spinner {
+      display: none;
+      width: 30px;
+      height: 30px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #24292E;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: relative;
+      left: 10px; /* Adjust as needed to move the spinner to the right */
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .dark-mode .loading-spinner {
+      border-top: 3px solid #2D333B;
+    }
+    </style>
+
 </head>
 
 
@@ -256,12 +280,6 @@
                                 <tr>
                                     <td style="text-align: left; font-family: Menlo, monospace;">{{dest_taf |safe}}</td>
                                 </tr>        
-                                
-
-
-
-
-                                <r>
                             </tr>
                         </tbody>
                     </table>
@@ -315,14 +333,13 @@
 
 
 <!-- Search box-->
-<div class="search-form-wrapper">
 <form method="post" class="search-form">
     {% csrf_token %}
     <label for="query"></label>
     <input type="text" name="query" id="query">
-    <button type="submit">Search</button>
-</form> 
-</div>
+    <button type="submit" id="searchButton">Search</button>
+    <div class="loading-spinner" id="loadingSpinner"></div>
+  </form>
 
 <script>      
 // This script is for departure/destination expand/collapse animation
@@ -336,6 +353,20 @@
         tbody.style.display = "none"; // Hide the content
       }
     }
+
+    document.getElementById("searchButton").addEventListener("click", function(event) {
+      // Prevent the default form submission behavior
+      event.preventDefault();
+
+      // Show the loading spinner
+      document.getElementById("loadingSpinner").style.display = "block";
+
+      // Submit the form after a short delay to allow the loading spinner to be displayed
+      setTimeout(function() {
+      document.querySelector(".search-form").submit();
+      }, 500); // Adjust the delay as needed
+      });
+
 </script>
 
 {% endblock %}
