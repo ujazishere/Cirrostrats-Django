@@ -4,9 +4,6 @@ Practice readibility and simplicity. Aviod code duplication. Include description
         when deploying>>****** EC2.py namechange and gitignore; run_lengthy_scrape True; bypass_fa to False;; aiohttp install 
         extract aiohttp in req.txt
 
-        PRIORITY!!! loading/spinner symbol for search bar;
-            Implement loading symbol when searching.
-            
         js. ext d work. make functions and use functions widely.
         
         Make sure bypass_fa for fa(view.py line 200) is true while working local and false when deploying on EC2
