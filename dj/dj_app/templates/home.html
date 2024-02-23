@@ -96,7 +96,7 @@
       {% csrf_token %}
       <label for="query"></label>
       <input type="text" name="query" id="query">
-      <button type="submit" id="searchButton">Search</button>
+      <button type="submit" onclick="search()" id="searchButton">Search</button>
       <div class="loading-spinner" id="loadingSpinner"></div>
     </form>
     
@@ -120,6 +120,23 @@
 
 
       document.getElementById("searchButton").addEventListener("click", function(event) {
+        // document is your html document on the client. This item says I want you to get my button 
+        // by the name id "searchButton". the addEventListener--> means
+        // I want to add a listener 
+        // Please listen to an event called click, when "somebody" clicks the button, I want you ..
+        // to run the function(event) for example:
+        alert("I just got clicked")
+        
+
+
+
+
+        // TODO: I want to listen to the event called click with id `searchButton`.
+        // When click happens do the follwing.
+        // This is the client side:Completely different than DOM 
+        // Script is the one that does thing 
+
+
       // Prevent the default form submission behavior
       event.preventDefault();
 

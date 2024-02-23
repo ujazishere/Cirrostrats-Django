@@ -228,7 +228,7 @@ async def main():
 
         # Actual pull work is done using as_completed 
         datis_resp = []
-        for task in asyncio.as_completed(tasks):
+        for task in asyncio.as_completed(tasks):        # use .gather() instead of .as_completed for background completion
             resp = await task 
             jj = await resp.json()
             datis_raw = 'n/a'
@@ -237,7 +237,7 @@ async def main():
             datis_resp.append(datis_raw)
         return datis_resp
 
-# Works regardless of the syntax error.
+# Works regardless of the syntax error. Not sut why its showing syntax error
 all_76_datis = await asyncio.ensure_future(main())
 
 

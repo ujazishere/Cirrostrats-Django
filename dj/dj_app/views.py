@@ -198,9 +198,10 @@ def gate_info(request, main_query):
         return render(request, 'flight_info.html', {'gate': gate})
 
 
-def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=False):
-    
-    bypass_fa = False           # to restrict fa api use: for local use keep it False. 
+def flight_deets(request,airline_code=None, flight_number_query=None, ):
+    bypass_fa = True
+    if run_lengthy_web_scrape:
+        bypass_fa = False           # to restrict fa api use: for local use keep it False. 
 
     flt_info = Pull_flight_info()           # from dep_des.py file
     weather = Weather_parse()         # from MET_TAF_parse.py
@@ -269,7 +270,6 @@ def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=
     
     bulk_flight_deets = without_futures()
 
-    """
     # This code is the parallel processing futures implementation. 
         # It is creating issues on EC2 as of 12/21/2023. Hence it is commented out.
 
@@ -308,7 +308,6 @@ def flight_deets(request,airline_code=None, flight_number_query=None, bypass_fa=
             flight_aware_data_pull[keys]= None
 
     bulk_flight_deets.update(flight_aware_data_pull)
-    """
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
@@ -392,7 +391,7 @@ def dummy2(request, airport):
 def nas_data(request, airport):
     print('within nas_data func',request, airport)
     airport = 'KEWR'        # declaring it regardless
-    sleep(0.5)
+    sleep(1.5)
     def bulk_pre_assigned():
         try:
             bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
@@ -457,7 +456,7 @@ def nas_data(request, airport):
 def weather_data(request, airport):
     print('Inside weather_data views func',request, airport)
     airport = 'KEWR'        # declaring it regardless
-    sleep(1)
+    sleep(2.5)
     def bulk_pre_assigned():
         try:
             bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
@@ -553,7 +552,7 @@ def weather_data(request, airport):
 def summary_box(request, airport):
     print('Insidee summary_box func',request, airport)
     airport = 'KEWR'        # declaring it regardless
-    sleep(0.2)
+    sleep(2)
     def bulk_pre_assigned():
         try:
             bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"

@@ -65,7 +65,6 @@
                 summary_box_js.appendChild(tbody_summary_box)
                 
 
-
                 function tr_td_section(tr_class_name, 
                                         td1_class_name, td2_class_name,
                                         td1_displays, td2_displays) {
@@ -75,7 +74,7 @@
                 var td_spacer_cell1 = document.createElement('td');
                 var td_spacer_cell2 = document.createElement('td');
                 
-                    tem.className = tr_class_name;
+                tr_item.className = tr_class_name;
                 
                 td_spacer_cell1.className = td1_class_name;
                 td_spacer_cell2.className = td2_class_name;
@@ -91,25 +90,27 @@
 
                 };
 
-                airportID_section = tr_td_section(tr_class_name="",
-                                td1_class_name="table-cell",
-                                td2_class_name="table-cell text-align-right",
-                                td1_displays=departure_ID,
-                                td2_displays=destination_ID,
-                );
+                function spacer_section(){
 
-                tbody_summary_box.appendChild(airportID_section);
-                
-
-                spacer_section = tr_td_section(tr_class_name="spacer-row",
+                var spacer_section = tr_td_section(tr_class_name="spacer-row",
                                 td1_class_name="spacer-cell",
                                 td2_class_name="spacer-cell",
                                 td1_displays='&nbsp;',
                                 td2_displays='&nbsp;',
                 );
 
-                tbody_summary_box.appendChild(spacer_section);
+                return spacer_section;
+                }
 
+                airportID_section = tr_td_section(tr_class_name="",
+                                td1_class_name="table-cell",
+                                td2_class_name="table-cell text-align-right",
+                                td1_displays=departure_ID,
+                                td2_displays=destination_ID,
+                );
+                tbody_summary_box.appendChild(airportID_section);
+                
+                tbody_summary_box.appendChild(spacer_section());
 
                 gate_title = tr_td_section(tr_class_name="info-row",
                                 td1_class_name="info-cell",
@@ -117,7 +118,6 @@
                                 td1_displays='Gate',
                                 td2_displays='Gate',
                 );
-
                 tbody_summary_box.appendChild(gate_title);
 
                 gate_section = tr_td_section(tr_class_name="gate-row",
@@ -126,21 +126,17 @@
                                 td1_displays=departure_gate,
                                 td2_displays=arrival_gate,
                 );
-
                 tbody_summary_box.appendChild(gate_section);
 
-                tbody_summary_box.appendChild(spacer_section);
-
-
+                tbody_summary_box.appendChild(spacer_section());
+                
                 scheduled_section = tr_td_section(tr_class_name="scheduled-row",
                                 td1_class_name="scheduled-cell",
                                 td2_class_name="scheduled-cell",
                                 td1_displays="Scheduled Local",
                                 td2_displays="Scheduled Local",
                 );
-
                 tbody_summary_box.appendChild(scheduled_section);
-
 
                 scheduled__row_section = tr_td_section(tr_class_name="scheduled-time-row",
                                 td1_class_name="scheduled-time-cell",
@@ -148,8 +144,17 @@
                                 td1_displays=scheduled_departure_time,
                                 td2_displays=scheduled_arrival_time,
                 );
-
                 tbody_summary_box.appendChild(scheduled__row_section);
+
+                tbody_summary_box.appendChild(spacer_section());
+
+                UTC_section = tr_td_section(tr_class_name="scheduled-row",
+                                td1_class_name="scheduled-cell",
+                                td2_class_name="scheduled-cell",
+                                td1_displays="UTC",
+                                td2_displays="UTC",
+                );
+                tbody_summary_box.appendChild(UTC_section);
 
 
                 flight_aware_UTC = tr_td_section(tr_class_name="flight-status-row",
@@ -160,52 +165,7 @@
                                 
                 );
 
-                tbody_summary_box.appendChild(scheduled__flight_aware_UTC);
-
-
-
-                
-                // this is for utc row //
-
-
-                var tr_utc = document.createElement('tr');
-                var td_utc_cell = document.createElement('td');
-                var td_utc_cell1 = document.createElement('td');
-
-
-                td_utc_cell.className = 'utc-cell';
-                td_utc_cell1.className = 'utc-cell';
-
-                td_utc_cell.innerHTML = 'UTC';
-                td_utc_cell1.innerHTML = 'UTC';
-
-                tr_utc.className = 'utc-row';
-                
-                tr_utc.appendChild(td_utc_cell);
-                tr_utc.appendChild(td_utc_cell1);
-                tbody_summary_box.appendChild(tr_utc);
-
-
-                // this is for flight_aware UTC flight status row //
-
-                var flight_aware_utc = document.createElement('tr');
-                var flight_status_cell = document.createElement('td');
-                var flight_status_cell1 = document.createElement('td');
-
-                
-                flight_status_cell.className = 'flight-status-cell';
-                flight_status_cell1.className = 'flight-status-cell';
-
-                flight_status_cell.innerHTML = 'STD ' + scheduled_out + '<br>' + 'ETD ' + estimated_out 
-                flight_status_cell1.innerHTML = 'STA ' + scheduled_in + '<br>' + 'ETA ' + estimated_in 
-
-                flight_aware_utc.className = 'flight-status-row';
-                
-                flight_aware_utc.appendChild(flight_status_cell);
-                flight_aware_utc.appendChild(flight_status_cell1);
-                tbody_summary_box.appendChild(flight_aware_utc);
-            
-
+                tbody_summary_box.appendChild(flight_aware_UTC);
 
 
             }

@@ -25,6 +25,7 @@ class Flight_aware_pull(Root_class):
         apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # New Key from Ismail
         apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
         auth_header = {'x-apikey':apiKey}
+        # TODO: Instead of getting all data make specific data requests.(optimize queries). Cache updates data 
         """
         airport = 'KSFO'
         payload = {'max_pages': 2}

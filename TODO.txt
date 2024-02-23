@@ -16,6 +16,7 @@ Practice readibility and simplicity. Aviod code duplication. Include description
 
 
 **UV:   
+        
         figure out how prod server works without virtual env and test server has its own--Cant install aiohttp on venv on prod.
         change EC2 name to switches_and_securities
         Hide datis table when N/A instead of showing N/A
