@@ -165,20 +165,21 @@ class Gate_Scrape(Root_class):
         
         
 # Mind the threading. Inheriting the thread that makes the code run concurrently
+# TODO: Investigate and master this .Thread sorcery
 class Gate_scrape_thread(threading.Thread):
     def __init__(self):
         super().__init__()
-        self.gc = Gate_Scrape()
+        self.gate_scrape = Gate_Scrape()
 
     
-    # run method is the inherited. It gets called as
+    # run method is inherited through .Thread; It gets called as
     def run(self):
         
         # self.gc.activator()
         while True:
             print('Lengthy Scrape  in progress...')
             # TODO: Investigate this async sorcery
-            self.gc.activator()
+            self.gate_scrape.activator()
             
             eastern = pytz.timezone('US/eastern')           # Time stamp is local to this Loop. Avoid moving it around
             now = datetime.now(eastern)

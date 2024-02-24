@@ -18,8 +18,8 @@ views.py runs as soon as the base web is requested. Hence, GateCheckerThread() i
 It will then run 
 '''
 
-# TODO: move this out so EC2 deployment is is streamlined without having to change this everytime
-# Before you remove this make sure you account for its use. its also used for sending email notifications
+# TODO: move this out so EC2 deployment, have it streamlined without having to change bool everytime
+    # Before you remove this make sure you account for its use: Used for sending email notifications
 run_lengthy_web_scrape = False 
 
 if run_lengthy_web_scrape:
