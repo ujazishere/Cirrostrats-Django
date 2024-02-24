@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-x)+c!^y3d6p6o*ov4to-%+00f(+z&df=%s$d&_2**7s(2v)qaf
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://cirrostrats.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://cirrostrats.onrender.com', 'https://cirrostrats-xfln.onrender.com/']
 
 # Application definition
 
