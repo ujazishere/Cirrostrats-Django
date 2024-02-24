@@ -34,6 +34,7 @@ class Gate_Scrape(Root_class):
         soup = self.request(flight_view, timeout=5)
         raw_bs4_scd2 = soup.find_all('td')
 
+
         # Schedule and terminal information with a lot of other garbage:
         scd = []
         [scd.append(i.text.strip()) for i in raw_bs4_scd2 if i != '']
@@ -87,7 +88,7 @@ class Gate_Scrape(Root_class):
                 master.update(ex['completed'])
                 self.troubled = set(ex['troubled'])     # emptying out troubled and refilling it with new troubled items
 
-                #Following code essentially removes troubled items that are already in the master.
+                # Following code essentially removes troubled items that are already in the master.
                 # logic: if troubled items are not in master make a new troubled set with those. Essentially doing the job of removing master keys from troubled set
                 self.troubled = {each for each in self.troubled if each not in master}
                 
@@ -163,7 +164,7 @@ class Gate_Scrape(Root_class):
             self.tro()
         
         
-# Mind the threading.Thread inheritance that makes the code run concurrently
+# Mind the threading. Inheriting the thread that makes the code run concurrently
 class Gate_scrape_thread(threading.Thread):
     def __init__(self):
         super().__init__()

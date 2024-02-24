@@ -95,7 +95,7 @@ class Root_class():
             # {<Future at 0x7f08f203ec10 state=running>: 'UA123',
                 # <Future at 0x7f08f203ed10 state=running>: 'DL789'
                         # }
-        with ThreadPoolExecutor(max_workers=350) as executor:
+        with ThreadPoolExecutor(max_workers=150) as executor:
             # First argument in submit method is the lengthy function that needs multi threading
                 # second argument is each flt number that goes into that function. Together forming the futures.key()
                 #note no parentheses in the first argument
