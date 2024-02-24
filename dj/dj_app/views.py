@@ -270,6 +270,7 @@ def flight_deets(request,airline_code=None, flight_number_query=None, ):
     
     bulk_flight_deets = without_futures()
 
+    """
     # This code is the parallel processing futures implementation. 
         # It is creating issues on EC2 as of 12/21/2023. Hence it is commented out.
 
@@ -308,6 +309,8 @@ def flight_deets(request,airline_code=None, flight_number_query=None, ):
             flight_aware_data_pull[keys]= None
 
     bulk_flight_deets.update(flight_aware_data_pull)
+    """
+
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
