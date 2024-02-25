@@ -1,5 +1,5 @@
 import pickle
-import asyncio
+import asyncio, aiohttp
 from django.views.decorators.http import require_GET
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from django.shortcuts import render
@@ -53,10 +53,14 @@ def home(request):
 
 
 def parse_query(request, main_query):
-    main_query = main_query
+
+    """
+    Checkout note `unit testing seems crucial.txt` for the parsing logic
+    """
+
     query_in_list_form = []     # Global variable since it is used outside of the if statement in case it was not triggered. purpose: Handeling Error
                                     # if .split() method is used outside here it can return since empty strings cannot be split.
-                                    
+
     if main_query == '':        # query is empty then return all gates
         print('Empty query: Inside just prior to the gate_info func')
         return gate_info(request, main_query='')
@@ -65,20 +69,26 @@ def parse_query(request, main_query):
     if 'ext d' in main_query:
         airport = main_query.split()[-1]
         return dummy2(request, airport)
-    
+
     if main_query != '':
-        query_in_list_form = main_query.split()
-        if len(query_in_list_form) == 1:            # If query is only one word or item  
+        query_in_list_form = main_query.split()     # splits query. Necessary operation to avoid complexity. Its a quick fix for a deeper more wider issue.
+
+        # TODO: Log the extent of query reach and occurrances to find impossible statements.
+        if len(query_in_list_form) == 1:            # If query is only one word or item. else statement for more than 1 is outside of this indent. bring it in as an elif statement to this if.
+
             query = query_in_list_form[0].upper()           # this is string form instead of list
-            if query[:2] == 'UA' or query[:3] == 'GJS':         # Accounting for flight number query with leads 
-                airline_code = None         
-                if query[0] == 'G':
-                    airline_code, flgiht_digits = query[:3], query[3:]          # Its GJS
+            # TODO: find a better way to handle this. Maybe regex. Need a system that classifies the query and assigns it a dedicated function like flight_deet or gate query.
+            if query[:2] == 'UA' or query[:3] == 'GJS':         # Accounting for flight number query with leading alphabets 
+                if query[0] == 'G':     # if GJS instead of UA: else its UA
+                    airline_code, flt_digits = query[:3], query[3:]          # Its GJS
                 else:
-                    flgiht_digits = query[2:]       # Its UA
-                print('\nSearching for:', airline_code,flgiht_digits)
-                return flight_deets(request, airline_code=airline_code,flight_number_query=flgiht_digits)
-            elif len(query) == 4 or len(query) == 3 or len(query) == 2:
+                    airline_code = None
+                    flt_digits = query[2:]       # Its UA
+                print('\nSearching for:', airline_code,flt_digits)
+                return flight_deets(request, airline_code=airline_code,flight_number_query=flt_digits)
+
+            elif len(query) == 4 or len(query) == 3 or len(query) == 2:     # flight or gate info page returns
+
                 if query.isdigit():
                     query = int(query)
                     if 1 <= query <= 35 or 40 <= query <= 136:              # Accounting for EWR gates for gate query
@@ -97,87 +107,36 @@ def parse_query(request, main_query):
                 # When the length of query_in_list_form is only 1 it returns gates table for that particular query.
                 gate_query = query
                 return gate_info(request, main_query=gate_query)
-            else:
+            else:   # return gate 
                 gate_query = query
                 return gate_info(request, main_query=gate_query)
 
 
-    if len(query_in_list_form) > 1:
-        first_letter = query_in_list_form[0].upper()        # Making it uppercase for compatibility issues and error handling
-        if first_letter == 'W':
-            weather_query_airport  = query_in_list_form[1]
-            weather_query_airport = weather_query_airport.upper()       # Making query uppercase for it to be compatible
-            return weather_display(request, weather_query_airport)
-        else:
-            return gate_info(request, main_query=' '.join(query_in_list_form))
+        elif len(query_in_list_form) > 1:           # its really an else statement but stated >1 here for situational awareness. This is more than one word query.
+            first_letter = query_in_list_form[0].upper()        # Making it uppercase for compatibility issues and error handling
+            if first_letter == 'W':
+                weather_query_airport  = query_in_list_form[1]
+                weather_query_airport = weather_query_airport.upper()       # Making query uppercase for it to be compatible
+                return weather_display(request, weather_query_airport)
+            else:
+                return gate_info(request, main_query=' '.join(query_in_list_form))
 
-        '''
-        # Attempting to pull all airports for easier search access
-        florida_airports = airports['Florida'][1]
-        for each_airport in florida_airports:
-            if each_query in each_airport:
-                print(each_airport)
-            flights = Gate_checker().departures_ewr_UA()
-            print(3)
-            for flt in flights:
-                # print(flt)
-                if each_query in flt:
-                    print(4)
-                    return flight_deets(request, abs_query, flt)
-                else:
-                    # return a static html saying no information found for flight number ****
-                    pass'''
-
-
-def dummy(request):
-
-    try:
-        bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
-        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
-    except:
-        bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
-    
-    # print('OLD with html highlights', bulk_flight_deets)
-    try: # UJ PC PATH
-        ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
-        ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
-        with open(ind, 'rb') as f:
-            dep_weather = pickle.load(f)
-        with open(ord, 'rb') as f:
-            dest_weather = pickle.load(f)
-        
-        weather = Weather_parse()
-        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
-        weather = Weather_parse()
-        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
-
-    except Exception as e:     # ISMAIL MAC PATH
-        print(e)
-        is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
-        is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
-        with open(is_ind, 'rb') as f:
-            dep_weather = pickle.load(f)
-        with open(is_ord, 'rb') as f:
-            dest_weather = pickle.load(f)
-        weather = Weather_parse()
-        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
-        weather = Weather_parse()
-        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
-    
-    # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
-    dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
-    dep_metar = bulk_flight_deets['dep_weather']['METAR']
-    dep_taf = bulk_flight_deets['dep_weather']['TAF']
-    bulk_flight_deets['dep_datis']= dep_atis
-    bulk_flight_deets['dep_metar']= dep_metar
-    bulk_flight_deets['dep_taf']= dep_taf
-    dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
-    dest_metar = bulk_flight_deets['dest_weather']['METAR']
-    dest_taf = bulk_flight_deets['dest_weather']['TAF']
-    bulk_flight_deets['dest_datis']= dest_datis
-    bulk_flight_deets['dest_metar']= dest_metar
-    bulk_flight_deets['dest_taf']= dest_taf
-    return render(request, 'flight_deet.html', bulk_flight_deets)
+            '''
+            # Attempting to pull all airports for easier search access
+            florida_airports = airports['Florida'][1]
+            for each_airport in florida_airports:
+                if each_query in each_airport:
+                    print(each_airport)
+                flights = Gate_checker().departures_ewr_UA()
+                print(3)
+                for flt in flights:
+                    # print(flt)
+                    if each_query in flt:
+                        print(4)
+                        return flight_deets(request, abs_query, flt)
+                    else:
+                        # return a static html saying no information found for flight number ****
+                        pass'''
 
 
 def gate_info(request, main_query):
@@ -194,7 +153,7 @@ def gate_info(request, main_query):
     if gate_data_table: 
         # print(gate_data_table)
         return render(request, 'flight_info.html',{'gate_data_table': gate_data_table, 'gate': gate, 'current_time': current_time})
-    else:       # Returns all gates since query is empty. Maybe this is not necessary. Try deleting else statement.
+    else:       # Returns all gates since query is empty. Maybe this is not necessary. TODO: Try deleting else statement.
         return render(request, 'flight_info.html', {'gate': gate})
 
 
@@ -269,6 +228,39 @@ def flight_deets(request,airline_code=None, flight_number_query=None, ):
         return bulk_flight_deets
     
     bulk_flight_deets = without_futures()
+
+
+    """
+    
+    async def get_tasks(session):
+        tasks = []
+        for airport_id in all_datis_airports:
+            url = f"https://datis.clowd.io/api/{airport_id}"
+            tasks.append(asyncio.create_task(session.get(url)))
+        return tasks
+
+    async def main():
+        async with aiohttp.ClientSession() as session:
+            tasks = await get_tasks(session)
+            # Upto here the tasks are created which is very light.
+
+            # Actual pull work is done using as_completed 
+            datis_resp = []
+            for task in asyncio.as_completed(tasks):        # use .gather() instead of .as_completed for background completion
+                resp = await task 
+                jj = await resp.json()
+                datis_raw = 'n/a'
+                if type(jj) == list and 'datis' in jj[0].keys():
+                    datis_raw = jj[0]['datis']
+                datis_resp.append(datis_raw)
+            return datis_resp
+
+    # Works regardless of the syntax error. Not sut why its showing syntax error
+    all_76_datis = await asyncio.ensure_future(main())
+
+    
+    """
+
 
     """
     # This code is the parallel processing futures implementation. 
@@ -377,6 +369,58 @@ def report_an_issue(request):
 
 def live_map(request):
     return render(request, 'live_map.html')
+
+
+def dummy(request):
+
+    try:
+        bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
+        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
+    except:
+        bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
+    
+    # print('OLD with html highlights', bulk_flight_deets)
+    try: # UJ PC PATH
+        ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
+        ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
+        with open(ind, 'rb') as f:
+            dep_weather = pickle.load(f)
+        with open(ord, 'rb') as f:
+            dest_weather = pickle.load(f)
+        
+        weather = Weather_parse()
+        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+        weather = Weather_parse()
+        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+
+    except Exception as e:     # ISMAIL MAC PATH
+        print(e)
+        is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
+        is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
+        with open(is_ind, 'rb') as f:
+            dep_weather = pickle.load(f)
+        with open(is_ord, 'rb') as f:
+            dest_weather = pickle.load(f)
+        weather = Weather_parse()
+        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+        weather = Weather_parse()
+        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+    
+    # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
+    dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
+    dep_metar = bulk_flight_deets['dep_weather']['METAR']
+    dep_taf = bulk_flight_deets['dep_weather']['TAF']
+    bulk_flight_deets['dep_datis']= dep_atis
+    bulk_flight_deets['dep_metar']= dep_metar
+    bulk_flight_deets['dep_taf']= dep_taf
+    dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
+    dest_metar = bulk_flight_deets['dest_weather']['METAR']
+    dest_taf = bulk_flight_deets['dest_weather']['TAF']
+    bulk_flight_deets['dest_datis']= dest_datis
+    bulk_flight_deets['dest_metar']= dest_metar
+    bulk_flight_deets['dest_taf']= dest_taf
+    return render(request, 'flight_deet.html', bulk_flight_deets)
+
 
 def dummy2(request, airport):
     # This page is returned by using `ext d` in the search bar
@@ -555,7 +599,7 @@ def weather_data(request, airport):
 def summary_box(request, airport):
     print('Insidee summary_box func',request, airport)
     airport = 'KEWR'        # declaring it regardless
-    sleep(2)
+    sleep(7)
     def bulk_pre_assigned():
         try:
             bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"

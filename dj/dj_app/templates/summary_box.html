@@ -19,7 +19,8 @@
             // This loads up right away
         
         var airport ='{{ airport }}' 
-        var url = 'summary_box/' + airport +'/'
+        // This summary_box is a function from views.py which gets called after the html gets loaded. and once the function 
+        var url = 'summary_box/' + airport +'/'        
         // This is where the data is pulled from the views function data_v. This is the first point of access.
             fetch(url)
         .then(response => response.json())
