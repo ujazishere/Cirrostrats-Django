@@ -372,39 +372,28 @@ def live_map(request):
 
 
 def dummy(request):
-
-    try:
-        bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
-        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
-    except:
-        bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
     
-    # print('OLD with html highlights', bulk_flight_deets)
-    try: # UJ PC PATH
-        ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
-        ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
-        with open(ind, 'rb') as f:
-            dep_weather = pickle.load(f)
-        with open(ord, 'rb') as f:
-            dest_weather = pickle.load(f)
-        
-        weather = Weather_parse()
-        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
-        weather = Weather_parse()
-        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
 
-    except Exception as e:     # ISMAIL MAC PATH
-        print(e)
-        is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
-        is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
-        with open(is_ind, 'rb') as f:
-            dep_weather = pickle.load(f)
-        with open(is_ord, 'rb') as f:
-            dest_weather = pickle.load(f)
-        weather = Weather_parse()
-        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
-        weather = Weather_parse()
-        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+    ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
+    ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
+    luis = r""
+
+    dummy_path_to_be_used = luis
+
+    bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
+    bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
+    
+    ind = dummy_path_to_be_used + r"raw_weather_dummy_dataKIND.pkl"
+    ord = dummy_path_to_be_used + r"raw_weather_dummy_dataKORD.pkl"
+    with open(ind, 'rb') as f:
+        dep_weather = pickle.load(f)
+    with open(ord, 'rb') as f:
+        dest_weather = pickle.load(f)
+    
+    weather = Weather_parse()
+    bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+    weather = Weather_parse()
+    bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
     
     # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
     dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
@@ -439,39 +428,29 @@ def nas_data(request, airport):
     print('within nas_data func',request, airport)
     airport = 'KEWR'        # declaring it regardless
     sleep(1.5)
+    
+    ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
+    ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
+    luis = r""
+
+    dummy_path_to_be_used = luis
     def bulk_pre_assigned():
-        try:
-            bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
-            bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
-        except:
-            bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
+        bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
+        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
         
         # print('OLD with html highlights', bulk_flight_deets)
-        try: # UJ PC PATH
-            ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
-            ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
-            with open(ind, 'rb') as f:
-                dep_weather = pickle.load(f)
-            with open(ord, 'rb') as f:
-                dest_weather = pickle.load(f)
-            
-            weather = Weather_parse()
-            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
-            weather = Weather_parse()
-            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+        ind = dummy_path_to_be_used + r"raw_weather_dummy_dataKIND.pkl"
+        ord = dummy_path_to_be_used + r"raw_weather_dummy_dataKORD.pkl"
+        with open(ind, 'rb') as f:
+            dep_weather = pickle.load(f)
+        with open(ord, 'rb') as f:
+            dest_weather = pickle.load(f)
+        
+        weather = Weather_parse()
+        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+        weather = Weather_parse()
+        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
 
-        except Exception as e:     # ISMAIL MAC PATH
-            print(e)
-            is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
-            is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
-            with open(is_ind, 'rb') as f:
-                dep_weather = pickle.load(f)
-            with open(is_ord, 'rb') as f:
-                dest_weather = pickle.load(f)
-            weather = Weather_parse()
-            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
-            weather = Weather_parse()
-            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
         
         # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
         def bunch():
@@ -504,40 +483,30 @@ def weather_data(request, airport):
     print('Inside weather_data views func',request, airport)
     airport = 'KEWR'        # declaring it regardless
     sleep(2.5)
+
+    ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
+    ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
+    luis = r""
+
+    dummy_path_to_be_used = luis
+
     def bulk_pre_assigned():
-        try:
-            bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
-            bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
-        except:
-            bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
+        bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
+        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
         
         # print('OLD with html highlights', bulk_flight_deets)
-        try: # UJ PC PATH
-            ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
-            ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
-            with open(ind, 'rb') as f:
-                dep_weather = pickle.load(f)
-            with open(ord, 'rb') as f:
-                dest_weather = pickle.load(f)
-            
-            weather = Weather_parse()
-            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
-            weather = Weather_parse()
-            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
-
-        except Exception as e:     # ISMAIL MAC PATH
-            print(e)
-            is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
-            is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
-            with open(is_ind, 'rb') as f:
-                dep_weather = pickle.load(f)
-            with open(is_ord, 'rb') as f:
-                dest_weather = pickle.load(f)
-            weather = Weather_parse()
-            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
-            weather = Weather_parse()
-            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+        ind = dummy_path_to_be_used + r"raw_weather_dummy_dataKIND.pkl"
+        ord = dummy_path_to_be_used + r"raw_weather_dummy_dataKORD.pkl"
+        with open(ind, 'rb') as f:
+            dep_weather = pickle.load(f)
+        with open(ord, 'rb') as f:
+            dest_weather = pickle.load(f)
         
+        weather = Weather_parse()
+        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+        weather = Weather_parse()
+        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+
         # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
         def bunch():
             dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
@@ -599,40 +568,30 @@ def weather_data(request, airport):
 def summary_box(request, airport):
     print('Insidee summary_box func',request, airport)
     airport = 'KEWR'        # declaring it regardless
-    sleep(7)
+    sleep(2)
+
+    ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
+    ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
+    luis = r""
+
+    dummy_path_to_be_used = luis
+
     def bulk_pre_assigned():
-        try:
-            bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
-            bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
-        except:
-            bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
+        bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
+        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
         
         # print('OLD with html highlights', bulk_flight_deets)
-        try: # UJ PC PATH
-            ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
-            ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
-            with open(ind, 'rb') as f:
-                dep_weather = pickle.load(f)
-            with open(ord, 'rb') as f:
-                dest_weather = pickle.load(f)
-            
-            weather = Weather_parse()
-            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
-            weather = Weather_parse()
-            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
-
-        except Exception as e:     # ISMAIL MAC PATH
-            print(e)
-            is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
-            is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
-            with open(is_ind, 'rb') as f:
-                dep_weather = pickle.load(f)
-            with open(is_ord, 'rb') as f:
-                dest_weather = pickle.load(f)
-            weather = Weather_parse()
-            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
-            weather = Weather_parse()
-            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+        ind = dummy_path_to_be_used + r"raw_weather_dummy_dataKIND.pkl"
+        ord = dummy_path_to_be_used + r"raw_weather_dummy_dataKORD.pkl"
+        with open(ind, 'rb') as f:
+            dep_weather = pickle.load(f)
+        with open(ord, 'rb') as f:
+            dest_weather = pickle.load(f)
+        
+        weather = Weather_parse()
+        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+        weather = Weather_parse()
+        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
         
         return bulk_flight_deets
         
@@ -651,40 +610,30 @@ def data_v(request, airport):
     print('here',request, airport)
     airport = 'KEWR'        # declaring it regardless
     sleep(1)
+
+    ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
+    ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
+    luis = r""
+
+    dummy_path_to_be_used = luis
+    
     def bulk_pre_assigned():
-        try:
-            bulk_flight_deets_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\latest_bulk_11_30.pkl"
-            bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
-        except:
-            bulk_flight_deets = pickle.load(open(r'/Users/ismailsakhani/Desktop/Cirrostrats/dj/latest_bulk_11_30.pkl', 'rb'))
+        bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
+        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
         
         # print('OLD with html highlights', bulk_flight_deets)
-        try: # UJ PC PATH
-            ind = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKIND.pkl"
-            ord = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\raw_weather_dummy_dataKORD.pkl"
-            with open(ind, 'rb') as f:
-                dep_weather = pickle.load(f)
-            with open(ord, 'rb') as f:
-                dest_weather = pickle.load(f)
-            
-            weather = Weather_parse()
-            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
-            weather = Weather_parse()
-            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
-
-        except Exception as e:     # ISMAIL MAC PATH
-            print(e)
-            is_ind = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKIND.pkl"
-            is_ord = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/raw_weather_dummy_dataKORD.pkl"
-            with open(is_ind, 'rb') as f:
-                dep_weather = pickle.load(f)
-            with open(is_ord, 'rb') as f:
-                dest_weather = pickle.load(f)
-            weather = Weather_parse()
-            bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
-            weather = Weather_parse()
-            bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+        ind = dummy_path_to_be_used + r"raw_weather_dummy_dataKIND.pkl"
+        ord = dummy_path_to_be_used + r"raw_weather_dummy_dataKORD.pkl"
+        with open(ind, 'rb') as f:
+            dep_weather = pickle.load(f)
+        with open(ord, 'rb') as f:
+            dest_weather = pickle.load(f)
         
+        weather = Weather_parse()
+        bulk_flight_deets['dep_weather'] = weather.processed_weather(dummy=dep_weather)
+        weather = Weather_parse()
+        bulk_flight_deets['dest_weather'] = weather.processed_weather(dummy=dest_weather)
+
         # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
         def bunch():
             dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
