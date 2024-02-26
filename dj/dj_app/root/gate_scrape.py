@@ -11,7 +11,6 @@ import re
 
 class Gate_Scrape(Root_class):
     def __init__(self) -> None:
-        pass
         super().__init__()
 
         # troubled is setup here so that it can be accessed locally

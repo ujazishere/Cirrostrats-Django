@@ -12,13 +12,14 @@ from .root.dep_des import Pull_flight_info
 from time import sleep
 from django.shortcuts import render
 from django.http import JsonResponse
+import os
 
 '''
 views.py runs as soon as the base web is requested. Hence, GateCheckerThread() is run in the background right away.
 It will then run 
 '''
 
-# TODO: move this out so EC2 deployment, have it streamlined without having to change bool everytime
+# TODO: move this out, have it streamlined without having to change bool everytime
     # Before you remove this make sure you account for its use: Used for sending email notifications
 run_lengthy_web_scrape = False 
 
@@ -36,14 +37,14 @@ def home(request):
         main_query = request.POST.get('query','')
         
         # This one adds similar queries to the admin panel in SearchQuerys.
-        # Make it such that the duplicates are grouped using maybe unique.
+        # Make it such that the duplicates are grouped using maybe unique occourances.
         # search_query = SearchQuery(query=main_query)      # Adds search queries to the database
         # search_query.save()       # you've got to save it otherwise it wont save
 
         # This bit will send an email notification with the query. Catered for EC2 deployment only!
         # For this to work on google you have to switch on two factor auth
             # You also need to go into the security--> 2factor auth--> app password and generate password for it  
-        # TODO: start this on a parallel thread.
+        # TODO: start this on a parallel thread so that it doesn't interfere with and add to user wait time
         if run_lengthy_web_scrape:
             Root_class().send_email(body_to_send=main_query)
         return parse_query(request, main_query)
@@ -73,7 +74,7 @@ def parse_query(request, main_query):
     if main_query != '':
         query_in_list_form = main_query.split()     # splits query. Necessary operation to avoid complexity. Its a quick fix for a deeper more wider issue.
 
-        # TODO: Log the extent of query reach and occurrances to find impossible statements.
+        # TODO: Log the extent of query reach deep within this code, also log its occurrances to find impossible statements and frequent searches.
         if len(query_in_list_form) == 1:            # If query is only one word or item. else statement for more than 1 is outside of this indent. bring it in as an elif statement to this if.
 
             query = query_in_list_form[0].upper()           # this is string form instead of list
@@ -373,12 +374,13 @@ def live_map(request):
 
 def dummy(request):
     
-
+    print('Within dummy func views.py')
     ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r""
 
-    dummy_path_to_be_used = luis
+    currentWorking = os.getcwd()
+    dummy_path_to_be_used = currentWorking
 
     bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
     bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
@@ -408,11 +410,14 @@ def dummy(request):
     bulk_flight_deets['dest_datis']= dest_datis
     bulk_flight_deets['dest_metar']= dest_metar
     bulk_flight_deets['dest_taf']= dest_taf
+    print('Going to dummy flight_deet.html')
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
 def dummy2(request, airport):
     # This page is returned by using `ext d` in the search bar
+    currentWorking = os.getcwd()
+    print(currentWorking)
     print("dummy2 area")
 
     # Renders the page and html states it gets the data from data_v
@@ -425,7 +430,8 @@ def dummy2(request, airport):
 # that airport then gets plugged in here. request is the WSGI thing and second argument is what you need
 @require_GET
 def nas_data(request, airport):
-    print('within nas_data func',request, airport)
+
+    print('within nas_data func w decorator',request, airport)
     airport = 'KEWR'        # declaring it regardless
     sleep(1.5)
     
@@ -433,7 +439,8 @@ def nas_data(request, airport):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r""
 
-    dummy_path_to_be_used = luis
+    currentWorking = os.getcwd()
+    dummy_path_to_be_used = currentWorking
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
         bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
@@ -480,6 +487,7 @@ def nas_data(request, airport):
 
 @require_GET
 def weather_data(request, airport):
+
     print('Inside weather_data views func',request, airport)
     airport = 'KEWR'        # declaring it regardless
     sleep(2.5)
@@ -488,7 +496,8 @@ def weather_data(request, airport):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r""
 
-    dummy_path_to_be_used = luis
+    currentWorking = os.getcwd()
+    dummy_path_to_be_used = currentWorking
 
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
@@ -566,15 +575,17 @@ def weather_data(request, airport):
 
 @require_GET
 def summary_box(request, airport):
+
     print('Insidee summary_box func',request, airport)
     airport = 'KEWR'        # declaring it regardless
-    sleep(2)
+    sleep(5)
 
     ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r""
 
-    dummy_path_to_be_used = luis
+    currentWorking = os.getcwd()
+    dummy_path_to_be_used = currentWorking
 
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
@@ -607,7 +618,8 @@ def summary_box(request, airport):
 
 @require_GET
 def data_v(request, airport):
-    print('here',request, airport)
+
+    print('within data_v',request, airport)
     airport = 'KEWR'        # declaring it regardless
     sleep(1)
 
@@ -615,7 +627,8 @@ def data_v(request, airport):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r""
 
-    dummy_path_to_be_used = luis
+    currentWorking = os.getcwd()
+    dummy_path_to_be_used = currentWorking
     
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
