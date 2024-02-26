@@ -108,46 +108,30 @@
     <div id="toast" class="toast"></div>
 
     <script>
-      // Function to show toast message
-      function showToast(message) {
-        var toast = document.getElementById("toast");
-        toast.innerHTML = message;
-        toast.className = "toast show";
-      }
-    
-      // Call the showToast function with your desired message
-      showToast("!! Scheduled Tests Coming Up! Please save and access the main webapp through: <a href='https://cirrostrats.us'>cirrostrats.us</a>. Also, please save my number and feel free to reach out for troubleshooting and general questions. <a href='tel:+12015099485'>+1 201-509-9485</a> - Ujas (UJ)");
+// Function to show toast message
+function showToast(message) {
+  var toast = document.getElementById("toast");
+  toast.innerHTML = message;
+  toast.className = "toast show";
+}
 
+// Call the showToast function with your desired message
+showToast("!! Scheduled Tests Coming Up! Please save and access the main webapp through: <a href='https://cirrostrats.us'>cirrostrats.us</a>. Also, please save my number and feel free to reach out for troubleshooting and general questions. <a href='tel:+12015099485'>+1 201-509-9485</a> - Ujas (UJ)");
 
-      document.getElementById("searchButton").addEventListener("click", function(event) {
-        // document is your html document on the client. This item says I want you to get my button 
-        // by the name id "searchButton". the addEventListener--> means
-        // I want to add a listener 
-        // Please listen to an event called click, when "somebody" clicks the button, I want you ..
-        // to run the function(event) for example:
-        alert("I just got clicked")
-        
+// Add event listener to the search button
+document.getElementById("searchButton").addEventListener("click", function(event) {
+  // Prevent the default form submission behavior
+  event.preventDefault();
 
+  // Show the loading spinner
+  document.getElementById("loadingSpinner").style.display = "block";
 
+  // Submit the form after a short delay to allow the loading spinner to be displayed
+  setTimeout(function() {
+    document.querySelector(".search-form").submit();
+  }, 500); // Adjust the delay as needed
+});
 
-
-        // TODO: I want to listen to the event called click with id `searchButton`.
-        // When click happens do the follwing.
-        // This is the client side:Completely different than DOM 
-        // Script is the one that does thing 
-
-
-      // Prevent the default form submission behavior
-      event.preventDefault();
-
-      // Show the loading spinner
-      document.getElementById("loadingSpinner").style.display = "block";
-
-      // Submit the form after a short delay to allow the loading spinner to be displayed
-      setTimeout(function() {
-      document.querySelector(".search-form").submit();
-      }, 500); // Adjust the delay as needed
-      });
 
     </script>
 
