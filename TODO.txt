@@ -21,7 +21,7 @@ Practice readibility and simplicity. Aviod code duplication. Include description
              `hit the live map to see the HD weather rader`
              `want to know the weather at a particular airport? look it up.` 
         move file paths to one file and call those paths everywhere else. 
-        Find software engineers; proficient people in 
+        Find software engineers; proficient people in your field of language, ask them to proofread it.
         Ask pilot's what would they search to get gate information. store these searches and use that for parsing.
         figure out how prod server works without virtual env and test server has its own--Cant install aiohttp on venv on prod.
         change EC2 name to switches_and_securities
