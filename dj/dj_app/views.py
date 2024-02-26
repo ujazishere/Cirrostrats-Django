@@ -379,8 +379,9 @@ def dummy(request):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r""
 
-    currentWorking = os.getcwd() + "\\"
+    currentWorking = os.getcwd() + "/"
     dummy_path_to_be_used = currentWorking
+    print(dummy_path_to_be_used)
 
     bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
     bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
@@ -416,7 +417,7 @@ def dummy(request):
 
 def dummy2(request, airport):
     # This page is returned by using `ext d` in the search bar
-    currentWorking = os.getcwd() + "\\"
+    currentWorking = os.getcwd() + "/"
     print(currentWorking)
     print("dummy2 area")
 
@@ -439,7 +440,7 @@ def nas_data(request, airport):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r""
 
-    currentWorking = os.getcwd() + "\\"
+    currentWorking = os.getcwd() + "/"
     dummy_path_to_be_used = currentWorking
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
@@ -496,7 +497,7 @@ def weather_data(request, airport):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r""
 
-    currentWorking = os.getcwd() + "\\"
+    currentWorking = os.getcwd() + "/"
     dummy_path_to_be_used = currentWorking
 
     def bulk_pre_assigned():
@@ -584,7 +585,7 @@ def summary_box(request, airport):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r""
 
-    currentWorking = os.getcwd() + "\\"
+    currentWorking = os.getcwd() + "/"
     dummy_path_to_be_used = currentWorking
 
     def bulk_pre_assigned():
@@ -627,7 +628,7 @@ def data_v(request, airport):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r""
 
-    currentWorking = os.getcwd() + "\\"
+    currentWorking = os.getcwd() + "/"
     dummy_path_to_be_used = currentWorking
     
     def bulk_pre_assigned():
