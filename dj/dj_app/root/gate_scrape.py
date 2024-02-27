@@ -11,7 +11,6 @@ import re
 
 class Gate_Scrape(Root_class):
     def __init__(self) -> None:
-        pass
         super().__init__()
 
         # troubled is setup here so that it can be accessed locally
@@ -33,6 +32,7 @@ class Gate_Scrape(Root_class):
         flight_view = f"https://www.flightview.com/flight-tracker/{airline_code}/{flight_number_without_airline_code}?date={raw_date}&depapt=EWR"
         soup = self.request(flight_view, timeout=5)
         raw_bs4_scd2 = soup.find_all('td')
+
 
         # Schedule and terminal information with a lot of other garbage:
         scd = []
@@ -87,7 +87,7 @@ class Gate_Scrape(Root_class):
                 master.update(ex['completed'])
                 self.troubled = set(ex['troubled'])     # emptying out troubled and refilling it with new troubled items
 
-                #Following code essentially removes troubled items that are already in the master.
+                # Following code essentially removes troubled items that are already in the master.
                 # logic: if troubled items are not in master make a new troubled set with those. Essentially doing the job of removing master keys from troubled set
                 self.troubled = {each for each in self.troubled if each not in master}
                 
@@ -163,21 +163,22 @@ class Gate_Scrape(Root_class):
             self.tro()
         
         
-# Mind the threading.Thread inheritance that makes the code run concurrently
+# Mind the threading. Inheriting the thread that makes the code run concurrently
+# TODO: Investigate and master this .Thread sorcery
 class Gate_scrape_thread(threading.Thread):
     def __init__(self):
         super().__init__()
-        self.gc = Gate_Scrape()
+        self.gate_scrape = Gate_Scrape()
 
     
-    # run method is the inherited. It gets called as
+    # run method is inherited through .Thread; It gets called as
     def run(self):
         
         # self.gc.activator()
         while True:
             print('Lengthy Scrape  in progress...')
             # TODO: Investigate this async sorcery
-            self.gc.activator()
+            self.gate_scrape.activator()
             
             eastern = pytz.timezone('US/eastern')           # Time stamp is local to this Loop. Avoid moving it around
             now = datetime.now(eastern)

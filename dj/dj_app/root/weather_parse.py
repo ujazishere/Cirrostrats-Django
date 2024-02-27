@@ -91,7 +91,7 @@ class Weather_parse:
                 datis_raw = datis[0]['datis']
             elif len(datis) == 2:       # Datis arrival and departure have been separated
                 if datis[0]['type'] == 'arr':
-                    print('This is the arr datis111')
+                    print('Returned Arrival D-ATIS through weather_parse.py')
                     arr_datis = datis[0]['datis']
                 else:
                     arr_datis = datis[1]['datis']

@@ -8,8 +8,8 @@ except:     # Just so it's easier to import outside of django
 import re
 
 # TODO: Fix wrong flights showing up. One way is to make the flight aware data prominent
-            # But that wwill cause utc and local time clashes. 
-            # Maybe crosscheck it with other source as primary rathar than other  way around.
+        # But that wwill cause utc and local time clashes. 
+        # Maybe crosscheck it with other source as primary rathar than other  way around.
 
 class Flight_aware_pull(Root_class):
     def __init__(self) -> None:
@@ -25,6 +25,7 @@ class Flight_aware_pull(Root_class):
         apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # New Key from Ismail
         apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
         auth_header = {'x-apikey':apiKey}
+        # TODO: Instead of getting all data make specific data requests.(optimize queries). Cache updates.
         """
         airport = 'KSFO'
         payload = {'max_pages': 2}

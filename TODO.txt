@@ -13,6 +13,13 @@ Practice readibility and simplicity. Aviod code duplication. Include description
 
 
 **UV:   
+        infrequent Homepage hints:
+             `Want to know if your gate is occupied in newark? lookup the gate. for example: 71x
+             `hit the live map to see the HD weather rader`
+             `want to know the weather at a particular airport? look it up.` 
+        move file paths to one file and call those paths everywhere else. 
+        Find software engineers; proficient people in your field of language, ask them to proofread it.
+        Ask pilot's what would they search to get gate information. store these searches and use that for parsing.
         figure out how prod server works without virtual env and test server has its own--Cant install aiohttp on venv on prod.
         change EC2 name to switches_and_securities
         Hide datis table when N/A instead of showing N/A
@@ -39,6 +46,7 @@ Practice readibility and simplicity. Aviod code duplication. Include description
             Add thunderstorm, freezing and such symbols on title.
             Add departure/approach runways in use.
         integrate EDCT info  from https://www.fly.faa.gov/edct/jsp/edctLookUp.jsp
+            ask then faa guys you have been reaching out to for jms issue
         
         Remove sql database and create own for seamless lightweight version.
         Fix bug that takes in 2 flight routes for singular flight number.

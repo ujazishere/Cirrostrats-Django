@@ -1,0 +1,23 @@
+Unit testing of some sort seems cruicial for this particular area to make sure the code doesn't break after working.
+
+Set it up such that it shows its going to the deep ends of the function while not executing the scrape mechanisms
+Basically switch off scrape and pull mechanisms and trigger notification for unusual behaviours.
+	One way to do this is to separate out the pulling mechanisms and place parallel marker points at each way through to the deep end.
+
+
+<empty query>: returns gate info
+dumm: returns a carbon copy of a dummmy file
+ext d: retuns dummy data asynchronously so as to instantly serve the user with webpage with a prograssbar and the data as it becomes available.
+
+1 word queries(In the order of operation>>):
+Prepended flight(made all uppercase during post processing): UA4433, GJS4433, 
+airports: KEWR, KSFO, CYOW etc
+gate: c101, 71x, etc
+4433, 419, 82, united4433, ual4433, <so on for other airlines too>
+
+
+
+2 word: could be airports, flight nums and gates for particular airports.
+w kewr, w cyow, UA 4433, Ua 4433, ua 4433, kewr c71, kord f19, ausstin teexas, 
+
+more than 2 words: find nlp items.

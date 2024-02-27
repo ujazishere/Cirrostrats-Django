@@ -24,7 +24,7 @@ urlpatterns = [
     path('dummy2', views.dummy2, name = 'dummy2'), #  Main Page
     
     # This page is a views function that is loaded asynchronously after dummy2 loads up.
-    # the string airport is passed as second argument to the data_v function in views.py
+    # the string airport is passed as second argument to the nas_data and subsequent functions in views.py
     path('nas_data/<str:airport>/', views.nas_data, name = 'data_v'),
     path('weather_data/<str:airport>/', views.weather_data, name = 'weather_data_name'),
     path('summary_box/<str:airport>/', views.summary_box, name = 'summary_box'),
