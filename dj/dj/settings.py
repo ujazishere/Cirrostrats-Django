@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-x)+c!^y3d6p6o*ov4to-%+00f(+z&df=%s$d&_2**7s(2v)qaf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://cirrostrats.onrender.com', 'https://cirrostrats-xfln.onrender.com/', 'https://cirrostrats.us']
