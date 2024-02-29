@@ -3,7 +3,6 @@ import asyncio
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pickle
-import aiohttp
 from bs4 import BeautifulSoup as bs4
 import requests
 

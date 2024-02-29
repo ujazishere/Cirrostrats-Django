@@ -1,4 +1,3 @@
-import asyncio, aiohttp
 import requests
 from .root_class import Root_class
 

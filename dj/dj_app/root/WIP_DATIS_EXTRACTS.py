@@ -4,8 +4,6 @@ import pickle
 from collections import Counter
 import json
 import requests
-import asyncio
-import aiohttp
 import os
 
 # regex notes:
@@ -207,8 +205,6 @@ import pickle
 from collections import Counter
 import json
 import requests
-import asyncio
-import aiohttp
 # this function pulls all datis and returns them in list form
 all_datis_airports_path = r'c:\users\ujasv\onedrive\desktop\codes\cirrostrats\all_datis_airports.pkl'
 with open(all_datis_airports_path, 'rb') as f:
