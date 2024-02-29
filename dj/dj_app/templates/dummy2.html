@@ -1,143 +1,121 @@
-{% extends "dj_app/base.html" %}
-
-{% load static %}
-
-{% block content %}
+{% extends "dj_app/base.html" %} {% load static %} {% block content %}
 
 <!-- dummy2.html -->
 
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Dummy Page</title>
-</head>
-<body>
-    <link rel="stylesheet" type="text/css" href="{% static 'flight_deet.css' %}">
-    
-    <meta name="format-detection" content="telephone=no">
-    
+  </head>
+  <body>
+    <link rel="stylesheet" type="text/css" href="{% static 'flight_deet.css' %}" />
+
+    <meta name="format-detection" content="telephone=no" />
+
     <h3>Progress Bar Here</h3>
 
-    {% include 'summary_box.html' %}
-    {% include 'weather_data.html' %}
-
-
+    {% include 'summary_box.html' %} {% include 'weather_data.html' %}
 
     <!-- Departure weather container -->
     <div id="departure-container" class="table-container">
-        <div class="accordion-button-container">
-            <div class="accordion-content active" id="departure-content-{{ departure_ID }}">
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>
-                                <div class="header-button" onclick="toggleAccordion('departure-content-{{ departure_ID }}')">
-                                    &#9660; Departure
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                        <!-- The id weather_DataBody_departure in tbody tag is being called and processed in weather_data.html. -->
-                    <tbody id="weather_DataBody_departure" >
-                        <!-- <script>createWeatherRows(weather_data, 'weather_DataBody_departure');</script> -->
-                        <td style="width: 100%; text-align: left;">
-                            <span style="float: left; width: 33%;">{{ scheduled_departure_time }}</span>
-                            <span style="float: left; width: 33%; text-align: center;">{{ departure_ID }}</span>
-                            <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }}</span>
-                        </td>
-                    
-                    </tbody>
-                    </table>
-                </div>
-            </div>
+      <div class="accordion-button-container">
+        <div class="accordion-content active" id="departure-content-{{ departure_ID }}">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>
+                  <div class="header-button" onclick="toggleAccordion('departure-content-{{ departure_ID }}')">
+                    &#9660; Departure
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <!-- The id weather_DataBody_departure in tbody tag is being called and processed in weather_data.html. -->
+            <tbody id="weather_DataBody_departure">
+              <!-- <script>createWeatherRows(weather_data, 'weather_DataBody_departure');</script> -->
+              <td style="width: 100%; text-align: left">
+                <span style="float: left; width: 33%">{{ scheduled_departure_time }}</span>
+                <span style="float: left; width: 33%; text-align: center">{{ departure_ID }}</span>
+                <span style="float: right; width: 33%; text-align: right">{{ departure_gate }}</span>
+              </td>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
 
-
-
-
     <!-- Departure nas -->
-    {% include 'nas_data.html'%}   <!-- Dont suppose this include statement needs to be repeated for destination-->
+    {% include 'nas_data.html'%}
+    <!-- Dont suppose this include statement needs to be repeated for destination-->
     <table class="another-table" id="weatherTable">
-        <thead></thead>
-        <tbody id="nas_data_body_departure"></tbody>
+      <thead></thead>
+      <tbody id="nas_data_body_departure"></tbody>
     </table>
-
-
-
-
 
     <!-- Destination weather container-->
     <div id="destination-container" class="table-container">
-        <div class="accordion-button-container">
-            <div class="accordion-content active" id="destination-content-{{ destination_ID }}">
-                <div class="custom-table-wrapper">
-                    <table class="comparison-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <div class="header-button" onclick="toggleAccordion('destination-content-{{ destination_ID }}')">
-                                        &#9660; Destination
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <!-- This id in tbody is being called and processed in weather_data.html. -->
-                        <tbody id="weather_DataBody_destination">
-                            <tr>
-                                <td style="width: 100%; text-align: left;">
-                                    <span style="float: left; width: 33%;">{{scheduled_arrival_time}}</span>
-                                    <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
-                                    <span style="float: right; width: 33%; text-align: right;">{{ arrival_gate }}</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+      <div class="accordion-button-container">
+        <div class="accordion-content active" id="destination-content-{{ destination_ID }}">
+          <div class="custom-table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>
+                    <div class="header-button" onclick="toggleAccordion('destination-content-{{ destination_ID }}')">
+                      &#9660; Destination
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <!-- This id in tbody is being called and processed in weather_data.html. -->
+              <tbody id="weather_DataBody_destination">
+                <tr>
+                  <td style="width: 100%; text-align: left">
+                    <span style="float: left; width: 33%">{{scheduled_arrival_time}}</span>
+                    <span style="float: left; width: 33%; text-align: center">{{ destination_ID }}</span>
+                    <span style="float: right; width: 33%; text-align: right">{{ arrival_gate }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
     </div>
-
-
-
 
     <!-- Destination nas -->
     {% include 'nas_data.html'%}
     <table class="another-table" id="weatherTable">
-        <thead></thead>
-        <tbody id="nas_data_body_destination"></tbody>
+      <thead></thead>
+      <tbody id="nas_data_body_destination"></tbody>
     </table>
-
-
 
     <!-- Search box-->
     <div class="search-form-wrapper">
-        <form method="post" class="search-form">
-            {% csrf_token %}
-            <label for="query"></label>
-            <input type="text" name="query" id="query">
-            <button type="submit">Search</button>
-        </form> 
+      <form method="post" class="search-form">
+        {% csrf_token %}
+        <label for="query"></label>
+        <input type="text" name="query" id="query" />
+        <button type="submit">Search</button>
+      </form>
     </div>
 
-    <script>      
-    // This script is for departure/destination expand/collapse animation
-        function toggleAccordion(contentId) {
+    <script>
+      // This script is for departure/destination expand/collapse animation
+      function toggleAccordion(contentId) {
         var content = document.getElementById(contentId);
         var tbody = content.querySelector("tbody"); // Select the tbody element inside the content
-        
+
         if (tbody.style.display === "none" || tbody.style.display === "") {
-            tbody.style.display = "table-row-group"; // Show the content
+          tbody.style.display = "table-row-group"; // Show the content
         } else {
-            tbody.style.display = "none"; // Hide the content
+          tbody.style.display = "none"; // Hide the content
         }
-        }
+      }
     </script>
 
     <!-- <script src="weather_data.js"></script> -->
-
-</body>
+  </body>
 </html>
 
-  
-  {% endblock %}
+{% endblock %}
