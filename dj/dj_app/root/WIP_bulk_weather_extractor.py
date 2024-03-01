@@ -1,5 +1,7 @@
 # from dj.dj_app.root.WIP_bulk_weather_extractor import Bulk_weather_extractor
 import asyncio
+import aiohttp
+from datetime import datetime
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pickle
@@ -20,7 +22,7 @@ class Bulk_weather_extractor:
         self.all_pickle_files = os.listdir(self.pickles_path)            # get all file names in pickles folder
         self.example_bulk_met_path = r"C:\Users\ujasv\OneDrive\Desktop\pickles\BULK_METAR_JAN_END_2024.pkl" 
         self.no_mets_path = r"C:\Users\ujasv\OneDrive\Desktop\pickles\no_mets.pkl"
-        self.export_path = r"C:\Users\ujasv\OneDrive\Desktop\pickles\BULK_METAR_FEB_2024.pkl"
+        self.export_path = r"C:\Users\ujasv\OneDrive\Desktop\pickles"
 
 
     def loader(self,example_bulk_met_load=None, big_met_bulk_load=None,
@@ -47,14 +49,14 @@ class Bulk_weather_extractor:
                 return no_mets
         
         elif taf_positive_airports:
-            with open("C:\Users\ujasv\OneDrive\Desktop\pickles\taf_positive_airports.pkl", 'rb') as f:
+            with open(r"C:\Users\ujasv\OneDrive\Desktop\pickles\taf_positive_airports.pkl", 'rb') as f:
                 id = pickle.load(f)
                 return id
 
         else:
             # 20,296 airport ID in list form. eg ['DAB', 'EWR', 'X50', 'AL44']
             # Load airport ID
-            with open('dj/dj_app/root/pkl/airport_identifiers_US.pkl', 'rb') as f:
+            with open(r'dj/dj_app/root/pkl/airport_identifiers_US.pkl', 'rb') as f:
                 id = pickle.load(f)
                 return id
     
@@ -171,18 +173,28 @@ class Bulk_weather_extractor:
 
     async def parallel_scrape(self,taf_pull=None):
         async def get_tasks(session):
-            
+            # async def classification(session,ids_to_pull, type_of_weather, airport_id, time_in_hours):
             if taf_pull:
-                url = f"https://aviationweather.gov/api/data/taf?ids={airport_id}&hours=408"
                 ids_to_pull = self.loader(taf_positive_airports=True)
+                type_of_weather,time_in_hours="taf","408"
             else:
-                url = f"https://aviationweather.gov/api/data/metar?ids={airport_id}&hours=360"
                 ids_to_pull = self.ids_without_digit_with_no_mets_excluded
-            print('total ID to pull: ', len(ids_to_pull))
+                type_of_weather,time_in_hours="metar","360"
+
             tasks = []
             for airport_id in ids_to_pull:
+                url = f"https://aviationweather.gov/api/data/{type_of_weather}?ids={airport_id}&hours={time_in_hours}"
                 tasks.append(asyncio.create_task(session.get(url)))
+
+            # if taf_pull:
+            #     # url = f"https://aviationweather.gov/api/data/taf?ids={airport_id}&hours=408"
+            #     ids_to_pull = self.loader(taf_positive_airports=True)
+            # else:
+            #     # url = f"https://aviationweather.gov/api/data/metar?ids={airport_id}&hours=360"
+            #     ids_to_pull = self.ids_without_digit_with_no_mets_excluded
+            print('total ID to pull: ', len(ids_to_pull))
             return tasks
+
         async def main():
             async with aiohttp.ClientSession() as session:
                 tasks = await get_tasks(session)
@@ -235,10 +247,13 @@ class Bulk_weather_extractor:
             print('Saved in self.bulky_metar')
 
             
-    def hard_write_dumper(self,file_path_w_name, bulky_weather):
-        with open(file_path_w_name, 'wb') as f:
+    def hard_write_dumper(self,file_name, bulky_weather):
+        currently = datetime.utcnow().strftime("%Y%m%d%H%M")
+        # Double slash here because it causes syntax error regardless of r string above since `\` is used as escape char 
+        file_name = self.export_path + "\\" + file_name + currently     
+        with open(file_name, 'wb') as f:
             pickle.dump(bulky_weather, f)
-        print('exported as:', file_path_w_name)
+        print('exported as:', file_name)
         
 """
 
@@ -247,12 +262,23 @@ we = Bulk_weather_extractor()
 x = we.airport_ID_separator()
 len(we.ids_without_digit_with_no_mets_excluded)
 
-# shows syntax error but works on jupyter
-async_pull_metar = await we.parallel_scrape()
-# async_pull_taf = await we.parallel_scrape(taf_pull=True)
+# Do the test first to init necessary items
+metar_pull_test = we.scraper(test=True,)
 
-# metar_pull_test = we.scraper(test=True,)
+
+
+# shows syntax error but works on jupyter. Pulls bulkt metar for last 15 days
+async_pull_metar = await we.parallel_scrape()
+
+# Automatically saves bulk_metar file name with current UTC YYYYMMDDHHMM 
+we.hard_write_dumper("bulk_metar",we.bulky_metar)
+
 # taf_pull_test = we.scraper(test=True,)
+# Pulls taf for last 17 days
+async_pull_taf = await we.parallel_scrape(taf_pull=True)
+
+# Automatically saves bulk_taf file name with current UTC YYYYMMDDHHMM 
+we.hard_write_dumper("bulk_taf",we.bulky_taf)
 
 
 

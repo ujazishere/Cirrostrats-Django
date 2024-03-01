@@ -1,4 +1,5 @@
 import pickle
+# import asyncio, aiohttp
 from django.views.decorators.http import require_GET
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from django.shortcuts import render
@@ -308,7 +309,8 @@ def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
 def weather_display(request,weather_query):
 
-    weather_query = weather_query.strip()       # remove leading and trailing spaces. Seems precautionary.
+    # remove leading and trailing spaces. Seems precautionary.
+    weather_query = weather_query.strip()
     airport = weather_query[-4:]
 
     weather = Weather_parse()
