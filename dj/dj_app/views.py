@@ -395,18 +395,19 @@ def live_map(request):
 
 
 def dummy(request):
+    
     currentWorking = os.getcwd()
     print("CURRENT WORKING",currentWorking)
     if currentWorking[-11:] == "Cirrostrats":
         dummy_path_to_be_used = currentWorking + "/dj/"
         print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
     elif currentWorking[-14:] == "Cirrostrats\dj":
-        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\`
+        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
         print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
     elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
-        dummy_path_to_be_used = currentWorking
+        dummy_path_to_be_used = currentWorking + "/"        # linux path
         print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
-
+    
     # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
     # ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
 
@@ -465,12 +466,12 @@ def nas_data(request, airport):
         dummy_path_to_be_used = currentWorking + "/dj/"
         print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
     elif currentWorking[-14:] == "Cirrostrats\dj":
-        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\`
+        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
         print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
     elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
-        dummy_path_to_be_used = currentWorking
+        dummy_path_to_be_used = currentWorking + "/"        # linux path
         print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
-
+    
     # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
     # ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
 
@@ -532,10 +533,10 @@ def weather_data(request, airport):
         dummy_path_to_be_used = currentWorking + "/dj/"
         print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
     elif currentWorking[-14:] == "Cirrostrats\dj":
-        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\`
+        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
         print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
     elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
-        dummy_path_to_be_used = currentWorking
+        dummy_path_to_be_used = currentWorking + "/"        # linux path
         print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
 
     # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
@@ -629,10 +630,10 @@ def summary_box(request, airport):
         dummy_path_to_be_used = currentWorking + "/dj/"
         print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
     elif currentWorking[-14:] == "Cirrostrats\dj":
-        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\`
+        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
         print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
     elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
-        dummy_path_to_be_used = currentWorking
+        dummy_path_to_be_used = currentWorking + "/"        # linux path
         print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
 
     # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
@@ -677,16 +678,17 @@ def data_v(request, airport):
     airport = 'KEWR'        # declaring it regardless
     sleep(1)
 
+
     currentWorking = os.getcwd()
     print("CURRENT WORKING",currentWorking)
     if currentWorking[-11:] == "Cirrostrats":
         dummy_path_to_be_used = currentWorking + "/dj/"
         print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
     elif currentWorking[-14:] == "Cirrostrats\dj":
-        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\`
+        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
         print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
     elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
-        dummy_path_to_be_used = currentWorking
+        dummy_path_to_be_used = currentWorking + "/"        # linux path
         print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
 
     # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
