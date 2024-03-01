@@ -1,5 +1,5 @@
 import pickle
-import asyncio, aiohttp
+# import asyncio, aiohttp
 from django.views.decorators.http import require_GET
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from django.shortcuts import render
