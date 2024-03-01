@@ -28,7 +28,6 @@ urlpatterns = [
     path('weather_data/<str:airport>/',
          views.weather_data, name='weather_data_name'),
 
-
     path('summary_box/<str:airport>/', views.summary_box, name='summary_box'),
 
 

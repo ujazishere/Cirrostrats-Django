@@ -400,8 +400,8 @@ def dummy(request):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r"/Users/luisarevalo/Desktop/Development/Cirrostrats/dj/"
 
-    currentWorking = os.getcwd() + "/"
-    dummy_path_to_be_used = luis
+    currentWorking = os.getcwd() + "/dj/"
+    dummy_path_to_be_used = currentWorking
     print(dummy_path_to_be_used)
 
     bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
@@ -462,8 +462,8 @@ def nas_data(request, airport):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r"/Users/luisarevalo/Desktop/Development/Cirrostrats/dj/"
 
-    currentWorking = os.getcwd() + "/"
-    dummy_path_to_be_used = luis
+    currentWorking = os.getcwd() + "/dj/"
+    dummy_path_to_be_used = currentWorking
 
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
@@ -521,8 +521,10 @@ def weather_data(request, airport):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r"/Users/luisarevalo/Desktop/Development/Cirrostrats/dj/"
 
-    currentWorking = os.getcwd() + "/"
-    dummy_path_to_be_used = luis
+    currentWorking = os.getcwd() + "/dj/"
+    print('CURRENT WORKING DIRECTOR', currentWorking)
+
+    dummy_path_to_be_used = currentWorking
 
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
@@ -610,8 +612,8 @@ def summary_box(request, airport):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r"/Users/luisarevalo/Desktop/Development/Cirrostrats/dj/"
 
-    currentWorking = os.getcwd() + "/"
-    dummy_path_to_be_used = luis
+    currentWorking = os.getcwd() + "/dj/"
+    dummy_path_to_be_used = currentWorking
 
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
@@ -647,6 +649,7 @@ def summary_box(request, airport):
 @require_GET
 def data_v(request, airport):
 
+    print('data_v called')
     print('within data_v', request, airport)
     airport = 'KEWR'        # declaring it regardless
     sleep(1)
@@ -655,8 +658,8 @@ def data_v(request, airport):
     ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
     luis = r"/Users/luisarevalo/Desktop/Development/Cirrostrats/dj/"
 
-    currentWorking = os.getcwd() + "/"
-    dummy_path_to_be_used = luis
+    currentWorking = os.getcwd() + "/dj/"
+    dummy_path_to_be_used = currentWorking
 
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"

@@ -14,7 +14,13 @@
 
     <h3>Progress Bar Here</h3>
 
-    {% include 'summary_box.html' %} {% include 'weather_data.html' %}
+    <!-- script tags for weather data and summary box -->
+    <script type="text/javascript" src="{% static 'weatherData.js' %}"></script>
+    <script type="text/javascript" src="{% static 'summaryBox.js' %}"></script>
+
+    <table class="summary-table" id="summary_box_js">
+      <tbody></tbody>
+    </table>
 
     <!-- Departure weather container -->
     <div id="departure-container" class="table-container">
