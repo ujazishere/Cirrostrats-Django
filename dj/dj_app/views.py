@@ -393,15 +393,21 @@ def live_map(request):
 
 
 def dummy(request):
-
-    print('Within dummy func views.py')
-    ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
-    ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
-    luis = r"/Users/luisarevalo/Desktop/Development/Cirrostrats/dj/"
-
-    currentWorking = os.getcwd() + "/dj/"
-    dummy_path_to_be_used = currentWorking
-    print(dummy_path_to_be_used)
+    
+    currentWorking = os.getcwd()
+    print("CURRENT WORKING",currentWorking)
+    if currentWorking[-11:] == "Cirrostrats":
+        dummy_path_to_be_used = currentWorking + "/dj/"
+        print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
+    elif currentWorking[-14:] == "Cirrostrats\dj":
+        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
+        print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
+    elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
+        dummy_path_to_be_used = currentWorking + "/"        # linux path
+        print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
+    
+    # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
+    # ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
 
     bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
     bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
@@ -455,14 +461,22 @@ def nas_data(request, airport):
 
     print('within nas_data func w decorator', request, airport)
     airport = 'KEWR'        # declaring it regardless
-    sleep(1.5)
+    sleep(0.5)
 
-    ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
-    ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
-    luis = r"/Users/luisarevalo/Desktop/Development/Cirrostrats/dj/"
-
-    currentWorking = os.getcwd() + "/dj/"
-    dummy_path_to_be_used = currentWorking
+    currentWorking = os.getcwd()
+    print("CURRENT WORKING",currentWorking)
+    if currentWorking[-11:] == "Cirrostrats":
+        dummy_path_to_be_used = currentWorking + "/dj/"
+        print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
+    elif currentWorking[-14:] == "Cirrostrats\dj":
+        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
+        print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
+    elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
+        dummy_path_to_be_used = currentWorking + "/"        # linux path
+        print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
+    
+    # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
+    # ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
 
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
@@ -514,16 +528,22 @@ def weather_data(request, airport):
 
     print('Inside weather_data views func', request, airport)
     airport = 'KEWR'        # declaring it regardless
-    sleep(2.5)
+    sleep(1)
+    
+    currentWorking = os.getcwd()
+    print("CURRENT WORKING",currentWorking)
+    if currentWorking[-11:] == "Cirrostrats":
+        dummy_path_to_be_used = currentWorking + "/dj/"
+        print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
+    elif currentWorking[-14:] == "Cirrostrats\dj":
+        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
+        print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
+    elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
+        dummy_path_to_be_used = currentWorking + "/"        # linux path
+        print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
 
-    ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
-    ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
-    luis = r"/Users/luisarevalo/Desktop/Development/Cirrostrats/dj/"
-
-    currentWorking = os.getcwd() + "/dj/"
-    print('CURRENT WORKING DIRECTOR', currentWorking)
-
-    dummy_path_to_be_used = currentWorking
+    # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
+    # ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
 
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
@@ -605,14 +625,22 @@ def summary_box(request, airport):
 
     print('Insidee summary_box func', request, airport)
     airport = 'KEWR'        # declaring it regardless
-    sleep(5)
+    sleep(1.5)
 
-    ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
-    ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
-    luis = r"/Users/luisarevalo/Desktop/Development/Cirrostrats/dj/"
+    currentWorking = os.getcwd()
+    print("CURRENT WORKING",currentWorking)
+    if currentWorking[-11:] == "Cirrostrats":
+        dummy_path_to_be_used = currentWorking + "/dj/"
+        print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
+    elif currentWorking[-14:] == "Cirrostrats\dj":
+        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
+        print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
+    elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
+        dummy_path_to_be_used = currentWorking + "/"        # linux path
+        print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
 
-    currentWorking = os.getcwd() + "/dj/"
-    dummy_path_to_be_used = currentWorking
+    # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
+    # ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
 
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
@@ -653,13 +681,22 @@ def data_v(request, airport):
     airport = 'KEWR'        # declaring it regardless
     sleep(1)
 
-    ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
-    ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
-    luis = r"/Users/luisarevalo/Desktop/Development/Cirrostrats/dj/"
 
-    currentWorking = os.getcwd() + "/dj/"
-    dummy_path_to_be_used = currentWorking
+    currentWorking = os.getcwd()
+    print("CURRENT WORKING",currentWorking)
+    if currentWorking[-11:] == "Cirrostrats":
+        dummy_path_to_be_used = currentWorking + "/dj/"
+        print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
+    elif currentWorking[-14:] == "Cirrostrats\dj":
+        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
+        print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
+    elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
+        dummy_path_to_be_used = currentWorking + "/"        # linux path
+        print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
 
+    # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
+    # ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
+    
     def bulk_pre_assigned():
         bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
         bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
