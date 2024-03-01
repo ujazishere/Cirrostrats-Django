@@ -1,104 +1,92 @@
-{% extends "dj_app/base.html" %}
+{% extends "dj_app/base.html" %} {% load static %} {% block content %}
 
-{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'weather_info.css' %}" />
 
-{% block content %}
+<style>
+  .loading-spinner {
+    display: none;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #24292e;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: relative;
+    left: 10px; /* Adjust as needed to move the spinner to the right */
+  }
 
-<link rel="stylesheet" type="text/css" href="{% static 'weather_info.css' %}">
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 
-    <style>
-        .loading-spinner {
-        display: none;
-        width: 30px;
-        height: 30px;
-        border: 3px solid #f3f3f3;
-        border-top: 3px solid #24292E;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        position: relative;
-        left: 10px; /* Adjust as needed to move the spinner to the right */
-      }
-      
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-  
-      .dark-mode .loading-spinner {
-        border-top: 3px solid #2D333B;
-      }
-      </style>
+  .dark-mode .loading-spinner {
+    border-top: 3px solid #2d333b;
+  }
+</style>
 
-  <h3> Weather for {{airport}}</h3>
+<h3>Weather for {{airport}}</h3>
 {% if D_ATIS or METAR or TAF %}
 <!-- This is the departure box that contains D-Atis, metar and taf. titles include scheduled time and  -->
-      <table class="comparison-table">
-          <tbody>
+<table class="comparison-table">
+  <tbody>
+    <!-- {% include 'flight_deet_weather_box.html' with weather=trr%} -->
+    {% if D_ATIS %}
+    <tr>
+      <th>D-ATIS <span class="small-text"> {{datis_zt | safe }}</span></th>
+    </tr>
+    <tr>
+      <td style="text-align: left; font-family: Menlo, monospace">{{D_ATIS|safe}}</td>
+    </tr>
+    {% endif %} {% if METAR %}
+    <tr>
+      <th>METAR <span class="small-text"> {{metar_zt | safe}}</span></th>
+    </tr>
+    <tr>
+      <td style="text-align: left; font-family: Menlo, monospace">{{METAR|safe}}</td>
+    </tr>
+    {% endif %} {% if TAF %}
+    <tr>
+      <th>TAF <span class="small-text"> {{taf_zt | safe}}</span></th>
+    </tr>
 
-            <!-- {% include 'flight_deet_weather_box.html' with weather=trr%} -->
-              {% if D_ATIS %}
-              <tr>
-                  <th> D-ATIS  <span class="small-text"> {{datis_zt | safe }}</span></th>
-              </tr>
-              <tr>
-                  <td style="text-align: left; font-family: Menlo, monospace;">{{D_ATIS|safe}}</td>
-              </tr>
-              {% endif %}  
-              
-
-              {% if METAR %}
-              <tr>
-                  <th> METAR  <span class="small-text">  {{metar_zt | safe}}</span> </th>
-              </tr>
-              <tr>
-                  <td style="text-align: left; font-family: Menlo, monospace;">{{METAR|safe}}</td>
-              </tr>
-              {% endif %}  
-
-
-              {% if TAF %}
-              <tr>
-                  <th> TAF  <span class="small-text"> {{taf_zt | safe}}</span> </th>
-              </tr>
-
-              <tr>
-                  <td style="text-align: left; font-family: Menlo, monospace;">{{TAF|safe}}</td>
-              </tr>        
-              {% endif %}  
-          
-          </tbody>
-      </table>
-  </div>
-</div>
-
+    <tr>
+      <td style="text-align: left; font-family: Menlo, monospace">{{TAF|safe}}</td>
+    </tr>
+    {% endif %}
+  </tbody>
+</table>
 
 {% else %}
-    <p>No weather informamtion found for {{airport}}. Try `w kewr`</p>
+<p>No weather informamtion found for {{airport}}. Try `w kewr`</p>
 
 {% endif %}
 
 <form method="post" class="search-form">
-    {% csrf_token %}
-    <label for="query"></label>
-    <input type="text" name="query" id="query">
-    <button type="submit" id="searchButton">Search</button>
-    <div class="loading-spinner" id="loadingSpinner"></div>
-  </form>
+  {% csrf_token %}
+  <label for="query"></label>
+  <input type="text" name="query" id="query" />
+  <button type="submit" id="searchButton">Search</button>
+  <div class="loading-spinner" id="loadingSpinner"></div>
+</form>
 
 <script>
-        document.getElementById("searchButton").addEventListener("click", function(event) {
-      // Prevent the default form submission behavior
-      event.preventDefault();
+  document.getElementById("searchButton").addEventListener("click", function (event) {
+    // Prevent the default form submission behavior
+    event.preventDefault();
 
-      // Show the loading spinner
-      document.getElementById("loadingSpinner").style.display = "block";
+    // Show the loading spinner
+    document.getElementById("loadingSpinner").style.display = "block";
 
-      // Submit the form after a short delay to allow the loading spinner to be displayed
-      setTimeout(function() {
+    // Submit the form after a short delay to allow the loading spinner to be displayed
+    setTimeout(function () {
       document.querySelector(".search-form").submit();
-      }, 500); // Adjust the delay as needed
-      });
+    }, 500); // Adjust the delay as needed
+  });
 </script>
-
 
 {% endblock %}

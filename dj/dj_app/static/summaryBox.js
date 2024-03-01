@@ -3,16 +3,14 @@
 document.addEventListener("DOMContentLoaded", function () {
   // This loads up right away
 
-  console.log("INSIDE SUMMARY BOX");
-  var airport = "{{ airport }}";
-  var url = "summary_box/" + airport + "/";
+  const url = `summary_box/{{ airport }}/`;
   // This is where the data is pulled from the views function data_v. This is the first point of access.
   fetch(url)
     .then(response => response.json())
     .then(data => {
       // data is a variable that pulls in data_v's bulk_flight_deet dictionary
       let bulk_flight_deets = data;
-      console.log(bulk_flight_deets);
+      // console.log(bulk_flight_deets);
       let flt_num = bulk_flight_deets.flight_number;
       let registration = bulk_flight_deets.registration;
       let departure_ID = bulk_flight_deets.departure_ID;
@@ -27,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
       let estimated_in = bulk_flight_deets.estimated_in;
 
       function summary_box(bulk_flight_deets) {
-        console.log("here in summary box", departure_ID);
+        // console.log("here in summary box", departure_ID);
 
         var summary_box_js = document.getElementById("summary_box_js");
 
