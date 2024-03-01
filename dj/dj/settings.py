@@ -16,8 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-CSRF_TRUSTED_ORIGINS = ['https://cirrostrats.us']
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -29,7 +27,7 @@ SECRET_KEY = 'django-insecure-x)+c!^y3d6p6o*ov4to-%+00f(+z&df=%s$d&_2**7s(2v)qaf
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://cirrostrats.onrender.com', 'https://cirrostrats-xfln.onrender.com/']
+CSRF_TRUSTED_ORIGINS = ['https://cirrostrats.onrender.com', 'https://cirrostrats-xfln.onrender.com/', 'https://cirrostrats.us']
 
 # Application definition
 
