@@ -1,5 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from .EC2 import EC2_location
+from .Switch_n_auth import EC2_location
 import requests
 from bs4 import BeautifulSoup as bs4
 from datetime import datetime

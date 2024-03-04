@@ -1,25 +1,23 @@
-Practice readibility and simplicity. Aviod code duplication. Include description and documentation for others to read and make changes to it
+Practice readibility and simplicity. Aviod code duplication. Include description and documentation every step of the way. Keep upgrading and evolving.
+
 
 **IS:   
-        when deploying>>****** EC2.py namechange and gitignore; run_lengthy_scrape True; bypass_fa to False;; aiohttp install 
-        extract aiohttp in req.txt
+        Media queries for mobile vs desktop view. use css media queries. Check bootstrap navbar. Target screens(IPAD, smaller, etc)
+        when deploying>>****** EC2.py namechange and gitignore; run_lengthy_scrape True; bypass_fa to False
 
-        PRIORITY!!! loading/spinner symbol for search bar;
-            Implement loading symbol when searching.
-            
-        js. ext d work. make functions and use functions widely.
+        `ext d` work. Make javascript functions and use functions widely.
         
         Make sure bypass_fa for fa(view.py line 200) is true while working local and false when deploying on EC2
         WIP - summery box shadow and expand/collapse (fast)animation.  
         work on script to extract data - aviation_stack_data_pull.py
-        
-
-
-**UV:   
         infrequent Homepage hints:
              `Want to know if your gate is occupied in newark? lookup the gate. for example: 71x
              `hit the live map to see the HD weather rader`
              `want to know the weather at a particular airport? look it up.` 
+        
+
+**UV:   
+        django hybrid. google auth.
         move file paths to one file and call those paths everywhere else. 
         Find software engineers; proficient people in your field of language, ask them to proofread it.
         Ask pilot's what would they search to get gate information. store these searches and use that for parsing.
@@ -197,3 +195,5 @@ weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf',
         DONE! Fixed the coloring for published time 
         DONE! fix coloring and table borders on weather and flight deet.
         DONE! integrate time passed since weather published time.(2 mins ago) and highlight it red when over 52 mins old.
+        IS DONE!!! PRIORITY!!! loading/spinner symbol for search bar;
+            Implement loading symbol when searching.
