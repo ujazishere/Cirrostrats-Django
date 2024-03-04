@@ -1,9 +1,9 @@
 import pickle
-# import asyncio, aiohttp
 from django.views.decorators.http import require_GET
-from concurrent.futures import ThreadPoolExecutor, as_completed
+# from concurrent.futures import ThreadPoolExecutor, as_completed           # Causing issues on AWS
 from django.shortcuts import render
 from django.http import HttpResponse
+from .root.dummy_files_call import dummy_imports
 from .root.gate_checker import Gate_checker
 from .root.root_class import Root_class
 from .root.gate_scrape import Gate_scrape_thread
@@ -12,6 +12,8 @@ from .root.dep_des import Pull_flight_info
 from time import sleep
 from django.shortcuts import render
 from django.http import JsonResponse
+# This will throw error if the file is not found. Change the EC2 file to this name.
+from .root.Switch_n_auth import run_lengthy_web_scrape
 import os
 
 '''
@@ -19,10 +21,11 @@ views.py runs as soon as the base web is requested. Hence, GateCheckerThread() i
 It will then run 
 '''
 
-# TODO: move this out, have it streamlined without having to change bool everytime
-# Before you remove this make sure you account for its use: Used for sending email notifications
-run_lengthy_web_scrape = False
-
+# TODO: move this out, have it streamlined without having to change bool everytime.
+    # >> Have made progress on this by making the Switches_n_auth file and adding it to the .gitignore.
+# Caution. If this file doesn't exist make one that contains this variable and make it a bool. 
+# Keep it false to avoid errors with from sending email errors as it is attached to UJ's personal email creds.
+# Before you remove this make sure you account for its use: Used for sending email notifications. Email creds are in Switches_n_auth.
 if run_lengthy_web_scrape:
     print('Running Lengthy web scrape')
     gc_thread = Gate_scrape_thread()
@@ -251,7 +254,6 @@ def flight_deets(request, airline_code=None, flight_number_query=None, ):
     bulk_flight_deets = without_futures()
 
     """
-    
     async def get_tasks(session):
         tasks = []
         for airport_id in all_datis_airports:
@@ -393,53 +395,13 @@ def live_map(request):
 
 
 def dummy(request):
-    
-    currentWorking = os.getcwd()
-    print("CURRENT WORKING",currentWorking)
-    if currentWorking[-11:] == "Cirrostrats":
-        dummy_path_to_be_used = currentWorking + "/dj/"
-        print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
-    elif currentWorking[-14:] == "Cirrostrats\dj":
-        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
-        print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
-    elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
-        dummy_path_to_be_used = currentWorking + "/"        # linux path
-        print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
-    
-    # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
-    # ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
+    dummy_imports_tuple = dummy_imports()
 
-    bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
-    bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
+    bulk_flight_deets = dummy_imports_tuple[0]
 
-    ind = dummy_path_to_be_used + r"raw_weather_dummy_dataKIND.pkl"
-    ord = dummy_path_to_be_used + r"raw_weather_dummy_dataKORD.pkl"
-    with open(ind, 'rb') as f:
-        dep_weather = pickle.load(f)
-    with open(ord, 'rb') as f:
-        dest_weather = pickle.load(f)
-
-    weather = Weather_parse()
-    bulk_flight_deets['dep_weather'] = weather.processed_weather(
-        dummy=dep_weather)
-    weather = Weather_parse()
-    bulk_flight_deets['dest_weather'] = weather.processed_weather(
-        dummy=dest_weather)
-
-    # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
-    dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
-    dep_metar = bulk_flight_deets['dep_weather']['METAR']
-    dep_taf = bulk_flight_deets['dep_weather']['TAF']
-    bulk_flight_deets['dep_datis'] = dep_atis
-    bulk_flight_deets['dep_metar'] = dep_metar
-    bulk_flight_deets['dep_taf'] = dep_taf
-    dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
-    dest_metar = bulk_flight_deets['dest_weather']['METAR']
-    dest_taf = bulk_flight_deets['dest_weather']['TAF']
-    bulk_flight_deets['dest_datis'] = dest_datis
-    bulk_flight_deets['dest_metar'] = dest_metar
-    bulk_flight_deets['dest_taf'] = dest_taf
+    # within dummy
     print('Going to dummy flight_deet.html')
+
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
@@ -452,7 +414,6 @@ def dummy2(request, airport):
     # Renders the page and html states it gets the data from data_v
     return (render(request, 'dummy2.html', {'airport': airport}))
 
-
 # This function gets loaded within the dummy2 page whilst dummy2 func gets rendered.
 # the fetch area in js acts as url. it will somehow get plugged into the urls.py's data_v line with the airport
 # that airport then gets plugged in here. request is the WSGI thing and second argument is what you need
@@ -463,60 +424,10 @@ def nas_data(request, airport):
     airport = 'KEWR'        # declaring it regardless
     sleep(0.5)
 
-    currentWorking = os.getcwd()
-    print("CURRENT WORKING",currentWorking)
-    if currentWorking[-11:] == "Cirrostrats":
-        dummy_path_to_be_used = currentWorking + "/dj/"
-        print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
-    elif currentWorking[-14:] == "Cirrostrats\dj":
-        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
-        print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
-    elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
-        dummy_path_to_be_used = currentWorking + "/"        # linux path
-        print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
-    
-    # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
-    # ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
+    dummy_imports_tuple = dummy_imports()
+    bulk_flight_deets = dummy_imports_tuple[0]
 
-    def bulk_pre_assigned():
-        bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
-        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
-
-        # print('OLD with html highlights', bulk_flight_deets)
-        ind = dummy_path_to_be_used + r"raw_weather_dummy_dataKIND.pkl"
-        ord = dummy_path_to_be_used + r"raw_weather_dummy_dataKORD.pkl"
-        with open(ind, 'rb') as f:
-            dep_weather = pickle.load(f)
-        with open(ord, 'rb') as f:
-            dest_weather = pickle.load(f)
-
-        weather = Weather_parse()
-        bulk_flight_deets['dep_weather'] = weather.processed_weather(
-            dummy=dep_weather)
-        weather = Weather_parse()
-        bulk_flight_deets['dest_weather'] = weather.processed_weather(
-            dummy=dest_weather)
-
-        # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
-
-        def bunch():
-            dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
-            dep_metar = bulk_flight_deets['dep_weather']['METAR']
-            dep_taf = bulk_flight_deets['dep_weather']['TAF']
-            bulk_flight_deets['dep_datis'] = dep_atis
-            bulk_flight_deets['dep_metar'] = dep_metar
-            bulk_flight_deets['dep_taf'] = dep_taf
-            dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
-            dest_metar = bulk_flight_deets['dest_weather']['METAR']
-            dest_taf = bulk_flight_deets['dest_weather']['TAF']
-            bulk_flight_deets['dest_datis'] = dest_datis
-            bulk_flight_deets['dest_metar'] = dest_metar
-            bulk_flight_deets['dest_taf'] = dest_taf
-            return bulk_flight_deets
-        return bunch()
-
-    # data_return = provide_weather()
-    data_return = bulk_pre_assigned()['nas_departure_affected']
+    data_return = bulk_flight_deets['nas_departure_affected']
     # print(data_return.keys())
 
     # return render(request, 'weather_info.html')
@@ -530,71 +441,21 @@ def weather_data(request, airport):
     airport = 'KEWR'        # declaring it regardless
     sleep(1)
     
-    currentWorking = os.getcwd()
-    print("CURRENT WORKING",currentWorking)
-    if currentWorking[-11:] == "Cirrostrats":
-        dummy_path_to_be_used = currentWorking + "/dj/"
-        print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
-    elif currentWorking[-14:] == "Cirrostrats\dj":
-        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
-        print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
-    elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
-        dummy_path_to_be_used = currentWorking + "/"        # linux path
-        print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
+    dummy_imports_tuple = dummy_imports()
+    bulk_flight_deets = dummy_imports_tuple[0]
 
-    # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
-    # ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
+    weather_extracts = {}
+    weather_extracts['dep_weather'] = {
+        'D-ATIS': [bulk_flight_deets['dep_weather']['D-ATIS_zt'], bulk_flight_deets['dep_datis']]}
+    weather_extracts['dep_weather'].update(
+        {'METAR': [bulk_flight_deets['dep_weather']['METAR_zt'], bulk_flight_deets['dep_metar'],]})
+    weather_extracts['dep_weather'].update(
+        {'TAF': [bulk_flight_deets['dep_weather']['TAF_zt'], bulk_flight_deets['dep_taf']]})
 
-    def bulk_pre_assigned():
-        bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
-        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
+    weather_extracts['dest_weather'] = bulk_flight_deets['dest_weather']
+    
 
-        # print('OLD with html highlights', bulk_flight_deets)
-        ind = dummy_path_to_be_used + r"raw_weather_dummy_dataKIND.pkl"
-        ord = dummy_path_to_be_used + r"raw_weather_dummy_dataKORD.pkl"
-        with open(ind, 'rb') as f:
-            dep_weather = pickle.load(f)
-        with open(ord, 'rb') as f:
-            dest_weather = pickle.load(f)
-
-        weather = Weather_parse()
-        bulk_flight_deets['dep_weather'] = weather.processed_weather(
-            dummy=dep_weather)
-        weather = Weather_parse()
-        bulk_flight_deets['dest_weather'] = weather.processed_weather(
-            dummy=dest_weather)
-
-        # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
-        def bunch():
-            dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
-            dep_metar = bulk_flight_deets['dep_weather']['METAR']
-            dep_taf = bulk_flight_deets['dep_weather']['TAF']
-            bulk_flight_deets['dep_datis'] = dep_atis
-            bulk_flight_deets['dep_metar'] = dep_metar
-            bulk_flight_deets['dep_taf'] = dep_taf
-
-            dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
-            dest_metar = bulk_flight_deets['dest_weather']['METAR']
-            dest_taf = bulk_flight_deets['dest_weather']['TAF']
-            bulk_flight_deets['dest_datis'] = dest_datis
-            bulk_flight_deets['dest_metar'] = dest_metar
-            bulk_flight_deets['dest_taf'] = dest_taf
-
-            weather_extracts = {}
-            weather_extracts['dep_weather'] = {
-                'D-ATIS': [bulk_flight_deets['dep_weather']['D-ATIS_zt'], bulk_flight_deets['dep_datis']]}
-            weather_extracts['dep_weather'].update(
-                {'METAR': [bulk_flight_deets['dep_weather']['METAR_zt'], bulk_flight_deets['dep_metar'],]})
-            weather_extracts['dep_weather'].update(
-                {'TAF': [bulk_flight_deets['dep_weather']['TAF_zt'], bulk_flight_deets['dep_taf']]})
-
-            weather_extracts['dest_weather'] = bulk_flight_deets['dest_weather']
-            # print(weather_extracts['dep_weather'])
-            return weather_extracts
-
-        return bunch()
-
-    def provide_weather():
+    def actual_weather_pull():
         weather = Weather_parse()
         weather = weather.processed_weather(airport, )
 
@@ -612,8 +473,8 @@ def weather_data(request, airport):
         # weather_page_data['trr'] = weather_page_data
         return weather_page_data
 
-    # data_return = provide_weather()
-    data_return = bulk_pre_assigned()
+    # data_return = actual_weather_pull()
+    data_return = weather_extracts
     # print(data_return.keys())
 
     # return render(request, 'weather_info.html')
@@ -627,46 +488,13 @@ def summary_box(request, airport):
     airport = 'KEWR'        # declaring it regardless
     sleep(1.5)
 
-    currentWorking = os.getcwd()
-    print("CURRENT WORKING",currentWorking)
-    if currentWorking[-11:] == "Cirrostrats":
-        dummy_path_to_be_used = currentWorking + "/dj/"
-        print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
-    elif currentWorking[-14:] == "Cirrostrats\dj":
-        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
-        print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
-    elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
-        dummy_path_to_be_used = currentWorking + "/"        # linux path
-        print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
+    dummy_imports_tuple = dummy_imports()
+    bulk_flight_deets = dummy_imports_tuple[0]
 
-    # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
-    # ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
+    data_return = bulk_flight_deets['nas_departure_affected']
+    # print(data_return.keys())
 
-    def bulk_pre_assigned():
-        bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
-        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
-
-        # print('OLD with html highlights', bulk_flight_deets)
-        ind = dummy_path_to_be_used + r"raw_weather_dummy_dataKIND.pkl"
-        ord = dummy_path_to_be_used + r"raw_weather_dummy_dataKORD.pkl"
-        with open(ind, 'rb') as f:
-            dep_weather = pickle.load(f)
-        with open(ord, 'rb') as f:
-            dest_weather = pickle.load(f)
-
-        weather = Weather_parse()
-        bulk_flight_deets['dep_weather'] = weather.processed_weather(
-            dummy=dep_weather)
-        weather = Weather_parse()
-        bulk_flight_deets['dest_weather'] = weather.processed_weather(
-            dummy=dest_weather)
-
-        return bulk_flight_deets
-
-        # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
-
-    # data_return = provide_weather()
-    data_return = bulk_pre_assigned()
+    data_return = bulk_flight_deets
     print(data_return.keys())
 
     # return render(request, 'weather_info.html')
@@ -679,81 +507,7 @@ def data_v(request, airport):
     print('data_v called')
     print('within data_v', request, airport)
     airport = 'KEWR'        # declaring it regardless
-    sleep(1)
-
-
-    currentWorking = os.getcwd()
-    print("CURRENT WORKING",currentWorking)
-    if currentWorking[-11:] == "Cirrostrats":
-        dummy_path_to_be_used = currentWorking + "/dj/"
-        print('Maybe Luis path. Verify this is not a problem:', dummy_path_to_be_used)
-    elif currentWorking[-14:] == "Cirrostrats\dj":
-        dummy_path_to_be_used = currentWorking + "\\"       # Caution! Escape char issue with `\` Windows path
-        print('Maybe UJ path. Verify this is not a problem:', dummy_path_to_be_used)
-    elif currentWorking[-14:] == "Cirrostrats/dj/" or currentWorking:  # This could be just `else` but elaborate for situational awareness.
-        dummy_path_to_be_used = currentWorking + "/"        # linux path
-        print('Maybe Ismail path or others. Verify this is not a problem:', dummy_path_to_be_used)
-
-    # ismail = r"/Users/ismailsakhani/Desktop/Cirrostrats/dj/"
-    # ujas = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\\"
-    
-    def bulk_pre_assigned():
-        bulk_flight_deets_path = dummy_path_to_be_used + r"latest_bulk_11_30.pkl"
-        bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
-
-        # print('OLD with html highlights', bulk_flight_deets)
-        ind = dummy_path_to_be_used + r"raw_weather_dummy_dataKIND.pkl"
-        ord = dummy_path_to_be_used + r"raw_weather_dummy_dataKORD.pkl"
-        with open(ind, 'rb') as f:
-            dep_weather = pickle.load(f)
-        with open(ord, 'rb') as f:
-            dest_weather = pickle.load(f)
-
-        weather = Weather_parse()
-        bulk_flight_deets['dep_weather'] = weather.processed_weather(
-            dummy=dep_weather)
-        weather = Weather_parse()
-        bulk_flight_deets['dest_weather'] = weather.processed_weather(
-            dummy=dest_weather)
-
-        # These seperate out all the wather for ease of work for design. for loops are harder to work with in html
-        def bunch():
-            dep_atis = bulk_flight_deets['dep_weather']['D-ATIS']
-            dep_metar = bulk_flight_deets['dep_weather']['METAR']
-            dep_taf = bulk_flight_deets['dep_weather']['TAF']
-            bulk_flight_deets['dep_datis'] = dep_atis
-            bulk_flight_deets['dep_metar'] = dep_metar
-            bulk_flight_deets['dep_taf'] = dep_taf
-            dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
-            dest_metar = bulk_flight_deets['dest_weather']['METAR']
-            dest_taf = bulk_flight_deets['dest_weather']['TAF']
-            bulk_flight_deets['dest_datis'] = dest_datis
-            bulk_flight_deets['dest_metar'] = dest_metar
-            bulk_flight_deets['dest_taf'] = dest_taf
-            return bulk_flight_deets
-        return bunch()
-
-    def provide_weather():
-        weather = Weather_parse()
-        weather = weather.processed_weather(airport, )
-
-        weather_page_data = {}
-
-        weather_page_data['airport'] = airport
-
-        weather_page_data['D_ATIS'] = weather['D-ATIS']
-        weather_page_data['METAR'] = weather['METAR']
-        weather_page_data['TAF'] = weather['TAF']
-
-        weather_page_data['datis_zt'] = weather['D-ATIS_zt']
-        weather_page_data['metar_zt'] = weather['METAR_zt']
-        weather_page_data['taf_zt'] = weather['TAF_zt']
-        # weather_page_data['trr'] = weather_page_data
-        return weather_page_data
-
-    # data_return = provide_weather()
-    data_return = bulk_pre_assigned()
-    # print(data_return.keys())
+    bulk_flight_deets = dummy_imports()
 
     # return render(request, 'weather_info.html')
-    return JsonResponse(data_return)
+    return JsonResponse(bulk_flight_deets)

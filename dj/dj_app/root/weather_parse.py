@@ -8,9 +8,6 @@ from datetime import datetime
 from django.utils.safestring import mark_safe
 
 
-# from data_access import load_kewr
-# kewr = load_kewr()
-
 # TODO: extract all airpoirts METAR and TAF  in the airport database
             # compare all unique values and group identical ones
             # analyze data for format patterns to make a template for output
@@ -19,12 +16,14 @@ from django.utils.safestring import mark_safe
 
 class Weather_parse:
     def __init__(self) -> None:
+        # Variables to be used for static html injection that feeds to explicitly show pertinent information like lower visibility and ceilings, windshear, runway use and so on.
         self.pink_text_color = r'<span class="pink_text_color">\1\2</span>'
         self.red_text_color = r'<span class="red_text_color">\1\2</span>'
         self.yellow_highlight = r'<span class="yellow_highlight">\1\2</span>'
         self.box_around_text = r'<span class="box_around_text">\1\2</span>'         # Change name to `box_around_text`
 
         # first digit between 1-2 then space all of it optional. Then digit and fwrd slash optional then digit then SM
+        # Notice the two groups in regex that exists within brackets. Necessary for regex processing.
         self.lifr_fractional_patt = r'((?<! \d ))((M)?\d/(\d)?\dSM)'        # Just the fractional pattern
         self.ifr_fractional_patt = r'((?<!\d))(([0-2] )(\d/\d{1,2})SM)'
         self.lifr_single_or_douple = r'((?<= )0?)(0SM)'
@@ -44,13 +43,14 @@ class Weather_parse:
         self.ATIS_INFO = r"(DEP|ARR|ARR/DEP|ATIS)( INFO [A-Z])"
         self.LLWS = r"()((?<=)(LLWS|WIND|LOW LEVEL ).*?\.)"
 
-        # self.RW_IN_US = r'(ARRIVALS EXPECT|SIMUL|RUNWAYS|VISUAL|RNAV|ILS(,|RY|))(.*?)\.'
-        # The empty bracks in the beginning is to make groups as it is easier to work with 2 groups completely different from each other.
+        # The empty bracks in the beginning is to make groups as it is easier to work with 2 groups completely different from each other. Temp fix that works.
         self.RW_IN_USE = r'()((SIMUL([A-Z]*)?,?|VISUAL (AP(P)?(ROA)?CH(E)?(S)?)|(ILS(/VA|,)?|(ARRIVALS )?EXPECT|RNAV|((ARVNG|LNDG) AND )?DEPG|LANDING)) (.*?)(IN USE\.|((RWY|RY|RUNWAY|APCH|ILS|DEP|VIS) )(\d{1,2}(R|L|C)?)\.))'
+        # self.RW_IN_US = r'(ARRIVALS EXPECT|SIMUL|RUNWAYS|VISUAL|RNAV|ILS(,|RY|))(.*?)\.'
 
 
     def visibility_color_code(self,incoming_weather_data):
 
+        # Surrounds the matched pattern with the html declared during initialization(the __init__ method).
         lifr_frac = re.sub(self.lifr_fractional_patt, self.pink_text_color,incoming_weather_data)
         ifr_frac = re.sub(self.ifr_fractional_patt, self.red_text_color,lifr_frac)
         lifr_digits = re.sub(self.lifr_single_or_douple,self.pink_text_color,ifr_frac)
@@ -66,7 +66,7 @@ class Weather_parse:
             return incoming_weather_data
         
 
-    def raw_scrape(self, query=None, datis_arr=None):
+    def raw_weather_pull(self, query=None, datis_arr=None):
         
         # Find ways to convert raw query input into identifiable airport ID
             # What does this mean^^?
@@ -131,7 +131,7 @@ class Weather_parse:
             # taf_raw = metar_raw + sfc_vis + vis_half
             taf_raw = 'KRIC 022355Z 0300/0324 00000KT 2SM BR VCSH FEW015 OVC060 TEMPO 0300/0303 1 1/2SM FG BKN015 FM030300 00000KT 1SM -SHRA FG OVC002 FM031300 19005KT 3/4SM BR OVC004 FM031500 23008KT 1/26SM OVC005 FM031800 25010KT 1/4SM OVC015 FM032100 25010KT M1/4SM BKN040'
         else:
-            raw_return = self.raw_scrape(query=query,datis_arr=datis_arr)
+            raw_return = self.raw_weather_pull(query=query,datis_arr=datis_arr)
             datis_raw = raw_return['datis']
             metar_raw = raw_return['metar']
             taf_raw = raw_return['taf']

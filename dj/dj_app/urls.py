@@ -24,13 +24,11 @@ urlpatterns = [
 
     # This page is a views function that is loaded asynchronously after dummy2 loads up.
     # the string airport is passed as second argument to the nas_data and subsequent functions in views.py
-    path('nas_data/<str:airport>/', views.nas_data, name='data_v'),
+    path('nas_data/<str:airport>/', views.nas_data, name='nas_data'),
+    path('data_v/<str:airport>/', views.data_v, name='data_v'),
     path('weather_data/<str:airport>/',
          views.weather_data, name='weather_data_name'),
-
     path('summary_box/<str:airport>/', views.summary_box, name='summary_box'),
-
-
 ]
 
 

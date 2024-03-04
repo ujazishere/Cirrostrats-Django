@@ -1,0 +1,33 @@
+
+
+<!-- Airport: {{airport}}  -->
+
+
+
+
+<script>   
+ 
+    // This is only to try to make a dummy imports function to reduce duplication
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        console.log('attempting data_v')
+        // right now it doesn't work without the airport variable. Just gotta use it. 
+        var airport ='{{ airport }}' 
+        var url = 'data_v/' + airport +'/'
+            fetch(url)
+        .then(response => response.json())
+        .then(data => {             // data is a variable that pulls in data_v's bulk_flight_deet dictionary
+            let bulk_flight_deet = data;
+
+            // get all the keys
+            let all_keys = Object.keys(bulk_flight_deet)
+            // check length
+            console.log(all_keys)
+            console.log(Object.keys(bulk_flight_deet.nas_departure_affected['Ground Delay']))
+            // check type of item
+            console.log(typeof all_keys)
+
+        })
+        .catch(error => console.error('Error Console:', error));
+    });
+</script>
