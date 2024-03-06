@@ -1,7 +1,7 @@
 Practice readibility and simplicity. Aviod code duplication. Include description and documentation every step of the way. Keep upgrading and evolving.
 
 
-**IS:   
+**IS:   1
         Media queries for mobile vs desktop view. use css media queries. Check bootstrap navbar. Target screens(IPAD, smaller, etc)
         when deploying>>****** EC2.py namechange and gitignore; run_lengthy_scrape True; bypass_fa to False
 
