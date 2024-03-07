@@ -100,6 +100,7 @@
       <div class="loading-spinner" id="loadingSpinner"></div>
     </form>
     
+    <h3 id="randomH3"></h3>
 
       <p></p>
     <h3><a href="{% url 'guide' %}"> Guide </a></h3>
@@ -131,6 +132,25 @@ document.getElementById("searchButton").addEventListener("click", function(event
     document.querySelector(".search-form").submit();
   },10); // Adjust the delay as needed
 });
+
+window.addEventListener("load", function() {
+  // Array of h3 tag contents
+  const h3Contents = [
+    "Want to know if your gate is occupied in Newark? Look up the gate. For example: 71x",
+    "Hit the live map to see the HD weather radar",
+    "Want to know the weather at a particular airport? Look it up."
+  ];
+
+  // Get a random index within the range of the array length
+  const randomIndex = Math.floor(Math.random() * h3Contents.length);
+
+  // Get the h3 element
+  const randomH3 = document.getElementById("randomH3");
+
+  // Set the content of the h3 element to the randomly chosen content
+  randomH3.textContent = h3Contents[randomIndex];
+});
+
 
 
     </script>
