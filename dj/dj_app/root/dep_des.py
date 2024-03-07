@@ -3,8 +3,6 @@ from bs4 import BeautifulSoup as bs4
 from .root_class import Root_class
 from .flight_aware_data_pull import flight_aware_data_pull
 import xml.etree.ElementTree as ET
-import re
-import pytz
 
 '''
 This Script pulls the departure and destination when provided with the flight number.

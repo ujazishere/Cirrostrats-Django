@@ -7,12 +7,11 @@ Practice readibility and simplicity. Aviod code duplication. Include description
 
         `ext d` work. Make javascript functions and use functions widely.
         
-        Make sure bypass_fa for fa(view.py line 200) is true while working local and false when deploying on EC2
         WIP - summery box shadow and expand/collapse (fast)animation.  
         work on script to extract data - aviation_stack_data_pull.py
         infrequent Homepage hints:
-             `Want to know if your gate is occupied in newark? lookup the gate. for example: 71x
-             `hit the live map to see the HD weather rader`
+             `Want to know if your gate is occupied in newark? lookup the gate. try: 71x
+             `hit the live map to see the HD weather radar`
              `want to know the weather at a particular airport? look it up.` 
         
 
