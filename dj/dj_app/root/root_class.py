@@ -1,5 +1,4 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from .Switch_n_auth import EC2_location
 import requests
 from bs4 import BeautifulSoup as bs4
 from datetime import datetime
@@ -15,7 +14,13 @@ class Root_class():
 
 
     def send_email(self, body_to_send):
-        full_email = f"Subject: {EC2_location}\n\n{body_to_send}"
+
+        try: 
+            from .Switch_n_auth import EC2_location
+            full_email = f"Subject: {EC2_location}\n\n{body_to_send}"
+        except:
+            print('EC2_location within dj\dj_app\root\Switch_n_auth.py was not found. Need the file and the variable as string.')
+            full_email = f"Subject: UNKNOWN Local\n\n{body_to_send}"
         smtp_server = "smtp.gmail.com"
         smtp_port = 587  # Use 587 for TLS port
         smtp_user = "publicuj@gmail.com"

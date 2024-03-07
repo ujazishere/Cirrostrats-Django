@@ -13,7 +13,6 @@ from time import sleep
 from django.shortcuts import render
 from django.http import JsonResponse
 # This will throw error if the file is not found. Change the EC2 file to this name.
-from .root.Switch_n_auth import run_lengthy_web_scrape
 import os
 
 '''
@@ -26,6 +25,10 @@ It will then run
 # Caution. If this file doesn't exist make one that contains this variable and make it a bool. 
 # Keep it false to avoid errors with from sending email errors as it is attached to UJ's personal email creds.
 # Before you remove this make sure you account for its use: Used for sending email notifications. Email creds are in Switches_n_auth.
+try:
+    from .root.Switch_n_auth import run_lengthy_web_scrape
+except:
+    run_lengthy_web_scrape = False
 if run_lengthy_web_scrape:
     print('Running Lengthy web scrape')
     gc_thread = Gate_scrape_thread()
