@@ -4,6 +4,26 @@ body {
 }
 
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.visible {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+
 
 /************** this code is for link container *************/
 

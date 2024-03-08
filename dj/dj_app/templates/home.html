@@ -23,7 +23,7 @@
       text-align: center; /* Center horizontally */
       border-radius: 8px;
       padding: 17px;
-      font-size: 17px;
+      font-size: 22px;
       left: 50%; /* Center horizontally */
       transform: translateX(-50%); /* Center horizontally */
     }
@@ -53,8 +53,6 @@
       text-decoration: underline;
     }
 
-
-
     .loading-spinner {
       display: none;
       width: 30px;
@@ -75,6 +73,25 @@
     .dark-mode .loading-spinner {
       border-top: 3px solid #2D333B;
     }
+
+    @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.visible {
+  animation: fadeIn 0.5s ease forwards;
+}
 
 
   </style>
@@ -100,6 +117,7 @@
       <div class="loading-spinner" id="loadingSpinner"></div>
     </form>
     
+    <h3 id="randomH3" class="hidden"></h3>
 
       <p></p>
     <h3><a href="{% url 'guide' %}"> Guide </a></h3>
@@ -131,6 +149,29 @@ document.getElementById("searchButton").addEventListener("click", function(event
     document.querySelector(".search-form").submit();
   },10); // Adjust the delay as needed
 });
+
+
+window.addEventListener("load", function() {
+  // Array of h3 tag contents
+  const h3Contents = [
+    "Want to know if your gate is occupied in Newark? Look up the gate. For example: 71x",
+    "Hit the live map to see the HD weather radar",
+    "Want to know the weather at a particular airport? Look it up."
+  ];
+
+  // Get a random index within the range of the array length
+  const randomIndex = Math.floor(Math.random() * h3Contents.length);
+
+  // Get the h3 element
+  const randomH3 = document.getElementById("randomH3");
+
+  // Set the content of the h3 element to the randomly chosen content
+  randomH3.textContent = h3Contents[randomIndex];
+
+  // Add the animation class to make the h3 visible with animation
+  randomH3.classList.add("visible");
+});
+
 
 
     </script>
