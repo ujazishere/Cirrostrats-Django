@@ -10,91 +10,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
 
-  <style>
-    /* CSS for toast message */
-
-    .toast {
-      visibility: hidden;
-      position: fixed;
-      width: 80%; 
-      max-width: 600px;
-      background-color: #272e34;
-      color: #dcdcdc;
-      text-align: center; /* Center horizontally */
-      border-radius: 8px;
-      padding: 17px;
-      font-size: 22px;
-      left: 50%; /* Center horizontally */
-      transform: translateX(-50%); /* Center horizontally */
-    }
-
-    .dark-mode .toast {
-      background-color: #515A65;
-      color: #dcdcdc;
-    }
-
-    .show {
-      visibility: visible;
-      -webkit-animation: fadein 0.5s;
-      animation: fadein 0.5s;
-    }
-    @-webkit-keyframes fadein {
-      from {opacity: 0;} 
-      to {opacity: 1;}
-    }
-    @keyframes fadein {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-    /* Override link styling */
-    .toast a {
-      color: rgb(255, 255, 255);
-      text-decoration: none;
-      text-decoration: underline;
-    }
-
-    .loading-spinner {
-      display: none;
-      width: 30px;
-      height: 30px;
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid #24292E;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      position: relative;
-      left: 10px; /* Adjust as needed to move the spinner to the right */
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .dark-mode .loading-spinner {
-      border-top: 3px solid #2D333B;
-    }
-
-    @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.hidden {
-  opacity: 0;
-}
-
-.visible {
-  animation: fadeIn 0.5s ease forwards;
-}
-
-
-  </style>
 
 </head>
 <body>
@@ -109,13 +24,13 @@
   {% csrf_token %}
 
   
-    <form method="post" class="search-form">
-      {% csrf_token %}
-      <label for="query"></label>
-      <input type="text" name="query" id="query">
-      <button type="submit" onclick="search()" id="searchButton">Search</button>
-      <div class="loading-spinner" id="loadingSpinner"></div>
-    </form>
+<form method="post" class="search-form">
+  {% csrf_token %}
+  <label for="query"></label>
+  <input type="text" name="query" id="query">
+  <button type="submit" id="searchButton">Search</button>
+  <div class="loading-spinner" id="loadingSpinner"></div>
+</form>
     
     <h3 id="randomH3" class="hidden"></h3>
 
@@ -134,7 +49,8 @@ function showToast(message) {
 }
 
 // Call the showToast function with your desired message
-showToast("!! Scheduled Tests Coming Up! Please save and access the main webapp through: <a href='https://cirrostrats.us'>cirrostrats.us</a>. Also, please save my number and feel free to reach out for troubleshooting and general questions. <a href='tel:+12015099485'>+1 201-509-9485</a> - Ujas (UJ)");
+// TODO: is: make this an alert using yellow triangle icon - https://getbootstrap.com/docs/5.3/components/alerts/
+showToast("!! Please save and access the main webapp through: <a href='https://cirrostrats.us'>cirrostrats.us</a>. This test server will be shutting down soon.<a href='tel:+12015099485'>+1 201-509-9485</a> - Ujas (UJ)");
 
 // Add event listener to the search button
 document.getElementById("searchButton").addEventListener("click", function(event) {
@@ -151,6 +67,7 @@ document.getElementById("searchButton").addEventListener("click", function(event
 });
 
 
+// TODO: is Style these as `info` prompts using bootstraps
 window.addEventListener("load", function() {
   // Array of h3 tag contents
   const h3Contents = [
