@@ -9,8 +9,7 @@
   <title>LETSLFYSAFE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
-
-
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
   <h1>Cirrostrats</h1> 
@@ -24,33 +23,46 @@
   {% csrf_token %}
 
   
-<form method="post" class="search-form">
-  {% csrf_token %}
-  <label for="query"></label>
-  <input type="text" name="query" id="query">
-  <button type="submit" id="searchButton">Search</button>
-  <div class="loading-spinner" id="loadingSpinner"></div>
-</form>
+    <form method="post" class="search-form">
+      {% csrf_token %}
+      <label for="query"></label>
+      <input type="text" name="query" id="query">
+      <button type="submit" onclick="search()" id="searchButton">Search</button>
+      <div class="loading-spinner" id="loadingSpinner"></div>
+    </form>
     
     <h3 id="randomH3" class="hidden"></h3>
+
+
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+          <symbol id="info-fill" viewBox="0 0 16 16">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+          </symbol>
+        </svg>
 
       <p></p>
     <h3><a href="{% url 'guide' %}"> Guide </a></h3>
     <h3><a href="{% url 'live_map' %}"> Live Map </a></h3>
 
-    <div id="toast" class="toast"></div>
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
+        <use xlink:href="#exclamation-triangle-fill"/>
+      </svg>
+      <div>
+        !! Scheduled Tests Coming Up! Please save and access the main webapp through: 
+        <a href='https://cirrostrats.us'>cirrostrats.us</a>. 
+        This test server will be shutting down soon. 
+        <a href='tel:+12015099485'>+1 201-509-9485</a> - Ujas (UJ)
+      </div>
+    </div>
+    
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      <symbol id="exclamation-triangle-fill" viewBox="0 0 16 16">
+        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+      </symbol>
+    </svg>
 
     <script>
-// Function to show toast message
-function showToast(message) {
-  var toast = document.getElementById("toast");
-  toast.innerHTML = message;
-  toast.className = "toast show";
-}
-
-// Call the showToast function with your desired message
-// TODO: is: make this an alert using yellow triangle icon - https://getbootstrap.com/docs/5.3/components/alerts/
-showToast("!! Please save and access the main webapp through: <a href='https://cirrostrats.us'>cirrostrats.us</a>. This test server will be shutting down soon.<a href='tel:+12015099485'>+1 201-509-9485</a> - Ujas (UJ)");
 
 // Add event listener to the search button
 document.getElementById("searchButton").addEventListener("click", function(event) {
@@ -67,28 +79,31 @@ document.getElementById("searchButton").addEventListener("click", function(event
 });
 
 
-// TODO: is Style these as `info` prompts using bootstraps
 window.addEventListener("load", function() {
-  // Array of h3 tag contents
-  const h3Contents = [
-    "Want to know if your gate is occupied in Newark? Look up the gate. For example: 71x",
-    "Hit the live map to see the HD weather radar",
-    "Want to know the weather at a particular airport? Look it up."
-  ];
+      // Array of h3 tag contents
+      const h3Contents = [
+        "Want to know if your gate is occupied in Newark? Look up the gate. For example: 71x",
+        "Hit the live map to see the HD weather radar",
+        "Want to know the weather at a particular airport? Look it up."
+      ];
 
-  // Get a random index within the range of the array length
-  const randomIndex = Math.floor(Math.random() * h3Contents.length);
+      // Get a random index within the range of the array length
+      const randomIndex = Math.floor(Math.random() * h3Contents.length);
 
-  // Get the h3 element
-  const randomH3 = document.getElementById("randomH3");
+      // Get the h3 element
+      const randomH3 = document.getElementById("randomH3");
 
-  // Set the content of the h3 element to the randomly chosen content
-  randomH3.textContent = h3Contents[randomIndex];
+      // Set the content of the h3 element to the randomly chosen content
+      randomH3.innerHTML = `
+        <svg class="bi me-2" width="16" height="16" fill="currentColor">
+          <use xlink:href="#info-fill"/>
+        </svg>
+        ${h3Contents[randomIndex]}
+      `;
 
-  // Add the animation class to make the h3 visible with animation
-  randomH3.classList.add("visible");
-});
-
+      // Add the animation class to make the h3 visible with animation
+      randomH3.classList.add("visible");
+    });
 
 
     </script>

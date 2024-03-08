@@ -3,88 +3,68 @@ body {
   padding: 0;
 }
 
-    /* CSS for toast message */
-
-    .toast {
-      visibility: hidden;
-      position: fixed;
-      width: 80%; 
-      max-width: 600px;
-      background-color: #272e34;
-      color: #dcdcdc;
-      text-align: center; /* Center horizontally */
-      border-radius: 8px;
-      padding: 17px;
-      font-size: 22px;
-      left: 50%; /* Center horizontally */
-      transform: translateX(-50%); /* Center horizontally */
-    }
-
-    .dark-mode .toast {
-      background-color: #515A65;
-      color: #dcdcdc;
-    }
-
-    .show {
-      visibility: visible;
-      -webkit-animation: fadein 0.5s;
-      animation: fadein 0.5s;
-    }
-    @-webkit-keyframes fadein {
-      from {opacity: 0;} 
-      to {opacity: 1;}
-    }
-    @keyframes fadein {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-    /* Override link styling */
-    .toast a {
-      color: rgb(255, 255, 255);
-      text-decoration: none;
-      text-decoration: underline;
-    }
-
-    .loading-spinner {
-      display: none;
-      width: 30px;
-      height: 30px;
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid #24292E;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      position: relative;
-      left: 10px; /* Adjust as needed to move the spinner to the right */
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .dark-mode .loading-spinner {
-      border-top: 3px solid #2D333B;
+    /* Additional CSS for animation */
+    .visible {
+      animation: fadeIn 1s ease-in-out forwards;
     }
 
     @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+.alert-warning {
+  background-color: #fff3cdb8; /* Yellow background color */
+  color: #000000; /* Dark color for text */
+  border-color: #fff3cdb8; /* Border color */
+  position: fixed;
+  width: 80%;
+  max-width: 600px;
+  text-align: center; /* Center horizontally */
+  border-radius: 8px;
+  padding: 17px;
+  font-size: 22px;
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
+}
+
+.alert a {
+  color: inherit;
+}
+
+.dark-mode .toast {
+  background-color: #515a65;
+  color: #dcdcdc;
+}
+
+.loading-spinner {
+  display: none;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #24292e;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  position: relative;
+  left: 10px; /* Adjust as needed to move the spinner to the right */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  100% {
+    transform: rotate(360deg);
   }
 }
 
-.hidden {
-  opacity: 0;
+.dark-mode .loading-spinner {
+  border-top: 3px solid #2d333b;
 }
-
-.visible {
-  animation: fadeIn 0.5s ease forwards;
-}
-
 
 @keyframes fadeIn {
   from {
@@ -105,14 +85,31 @@ body {
   animation: fadeIn 0.5s ease forwards;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+.hidden {
+  opacity: 0;
+}
+
+.visible {
+  animation: fadeIn 0.5s ease forwards;
+}
 
 /************** this code is for link container *************/
 
-  .dark-mode .links-container a {
-    color: white;
-  }
-  
+.dark-mode .links-container a {
+  color: white;
+}
+
 .links-container {
   display: flex;
   justify-content: center;
@@ -124,17 +121,15 @@ body {
 }
 
 .links-container a {
-  color: #000000; 
-  text-decoration: none; 
-  transition: font-size 0.2s; 
+  color: #000000;
+  text-decoration: none;
+  transition: font-size 0.2s;
 }
 
 .links-container a:hover {
-  text-decoration: underline; 
-  font-size: 18px; 
+  text-decoration: underline;
+  font-size: 18px;
 }
-
-
 
 /************** this code is for styles *************/
 
@@ -160,7 +155,7 @@ h3 {
 }
 
 h3 a {
-  color: #24292E;
+  color: #24292e;
 }
 
 p {
@@ -171,7 +166,7 @@ p {
 }
 
 .dark-mode h3 a {
-  color: #ADBAC7 !important;
+  color: #adbac7 !important;
 }
 
 /************** this code is for search bar *************/
@@ -195,8 +190,8 @@ p {
 }
 
 .dark-mode .search-form input[type="text"] {
-  border: 1px solid rgb(255, 255, 255); 
-  background-color: #2D333B;
+  border: 1px solid rgb(255, 255, 255);
+  background-color: #2d333b;
   color: white;
 }
 
@@ -204,16 +199,15 @@ p {
   padding: 10px;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: #2D333B;
+  background-color: #2d333b;
   color: #ffffff;
   cursor: pointer;
 }
 
-.dark-mode .search-form button{
+.dark-mode .search-form button {
   border: 1px solid white;
-  background-color: #2D333B;
+  background-color: #2d333b;
 }
-
 
 /* Media queries for responsiveness */
 @media only screen and (max-width: 600px) {
@@ -237,7 +231,6 @@ h1 {
   margin-top: 50px;
 }
 
-
 @media only screen and (max-width: 400px) {
   h1 {
     font-size: 35px;
@@ -251,7 +244,6 @@ h1 {
     width: 150px;
   }
 }
-
 
 h1 {
   font-size: 35px;
