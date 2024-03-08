@@ -3,6 +3,88 @@ body {
   padding: 0;
 }
 
+    /* CSS for toast message */
+
+    .toast {
+      visibility: hidden;
+      position: fixed;
+      width: 80%; 
+      max-width: 600px;
+      background-color: #272e34;
+      color: #dcdcdc;
+      text-align: center; /* Center horizontally */
+      border-radius: 8px;
+      padding: 17px;
+      font-size: 22px;
+      left: 50%; /* Center horizontally */
+      transform: translateX(-50%); /* Center horizontally */
+    }
+
+    .dark-mode .toast {
+      background-color: #515A65;
+      color: #dcdcdc;
+    }
+
+    .show {
+      visibility: visible;
+      -webkit-animation: fadein 0.5s;
+      animation: fadein 0.5s;
+    }
+    @-webkit-keyframes fadein {
+      from {opacity: 0;} 
+      to {opacity: 1;}
+    }
+    @keyframes fadein {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    /* Override link styling */
+    .toast a {
+      color: rgb(255, 255, 255);
+      text-decoration: none;
+      text-decoration: underline;
+    }
+
+    .loading-spinner {
+      display: none;
+      width: 30px;
+      height: 30px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #24292E;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: relative;
+      left: 10px; /* Adjust as needed to move the spinner to the right */
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .dark-mode .loading-spinner {
+      border-top: 3px solid #2D333B;
+    }
+
+    @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.visible {
+  animation: fadeIn 0.5s ease forwards;
+}
+
 
 @keyframes fadeIn {
   from {

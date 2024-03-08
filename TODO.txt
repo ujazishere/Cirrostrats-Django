@@ -1,18 +1,17 @@
 Practice readibility and simplicity. Aviod code duplication. Include description and documentation every step of the way. Keep upgrading and evolving.
 
 
-**IS:   1
-        Media queries for mobile vs desktop view. use css media queries. Check bootstrap navbar. Target screens(IPAD, smaller, etc)
-        when deploying>>****** EC2.py namechange and gitignore; run_lengthy_scrape True; bypass_fa to False
-
+**IS:   use command shift f to find targetted tasks - "TODO: is"
+        
+        Clean up code-use prettiy or some extension to cleanup indents; separate css from html. 
+        
+        zulu time dymanic with the weather published times using js instead of the static python way.
         `ext d` work. Make javascript functions and use functions widely.
         
         WIP - summery box shadow and expand/collapse (fast)animation.  
         work on script to extract data - aviation_stack_data_pull.py
-        infrequent Homepage hints:
-             `Want to know if your gate is occupied in newark? lookup the gate. try: 71x
-             `hit the live map to see the HD weather radar`
-             `want to know the weather at a particular airport? look it up.` 
+        Media queries for mobile vs desktop view. use css media queries. Check bootstrap navbar. Target screens(IPAD, smaller, etc)
+            make side bar
         
 
 **UV:   
@@ -196,3 +195,8 @@ weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf',
         DONE! integrate time passed since weather published time.(2 mins ago) and highlight it red when over 52 mins old.
         IS DONE!!! PRIORITY!!! loading/spinner symbol for search bar;
             Implement loading symbol when searching.
+    
+        DONE! infrequent Homepage hints:
+             `Want to know if your gate is occupied in newark? lookup the gate. try: 71x
+             `hit the live map to see the HD weather radar`
+             `want to know the weather at a particular airport? look it up.` 
