@@ -9,6 +9,31 @@ body {
   color: gray;
 }
 
+.loading-spinner {
+  display: none;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #24292e;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  position: relative;
+  left: 10px; /* Adjust as needed to move the spinner to the right */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.dark-mode .loading-spinner {
+  border-top: 3px solid #2d333b;
+}
+
 
 /************** this code is for comparison table *************/
 
