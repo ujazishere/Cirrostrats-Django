@@ -21,6 +21,8 @@ class Weather_parse:
         self.red_text_color = r'<span class="red_text_color">\1\2</span>'
         self.yellow_highlight = r'<span class="yellow_highlight">\1\2</span>'
         self.box_around_text = r'<span class="box_around_text">\1\2</span>'         # Change name to `box_around_text`
+        self.yellow_warning = r'<span class="yellow_warning">\1\2</span>' 
+
 
         # first digit between 1-2 then space all of it optional. Then digit and fwrd slash optional then digit then SM
         # Notice the two groups in regex that exists within brackets. Necessary for regex processing.
@@ -56,6 +58,7 @@ class Weather_parse:
         lifr_digits = re.sub(self.lifr_single_or_douple,self.pink_text_color,ifr_frac)
         ifr_digits = re.sub(self.ifr_single_or_douple,self.red_text_color,lifr_digits)
         processed_incoming_data = ifr_digits
+
 
 
 
@@ -227,7 +230,7 @@ class Weather_parse:
 
         highlighted_datis = re.sub(self.ATIS_INFO, self.box_around_text, highlighted_datis)
         highlighted_datis = re.sub(self.ALTIMETER_PATTERN, self.box_around_text, highlighted_datis)
-        highlighted_datis = re.sub(self.LLWS, self.box_around_text, highlighted_datis)
+        highlighted_datis = re.sub(self.LLWS, self.yellow_warning, highlighted_datis)
         highlighted_datis = re.sub(self.RW_IN_USE, self.box_around_text,highlighted_datis)
         
         highlighted_metar = re.sub(self.ALTIMETER_PATTERN, self.box_around_text, highlighted_metar)
