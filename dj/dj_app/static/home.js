@@ -39,3 +39,16 @@ window.addEventListener("load", function () {
   // Add the animation class to make the h3 visible with animation
   randomH3.classList.add("visible");
 });
+
+
+function search() {
+  // Hide the button
+  document.getElementById("searchButton").style.display = "none";
+  
+  // Optionally, you might want to show a loading spinner
+  document.getElementById("loadingSpinner").style.display = "block";
+
+  // Perform your search operation here
+  // For example, submit the form
+  document.querySelector('.search-form').submit();
+}
