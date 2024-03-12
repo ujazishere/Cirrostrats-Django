@@ -44,8 +44,8 @@
 <form method="post" class="search-form">
   {% csrf_token %}
   <label for="query"></label>
-  <input type="text" name="query" id="query" />
-  <button type="submit" id="searchButton">Search</button>
+  <input type="text" name="query" id="query">
+  <button type="submit" onclick="search()" id="searchButton">Search</button>
   <div class="loading-spinner" id="loadingSpinner"></div>
 </form>
 

@@ -314,7 +314,7 @@
     {% csrf_token %}
     <label for="query"></label>
     <input type="text" name="query" id="query">
-    <button type="submit" id="searchButton">Search</button>
+    <button type="submit" onclick="search()" id="searchButton">Search</button>
     <div class="loading-spinner" id="loadingSpinner"></div>
   </form>
 
