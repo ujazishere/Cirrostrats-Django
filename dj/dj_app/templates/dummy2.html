@@ -8,7 +8,11 @@
     <title>Dummy Page</title>
   </head>
   <body>
-    <link rel="stylesheet" type="text/css" href="{% static 'flight_deet.css' %}" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'flight_deet.css' %}"
+    />
 
     <meta name="format-detection" content="telephone=no" />
 
@@ -25,12 +29,18 @@
     <!-- Departure weather container -->
     <div id="departure-container" class="table-container">
       <div class="accordion-button-container">
-        <div class="accordion-content active" id="departure-content-{{ departure_ID }}">
+        <div
+          class="accordion-content active"
+          id="departure-content-{{ departure_ID }}"
+        >
           <table class="comparison-table">
             <thead>
               <tr>
                 <th>
-                  <div class="header-button" onclick="toggleAccordion('departure-content-{{ departure_ID }}')">
+                  <div
+                    class="header-button"
+                    onclick="toggleAccordion('departure-content-{{ departure_ID }}')"
+                  >
                     &#9660; Departure
                   </div>
                 </th>
@@ -40,9 +50,15 @@
             <tbody id="weather_DataBody_departure">
               <!-- <script>createWeatherRows(weather_data, 'weather_DataBody_departure');</script> -->
               <td style="width: 100%; text-align: left">
-                <span style="float: left; width: 33%">{{ scheduled_departure_time }}</span>
-                <span style="float: left; width: 33%; text-align: center">{{ departure_ID }}</span>
-                <span style="float: right; width: 33%; text-align: right">{{ departure_gate }}</span>
+                <span style="float: left; width: 33%"
+                  >{{ scheduled_departure_time }}</span
+                >
+                <span style="float: left; width: 33%; text-align: center"
+                  >{{ departure_ID }}</span
+                >
+                <span style="float: right; width: 33%; text-align: right"
+                  >{{ departure_gate }}</span
+                >
               </td>
             </tbody>
           </table>
@@ -51,8 +67,7 @@
     </div>
 
     <!-- Departure nas -->
-    {% include 'nas_data.html'%}
-    {% include 'data_v.html'%}
+    {% include 'nas_data.html'%} {% include 'data_v.html'%}
     <!-- Dont suppose this include statement needs to be repeated for destination-->
     <table class="another-table" id="weatherTable">
       <thead></thead>
@@ -62,13 +77,19 @@
     <!-- Destination weather container-->
     <div id="destination-container" class="table-container">
       <div class="accordion-button-container">
-        <div class="accordion-content active" id="destination-content-{{ destination_ID }}">
+        <div
+          class="accordion-content active"
+          id="destination-content-{{ destination_ID }}"
+        >
           <div class="custom-table-wrapper">
             <table class="comparison-table">
               <thead>
                 <tr>
                   <th>
-                    <div class="header-button" onclick="toggleAccordion('destination-content-{{ destination_ID }}')">
+                    <div
+                      class="header-button"
+                      onclick="toggleAccordion('destination-content-{{ destination_ID }}')"
+                    >
                       &#9660; Destination
                     </div>
                   </th>
@@ -78,9 +99,15 @@
               <tbody id="weather_DataBody_destination">
                 <tr>
                   <td style="width: 100%; text-align: left">
-                    <span style="float: left; width: 33%">{{scheduled_arrival_time}}</span>
-                    <span style="float: left; width: 33%; text-align: center">{{ destination_ID }}</span>
-                    <span style="float: right; width: 33%; text-align: right">{{ arrival_gate }}</span>
+                    <span style="float: left; width: 33%"
+                      >{{scheduled_arrival_time}}</span
+                    >
+                    <span style="float: left; width: 33%; text-align: center"
+                      >{{ destination_ID }}</span
+                    >
+                    <span style="float: right; width: 33%; text-align: right"
+                      >{{ arrival_gate }}</span
+                    >
                   </td>
                 </tr>
               </tbody>
@@ -98,14 +125,13 @@
     </table>
 
     <!-- Search box-->
-    <div class="search-form-wrapper">
-      <form method="post" class="search-form">
-        {% csrf_token %}
-        <label for="query"></label>
-        <input type="text" name="query" id="query" />
-        <button type="submit">Search</button>
-      </form>
-    </div>
+    <form method="post" class="search-form">
+      {% csrf_token %}
+      <label for="query"></label>
+      <input type="text" name="query" id="query" />
+      <button type="submit" onclick="search()" id="searchButton">Search</button>
+      <div class="loading-spinner" id="loadingSpinner"></div>
+    </form>
 
     <script>
       // This script is for departure/destination expand/collapse animation
@@ -118,6 +144,34 @@
         } else {
           tbody.style.display = "none"; // Hide the content
         }
+      }
+
+      // Add event listener to the search button
+      document
+        .getElementById("searchButton")
+        .addEventListener("click", function (event) {
+          // Prevent the default form submission behavior
+          event.preventDefault();
+
+          // Show the loading spinner
+          document.getElementById("loadingSpinner").style.display = "block";
+
+          // Submit the form after a short delay to allow the loading spinner to be displayed
+          setTimeout(function () {
+            document.querySelector(".search-form").submit();
+          }, 10); // Adjust the delay as needed
+        });
+
+      function search() {
+        // Hide the button
+        document.getElementById("searchButton").style.display = "none";
+
+        // Optionally, you might want to show a loading spinner
+        document.getElementById("loadingSpinner").style.display = "block";
+
+        // Perform your search operation here
+        // For example, submit the form
+        document.querySelector(".search-form").submit();
       }
     </script>
 
