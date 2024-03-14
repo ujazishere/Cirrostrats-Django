@@ -199,65 +199,11 @@ patt_match = {
 
     }
 
-from dj.dj_app.root.root_class import Root_class
-import re
-import pickle
-from collections import Counter
-import json
-import requests
-# this function pulls all datis and returns them in list form
 all_datis_airports_path = r'c:\users\ujasv\onedrive\desktop\codes\cirrostrats\all_datis_airports.pkl'
 with open(all_datis_airports_path, 'rb') as f:
     all_datis_airports = pickle.load(f)
 
-async def get_tasks(session):
-    tasks = []
-    for airport_id in all_datis_airports:
-        url = f"https://datis.clowd.io/api/{airport_id}"
-        tasks.append(asyncio.create_task(session.get(url)))
-    return tasks
-
-async def main():
-    async with aiohttp.ClientSession() as session:
-        tasks = await get_tasks(session)
-        # Upto here the tasks are created which is very light.
-
-        # Actual pull work is done using as_completed 
-        datis_resp = []
-        for task in asyncio.as_completed(tasks):        # use .gather() instead of .as_completed for background completion
-            resp = await task 
-            jj = await resp.json()
-            datis_raw = 'n/a'
-            if type(jj) == list and 'datis' in jj[0].keys():
-                datis_raw = jj[0]['datis']
-            datis_resp.append(datis_raw)
-        return datis_resp
-
-# Works regardless of the syntax error. Not sut why its showing syntax error
-all_76_datis = await asyncio.ensure_future(main())
-
-
-# extract datis with dates in the filename
-yyyymmddhhmm = Root_class().date_time(raw_utc='HM')
-print(yyyymmddhhmm)
-path = rf'c:\users\ujasv\onedrive\desktop\pickles\datis_info_stack_{yyyymmddhhmm}.pkl'
-
-# **********CAUTION!!! HARD WRITE***************
-with open(path, 'wb') as f:
-    pickle.dump(all_76_datis,f)
-
-
-
-
-
-
-
-
-
-
-
-
-# old synchronous series wise ineficient pull.
+# old synchronous series wise ineficient pull. New one is async_datis_extracts
 def datis_scrape():
 
     def datis_raw_data(airport_id):
@@ -275,4 +221,3 @@ def datis_scrape():
         datis_info_stack.append(datis_raw_data(each_id))
     
     return datis_info_stack
-

@@ -633,6 +633,7 @@ table.summary-table thead th {
   background-color: rgba(251, 118, 118, 0.847);
 }
 
+/* TODO: is- account for dark mode. */
 .yellow_warning {
   background-color: rgba(255, 247, 159, 0.999);
   padding: 1.5px; 

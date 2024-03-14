@@ -183,6 +183,12 @@ p {
   background-color: rgba(251, 118, 118, 0.847);
 }
 
+.yellow_warning {
+  background-color: rgba(255, 247, 159, 0.999);
+  padding: 1.5px; 
+  border-radius: 7px;
+}
+
 
 
 @media only screen and (max-width: 600px) {

@@ -15,21 +15,24 @@ class Pull_flight_info(Root_class):
         super().__init__()
 
 
-    def fs_dep_arr_timezone_pull(self, flt_num_query):
+    def fs_dep_arr_timezone_pull(self, flt_num_query=None, pre_process=None):
         if type(flt_num_query) == list:
-             flt_num_query = flt_num_query[1]
-            
+            flt_num_query = flt_num_query[1]
+
         # flt_num = query.split()[1]
         flt_num = flt_num_query
-        # airport = query.split()[2]        This was for when passing `i flt_num airport` as search
-        date = self.date_time(raw=True)     # Root_class inheritance format yyyymmdd
-        
-        #  TODO: pull information on flight numners from the info web and use that to pull info through flightview.
-        # attempt to only pull departure and destination from the united from the info web.
-        # TODO: Use Flightstats for scheduled times conversion
-        flight_stats_url = f"https://www.flightstats.com/v2/flight-tracker/UA/{flt_num}?year={date[:4]}&month={date[4:6]}&date={date[-2:]}"
-        soup_fs = self.request(flight_stats_url)
-        
+        if pre_process:
+            soup_fs = pre_process
+        else:
+            # airport = query.split()[2]        This was for when passing `i flt_num airport` as search
+            date = self.date_time(raw=True)     # Root_class inheritance format yyyymmdd
+            
+            #  TODO: pull information on flight numners from the info web and use that to pull info through flightview.
+            # attempt to only pull departure and destination from the united from the info web.
+            # TODO: Use Flightstats for scheduled times conversion
+            flight_stats_url = f"https://www.flightstats.com/v2/flight-tracker/UA/{flt_num}?year={date[:4]}&month={date[4:6]}&date={date[-2:]}"
+            soup_fs = self.request(flight_stats_url)
+
         # fs_juice = soup_fs.select('[class*="TicketContainer"]')     # This is the whole packet not needed now
         fs_time_zone = soup_fs.select('[class*="TimeGroupContainer"]')
         if fs_time_zone:
@@ -42,7 +45,7 @@ class Pull_flight_info(Root_class):
         else:
             departure_time_zone,arrival_time_zone = [None]*2
 
-        print('Success at pull_UA for scheduled_dep and arr with time zone')
+        print('Success at flightstats.com for scheduled_dep and arr local time stating what time zone it is.')
         bulk_flight_deet = {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                             'scheduled_departure_time': departure_time_zone,
                             'scheduled_arrival_time': arrival_time_zone,
@@ -51,11 +54,14 @@ class Pull_flight_info(Root_class):
         return bulk_flight_deet
 
 
-    def united_departure_destination_scrape(self, query=None):
-        flt_num = query
-        info = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
-        soup = self.request(info)
+    def united_departure_destination_scrape(self, flt_num=None,pre_process=None):
+        if pre_process:
+            soup = pre_process
+        else:
+            info = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
+            soup = self.request(info)
         # Airport distance and duration can be misleading. Be careful with using these. 
+
         # table = soup.find('div', {'class': 'a2'})
         try: 
             airport_id = soup.find_all('div', {'class': 'a2_ak'})
@@ -255,17 +261,24 @@ class Pull_flight_info(Root_class):
                 }
 
 
-    def flight_view_gate_info(self, flt_num, airport=None):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
+    def flight_view_gate_info(self, flt_num=None, airport=None, pre_process=None):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
 
         # date format in the url is YYYYMMDD. For testing, you can find flt_nums on https://www.airport-ewr.com/newark-departures
-        use_custom_dummy_data = False
-        if use_custom_dummy_data:
-            date = 20230505
-        else:
-            date = str(self.date_time(raw=True))     # Root_class inheritance format yyyymmdd
-        flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport[1:]}"
-        print('Pulled gate info from:', flight_view)
-        soup = self.request(flight_view)
+        if pre_process:
+            soup = pre_process
+        else:            
+            use_custom_dummy_data = False
+            if use_custom_dummy_data:
+                date = 20230505
+            else:
+                date = str(self.date_time(raw=True))     # Root_class inheritance format yyyymmdd
+            try:        # the airport coming in initially wouldnt take airport as arg since it lacks the initial info, hence sec rep info will have this airport ID
+                flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport[1:]}"
+            except:
+                pass
+            print('Pulled gate info from:', flight_view)
+            
+            soup = self.request(flight_view)
         try :
             leg_data = soup.find_all('div', class_='leg')   # Has all the departure and destination data
             departure_gate = leg_data[0].find_all('tr', class_='even')[1].text[17:]
@@ -310,5 +323,5 @@ class Pull_flight_info(Root_class):
         # print(departure, destination)
 
     
-    def fa_data_pull(self, airline_code=None,query=None):
-        return flight_aware_data_pull(airline_code=airline_code,query=query)
+    def fa_data_pull(self, airline_code=None,flt_num=None):
+        return flight_aware_data_pull(airline_code=airline_code,flt_num=flt_num)
