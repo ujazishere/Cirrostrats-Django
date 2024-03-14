@@ -4,10 +4,12 @@ Practice readibility and simplicity. Aviod code duplication. Include description
 **IS:   use command shift f to find targetted tasks - "TODO: is"
         
         Clean up code-use prettiy or some extension to cleanup indents; separate css from html. 
+        mark ETD time as red when STD is past ETD
         
         zulu time dymanic with the weather published times using js instead of the static python way.
         `ext d` work. Make javascript functions and use functions widely.
         
+        Hide datis table when N/A instead of showing N/A
         WIP - summery box shadow and expand/collapse (fast)animation.  
         work on script to extract data - aviation_stack_data_pull.py
         Media queries for mobile vs desktop view. use css media queries. Check bootstrap navbar. Target screens(IPAD, smaller, etc)
@@ -15,20 +17,19 @@ Practice readibility and simplicity. Aviod code duplication. Include description
         
 
 **UV:   
-        django hybrid. google auth.
+        learn about multiprocessing vs multithreading and implement on flight_deet- asyncio,aiohttp,threading.thread, threadpool exec
+        account for nas alongside weather- in airport lookup query
+        Implement asynchronous pull through asyncio and aiohttp.
+            weather:datis,metar and taf
+            once async pull accomplished figure out dummy files for ease of work for ismail.
+        django hybrid. google auth. fast api to figure out back end python comms with front end react.
         move file paths to one file and call those paths everywhere else. 
         Find software engineers; proficient people in your field of language, ask them to proofread it.
         Ask pilot's what would they search to get gate information. store these searches and use that for parsing.
-        figure out how prod server works without virtual env and test server has its own--Cant install aiohttp on venv on prod.
-        change EC2 name to switches_and_securities
-        Hide datis table when N/A instead of showing N/A
         Put in 'TAF(Ammended)', 'METAR(SPECI)' and D-ATIS(SPECIAL) in their title for special weather published times.
         Integrate weather page with  the flight deet page--> reduce duplication--> use js
-        box out the associated taf section with respect to ETA. Give pilots freedown
-            make airport id and departure time and arrival time consistent like utc throughout the page for ETA on TAF comparison
-        learn about multiprocessing vs multithreading and implement on flight_deet
-        Implement asynchronous loading of the data on the flight_deet page.
-            weather:datis,metar and taf
+        box up the associated taf section with respect to ETA. Give pilots freedown:
+            make airport id and departure time and arrival time consistent(stuck on top) like utc throughout the page for ETA on TAF comparison
         make -ve temps turquoise
         prepare search query logic for disecting typical searches.
             store typical searches server side for quick access and use celery for event update checks:
