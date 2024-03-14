@@ -1,3 +1,4 @@
+# from dj.dj_app.root.root_class import Root_class, Pull_class
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 from bs4 import BeautifulSoup as bs4
@@ -5,7 +6,8 @@ from datetime import datetime
 import pytz
 import pickle
 import smtplib
-import os
+import asyncio
+import aiohttp
 
 class Root_class():
     
@@ -73,8 +75,6 @@ class Root_class():
                 return pickle.load(f)
 
 
-
-
     def dt_conversion(self, data):
         # converts date and time string into a class object 
         return datetime.strptime(data, "%I:%M%p, %b%d")
@@ -125,4 +125,147 @@ class Root_class():
             pickle.dump(outlaws, f)
             
         return dict({'completed':  completed, 'troubled': troubled})
+        
+
+class Pull_class(Root_class):           # Change this name to Fetch_class
+    def __init__(self,flt_num=None,dep_airport_id=None,dest_airport_id=None) -> None:
+        super().__init__()
+        date = self.date_time(raw=True)
+        # United departure and destination airport only
+        # soup
+        self.ua_dep_dest = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
+
+        # local time zones. just needs flight number as input
+        # soup
+        self.flight_stats_url = f"https://www.flightstats.com/v2/flight-tracker/UA/{flt_num}?year={date[:4]}&month={date[4:6]}&date={date[-2:]}"
+        
+        #soup- gate information accounted for both
+        try:        # the airport coming in initially wouldnt take airport as arg since it lacks the initial info, hence sec rep info will have this airport ID
+            self.flight_view_gate_info = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={dep_airport_id[1:]}"
+        except:
+            pass
+        self.nas = "https://nasstatus.faa.gov/api/airport-status-information"
+
+        # Flight Aware
+        fa_apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # New Key from Ismail
+        self.fa_auth_header = {'x-apikey':fa_apiKey}
+
+        # Aviation Stack api call. 3000 requests per month
+        self.aviation_stack_params = {
+          'access_key': '65dfac89c99477374011de39d27e290a',
+          'flight_icao': "UAL414"
+        }
+
+
+    def requests_processing(self, 
+                        requests_raw_extract: requests.models.Response,
+                        json=None,
+                        awc=None,
+                        bs=None,
+                        ):
+        if awc:
+            
+            awc_raw = requests_raw_extract        # Trying this asraw see if it works
+            # awc_raw = requests_raw_extract.text
+            # awc_raw = awc_raw.decode("utf-8")
+            return awc_raw
+        elif json:
+            return requests_raw_extract.json()
+        elif bs:
+            # Might need to change this to requests_raw_extract.content depending on the use case.
+            return bs4(requests_raw_extract,'html.parser')
+
+
+    def weather_links(self, dep_airport_id, dest_airport_id, ):
+        
+        return {
+        "dep_awc_metar_api": f"https://aviationweather.gov/api/data/metar?ids={dep_airport_id}",
+        "dep_awc_taf_api": f"https://aviationweather.gov/api/data/taf?ids={dep_airport_id}",
+        "dep_datis_api":  f"https://datis.clowd.io/api/{dep_airport_id}",
+        "dest_awc_metar_api": f"https://aviationweather.gov/api/data/metar?ids={dest_airport_id}",
+        "dest_awc_taf_api": f"https://aviationweather.gov/api/data/taf?ids={dest_airport_id}",
+        "dest_datis_api":  f"https://datis.clowd.io/api/{dest_airport_id}",
+        }
+
+
+    def api_pull_w_limits(self, flt_num, airline_code=None):
+
+        if not airline_code:
+            airline_code = 'UAL'
+        fa_base_apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
+        self.fa_url = fa_base_apiUrl + f"flights/{airline_code}{flt_num}"
+        # response = requests.get(url, headers=fa_auth_header) 
+
+        # aviationstack just like flight_aware
+        self.aviation_stack_url = 'http://api.aviationstack.com/v1/flights'
+        # api_result = requests.get(aviation_stack_url, self.aviation_stack_params)
+
+
+        """
+        # copy paste these lines within comment to jupyter and it will work
+        import requests,asyncio, aiohttp
+        from dj.dj_app.root.root_class import Root_class, Pull_class
+        pc = Pull_class('4416)
+        r = Root_class()
+        pc.pull('4416')
+        all_links = [
+        pc.ua_dep_dest,
+        pc.flight_stats_url,
+        pc.dep_awc_metar_api,
+        pc.dep_awc_taf_api,
+        pc.dep_datis_api,
+        pc.dest_awc_metar_api,
+        pc.dest_datis_api,
+        pc.dest_awc_taf_api,
+        pc.nas,]
+
+        task = asyncio.ensure_future(pc.async_pull(all_links))
+        asyncio.gather(task)
+        resp = await task       # This is the responsein jupyter that works 
+
+        print(resp)
+
+        # all_items = []
+        # for url in all_links:
+            # all_items.append(r.request(url))
+
+        """
+
+
+    async def async_pull(self, link_list:list):
+        # A function is a coroutine if you prepend it with `async`. This is a coroutine function
+        async def get_tasks(session):
+            # an inexpensive operation: putting all urls to be fetched into tasks list.
+            tasks = []
+            for url in link_list:
+                tasks.append(asyncio.create_task(session.get(url)))
+            return tasks
+        
+        async def main():
+            async with aiohttp.ClientSession() as session:
+                tasks = await get_tasks(session)
+                # Upto here the tasks are created which is very light.
+        
+                # Actual pull work is done using as_completed 
+                resp_return_list = {}
+                for resp in asyncio.as_completed(tasks):        # use .gather() instead of .as_completed for background completion
+                    resp = await resp
+                    content_type = resp.headers.get('Content-Type')
+                    if content_type == "application/json":
+                        resp_text = await resp.json()
+                    else:
+                        resp_text = await resp.text()
+                    resp_return_list[resp.url] = resp_text
+                return resp_return_list
+
+        #1 Temporary. Works when function calling within jupyter.
+        return await main()         
+
+        #2 works for jupyter when copy pasting this whole code within jupyter.
+        # link_fetch = await asyncio.ensure_future(main())  
+        
+        #3 works for external cli use.
+        # if __name__ == "__main__":        # if statement seems unnecessary: works when calling from cli, not when importing elsewhere
+            # link_fetch = await asyncio.run(main())
+            # return await link_fetch
         

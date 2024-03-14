@@ -3,7 +3,7 @@ import pickle
 from bs4 import BeautifulSoup as bs4
 import requests
 import json
-from .root_class import Root_class
+from .root_class import Root_class,Pull_class
 from datetime import datetime
 from django.utils.safestring import mark_safe
 
@@ -13,6 +13,7 @@ from django.utils.safestring import mark_safe
             # analyze data for format patterns to make a template for output
 # TODO: seperate raw data from html highlight. 
         # should have ability to return both raw(for externam use) and highlighted data for use in web.
+
 
 class Weather_parse:
     def __init__(self) -> None:
@@ -69,25 +70,10 @@ class Weather_parse:
             return incoming_weather_data
         
 
-    def raw_weather_pull(self, query=None, datis_arr=None):
-        
-        # Find ways to convert raw query input into identifiable airport ID
-            # What does this mean^^?
-        airport_id = query
-        awc_metar_api = f"https://aviationweather.gov/api/data/metar?ids={airport_id}"
-        metar_raw = requests.get(awc_metar_api)
-        metar_raw = metar_raw.content
-        metar_raw = metar_raw.decode("utf-8")
-        awc_taf_api = f"https://aviationweather.gov/api/data/taf?ids={airport_id}"
-        taf_raw = requests.get(awc_taf_api)
-        taf_raw = taf_raw.content
-        taf_raw = taf_raw.decode("utf-8")
+    def datis_processing(self,datis_raw_fetch,datis_arr=None):
 
-        datis_api =  f"https://datis.clowd.io/api/{airport_id}"
-        datis = requests.get(datis_api)
-        datis = json.loads(datis.content.decode('utf-8'))
-        datis_raw = 'N/A'
-
+        datis_raw = 'N/A'       # Need this to be declared to avoid error when datis is not available
+        datis = datis_raw_fetch
         # D-ATIS processing for departure vs arrival
         if type(datis) == list and 'datis' in datis[0].keys():
             if len(datis) == 1:
@@ -110,14 +96,62 @@ class Weather_parse:
             else:
                 print('Impossible else in DATIS')
                 datis_raw = 'N/A'
-            
+        return datis_raw
+
+
+    def raw_weather_pull(self, query=None, datis_arr=None):
+        
+        # Find ways to convert raw query input into identifiable airport ID
+            # What does this mean^^?
+        airport_id = query
+        awc_metar_api = f"https://aviationweather.gov/api/data/metar?ids={airport_id}"
+        metar_raw = requests.get(awc_metar_api)
+        metar_raw = metar_raw.content
+        metar_raw = metar_raw.decode("utf-8")
+        awc_taf_api = f"https://aviationweather.gov/api/data/taf?ids={airport_id}"
+        taf_raw = requests.get(awc_taf_api)
+        taf_raw = taf_raw.content
+        taf_raw = taf_raw.decode("utf-8")
+
+        datis_api =  f"https://datis.clowd.io/api/{airport_id}"
+        datis = requests.get(datis_api)
+        datis = datis.json()
+
+        datis_raw = self.datis_processing(datis_raw_fetch=datis,datis_arr=datis_arr)
+
+        """     If the above function works then get rid of this garbage
+        # D-ATIS processing for departure vs arrival
+        if type(datis) == list and 'datis' in datis[0].keys():
+            if len(datis) == 1:
+                datis_raw = datis[0]['datis']
+            elif len(datis) == 2:       # Datis arrival and departure have been separated
+                if datis[0]['type'] == 'arr':
+                    print('Returned Arrival D-ATIS through weather_parse.py')
+                    arr_datis = datis[0]['datis']
+                else:
+                    arr_datis = datis[1]['datis']
+                if datis[1]['type'] == 'dep':
+                    dep_datis = datis[1]['datis']
+                else:
+                    dep_datis = datis[0]['datis']
+                
+                if datis_arr:
+                    datis_raw = arr_datis
+                else:
+                    datis_raw = dep_datis
+            else:
+                print('Impossible else in DATIS')
+                datis_raw = 'N/A'
+        """
         return dict({ 'datis': datis_raw,
                         'metar': metar_raw, 
                         'taf': taf_raw,
                         })
     
 
-    def processed_weather(self, query=None, dummy=None, datis_arr=None):
+    def processed_weather(self, query=None, dummy=None, datis_arr=None,
+                          weather_raw=None,
+                          ):
 
         if dummy:
             
@@ -133,9 +167,15 @@ class Weather_parse:
 
             # taf_raw = metar_raw + sfc_vis + vis_half
             taf_raw = 'KRIC 022355Z 0300/0324 00000KT 2SM BR VCSH FEW015 OVC060 TEMPO 0300/0303 1 1/2SM FG BKN015 FM030300 00000KT 1SM -SHRA FG OVC002 FM031300 19005KT 3/4SM BR OVC004 FM031500 23008KT 1/26SM OVC005 FM031800 25010KT 1/4SM OVC015 FM032100 25010KT M1/4SM BKN040'
+        
+        elif weather_raw:
+            raw_return = weather_raw
+            datis_raw = self.datis_processing(datis_raw_fetch=raw_return['datis'],datis_arr=datis_arr)
+            metar_raw = raw_return['metar']
+            taf_raw = raw_return['taf']
         else:
             raw_return = self.raw_weather_pull(query=query,datis_arr=datis_arr)
-            datis_raw = raw_return['datis']
+            datis_raw = self.datis_processing(datis_raw_fetch=raw_return['datis'],datis_arr=datis_arr)
             metar_raw = raw_return['metar']
             taf_raw = raw_return['taf']
 
@@ -245,4 +285,39 @@ class Weather_parse:
                       'TAF': highlighted_taf,
                       'TAF_zt': zulu_extracts(taf_raw,taf=True),
                       })
+
+
+    def nested_weather_dict_explosion(self,incoming_weather:dict):
+        # Departure weather: assigning dedicated keys for data rather than a nested dictionary to simplify use on front end
         
+        weather_returns = {}
+        dep_datis = incoming_weather['dep_weather']['D-ATIS']
+        dep_metar = incoming_weather['dep_weather']['METAR']
+        dep_taf = incoming_weather['dep_weather']['TAF']
+        weather_returns['dep_metar'] = dep_metar
+        weather_returns['dep_datis'] = dep_datis
+        weather_returns['dep_taf'] = dep_taf
+
+        dep_datis_zt = incoming_weather['dep_weather']['D-ATIS_zt']
+        dep_metar_zt = incoming_weather['dep_weather']['METAR_zt']
+        dep_taf_zt = incoming_weather['dep_weather']['TAF_zt']
+        weather_returns['dep_metar_zt'] = dep_metar_zt
+        weather_returns['dep_datis_zt'] = dep_datis_zt
+        weather_returns['dep_taf_zt'] = dep_taf_zt
+
+        # Destionation Weather: assigning dedicated keys for data rather than a nested dictionary to simplify use on front end
+        dest_datis = incoming_weather['dest_weather']['D-ATIS']
+        dest_metar = incoming_weather['dest_weather']['METAR']
+        dest_taf = incoming_weather['dest_weather']['TAF']
+        weather_returns['dest_datis'] = dest_datis
+        weather_returns['dest_metar'] = dest_metar
+        weather_returns['dest_taf'] = dest_taf
+
+        dest_datis_zt = incoming_weather['dest_weather']['D-ATIS_zt']
+        dest_metar_zt = incoming_weather['dest_weather']['METAR_zt']
+        dest_taf_zt = incoming_weather['dest_weather']['TAF_zt']
+        weather_returns['dest_datis_zt'] = dest_datis_zt
+        weather_returns['dest_metar_zt'] = dest_metar_zt
+        weather_returns['dest_taf_zt'] = dest_taf_zt
+
+        return weather_returns

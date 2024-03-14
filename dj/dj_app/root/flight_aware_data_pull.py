@@ -21,11 +21,13 @@ class Flight_aware_pull(Root_class):
         
         self.current_utc = self.date_time(raw_utc=True)
 
-    def initial_pull(self, airline_code=None, query=None):
+    def initial_pull(self, airline_code=None, flt_num=None):
         apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # New Key from Ismail
         apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
         auth_header = {'x-apikey':apiKey}
         # TODO: Instead of getting all data make specific data requests.(optimize queries). Cache updates.
+            # Try searching here use /route for specific routes maybe to reduce pull
+            # https://www.flightaware.com/aeroapi/portal/documentation#get-/flights/-id-/map
         """
         airport = 'KSFO'
         payload = {'max_pages': 2}
@@ -39,7 +41,7 @@ class Flight_aware_pull(Root_class):
         """
         if not airline_code:
             airline_code = 'UAL'
-        response = requests.get(apiUrl + f"flights/{airline_code}{query}", headers=auth_header) 
+        response = requests.get(apiUrl + f"flights/{airline_code}{flt_num}", headers=auth_header) 
         
         if response.status_code == 200:
             return response.json()['flights']
@@ -99,7 +101,7 @@ class Flight_aware_pull(Root_class):
         
         # solace_client.disconnect()
 
-def flight_aware_data_pull(airline_code=None, query=None,):
+def flight_aware_data_pull(airline_code=None, flt_num=None,):
 
     # This returns bypass all and return prefabricated None vals
     # return Flight_aware_pull().attrs
@@ -115,7 +117,7 @@ def flight_aware_data_pull(airline_code=None, query=None,):
             flights = pickle.load(f)
     else:
         fa_object = Flight_aware_pull()
-        flights = fa_object.initial_pull(airline_code=airline_code,query=query)
+        flights = fa_object.initial_pull(airline_code=airline_code,flt_num=flt_num)
     
     current_UTC = Flight_aware_pull().current_utc
     route = None        # Declaring not available unless available throught flights

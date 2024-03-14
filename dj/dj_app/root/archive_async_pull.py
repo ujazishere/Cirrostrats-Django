@@ -1,4 +1,5 @@
 import asyncio, aiohttp
+# from dj.dj_app.root.root_class import Root_class
 import requests
 from .root_class import Root_class
 
@@ -17,14 +18,13 @@ class pull_stack:
 
 class async_pull:
     def __init__(self) -> None:
-        pass
+        self.date = Root_class().date_time(raw=True)     # Root_class format yyyymmdd. Targetted call instead of expensive inheritance.
 
     def creating_tasks(self, session,url):
         asyncio.create_task(session.get(url))
 
 
     def pulling(self, flt_num, query):
-        date = Root_class().date_time(raw=True)     # Root_class inheritance format yyyymmdd
 
         async def get_tasks(session):
             tasks = []
@@ -41,7 +41,9 @@ class async_pull:
             auth_header = {'x-apikey':apiKey}
             if not airline_code:
                 airline_code = 'UAL'
-                response = requests.get(apiUrl + f"flights/{airline_code}{query}", headers=auth_header) 
+                url = apiUrl + f"flights/{airline_code}{query}"
+                # response = requests.get(url, headers=auth_header) 
+                tasks.append(asyncio.create_task(session.get(url,headers=auth_header)))
 
             # United departure and destination scrape
             # bulk_flight_deets.update(flt_info.united_departure_destination_scrape(flight_number_query))
