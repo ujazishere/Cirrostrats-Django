@@ -58,8 +58,7 @@ document
     // Initial display
     displayNextText();
 
-    // Add a click event listener to display next text when clicked
-    randomH3.addEventListener("click", displayNextText);
+
   });
 
 
