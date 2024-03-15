@@ -23,7 +23,7 @@ body.loading {
 
 .gmt-clock {
   position: fixed;
-  top: 65px; 
+  top: 85px; 
   right: 10px; 
   background-color: rgba(0, 0, 0, 0.5); 
   color: white; 
