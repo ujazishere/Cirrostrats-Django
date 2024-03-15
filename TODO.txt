@@ -3,7 +3,6 @@ Practice readibility and simplicity. Aviod code duplication. Include description
 
 **IS:   use command shift f to find targetted tasks - "TODO: is"
         
-        Clean up code-use prettiy or some extension to cleanup indents; separate css from html. 
         mark ETD time as red when STD is past ETD
         
         zulu time dymanic with the weather published times using js instead of the static python way.
