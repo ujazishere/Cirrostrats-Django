@@ -261,10 +261,10 @@ class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
                     content_type = resp.headers.get('Content-Type')
                     if content_type == "application/json":
                         response_output = await resp.json()
+                        response_output = await resp.json()
                     else:
                         response_output = await resp.text()
                     
-                    # print(resp.url,content_type)
                     resp_return_list[resp.url] = response_output
                 return resp_return_list
 

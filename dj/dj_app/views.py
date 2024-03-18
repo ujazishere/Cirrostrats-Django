@@ -149,10 +149,17 @@ def gate_info(request, main_query):
     # In the database all the gates are uppercase so making the query uppercase
     gate = gate.upper()
     current_time = Root_class().date_time()
+    current_time = Root_class().date_time()
 
     # This is a list full of dictionararies returned by err_UA_gate depending on what user requested..
     # Each dictionary has 4 key value pair.eg. gate:c10,flight_number:UA4433,scheduled:20:34 and so on
+    # This is a list full of dictionararies returned by err_UA_gate depending on what user requested..
+    # Each dictionary has 4 key value pair.eg. gate:c10,flight_number:UA4433,scheduled:20:34 and so on
     gate_data_table = Gate_checker().ewr_UA_gate(gate)
+    
+
+    # This can be a json to be delivered to the frontend
+    data_out = {'gate_data_table': gate_data_table, 'gate': gate, 'current_time': current_time}
     
 
     # This can be a json to be delivered to the frontend
@@ -179,15 +186,14 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
     bulk_flight_deets = {}
 
+
     # TODO: Priority: Each individual scrape should be separate function. Also separate scrape from api fetch
     ''' *****VVI******  
-    Logic: resp_dict gets all information fetched from root_class.Pull_class().async_pull(). Look it up and come back.
-    pre-processes it using resp_initial_returns and resp_sec_returns for inclusion in the bulk_flight_deets..
-    first async response returs origin and destination since their argument only takes in flightnumber.
-    first resp returns airport ID's through united's flight-status, gets scheduled times in local time zones through flightstats,
-    and the packet from flightaware.
-    This origin and destination is then used to make another async request that requires additional arguments
-    This is the second resp_dict that returns weather and nas in the resp_sec,
+    Logic: resp_dict gets all information pulled. The for loop for that dict iterates the raw data and
+    pre-processess for inclusion in the bulk_flight_deets.. first async response returs origin and destination
+    airport ID through united's flight-status, gets scheduled times in local time zones through flightstats,
+    and the packet from flightaware. This departure and destination is then used to make another async request
+    that returns weather and nas in the resp_sec,
     '''
 
     pc = Pull_class(airline_code=airline_code,flt_num=flight_number_query)
@@ -252,18 +258,13 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
         # Weather and nas information processing
         resp_sec = resp_sec_returns(resp_dict,united_dep_dest['departure_ID'],united_dep_dest['destination_ID']) 
 
-        weather_dict = resp_sec
-        gate_returns = Pull_flight_info().flight_view_gate_info(flt_num=flight_number_query,airport=united_dep_dest['departure_ID'])
-        bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
-                            **weather_dict, **fa_data, **gate_returns}
+    weather_dict = resp_sec
 
-    else:
-        print('No Departure/Destination ID')
-        bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
-                            **fa_data, }
     # More streamlined to merge dict than just the typical update method of dict. update wont take multiple dictionaries
-
-
+    bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
+                         **weather_dict,
+                        # **flight_aware_data,
+                         }
 
     # This is a inefficient fucntion to bypass the futures error on EC2
     # TODO: Delete this since it wont be used anymore. Account for all attribues before it though.
