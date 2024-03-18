@@ -274,6 +274,7 @@ class Pull_flight_info(Root_class):
             # departure_gate = departure_gate[26:-1]
             arrival_gate = leg_data[0].find_all('tr', class_='even')[4].text[17:]
             # arrival_gate = arrival_gate[26:-1]
+            print('were in try stat')
             if 'Terminal' in departure_gate:
                 departure_gate = departure_gate.replace('Terminal', '')
             if 'Terminal' in arrival_gate:
