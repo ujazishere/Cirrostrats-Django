@@ -113,4 +113,3 @@ class async_pull:
 
         # Works regardless of the syntax error. Not sut why its showing syntax error
         all_76_datis = await asyncio.ensure_future(main())
-
