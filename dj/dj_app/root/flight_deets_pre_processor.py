@@ -53,6 +53,7 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
         elif f"&depapt={dep_airport_id[1:]}" in str(url):
             
             gate_info = pc.requests_processing(resp,bs=True)
+            print(gate_info,"gate info is here")
 
             
         elif f"faa.gov/api/airport-status-information" in str(url):
