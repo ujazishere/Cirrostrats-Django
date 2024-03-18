@@ -30,7 +30,10 @@ It will then run
 # Keep it false to avoid errors with from sending email errors as it is attached to UJ's personal email creds.
 # Before you remove this make sure you account for its use: Used for sending email notifications. Email creds are in Switches_n_auth.
 try:        # TODO: Find a better way other than try and except
+try:        # TODO: Find a better way other than try and except
     from .root.Switch_n_auth import run_lengthy_web_scrape
+except Exception as e:
+    print('Couldnt find swithc_n_auth! ERROR:',e)
 except Exception as e:
     print('Couldnt find swithc_n_auth! ERROR:',e)
     run_lengthy_web_scrape = False
@@ -75,6 +78,7 @@ async def parse_query(request, main_query):
     # if .split() method is used outside here it can return since empty strings cannot be split.
 
     if main_query == '':        # query is empty then return all gates
+        print('Empty query')
         print('Empty query')
         return gate_info(request, main_query='')
     if 'DUMM' in main_query.upper():
@@ -196,6 +200,13 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     and the packet from flightaware.
     This origin and destination is then used to make another async request that requires additional arguments
     This is the second resp_dict that returns weather and nas in the resp_sec,
+    Logic: resp_dict gets all information fetched from root_class.Pull_class().async_pull(). Look it up and come back.
+    pre-processes it using resp_initial_returns and resp_sec_returns for inclusion in the bulk_flight_deets..
+    first async response returs origin and destination since their argument only takes in flightnumber.
+    first resp returns airport ID's through united's flight-status, gets scheduled times in local time zones through flightstats,
+    and the packet from flightaware.
+    This origin and destination is then used to make another async request that requires additional arguments
+    This is the second resp_dict that returns weather and nas in the resp_sec,
     '''
 
     pc = Pull_class(airline_code=airline_code,flt_num=flight_number_query)
@@ -240,31 +251,10 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     # united_dep_dest,flight_stats_arr_dep_time_zone,flight_aware_data,aviation_stack_data = resp_initial
 
     # This will init the flight_view for gate info
-    if fa_data['origin']:           # Flightaware data is prefered as source for otherdata.
-        pc = Pull_class(flight_number_query,fa_data['origin'],fa_data['destination'])
-        wl_dict = pc.weather_links(fa_data['origin'],fa_data['destination'])
-        # OR get the flightaware data for origin and destination airport ID as primary then united's info.
-        # also get flight-stats data. Compare them all for information.
-
-        # fetching weather, nas and gate info since those required departure, destination
-        # TODO: Probably take out nas_data from here and put it in the initial pulls.
-        resp_dict:dict = await pc.async_pull(list(wl_dict.values())+[pc.nas,])
-
-        # /// End of the second and last async await.
-
-        
-        # Weather and nas information processing
-        resp_sec = resp_sec_returns(resp_dict,fa_data['origin'],fa_data['destination']) 
-
-        weather_dict = resp_sec
-        gate_returns = Pull_flight_info().flight_view_gate_info(flt_num=flight_number_query,airport=fa_data['origin'])
-        bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
-                            **weather_dict, **fa_data, **gate_returns}
-    elif united_dep_dest['departure_ID']:       # If flightaware data is not available use this scraped data. Very unstable. TODO: Change this. Have 3 sources for redundencies
-        pc = Pull_class(flight_number_query,united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
-        wl_dict = pc.weather_links(united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
-        # OR get the flightaware data for origin and destination airport ID as primary then united's info.
-        # also get flight-stats data. Compare them all for information.
+    pc = Pull_class(flight_number_query,united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
+    wl_dict = pc.weather_links(united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
+    # OR get the flightaware data for origin and destination airport ID as primary then united's info.
+    # also get flight-stats data. Compare them all for information.
 
         # fetching weather, nas and gate info since those required departure, destination
         # TODO: Probably take out nas_data from here and put it in the initial pulls.
@@ -293,12 +283,16 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
         bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
                             **fa_data, }
     # More streamlined to merge dict than just the typical update method of dict. update wont take multiple dictionaries
+    bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
+                         **weather_dict, **fa_data, }
 
 
 
     # This is a inefficient fucntion to bypass the futures error on EC2
     # TODO: Delete this since it wont be used anymore. Account for all attribues before it though.
     def without_futures():
+        flt_info = Pull_flight_info()           # from dep_des.py file
+        weather = Weather_parse()         # from MET_TAF_parse.py
         flt_info = Pull_flight_info()           # from dep_des.py file
         weather = Weather_parse()         # from MET_TAF_parse.py
         # leave this function as is for backup.
@@ -384,7 +378,6 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
 
 
-
 def weather_display(request, weather_query):
 
     # remove leading and trailing spaces. Seems precautionary.
@@ -394,6 +387,7 @@ def weather_display(request, weather_query):
     weather = Weather_parse()
     # TODO: Need to be able to add the ability to see the departure as well as the arrival datis
     # weather = weather.scrape(weather_query, datis_arr=True)
+    weather = weather.processed_weather(query=weather_query, )
     weather = weather.processed_weather(query=weather_query, )
 
     weather_page_data = {}
