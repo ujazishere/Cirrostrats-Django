@@ -355,7 +355,8 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
 
 
-
+def react_dummy(request,):
+    return JsonResponse('message', 'hello world')
 
 
 
