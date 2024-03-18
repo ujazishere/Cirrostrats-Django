@@ -73,7 +73,7 @@ class Gate_Scrape(Root_class):
 
         # Reopening master to check troubled flights within it.
         
-        # TODO:There is a probelm with opening the master_UA.pkl file as is.
+        # TODO:There is a probelm with opening the gate_query_database.pkl file as is.
             # Troubled items will already be in this master from old data so they wont be checked and updated
             # one way to fix it is to check date and time and overwrite the old one with the latest one
         master = self.load_master()
@@ -102,7 +102,7 @@ class Gate_Scrape(Root_class):
         # Investigate. This one I suppise was only reaading then I changedd it to write
         # But i realised it would overright the old master so I switcheed it back to rb.
         # However. Master is loaded earlier using load_master. so master seems retained so it can be a write file.
-        with open('master_UA.pkl', 'wb') as f:
+        with open('gate_query_database.pkl', 'wb') as f:
             pickle.dump(master, f) 
         
         print(self.date_time(), f'Troubled: {len(self.troubled)}, Master : {len(master)}')
@@ -125,13 +125,13 @@ class Gate_Scrape(Root_class):
         for i in to_remove:
             del master[i]
 
-        with open('master_UA.pkl', 'wb') as f:
+        with open('gate_query_database.pkl', 'wb') as f:
             pickle.dump(master, f)
 
 
     def activator(self):
         
-        # Purpose of this file is to dump master_UA file.
+        # Purpose of this file is to dump gate_query_database.pkl file.
 
         # Extracting all United flight numbers in list form to dump into the exec func
         ewr_departures_UA = Newark_departures_scrape().united_departures()
@@ -155,7 +155,7 @@ class Gate_Scrape(Root_class):
         # print('troubled:', len(self.troubled), self.troubled)
 
         # Dumping master dict into the root folder in order to be accessed by ewr_UA_gate func later on.
-        with open('master_UA.pkl', 'wb') as f:
+        with open('gate_query_database.pkl', 'wb') as f:
             pickle.dump(master, f) 
 
         # Redo the troubled flights

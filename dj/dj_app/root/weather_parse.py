@@ -116,33 +116,7 @@ class Weather_parse:
         datis_api =  f"https://datis.clowd.io/api/{airport_id}"
         datis = requests.get(datis_api)
         datis = datis.json()
-
         datis_raw = self.datis_processing(datis_raw_fetch=datis,datis_arr=datis_arr)
-
-        """     If the above function works then get rid of this garbage
-        # D-ATIS processing for departure vs arrival
-        if type(datis) == list and 'datis' in datis[0].keys():
-            if len(datis) == 1:
-                datis_raw = datis[0]['datis']
-            elif len(datis) == 2:       # Datis arrival and departure have been separated
-                if datis[0]['type'] == 'arr':
-                    print('Returned Arrival D-ATIS through weather_parse.py')
-                    arr_datis = datis[0]['datis']
-                else:
-                    arr_datis = datis[1]['datis']
-                if datis[1]['type'] == 'dep':
-                    dep_datis = datis[1]['datis']
-                else:
-                    dep_datis = datis[0]['datis']
-                
-                if datis_arr:
-                    datis_raw = arr_datis
-                else:
-                    datis_raw = dep_datis
-            else:
-                print('Impossible else in DATIS')
-                datis_raw = 'N/A'
-        """
         return dict({ 'datis': datis_raw,
                         'metar': metar_raw, 
                         'taf': taf_raw,
@@ -152,7 +126,6 @@ class Weather_parse:
     def processed_weather(self, query=None, dummy=None, datis_arr=None,
                           weather_raw=None,
                           ):
-
         if dummy:
             
             datis_raw = dummy['D-ATIS']
@@ -169,13 +142,13 @@ class Weather_parse:
             taf_raw = 'KRIC 022355Z 0300/0324 00000KT 2SM BR VCSH FEW015 OVC060 TEMPO 0300/0303 1 1/2SM FG BKN015 FM030300 00000KT 1SM -SHRA FG OVC002 FM031300 19005KT 3/4SM BR OVC004 FM031500 23008KT 1/26SM OVC005 FM031800 25010KT 1/4SM OVC015 FM032100 25010KT M1/4SM BKN040'
         
         elif weather_raw:
-            raw_return = weather_raw
+            raw_return = weather_raw        # This wont do the datis processing.
             datis_raw = self.datis_processing(datis_raw_fetch=raw_return['datis'],datis_arr=datis_arr)
             metar_raw = raw_return['metar']
             taf_raw = raw_return['taf']
         else:
-            raw_return = self.raw_weather_pull(query=query,datis_arr=datis_arr)
-            datis_raw = self.datis_processing(datis_raw_fetch=raw_return['datis'],datis_arr=datis_arr)
+            raw_return = self.raw_weather_pull(query=query,datis_arr=datis_arr)     # This will do the datis processing
+            datis_raw = raw_return['datis']
             metar_raw = raw_return['metar']
             taf_raw = raw_return['taf']
 
@@ -242,7 +215,7 @@ class Weather_parse:
         low_ifr_taf_ceilings = re.sub(self.BKN_OVC_PATTERN_LIFR, self.pink_text_color, taf_raw)
         # LIFR pattern for ceilings >>> anything below 5 to pink DATIS 
         low_ifr_datis_ceilings = re.sub(self.BKN_OVC_PATTERN_LIFR, self.pink_text_color, datis_raw)
-
+        # print('within lowifr', datis_raw)
 
         # IFR Pattern for ceilings METAR
         ifr_metar_ceilings = re.sub(self.BKN_OVC_PATTERN_IFR, self.red_text_color, low_ifr_metar_ceilings)
@@ -274,7 +247,6 @@ class Weather_parse:
         highlighted_datis = re.sub(self.RW_IN_USE, self.box_around_text,highlighted_datis)
         
         highlighted_metar = re.sub(self.ALTIMETER_PATTERN, self.box_around_text, highlighted_metar)
-
 
         return dict({ 'D-ATIS': highlighted_datis,
                       'D-ATIS_zt': zulu_extracts(datis_raw,datis=True),

@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup as bs4
 from .root_class import Root_class
 from .flight_aware_data_pull import flight_aware_data_pull
 import xml.etree.ElementTree as ET
+import pickle
 
 '''
 This Script pulls the departure and destination when provided with the flight number.
@@ -83,7 +84,7 @@ class Pull_flight_info(Root_class):
         departure_ID = dep_ID[1:]       # Stripping off the 'K' since NAS uses 3 letter airport ID
         destination_ID = dest_ID[1:]
 
-        nas_delays = self.nas_packet_pull()          # Doing the scraping here
+        nas_delays = self.nas_pre_processing()          # Doing the scraping here
         airport_closures = nas_delays['Airport Closure']
         ground_stop_packet = nas_delays['ground_stop_packet']
         ground_delay_packet = nas_delays['ground_delay_packet']
@@ -186,34 +187,17 @@ class Pull_flight_info(Root_class):
                 'nas_destination_affected': destination_affected}
 
 
-    def nas_packet_pull(self):
-        '''
-        import pickle
-        with open('et_root_eg_1.pkl', 'wb') as f:
-            pickle.dump(root, f)
-        with open('et_root_eg_1.pkl', 'rb') as f:
-            root = pickle.load(f)
-        '''
-
-        '''
-        import requests
-        from bs4 import BeautifulSoup as bs4
-        from dj.dj_app.root.root_class import Root_class
-        import xml.etree.ElementTree as ET
-        import pytz
-        '''
+    def nas_fetch(self,):
         nas = "https://nasstatus.faa.gov/api/airport-status-information"
         response = requests.get(nas)
         xml_data = response.content
+        return xml_data
+
+    def nas_pre_processing(self):
+
+        xml_data = self.nas_fetch()
 
         root = ET.fromstring(xml_data) 
-        '''
-        # These upto pickle load is dummy file. comment them out to get the actual NAS packet.
-        import pickle
-
-        with open('ewr_delay_packet_experimantal.pkl', 'rb') as f:
-            root = pickle.load(f)
-        '''
         update_time = root[0].text
 
         affected_airports = [i.text for i in root.iter('ARPT')]
@@ -268,6 +252,7 @@ class Pull_flight_info(Root_class):
         # date format in the url is YYYYMMDD. For testing, you can find flt_nums on https://www.airport-ewr.com/newark-departures
         if pre_process:     # it doesn't feed in the pre-process if it cannt find the
             soup = pre_process
+
         else:            
             use_custom_dummy_data = False
             if use_custom_dummy_data:
@@ -281,13 +266,15 @@ class Pull_flight_info(Root_class):
                 pass
             print('Pulled gate info from:', flight_view)
             
-            soup = self.request(flight_view)
+            self.soup = self.request(flight_view)
+            soup = self.soup
         try :
             leg_data = soup.find_all('div', class_='leg')   # Has all the departure and destination data
             departure_gate = leg_data[0].find_all('tr', class_='even')[1].text[17:]
             # departure_gate = departure_gate[26:-1]
             arrival_gate = leg_data[0].find_all('tr', class_='even')[4].text[17:]
             # arrival_gate = arrival_gate[26:-1]
+            print('were in try stat')
             if 'Terminal' in departure_gate:
                 departure_gate = departure_gate.replace('Terminal', '')
             if 'Terminal' in arrival_gate:
@@ -314,10 +301,10 @@ class Pull_flight_info(Root_class):
                     'arrival_gate': arrival_gate,
                     }
 
-        except :
+        except Exception as e:
             empty_soup = {'departure_gate': 'None',
                           'arrival_gate': 'None'} 
-            print('!!!UNSUCCESSFUL at flight_view_gate_info for gate info')
+            print('!!!UNSUCCESSFUL at flight_view_gate_info for gate info, Error:',e)
             return empty_soup
 
         # typically 9th index of scripts is where departure and destination is.
@@ -326,5 +313,5 @@ class Pull_flight_info(Root_class):
         # print(departure, destination)
 
     
-    def fa_data_pull(self, airline_code=None,flt_num=None):
-        return flight_aware_data_pull(airline_code=airline_code,flt_num=flt_num)
+    def fa_data_pull(self, airline_code=None,flt_num=None,pre_process=None):
+        return flight_aware_data_pull(airline_code=airline_code,flt_num=flt_num,pre_process=pre_process)

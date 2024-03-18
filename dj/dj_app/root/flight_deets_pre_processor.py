@@ -1,14 +1,15 @@
-
+import pickle
 from .weather_parse import Weather_parse
 from .root_class import Root_class, Pull_class
 from .dep_des import Pull_flight_info
-
+import json
 flt_info = Pull_flight_info()
 
 
 def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
-    # see use in view.py for document
+    # see use of this function in view.py for document
     pc = Pull_class(flight_number_query)
+    flight_aware_data = flt_info.fa_data_pull()
     for url,resp in resp_dict.items():
         if "flight-status.com" in str(url):
             soup = pc.requests_processing(resp,bs=True)
@@ -21,16 +22,20 @@ def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
 
 
         elif "flightaware" in str(url):
-            soup = pc.requests_processing(resp,json=True)
-            flight_aware_data = flt_info.fa_data_pull(airline_code=airline_code, flt_num=flight_number_query)
+            fa_return = json.loads(resp)
+            fa_return = fa_return['flights']
+            flight_aware_data = flt_info.fa_data_pull(airline_code=airline_code, flt_num=flight_number_query,pre_process=fa_return)
             # print(flight_aware_data)
-        elif "aviationstack" in str(url):
-            soup = pc.requests_processing(resp,json=True)
-            aviation_stack_data = flt_info.aviation_stack_pull(airline_code=airline_code, flt_num=flight_number_query)
+        elif "aviationstack" in str(url):       #TODO: aviation stack needs work
+            pass
+            # soup = pc.requests_processing(resp,json=True)
+            # aviation_stack_data = flt_info.aviation_stack_pull(airline_code=airline_code, flt_num=flight_number_query)
             # print(aviation_stack_data)
     
-    return united_dep_dest, flight_stats_arr_dep_time_zone,
-            # flight_aware_data, aviation_stack_data
+
+    return united_dep_dest, flight_stats_arr_dep_time_zone, flight_aware_data,
+            #  aviation_stack_data
+
 
 def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
     gate_info = None        # Declared this here. in case if gate info is not scraped variable will atleast exist. used to avoid definition error
@@ -50,18 +55,24 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
             dest_datis = resp         # Apparently this is being returned within a list. Is accounted for.
 
 
-        elif f"&depapt={dep_airport_id[1:]}" in str(url):
-            
-            
+        elif f"flightview.com" in str(url):
+            # This is just for testing
+            # fv_test = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\fv_test.pkl"
+            # with open(fv_test, 'wb') as f:
+            #     resp = pickle.dump(resp,f)
+
             gate_info = pc.requests_processing(resp,bs=True)
-            print(gate_info,"gate info is here")
 
             
         elif f"faa.gov/api/airport-status-information" in str(url):
             nas_data = resp
+            nas_data = flt_info.nas_final_packet(dep_ID=dep_airport_id,dest_ID=dest_airport_id)
+
             
         else:
             pass
+
+    # Raw weather sent for preprocessing 
     wp = Weather_parse()            
     dep_weather = {"datis":dep_datis,"metar":dep_metar,"taf":dep_taf}
     dep_weather = wp.processed_weather(weather_raw=dep_weather)
@@ -71,13 +82,19 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
 
     wpp = {"dep_weather":dep_weather,"dest_weather":dest_weather}
 
-    wpp = wp.nested_weather_dict_explosion(wpp)     # Doing this to avoid nested dictionaries
+    wpp = wp.nested_weather_dict_explosion(wpp)     # Doing this to avoid nested weather dictionaries
 
 
-    print('gate info areaa')
-    # gegte_info_return = flt_info.flight_view_gate_info(pre_process=gate_info)
+    if gate_info:
+        print('we have gate info')
+        gate_info_return = flt_info.flight_view_gate_info(pre_process=gate_info)
+        print(gate_info_return)
+    else:
+        print("we dont have gate info")
+        gate_info_return = {'departure_gate': None,
+                            'arrival_gate': None, }
+        print('no gate info found')
     
 
-    # giving the nested weather dict explosion to simplify the front end
-    return {**wpp,}
+    return {**wpp,**gate_info_return, **nas_data}       # The ** merges dicts in to a single dict
 

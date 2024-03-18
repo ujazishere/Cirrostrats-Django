@@ -20,7 +20,8 @@ class Root_class():
         try: 
             from .Switch_n_auth import EC2_location
             full_email = f"Subject: {EC2_location}\n\n{body_to_send}"
-        except:
+        except Exception as e:
+            print("error in Switch_n_auth",e)
             print('EC2_location within dj\dj_app\root\Switch_n_auth.py was not found. Need the file and the variable as string.')
             full_email = f"Subject: UNKNOWN Local\n\n{body_to_send}"
         smtp_server = "smtp.gmail.com"
@@ -68,10 +69,10 @@ class Root_class():
 
     def load_master(self):
         try:
-            with open('master_UA.pkl', 'rb') as f:
+            with open('gate_query_database.pkl', 'rb') as f:
                 return pickle.load(f)
         except:
-            with open('dj/master_UA.pkl', 'rb') as f:
+            with open('dj/gate_query_database.pkl', 'rb') as f:
                 return pickle.load(f)
 
 
@@ -127,9 +128,16 @@ class Root_class():
         return dict({'completed':  completed, 'troubled': troubled})
         
 
-class Pull_class(Root_class):           # Change this name to Fetch_class
-    def __init__(self,flt_num=None,dep_airport_id=None,dest_airport_id=None) -> None:
+class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
+    # TODO:first rest should account for airline code and flight number, next init of this class needs dep_id
+    def __init__(self,airline_code=None,flt_num=None,
+                 dep_airport_id=None,dest_airport_id=None):
         super().__init__()
+        
+        # TODO: need to get rid of this. Search should find the appropriate flight number, w airline code, of all the flight numbers for that day
+        if not airline_code:
+            airline_code = 'UAL'
+        
         date = self.date_time(raw=True)
         # United departure and destination airport only
         # soup
@@ -139,29 +147,40 @@ class Pull_class(Root_class):           # Change this name to Fetch_class
         # soup
         self.flight_stats_url = f"https://www.flightstats.com/v2/flight-tracker/UA/{flt_num}?year={date[:4]}&month={date[4:6]}&date={date[-2:]}"
         
+        # TODO: This is a hazard. Have to init Pull_class twice because of this. fix it.
         #soup- gate information accounted for both
-        try:        # the airport coming in initially wouldnt take airport as arg since it lacks the initial info, hence sec rep info will have this airport ID
+        if dep_airport_id: # the airport coming in initially wouldnt take airport as arg since it lacks the initial info, hence sec rep info will have this airport ID
             self.flight_view_gate_info = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={dep_airport_id[1:]}"
-        except:
+        else:
             pass
+        
+
         self.nas = "https://nasstatus.faa.gov/api/airport-status-information"
 
         # Flight Aware
         fa_apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # New Key from Ismail
-        self.fa_auth_header = {'x-apikey':fa_apiKey}
+        fa_auth_header = {'x-apikey':fa_apiKey}
+        fa_base_apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
+        fa_url = fa_base_apiUrl + f"flights/{airline_code}{flt_num}"
+        self.fa_url_w_auth = {fa_url:fa_auth_header}
+        # Old requests code: response = requests.get(url, headers=fa_auth_header) 
 
+        # TODO: Fix airline code issue. This is not used yet. Find use case.
         # Aviation Stack api call. 3000 requests per month
-        self.aviation_stack_params = {
-          'access_key': '65dfac89c99477374011de39d27e290a',
-          'flight_icao': "UAL414"
-        }
-
+        aviation_stack_url = 'http://api.aviationstack.com/v1/flights'
+        aviation_stack_params = {
+                            'access_key': '65dfac89c99477374011de39d27e290a',
+                            'flight_icao': f"{airline_code}{flt_num}"}
+        # aviationstack just like flight_aware
+        self.av_stack_url_w_auth = {aviation_stack_url:aviation_stack_params}
+        # Old requests code: api_result = requests.get(aviation_stack_url, self.aviation_stack_params)
 
     def requests_processing(self, 
                         requests_raw_extract: requests.models.Response,
                         json=None,
                         awc=None,
                         bs=None,
+                        bs_flight_view=None,
                         ):
         if awc:
             
@@ -174,6 +193,9 @@ class Pull_class(Root_class):           # Change this name to Fetch_class
         elif bs:
             # Might need to change this to requests_raw_extract.content depending on the use case.
             return bs4(requests_raw_extract,'html.parser')
+        elif bs_flight_view:
+            # Might need to change this to requests_raw_extract.content depending on the use case.
+            return bs4(requests_raw_extract.content,'html.parser')
 
 
     def weather_links(self, dep_airport_id, dest_airport_id, ):
@@ -188,37 +210,21 @@ class Pull_class(Root_class):           # Change this name to Fetch_class
         }
 
 
-    def api_pull_w_limits(self, flt_num, airline_code=None):
-
-        if not airline_code:
-            airline_code = 'UAL'
-        fa_base_apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
-        self.fa_url = fa_base_apiUrl + f"flights/{airline_code}{flt_num}"
-        # response = requests.get(url, headers=fa_auth_header) 
-
-        # aviationstack just like flight_aware
-        self.aviation_stack_url = 'http://api.aviationstack.com/v1/flights'
-        # api_result = requests.get(aviation_stack_url, self.aviation_stack_params)
-
+    def jupyter_interactive_code(self,):
 
         """
+
         # copy paste these lines within comment to jupyter and it will work
         import requests,asyncio, aiohttp
         from dj.dj_app.root.root_class import Root_class, Pull_class
-        pc = Pull_class('4416)
+        pc = Pull_class('4416')
         r = Root_class()
-        pc.pull('4416')
         all_links = [
         pc.ua_dep_dest,
         pc.flight_stats_url,
-        pc.dep_awc_metar_api,
-        pc.dep_awc_taf_api,
-        pc.dep_datis_api,
-        pc.dest_awc_metar_api,
-        pc.dest_datis_api,
-        pc.dest_awc_taf_api,
-        pc.nas,]
-
+        ]
+        
+        
         task = asyncio.ensure_future(pc.async_pull(all_links))
         asyncio.gather(task)
         resp = await task       # This is the responsein jupyter that works 
@@ -230,21 +236,23 @@ class Pull_class(Root_class):           # Change this name to Fetch_class
             # all_items.append(r.request(url))
 
         """
-
+        pass
 
     async def async_pull(self, link_list:list):
-        # A function is a coroutine if you prepend it with `async`. This is a coroutine function
+
         async def get_tasks(session):
-            # an inexpensive operation: putting all urls to be fetched into tasks list.
             tasks = []
             for url in link_list:
-                tasks.append(asyncio.create_task(session.get(url)))
+                if type(url)==dict:
+                    url,auth_headers = list(url.keys())[0], list(url.values())[0]
+                    tasks.append(asyncio.create_task(session.get(url, headers=auth_headers)))
+                else:
+                    tasks.append(asyncio.create_task(session.get(url)))
             return tasks
         
         async def main():
             async with aiohttp.ClientSession() as session:
                 tasks = await get_tasks(session)
-                # Upto here the tasks are created which is very light.
         
                 # Actual pull work is done using as_completed 
                 resp_return_list = {}
@@ -256,6 +264,7 @@ class Pull_class(Root_class):           # Change this name to Fetch_class
                     else:
                         response_output = await resp.text()
                     
+                    # print(resp.url,content_type)
                     resp_return_list[resp.url] = response_output
                 return resp_return_list
 
