@@ -7,6 +7,7 @@ flt_info = Pull_flight_info()
 
 
 def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
+    # see use in view.py for document
     pc = Pull_class(flight_number_query)
     for url,resp in resp_dict.items():
         if "flight-status.com" in str(url):
@@ -32,10 +33,9 @@ def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
             # flight_aware_data, aviation_stack_data
 
 def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
-    gate_info = None
+    gate_info = None        # Declared this here. in case if gate info is not scraped variable will atleast exist. used to avoid definition error
     pc = Pull_class(dep_airport_id=dep_airport_id)
     for url,resp in resp_dict.items():
-
         if f"metar?ids={dep_airport_id}" in str(url):
             dep_metar = pc.requests_processing(resp,awc=True)
         elif f"taf?ids={dep_airport_id}" in str(url):
@@ -51,6 +51,7 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
 
 
         elif f"&depapt={dep_airport_id[1:]}" in str(url):
+            
             gate_info = pc.requests_processing(resp,bs=True)
 
             
@@ -68,10 +69,17 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
 
     wpp = {"dep_weather":dep_weather,"dest_weather":dest_weather}
 
-    wpp = wp.nested_weather_dict_explosion(wpp)
+    wpp = wp.nested_weather_dict_explosion(wpp)     # Doing this to avoid nested dictionaries
 
-    gate_info = flt_info.flight_view_gate_info(pre_process=gate_info)
 
-    # giving the nested weather dict explosion to simplify the front end
-    return {**wpp,**gate_info}
+    if gate_info:
+        gate_info_return = flt_info.flight_view_gate_info(pre_process=gate_info)
+    else:
+
+        gate_info_return = {'departure_gate': None,
+                            'arrival_gate': None, }
+        print('no gate info found')
+    
+
+    return {**wpp,**gate_info_return}       # The ** merges dicts in to a single dict
 

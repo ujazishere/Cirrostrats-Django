@@ -11,9 +11,15 @@ class Gate_checker(Root_class):
 
 
     def ewr_UA_gate(self, query=None):
-        # Stacking query items together
-        # update actual more frequently and scheduled less frequently. maybe couple times a day for scheduled
+        # This function loads the master_UA pickle file that is a dictionary with keys as 
+            # flight numbers out of newark and values as their gate and times.
+            # It filters per users query, sorts by date then returns as list. A list of dicts.
+            # Check gate scrape for actual data fetch and filter mechanish
+
+        # TODO: Update actual more frequently and scheduled less frequently. maybe couple times a day for scheduled.
+            # Highlight late ones in red
         master = self.load_master()
+
         flights = []
         for flt_num, values in master.items():
             gate = values[0]
