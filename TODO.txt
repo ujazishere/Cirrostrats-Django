@@ -16,14 +16,15 @@ Practice readibility and simplicity. Aviod code duplication. Include description
         
 
 **UV:   
-        learn about multiprocessing vs multithreading and implement on flight_deet- asyncio,aiohttp,threading.thread, threadpool exec
+        # TODO: Priority: Each individual scrape should be separate function in views. also separate scrape from api fetch.
+        TODO: Priority: Integrate frontend into this project as a separate branch and also declutter django include fastapi
+        clean up code. clean up the mess: separate scraping, add notes all along
         account for nas alongside weather- in airport lookup query
-        Implement asynchronous pull through asyncio and aiohttp.
-            weather:datis,metar and taf
-            once async pull accomplished figure out dummy files for ease of work for ismail.
+        weather sources should show aviationweather link on each metar/taf/datis: https://aviationweather.gov/data/metar/?id=KEWR&hours=0
+        figure out dummy files for ease of work for ismail and Luis.
         django hybrid. google auth. fast api to figure out back end python comms with front end react.
         move file paths to one file and call those paths everywhere else. 
-        Find software engineers; proficient people in your field of language, ask them to proofread it.
+        Have software engineers proofread the code and logic.
         Ask pilot's what would they search to get gate information. store these searches and use that for parsing.
         Put in 'TAF(Ammended)', 'METAR(SPECI)' and D-ATIS(SPECIAL) in their title for special weather published times.
         Integrate weather page with  the flight deet page--> reduce duplication--> use js
@@ -200,3 +201,6 @@ weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf',
              `Want to know if your gate is occupied in newark? lookup the gate. try: 71x
              `hit the live map to see the HD weather radar`
              `want to know the weather at a particular airport? look it up.` 
+        DONE! learn about multiprocessing vs multithreading and implement on flight_deet- asyncio,aiohttp,threading.thread, threadpool exec
+        DONE! Implement asynchronous pull through asyncio and aiohttp.
+            weather:datis,metar and taf

@@ -22,7 +22,7 @@ document
     const h3Contents = [
       "Want to know if your gate is occupied in Newark? Look up the gate. For example: 71x",
       "Hit the live map to see the HD weather radar",
-      "Want to know the weather at a particular airport? Look it up.",
+      "Want to know the weather at a particular airport? Look it up the identifier. E.g: KEWR",
     ];
 
     // Get the h3 element

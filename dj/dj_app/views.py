@@ -141,38 +141,25 @@ async def parse_query(request, main_query):
             else:
                 return gate_info(request, main_query=' '.join(query_in_list_form))
 
-            '''
-            # Attempting to pull all airports for easier search access
-            florida_airports = airports['Florida'][1]
-            for each_airport in florida_airports:
-                if each_query in each_airport:
-                    print(each_airport)
-                flights = Gate_checker().departures_ewr_UA()
-                print(3)
-                for flt in flights:
-                    # print(flt)
-                    if each_query in flt:
-                        print(4)
-                        return flight_deets(request, abs_query, flt)
-                    else:
-                        # return a static html saying no information found for flight number ****
-                        pass'''
-
 
 def gate_info(request, main_query):
     gate = main_query
     # In the database all the gates are uppercase so making the query uppercase
     gate = gate.upper()
+    current_time = Root_class().date_time()
 
-    # Dictionary format a list with one or many dictionaries each dictionary containing 4 items:gate,flight,scheduled,actual
-
-    current_time = Gate_checker().date_time()
+    # This is a list full of dictionararies returned by err_UA_gate depending on what user requested..
+    # Each dictionary has 4 key value pair.eg. gate:c10,flight_number:UA4433,scheduled:20:34 and so on
     gate_data_table = Gate_checker().ewr_UA_gate(gate)
+    
+
+    # This can be a json to be delivered to the frontend
+    data_out = {'gate_data_table': gate_data_table, 'gate': gate, 'current_time': current_time}
 
     # showing info if the info is found else it falls back to `No flights found for {{gate}}`on flight_info.html
     if gate_data_table:
         # print(gate_data_table)
-        return render(request, 'flight_info.html', {'gate_data_table': gate_data_table, 'gate': gate, 'current_time': current_time})
+        return render(request, 'flight_info.html', data_out)
     else:       # Returns all gates since query is empty. Maybe this is not necessary. TODO: Try deleting else statement.
         return render(request, 'flight_info.html', {'gate': gate})
 
@@ -194,8 +181,8 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     bulk_flight_deets = {}
 
 
-
-    '''
+    # TODO: Priority: Each individual scrape should be separate function. Also separate scrape from api fetch
+    ''' *****VVI******  
     Logic: resp_dict gets all information pulled. The for loop for that dict iterates the raw data and
     pre-processess for inclusion in the bulk_flight_deets.. first async response returs origin and destination
     airport ID through united's flight-status, gets scheduled times in local time zones through flightstats,
@@ -235,38 +222,14 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
     weather_dict = resp_sec
 
-    # TODO: Still need to account for fake NoneType flight numbers
-
-
-
-    """
-    # Might not need this, best to outsource it from weather_parse.py to keep views.py clean and clutter free.
-    for url,resp in resp_dict.items():
-        print(type(str(url)))
-        # TODO: MAke this a function to reduce code duplication:
-        if f"metar"+flight_aware_data['origin'] in str(url):
-            soup = pc.requests_processing(resp,awc=True)
-            united_dep_dest = flt_info.united_departure_destination_scrape(pre_process=soup)
-            print(united_dep_dest)
-        if f"taf"+flight_aware_data['origin'] in str(url):
-            soup = pc.requests_processing(resp,awc=True)
-            united_dep_dest = flt_info.united_departure_destination_scrape(pre_process=soup)
-            print(united_dep_dest)
-
-    """
-
-
-
-    # More streamlined than just the update method.
+    # More streamlined to merge dict than just the typical update method of dict. update wont take multiple dictionaries
     bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
                          **weather_dict,
                         # **flight_aware_data,
                          }
-    # bulk_flight_deets.update(united_dep_dest)
-    # bulk_flight_deets.update(flight_stats_arr_dep_time_zone)
 
     # This is a inefficient fucntion to bypass the futures error on EC2
-    # TODO: sort this out for async feature and parallel processing
+    # TODO: Delete this since it wont be used anymore. Account for all attribues before it though.
     def without_futures():
         # leave this function as is for backup.
 
