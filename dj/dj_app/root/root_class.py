@@ -265,6 +265,7 @@ class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
                     else:
                         response_output = await resp.text()
                     
+                    # print(resp.url,content_type)
                     resp_return_list[resp.url] = response_output
                 return resp_return_list
 
