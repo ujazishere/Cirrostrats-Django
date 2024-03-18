@@ -23,8 +23,10 @@ class Pull_flight_info(Root_class):
         flt_num = flt_num_query
         if pre_process:
             soup_fs = pre_process
-        else:
-            # airport = query.split()[2]        This was for when passing `i flt_num airport` as search
+        else:       
+            # This is obsolete. will be removed. this is the old synchronous way to fetch data.
+            # This only exists as a backup in case we have to return to synchronous if async doesn't work when deploying
+
             date = self.date_time(raw=True)     # Root_class inheritance format yyyymmdd
             
             #  TODO: pull information on flight numners from the info web and use that to pull info through flightview.
@@ -264,7 +266,7 @@ class Pull_flight_info(Root_class):
     def flight_view_gate_info(self, flt_num=None, airport=None, pre_process=None):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
 
         # date format in the url is YYYYMMDD. For testing, you can find flt_nums on https://www.airport-ewr.com/newark-departures
-        if pre_process:
+        if pre_process:     # it doesn't feed in the pre-process if it cannt find the
             soup = pre_process
         else:            
             use_custom_dummy_data = False
@@ -272,6 +274,7 @@ class Pull_flight_info(Root_class):
                 date = 20230505
             else:
                 date = str(self.date_time(raw=True))     # Root_class inheritance format yyyymmdd
+            print(flt_num,airport,date)
             try:        # the airport coming in initially wouldnt take airport as arg since it lacks the initial info, hence sec rep info will have this airport ID
                 flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport[1:]}"
             except:

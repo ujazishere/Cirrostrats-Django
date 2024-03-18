@@ -252,10 +252,11 @@ class Pull_class(Root_class):           # Change this name to Fetch_class
                     resp = await resp
                     content_type = resp.headers.get('Content-Type')
                     if content_type == "application/json":
-                        resp_text = await resp.json()
+                        response_output = await resp.json()
                     else:
-                        resp_text = await resp.text()
-                    resp_return_list[resp.url] = resp_text
+                        response_output = await resp.text()
+                    
+                    resp_return_list[resp.url] = response_output
                 return resp_return_list
 
         #1 Temporary. Works when function calling within jupyter.

@@ -13,12 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+from django.contrib import admin        # Probs dont need it
 from django.urls import path, include
 
+
 # This is the base url after the port number. http://127.0.0.1:8000/gate/{here is the url mentioned in dj_app.urls file}
-# dj_app folder has to be in the same directory as manage.py onlyl then it will be able to find the folder.
+# dj_app folder has to be in the same directory as manage.py only then it will be able to find the folder.
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('dj_app.urls'))
+    path('', include('dj_app.urls'))            # the dot `.` is equivalent to `/` for directory
 ]   
