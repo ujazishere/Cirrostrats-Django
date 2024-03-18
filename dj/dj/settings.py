@@ -42,7 +42,13 @@ INSTALLED_APPS = [
     
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    # Other middleware classes
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.security.SecurityMiddleware',
