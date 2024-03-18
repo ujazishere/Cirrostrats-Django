@@ -1,12 +1,22 @@
+
 from django.urls import path
+from rest_framework import routers
+# from django.middleware.Cor
 from . import views
-# this file is within dj_app
 from django.conf import settings
+
+
+"""
 from django.conf.urls.static import static
+
+router = routers.DefaultRouter()
+router.register('weather',views.weather_display)
+"""
 
 
 urlpatterns = [
     path('', views.home, name='home'),   # Home page.
+    path('api/react_dummy', views.react_dummy, name='react_dummy'),   # Home page.
     path('ourstory', views.ourstory, name='ourstory'),   # about page.
     path('contact', views.contact, name='contact'),   # contact page.
     path('gate_info', views.gate_info, name='gate_info'),
@@ -32,6 +42,6 @@ urlpatterns = [
 ]
 
 
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL,
-                          document_root=settings.STATIC_ROOT)
+# if settings.DEBUG:
+#     urlpatterns += static(settings.STATIC_URL,
+#                           document_root=settings.STATIC_ROOT)
