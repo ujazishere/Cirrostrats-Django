@@ -352,6 +352,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
 
 
+
 def weather_display(request, weather_query):
 
     # remove leading and trailing spaces. Seems precautionary.
