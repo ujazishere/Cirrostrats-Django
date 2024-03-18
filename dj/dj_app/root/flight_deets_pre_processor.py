@@ -52,7 +52,9 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
 
         elif f"&depapt={dep_airport_id[1:]}" in str(url):
             
+            
             gate_info = pc.requests_processing(resp,bs=True)
+            print(gate_info,"gate info is here")
 
             
         elif f"faa.gov/api/airport-status-information" in str(url):
@@ -72,14 +74,10 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
     wpp = wp.nested_weather_dict_explosion(wpp)     # Doing this to avoid nested dictionaries
 
 
-    if gate_info:
-        gate_info_return = flt_info.flight_view_gate_info(pre_process=gate_info)
-    else:
-
-        gate_info_return = {'departure_gate': None,
-                            'arrival_gate': None, }
-        print('no gate info found')
+    print('gate info areaa')
+    # gegte_info_return = flt_info.flight_view_gate_info(pre_process=gate_info)
     
 
-    return {**wpp,**gate_info_return}       # The ** merges dicts in to a single dict
+    # giving the nested weather dict explosion to simplify the front end
+    return {**wpp,}
 
