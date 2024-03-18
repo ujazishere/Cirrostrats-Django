@@ -14,7 +14,7 @@ base.ppk
 
 
 dj/dj_app/root/Switch_n_auth.py
-# dj/master_UA.pkl
+# dj/gate_query_database.pkl
 # dj/outlaws.pkl
 
 # C extensions

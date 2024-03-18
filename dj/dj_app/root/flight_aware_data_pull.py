@@ -50,8 +50,8 @@ class Flight_aware_pull(Root_class):
             return None    
 
 
-    def trial(self):        # This is for swift portal.
-        
+    def trial(self):    # INACTIVE
+        # This is for swift portal.
         # checkout for knowledge https://www.faa.gov/air_traffic/technology/swim/swift
         api_url = 'API_URL'
         params = {
@@ -68,7 +68,7 @@ class Flight_aware_pull(Root_class):
         if response.status_code == 200:
             data = response.json()  # Assuming the data is in JSON format
 
-    def jms_trial(self):
+    def jms_trial(self):    # INACTIVE
         class SolaceJMSClient:
             def __init__(self, config):
                 self.config = config
@@ -101,7 +101,7 @@ class Flight_aware_pull(Root_class):
         
         # solace_client.disconnect()
 
-def flight_aware_data_pull(airline_code=None, flt_num=None,):
+def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None):
 
     # This returns bypass all and return prefabricated None vals
     # return Flight_aware_pull().attrs
@@ -110,18 +110,25 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,):
     
     pull_dummy = False
 
+    fa_object = Flight_aware_pull()
     if pull_dummy:
         # Use this to recall a dummy flight packet:
         print('\n CALLING DUMMY FILE IN flight_aware_data_pull \n')
         with open ('dummy_flight_aware_packet.pkl', 'rb') as f:
             flights = pickle.load(f)
     else:
-        fa_object = Flight_aware_pull()
-        flights = fa_object.initial_pull(airline_code=airline_code,flt_num=flt_num)
+        if pre_process:
+            flights = pre_process
+        elif flt_num:
+            flights = fa_object.initial_pull(airline_code=airline_code,flt_num=flt_num)
+        else:
+            # Reason here to to return none items when no flight aware data is found. it returns fa_object.attrs
+            flights = None
+            pass
     
     current_UTC = Flight_aware_pull().current_utc
     route = None        # Declaring not available unless available throught flights
-    filed_altitude, filed_ete = None, None
+    filed_altitude, filed_ete,  = None, None
     
     # Use this to dump a dummy flight packet:
         # with open('dummy_flight_aware_packet.pkl', 'wb') as f:
@@ -183,6 +190,7 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,):
         filed_ete = flights[i]['filed_ete']
         filed_altitude = flights[i]['filed_altitude']
     """
+    
     if flights:     # sometimes flights returns empty list.
         for i in range(len(flights)):      # There are typically 15 of these for multiple dates
             scheduled_out_raw_fa = flights[i]['scheduled_out']
