@@ -74,7 +74,7 @@ class Pull_flight_info(Root_class):
             print('Success at united_flight_stat scrape for dep and des ID')
         except:
             departure_ID, destination_ID = [None]*2
-        print('united_flight_stat', departure_ID, destination_ID)
+        print('united_flight_stat for departure and destination', departure_ID, destination_ID)
         return {'departure_ID': departure_ID,
                 'destination_ID': destination_ID}
 
@@ -264,7 +264,7 @@ class Pull_flight_info(Root_class):
                 flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport[1:]}"
             except:
                 pass
-            print('Pulled gate info from:', flight_view)
+            print('Standard synchronoys fetch for gate info from:', flight_view)
             
             self.soup = self.request(flight_view)
             soup = self.soup
@@ -274,7 +274,6 @@ class Pull_flight_info(Root_class):
             # departure_gate = departure_gate[26:-1]
             arrival_gate = leg_data[0].find_all('tr', class_='even')[4].text[17:]
             # arrival_gate = arrival_gate[26:-1]
-            print('were in try stat')
             if 'Terminal' in departure_gate:
                 departure_gate = departure_gate.replace('Terminal', '')
             if 'Terminal' in arrival_gate:
