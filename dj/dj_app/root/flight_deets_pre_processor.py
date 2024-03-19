@@ -71,8 +71,12 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
             dest_datis = resp         # Apparently this is being returned within a list. Is accounted for.
 
 
-        elif f"&depapt={dep_airport_id[1:]}" in str(url):
-            
+        elif f"flightview.com" in str(url):
+            # This is just for testing
+            # fv_test = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\fv_test.pkl"
+            # with open(fv_test, 'wb') as f:
+            #     resp = pickle.dump(resp,f)
+
             gate_info = pc.requests_processing(resp,bs=True)
 
             
@@ -103,11 +107,10 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
 
 
     if gate_info:
-        print('we have gate info')
         gate_info_return = flt_info.flight_view_gate_info(pre_process=gate_info)
         print(gate_info_return)
     else:
-
+        print("we dont have gate info")
         gate_info_return = {'departure_gate': None,
                             'arrival_gate': None, }
         print('no gate info found')

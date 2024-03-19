@@ -206,9 +206,8 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     united_dep_dest,flight_stats_arr_dep_time_zone= resp_initial
     # united_dep_dest,flight_stats_arr_dep_time_zone,flight_aware_data,aviation_stack_data = resp_initial
 
-    
+    # This will init the flight_view for gate info
     pc = Pull_class(flight_number_query,united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
-    # Weather links
     wl_dict = pc.weather_links(united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
     # OR get the flightaware data for origin and destination airport ID as primary then united's info.
     # also get flight-stats data. Compare them all for information.
@@ -241,9 +240,9 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
                             **fa_data, }
     # More streamlined to merge dict than just the typical update method of dict. update wont take multiple dictionaries
     bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
-                         **weather_dict,
-                        # **flight_aware_data,
-                         }
+                         **weather_dict, **fa_data, }
+
+
 
     # This is a inefficient fucntion to bypass the futures error on EC2
     # TODO: Delete this since it wont be used anymore. Account for all attribues before it though.
