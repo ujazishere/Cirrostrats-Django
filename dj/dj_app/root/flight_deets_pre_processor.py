@@ -76,8 +76,9 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
             # fv_test = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\fv_test.pkl"
             # with open(fv_test, 'wb') as f:
             #     resp = pickle.dump(resp,f)
-
-            gate_info = pc.requests_processing(resp,bs=True)
+            # gate_info = pc.requests_processing(resp,bs=True)
+            pass    # This is just not working. async return is way different than organic requests return.
+            # Both are html but different data. Tried different likes, different soup type, bs4.prettify and still no joy!
 
             
         elif f"faa.gov/api/airport-status-information" in str(url):
@@ -107,11 +108,9 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
 
 
     if gate_info:
-        print('we have gate info')
         gate_info_return = flt_info.flight_view_gate_info(pre_process=gate_info)
         print(gate_info_return)
     else:
-        print("we dont have gate info")
         gate_info_return = {'departure_gate': None,
                             'arrival_gate': None, }
         print('no gate info found')

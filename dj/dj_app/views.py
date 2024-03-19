@@ -207,10 +207,31 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     # united_dep_dest,flight_stats_arr_dep_time_zone,flight_aware_data,aviation_stack_data = resp_initial
 
     # This will init the flight_view for gate info
-    pc = Pull_class(flight_number_query,united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
-    wl_dict = pc.weather_links(united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
-    # OR get the flightaware data for origin and destination airport ID as primary then united's info.
-    # also get flight-stats data. Compare them all for information.
+    if fa_data['origin']:           # Flightaware data is prefered as source for otherdata.
+        pc = Pull_class(flight_number_query,fa_data['origin'],fa_data['destination'])
+        wl_dict = pc.weather_links(fa_data['origin'],fa_data['destination'])
+        # OR get the flightaware data for origin and destination airport ID as primary then united's info.
+        # also get flight-stats data. Compare them all for information.
+
+        # fetching weather, nas and gate info since those required departure, destination
+        # TODO: Probably take out nas_data from here and put it in the initial pulls.
+        resp_dict:dict = await pc.async_pull(list(wl_dict.values())+[pc.nas,])
+
+        # /// End of the second and last async await.
+
+        
+        # Weather and nas information processing
+        resp_sec = resp_sec_returns(resp_dict,fa_data['origin'],fa_data['destination']) 
+
+        weather_dict = resp_sec
+        gate_returns = Pull_flight_info().flight_view_gate_info(flt_num=flight_number_query,airport=fa_data['origin'])
+        bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
+                            **weather_dict, **fa_data, **gate_returns}
+    elif united_dep_dest['departure_ID']:       # If flightaware data is not available use this scraped data. Very unstable. TODO: Change this. Have 3 sources for redundencies
+        pc = Pull_class(flight_number_query,united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
+        wl_dict = pc.weather_links(united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
+        # OR get the flightaware data for origin and destination airport ID as primary then united's info.
+        # also get flight-stats data. Compare them all for information.
 
         # fetching weather, nas and gate info since those required departure, destination
         # TODO: Probably take out nas_data from here and put it in the initial pulls.
@@ -239,8 +260,6 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
         bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
                             **fa_data, }
     # More streamlined to merge dict than just the typical update method of dict. update wont take multiple dictionaries
-    bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
-                         **weather_dict, **fa_data, }
 
 
 
