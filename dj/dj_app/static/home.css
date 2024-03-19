@@ -4,18 +4,9 @@ body {
 }
 
     /* Additional CSS for animation */
-    .visible {
-      animation: fadeIn 1s ease-in-out forwards;
-    }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
+
+
 
 .alert-warning {
   background-color: #fff3cdb8; /* Yellow background color */
@@ -77,32 +68,17 @@ body {
   }
 }
 
-.hidden {
-  opacity: 0;
-}
+/************** this code is for random text animation *************/
 
-.visible {
-  animation: fadeIn 0.5s ease forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 .hidden {
   opacity: 0;
 }
 
 .visible {
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn 0.2s ease forwards;
 }
+
 
 /************** this code is for link container *************/
 

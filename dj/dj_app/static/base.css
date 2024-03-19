@@ -18,6 +18,7 @@ body.loading {
   transition: opacity 0;
 }
 
+
 /************** this code is for clock *************/
 
 .gmt-clock {
@@ -99,6 +100,15 @@ body.dark-mode .sticky-header {
 body.dark-mode thead {
   font: #FFFFFF;
 }
+
+
+
+.alert-banner a {
+  color: white; /* Set link color to white */
+  text-decoration: none;
+}
+
+
 
 /************** this code is for header *************/
 
