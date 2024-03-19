@@ -16,6 +16,8 @@ Practice readibility and simplicity. Aviod code duplication. Include description
         
 
 **UV:   
+        Need redundency for dep and destination pull. current one is unstable giving errors during async
+        date implementatiton. Current web is error prone
         # TODO: Priority: Each individual scrape should be separate function in views. also separate scrape from api fetch.
         TODO: Priority: Integrate frontend into this project as a separate branch and also declutter django include fastapi
         clean up code. clean up the mess: separate scraping, add notes all along
