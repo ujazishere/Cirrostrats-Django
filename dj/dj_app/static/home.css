@@ -5,7 +5,33 @@ body {
 
     /* Additional CSS for animation */
 
+    .scrolling-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 60px; /* Adjust height as needed */
+      margin: auto; /* Center the container */
+  }
 
+  .scrolling-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      white-space: nowrap;
+      width: 100%;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+      font-weight: bold; /* Make the text bold */
+  }
+
+  .scrolling-text.active {
+      opacity: 1;
+  }
+
+  .scrolling-text.hidden {
+      display: none;
+  }
 
 
 .alert-warning {
@@ -188,7 +214,7 @@ p {
 /* Media queries for responsiveness */
 @media only screen and (max-width: 600px) {
   h1 {
-    font-size: 35px;
+    font-size: 30px;
   }
 
   p {
@@ -201,7 +227,7 @@ p {
 }
 
 h1 {
-  font-size: 35px;
+  font-size: 30px;
   font-weight: bold;
   text-align: center;
   margin-top: 50px;
@@ -209,7 +235,7 @@ h1 {
 
 @media only screen and (max-width: 400px) {
   h1 {
-    font-size: 35px;
+    font-size: 30px;
   }
 
   p {
@@ -222,7 +248,7 @@ h1 {
 }
 
 h1 {
-  font-size: 35px;
+  font-size: 30px;
   font-weight: bold;
   text-align: center;
   margin-top: 50px;
