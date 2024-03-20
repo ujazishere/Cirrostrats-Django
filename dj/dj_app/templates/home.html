@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+
 </head>
 <body>
 
@@ -28,6 +30,21 @@
     </form>
     
     <h3 id="randomH3" class="hidden"></h3>
+
+
+
+    <div class="scrolling-container">
+      <div class="scrolling-text active">
+          Want to know if your gate is occupied in Newark? Look up the gate. For example: 71x
+      </div>
+      <div class="scrolling-text hidden">
+          Hit the live map to see the HD weather radar
+      </div>
+      <div class="scrolling-text hidden">
+          Want to know the weather at a particular airport? Look it up the identifier. E.g: KEWR
+      </div>
+  </div>
+
 
 
         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -63,6 +80,7 @@
 </html>
 </body>
 </html>
+
 
 <script type="text/javascript" src="{% static 'home.js' %}"></script>
 
