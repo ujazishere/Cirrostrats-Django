@@ -16,7 +16,7 @@ router.register('weather',views.weather_display)
 
 urlpatterns = [
     path('', views.home, name='home'),   # Home page.
-    path('api/react_dummy', views.react_dummy, name='react_dummy'),   # Home page.
+    # path('api/react_dummy', views.react_dummy, name='react_dummy'),   # Home page.
     path('ourstory', views.ourstory, name='ourstory'),   # about page.
     path('contact', views.contact, name='contact'),   # contact page.
     path('gate_info', views.gate_info, name='gate_info'),
@@ -30,7 +30,7 @@ urlpatterns = [
     path('report', views.report_an_issue, name='report'),  # report page.
     path('live_map', views.live_map, name='live_map'),  # live_map page.
 
-    path('dummy2', views.dummy2, name='dummy2'),  # Main Page
+    path('extra_dummy', views.extra_dummy, name='extra_dummy'),  # Main Page
 
     # This page is a views function that is loaded asynchronously after dummy2 loads up.
     # the string airport is passed as second argument to the nas_data and subsequent functions in views.py
