@@ -199,6 +199,10 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None):
                 origin = flights[i]['origin']['code_icao']
                 destination = flights[i]['destination']['code_icao']
                 registration = flights[i]['registration']
+                terminal_origin = flights[i]["terminal_origin"]
+                terminal_destination = flights[i]["terminal_destinatino"]
+                gate_origin = flights[i]["gate_origin"]
+                gate_destination = flights[i]["gate_destinatino"]
 
                 scheduled_out_raw_fa = flights[i]['scheduled_out']
                 date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time
@@ -248,7 +252,11 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None):
             'estimated_out':estimated_out, 
             'scheduled_in':scheduled_in, 
             'estimated_in':estimated_in, 
-            'route':route, 
+            "terminal_origin": terminal_origin,
+            "terminal_destination": terminal_destination,
+            "gate_origin": gate_origin,
+            "gate_destination": gate_destination,
+            "terminal_origin": terminal_origin,
             'filed_altitude':filed_altitude, 
             'filed_ete':filed_ete,
             'sv': sv,

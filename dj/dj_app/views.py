@@ -7,11 +7,11 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .root.dummy_files_call import dummy_imports
 from .root.gate_checker import Gate_checker
-from .root.root_class import Root_class, Pull_class
+from .root.root_class import Root_class, Pull_class, Source_links_and_api
 from .root.gate_scrape import Gate_scrape_thread
 from .root.weather_parse import Weather_parse
 from .root.dep_des import Pull_flight_info
-from .root.flight_deets_pre_processor import resp_initial_returns,resp_sec_returns
+from .root.flight_deets_pre_processor import resp_initial_returns,resp_sec_returns,response_filter
 from time import sleep
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -80,7 +80,7 @@ async def parse_query(request, main_query):
         return dummy(request)
     if 'ext d' in main_query:
         airport = main_query.split()[-1]
-        return dummy2(request, airport)
+        return extra_dummy(request, airport)
 
     if main_query != '':
         # splits query. Necessary operation to avoid complexity. Its a quick fix for a deeper more wider issue.
@@ -182,17 +182,19 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     ''' *****VVI******  
     Logic: resp_dict gets all information fetched from root_class.Pull_class().async_pull(). Look it up and come back.
     pre-processes it using resp_initial_returns and resp_sec_returns for inclusion in the bulk_flight_deets..
-    first async response returs origin and destination since their argument only takes in flightnumber.
-    first resp returns airport ID's through united's flight-status, gets scheduled times in local time zones through flightstats,
+    first async response returs origin and destination through united's flight-status since their argument only
+    takes in flightnumber and it als, also gets scheduled times in local time zones through flightstats,
     and the packet from flightaware.
     This origin and destination is then used to make another async request that requires additional arguments
     This is the second resp_dict that returns weather and nas in the resp_sec,
     '''
 
+    sl = Source_links_and_api()
     pc = Pull_class(airline_code=airline_code,flt_num=flight_number_query)
     if bypass_fa:
 
-        resp_dict:dict = await pc.async_pull([pc.ua_dep_dest,pc.flight_stats_url,])
+        resp_dict:dict = await pc.async_pull([sl.ua_dep_dest_flight_status(flight_number_query),
+                                              sl.flight_stats_url(flight_number_query),])
         # """
         # This is just for testing
         # fa_test_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\fa_test.pkl"
@@ -202,8 +204,10 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
         # resp_dict.update({'https://aeroapi.flightaware.com/aeroapi/flights/UAL4433':fa_resp})
         # """
     else:
-        resp_dict:dict = await pc.async_pull([pc.ua_dep_dest,pc.flight_stats_url,pc.fa_url_w_auth])      #TODO: Need to include aviationstack
-    
+        resp_dict:dict = await pc.async_pull([sl.ua_dep_dest_flight_status(flight_number_query),
+                                              sl.flight_stats_url(flight_number_query),
+                                              sl.flight_aware_w_auth(airline_code,flight_number_query),
+                                              ])
     # /// End of the first async await, next one is for weather and nas ///.
 
     # flight_deet preprocessing. fetched initial raw data gets fed into their respective pre_processors through this function that iterates through the dict
@@ -223,7 +227,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
         # fetching weather, nas and gate info since those required departure, destination
         # TODO: Probably take out nas_data from here and put it in the initial pulls.
-        resp_dict:dict = await pc.async_pull(list(wl_dict.values())+[pc.nas,])
+        resp_dict:dict = await pc.async_pull(list(wl_dict.values())+[sl.nas(),])
 
         # /// End of the second and last async await.
 
@@ -243,7 +247,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
         # fetching weather, nas and gate info since those required departure, destination
         # TODO: Probably take out nas_data from here and put it in the initial pulls.
-        resp_dict:dict = await pc.async_pull(list(wl_dict.values())+[pc.nas,])
+        resp_dict:dict = await pc.async_pull(list(wl_dict.values())+[sl.nas()])
 
         # /// End of the second and last async await.
 
@@ -264,87 +268,61 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
 
 
-    # This is a inefficient fucntion to bypass the futures error on EC2
-    # TODO: Delete this since it wont be used anymore. Account for all attribues before it though.
-    def without_futures():
-        flt_info = Pull_flight_info()           # from dep_des.py file
-        weather = Weather_parse()         # from MET_TAF_parse.py
-        # leave this function as is for backup.
-
-        if not bypass_fa:       # bypassing flight_aware pull if bypass data == True
-            bulk_flight_deets.update(flt_info.fa_data_pull(
-                airline_code, flight_number_query))
-        else:
-            print("BYPASSING FLIGHTAWARE DATA")
-            bulk_flight_deets['origin'] = ''
-
-
-
-        # united dep and destination airports are inaccurate at times. This assigns flight_aware origin and destination
-        # as feed in for weather, NAS and gate instead of UA dep and des feed thats to be
-        # used in case flightaware cannot be accessed.
-        if bulk_flight_deets['origin']:
-            UA_departure_ID, UA_destination_ID = bulk_flight_deets[
-                'origin'], bulk_flight_deets['destination']
-        else:
-            UA_departure_ID, UA_destination_ID = bulk_flight_deets[
-                'departure_ID'], bulk_flight_deets['destination_ID']
-        bulk_flight_deets['dep_weather'] = weather.processed_weather(
-            UA_departure_ID)
-        # datis_arr as true in this case since its for the destination/arr datis.
-        bulk_flight_deets['dest_weather'] = weather.processed_weather(
-            UA_destination_ID, datis_arr=True)
-        bulk_flight_deets.update(flt_info.nas_final_packet(
-            UA_departure_ID, UA_destination_ID))
-        bulk_flight_deets.update(flt_info.flight_view_gate_info(
-            flight_number_query, UA_departure_ID))
-
-        # This whole area removes the need for for loop in html making it easier to
-        # work with css styling and readibility.
-        def nested_weather_dict_explosion():
-
-            # Departure weather: assigning dedicated keys for data rather than a nested dictionary to simplify use on front end
-            dep_datis = bulk_flight_deets['dep_weather']['D-ATIS']
-            dep_metar = bulk_flight_deets['dep_weather']['METAR']
-            dep_taf = bulk_flight_deets['dep_weather']['TAF']
-            bulk_flight_deets['dep_datis'] = dep_datis
-            bulk_flight_deets['dep_metar'] = dep_metar
-            bulk_flight_deets['dep_taf'] = dep_taf
-
-            dep_datis_zt = bulk_flight_deets['dep_weather']['D-ATIS_zt']
-            dep_metar_zt = bulk_flight_deets['dep_weather']['METAR_zt']
-            dep_taf_zt = bulk_flight_deets['dep_weather']['TAF_zt']
-            bulk_flight_deets['dep_datis_zt'] = dep_datis_zt
-            bulk_flight_deets['dep_metar_zt'] = dep_metar_zt
-            bulk_flight_deets['dep_taf_zt'] = dep_taf_zt
-
-            # Destionation Weather: assigning dedicated keys for data rather than a nested dictionary to simplify use on front end
-            dest_datis = bulk_flight_deets['dest_weather']['D-ATIS']
-            dest_metar = bulk_flight_deets['dest_weather']['METAR']
-            dest_taf = bulk_flight_deets['dest_weather']['TAF']
-            bulk_flight_deets['dest_datis'] = dest_datis
-            bulk_flight_deets['dest_metar'] = dest_metar
-            bulk_flight_deets['dest_taf'] = dest_taf
-
-            dest_datis_zt = bulk_flight_deets['dest_weather']['D-ATIS_zt']
-            dest_metar_zt = bulk_flight_deets['dest_weather']['METAR_zt']
-            dest_taf_zt = bulk_flight_deets['dest_weather']['TAF_zt']
-            bulk_flight_deets['dest_datis_zt'] = dest_datis_zt
-            bulk_flight_deets['dest_metar_zt'] = dest_metar_zt
-            bulk_flight_deets['dest_taf_zt'] = dest_taf_zt
-
-        nested_weather_dict_explosion()
-        print(bulk_flight_deets.keys())
-        return bulk_flight_deets
-    # bulk_flight_deets = without_futures()
-
-
+    # If youre looking for without_futures() that was used prior to the async implementation..
+        #  you fan find it in Async milestone on hash dd7ebd0efa3b5a62798c88bcfe77cc43f8c0048c
+        # It was an inefficient fucntion to bypass the futures error on EC2
 
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
-def react_dummy(request,):
-    return JsonResponse('message', 'hello world')
+async def ua_dep_dest_flight_status(request,flight_number):
+    pc = Pull_class(flt_num=flight_number)
+    sl = Source_links_and_api()
+    flt_info = Pull_flight_info()
+    
+    link = sl.ua_dep_dest_flight_status(flight_number)
+    resp_dict:dict = await pc.async_pull([link])
+
+    resp = response_filter(resp_dict,"flight-status.com")
+    united_dep_dest = flt_info.united_departure_destination_scrape(pre_process=resp)
+
+    return united_dep_dest
+
+
+async def flight_stats_url(request,flight_number):
+    # sl.flight_stats_url(flight_number_query),])
+    pc = Pull_class(flt_num=flight_number)
+    sl = Source_links_and_api()
+    flt_info = Pull_flight_info()
+    
+    link = sl.flight_stats_url(flight_number)
+    resp_dict:dict = await pc.async_pull([link])
+
+    resp = response_filter(resp_dict,"flightstats.com")
+    fs_departure_arr_time_zone = flt_info.fs_dep_arr_timezone_pull(pre_process=resp)
+
+    return fs_departure_arr_time_zone
+
+    
+
+    
+async def flight_aware_w_auth(request,airline_code,flight_number):
+    # sl.flight_stats_url(flight_number_query),])
+    pc = Pull_class(flt_num=flight_number)
+    sl = Source_links_and_api()
+    flt_info = Pull_flight_info()
+    
+    
+    link = sl.flight_aware_w_auth(airline_code,flight_number)
+    resp_dict:dict = await pc.async_pull([link])
+
+    # TODO: account for json as kwarg
+    # resp = response_filter(resp_dict,"flightstats.com","json")
+    # fs_departure_arr_time_zone = flt_info.fs_dep_arr_timezone_pull(pre_process=resp)
+
+    # return fs_departure_arr_time_zone
+
+
 
 
 
@@ -432,10 +410,10 @@ def dummy(request):
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
-def dummy2(request, airport):
+def extra_dummy(request, airport):
     # This page is returned by using `ext d` in the search bar
     # Renders the page and html states it gets the data from data_v
-    return (render(request, 'dummy2.html', {'airport': airport}))
+    return (render(request, 'extra_dummy.html', {'airport': airport}))
 
 # This function gets loaded within the dummy2 page whilst dummy2 func gets rendered.
 # the fetch area in js acts as url. it will somehow get plugged into the urls.py's data_v line with the airport

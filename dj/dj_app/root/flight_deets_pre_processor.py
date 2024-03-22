@@ -52,10 +52,11 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
         elif f"taf?ids={dest_airport_id}" in str(url):
             dest_taf = pc.requests_processing(resp,awc=True)
         elif f"clowd.io/api/{dest_airport_id}" in str(url):         # TODO: Need to account for arrival datis vs dep
-            dest_datis = resp         # Apparently this is being returned within a list. Is accounted for.
+            dest_datis = resp         # Apparently this is being returned within a list and is accounted for.
 
 
         elif f"flightview.com" in str(url):
+            # Gate fetch
             # This is just for testing
             # fv_test = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\fv_test.pkl"
             # with open(fv_test, 'wb') as f:
@@ -97,3 +98,14 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
 
     return {**wpp,**gate_info_return, **nas_data}       # The ** merges dicts in to a single dict
 
+
+def response_filter(resp_dict:dict, base_link,**kwargs):
+    pc = Pull_class()
+    for url,resp in resp_dict.items():
+        # if soup then this
+        soup = pc.requests_processing(resp,bs=True)
+        # elif json then this dont need this I suppose. account for json processing within views. I guess.
+
+        # elfi just raw response return then dont even need this
+        # print(united_dep_dest)
+    return soup

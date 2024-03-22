@@ -127,6 +127,68 @@ class Root_class():
             
         return dict({'completed':  completed, 'troubled': troubled})
         
+class Source_links_and_api:
+    def __init__(self,):
+        pass
+
+    def ua_dep_dest_flight_status(self, flight_number):
+        # reeturns a dictionay paid of departure and destination
+        return f"https://united-airlines.flight-status.info/ua-{flight_number}"               # This web probably contains incorrect information.
+    
+
+    def flight_stats_url(self,flight_number):
+        # local time zones. just needs flight number and date as input
+        
+        date = Root_class().date_time(raw=True)
+        
+        base_url = "https://www.flightstats.com/v2/flight-tracker/"
+        return f"{base_url}UA/{flight_number}?year={date[:4]}&month={date[4:6]}&date={date[-2:]}"
+
+
+    def aviation_stack(self,airline_code, flight_number):
+        # TODO: Fix airline code issue. This is not used yet. Find use case.
+        # Aviation Stack api call. 3000 requests per month
+        aviation_stack_url = 'http://api.aviationstack.com/v1/flights'
+        aviation_stack_params = {
+                            'access_key': '65dfac89c99477374011de39d27e290a',
+                            'flight_icao': f"{airline_code}{flight_number}"}
+        # aviationstack just like flight_aware
+        av_stack_url_w_auth = {aviation_stack_url:aviation_stack_params}
+        return  av_stack_url_w_auth
+
+
+    def flight_aware_w_auth(self,airline_code, flight_number):
+        if not airline_code:
+            airline_code = "UA"
+        fa_apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # New Key from Ismail
+        fa_auth_header = {'x-apikey':fa_apiKey}
+        fa_base_apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
+        fa_url = fa_base_apiUrl + f"flights/{airline_code}{flight_number}"
+        fa_url_w_auth = {fa_url:fa_auth_header}
+        return fa_url_w_auth
+
+
+    def nas(self,):
+        return  "https://nasstatus.faa.gov/api/airport-status-information"
+
+
+    def flight_view_gate_info(self,flight_number:str ,departure_airport_id:str):
+        date = Root_class().date_time(raw=True)
+        base_url = "https://www.flightview.com/flight-tracker/"
+        return f"{base_url}UA/{flight_number}?date={date}&depapt={departure_airport_id[1:]}"
+
+
+
+    def awc_weather(self,metar_or_taf,airport_id):
+        return f"https://aviationweather.gov/api/data/{metar_or_taf}?ids={airport_id}"
+
+
+    def datis(self, airport_id):
+        return f"https://datis.clowd.io/api/{airport_id}"
+
+
+
+
 
 class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
     # TODO:first rest should account for airline code and flight number, next init of this class needs dep_id
@@ -137,25 +199,6 @@ class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
         # TODO: need to get rid of this. Search should find the appropriate flight number, w airline code, of all the flight numbers for that day
         if not airline_code:
             airline_code = 'UAL'
-        
-        date = self.date_time(raw=True)
-        # United departure and destination airport only
-        # soup
-        self.ua_dep_dest = f"https://united-airlines.flight-status.info/ua-{flt_num}"               # This web probably contains incorrect information.
-
-        # local time zones. just needs flight number as input
-        # soup
-        self.flight_stats_url = f"https://www.flightstats.com/v2/flight-tracker/UA/{flt_num}?year={date[:4]}&month={date[4:6]}&date={date[-2:]}"
-        
-        # TODO: This is a hazard. Have to init Pull_class twice because of this. fix it.
-        #soup- gate information accounted for both
-        if dep_airport_id: # the airport coming in initially wouldnt take airport as arg since it lacks the initial info, hence sec rep info will have this airport ID
-            self.flight_view_gate_info = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={dep_airport_id[1:]}"
-        else:
-            pass
-        
-
-        self.nas = "https://nasstatus.faa.gov/api/airport-status-information"
 
         # Flight Aware
         fa_apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # New Key from Ismail
@@ -174,6 +217,7 @@ class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
         # aviationstack just like flight_aware
         self.av_stack_url_w_auth = {aviation_stack_url:aviation_stack_params}
         # Old requests code: api_result = requests.get(aviation_stack_url, self.aviation_stack_params)
+
 
     def requests_processing(self, 
                         requests_raw_extract: requests.models.Response,
@@ -237,6 +281,7 @@ class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
 
         """
         pass
+
 
     async def async_pull(self, link_list:list):
 
