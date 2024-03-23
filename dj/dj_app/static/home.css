@@ -26,6 +26,10 @@ body {
       text-wrap: wrap;
   }
 
+  .dark-mode .scrolling-text {
+    color: #adbac7;
+  }
+
   .scrolling-text.active {
       opacity: 1;
       animation-name: fade;
