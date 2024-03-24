@@ -3,7 +3,7 @@ body {
   padding: 0;
 }
 
-    /* Additional CSS for animation */
+/* this is a styling for random text spinner */
 
     .scrolling-container {
       position: relative;
@@ -58,29 +58,36 @@ body {
     }
 
 
-.alert-warning {
-  background-color: #fff3cdb8; /* Yellow background color */
-  color: #000000; /* Dark color for text */
-  border-color: #fff3cdb8; /* Border color */
-  position: fixed;
-  width: 80%;
-  max-width: 600px;
-  text-align: center; /* Center horizontally */
-  border-radius: 15px;
-  padding: 17px;
-  font-size: 22px;
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Center horizontally */
-}
+    /* this is a styling for banner  */
 
-.alert a {
-  color: inherit;
-}
 
-.dark-mode .toast {
-  background-color: #515a65;
-  color: #dcdcdc;
-}
+    .banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #f44336;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      z-index: 9999;
+      box-sizing: border-box; /* Ensure padding is included in width calculation */
+      overflow: hidden; /* Hide any overflowing content */
+      white-space: wrap; /* Prevent text from wrapping */
+      text-overflow: ellipsis; /* Show ellipsis (...) for overflowed text */
+    }
+    
+    .banner > * {
+      white-space: normal; /* Allow text to wrap within children elements */
+    }
+    
+    
+    .banner a {
+      color: inherit;
+    }
+
+    
+/* this is a styling for loading spinner */
 
 .loading-spinner {
   display: none;
