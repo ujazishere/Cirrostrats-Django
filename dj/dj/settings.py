@@ -32,7 +32,6 @@ CSRF_TRUSTED_ORIGINS = ['https://cirrostrats.onrender.com', 'https://cirrostrats
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

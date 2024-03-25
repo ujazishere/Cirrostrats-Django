@@ -1,6 +1,6 @@
 
 from django.urls import path
-from rest_framework import routers
+# from rest_framework import routers
 # from django.middleware.Cor
 from . import views
 from django.conf import settings
