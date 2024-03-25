@@ -335,7 +335,7 @@ async def flight_aware_w_auth(request,airline_code,flight_number):
 # TODO: Need to account for aviation stack
 
 
-async def metar(request, )
+# async def metar(request, ):
 
 
 
