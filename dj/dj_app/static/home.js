@@ -1,4 +1,4 @@
-s/ Add event listener to the search button
+// Add event listener to the search button
 document
   .getElementById("searchButton")
   .addEventListener("click", function (event) {
