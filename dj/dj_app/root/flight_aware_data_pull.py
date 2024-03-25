@@ -200,9 +200,9 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None):
                 destination = flights[i]['destination']['code_icao']
                 registration = flights[i]['registration']
                 terminal_origin = flights[i]["terminal_origin"]
-                terminal_destination = flights[i]["terminal_destinatino"]
+                terminal_destination = flights[i]["terminal_destination"]
                 gate_origin = flights[i]["gate_origin"]
-                gate_destination = flights[i]["gate_destinatino"]
+                gate_destination = flights[i]["gate_destination"]
 
                 scheduled_out_raw_fa = flights[i]['scheduled_out']
                 date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time

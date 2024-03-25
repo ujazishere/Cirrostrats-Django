@@ -304,8 +304,6 @@ async def flight_stats_url(request,flight_number):
     return fs_departure_arr_time_zone
 
     
-
-    
 async def flight_aware_w_auth(request,airline_code,flight_number):
     # sl.flight_stats_url(flight_number_query),])
     pc = Pull_class(flt_num=flight_number)
@@ -316,13 +314,17 @@ async def flight_aware_w_auth(request,airline_code,flight_number):
     link = sl.flight_aware_w_auth(airline_code,flight_number)
     resp_dict:dict = await pc.async_pull([link])
 
-    # TODO: account for json as kwarg
-    # resp = response_filter(resp_dict,"flightstats.com","json")
-    # fs_departure_arr_time_zone = flt_info.fs_dep_arr_timezone_pull(pre_process=resp)
+    resp = response_filter(resp_dict,"json",)
+    fa_return = resp['flights']
+    flight_aware_data = flt_info.fa_data_pull(airline_code=airline_code, flt_num=flight_number,pre_process=fa_return)
 
-    # return fs_departure_arr_time_zone
+    # Accounted for gate through flight aware. gives terminal and gate as separate key value pairs.
+    return flight_aware_data
+
+# TODO: Need to account for aviation stack
 
 
+async def metar(request, )
 
 
 

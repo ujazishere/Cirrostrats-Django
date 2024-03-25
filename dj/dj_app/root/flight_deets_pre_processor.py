@@ -99,13 +99,16 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
     return {**wpp,**gate_info_return, **nas_data}       # The ** merges dicts in to a single dict
 
 
-def response_filter(resp_dict:dict, base_link,**kwargs):
+def response_filter(resp_dict:dict,*args,):
     pc = Pull_class()
     for url,resp in resp_dict.items():
         # if soup then this
-        soup = pc.requests_processing(resp,bs=True)
+        if "json" in args:
+            data_return = json.loads(resp)
+        else:
+            data_return = pc.requests_processing(resp,bs=True)
         # elif json then this dont need this I suppose. account for json processing within views. I guess.
 
         # elfi just raw response return then dont even need this
         # print(united_dep_dest)
-    return soup
+    return data_return
