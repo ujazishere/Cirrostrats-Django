@@ -1,8 +1,7 @@
 # from dj.dj_app.root.root_class import Root_class      # this works in jupyter interactive
 from root_class import Root_class
 import pickle
-import asyncio
-import aiohttp
+import asyncio,aiohttp
 # this function pulls all datis and returns them in list form
 all_datis_airports_path = r'c:\users\ujasv\onedrive\desktop\codes\cirrostrats\all_datis_airports.pkl'
 with open(all_datis_airports_path, 'rb') as f:

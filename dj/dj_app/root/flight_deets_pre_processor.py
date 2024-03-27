@@ -53,20 +53,23 @@ def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
 
 
 def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
-    gate_info = None        # Declared this here. in case if gate info is not scraped variable will atleast exist. used to avoid definition error
-    gate_info = None        # Declared this here. in case if gate info is not scraped variable will atleast exist. used to avoid definition error
     pc = Pull_class(dep_airport_id=dep_airport_id)
+
+
+
+    gate_info = None        # Declared this here. in case if gate info is not scraped variable will atleast exist. used to avoid definition error
+    dep_metar,nas_data,wpp = [None]*3            # Declaring for use in nas() in views.py
     for url,resp in resp_dict.items():
         if f"metar?ids={dep_airport_id}" in str(url):
-            dep_metar = pc.requests_processing(resp,awc=True)
+            dep_metar = resp
         elif f"taf?ids={dep_airport_id}" in str(url):
-            dep_taf = pc.requests_processing(resp,awc=True)
+            dep_taf = resp
         elif f"clowd.io/api/{dep_airport_id}" in str(url):          # TODO: Need to account for arrival dep vs arrival datis
             dep_datis = resp     # Apparently this is being returned within a list is being fed as is. Accounted for.
         elif f"metar?ids={dest_airport_id}" in str(url):
-            dest_metar = pc.requests_processing(resp,awc=True)
+            dest_metar = resp
         elif f"taf?ids={dest_airport_id}" in str(url):
-            dest_taf = pc.requests_processing(resp,awc=True)
+            dest_taf = resp
         elif f"clowd.io/api/{dest_airport_id}" in str(url):         # TODO: Need to account for arrival datis vs dep
             dest_datis = resp         # Apparently this is being returned within a list and is accounted for.
 
@@ -92,20 +95,22 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
         else:
             pass
 
+    # All of this should work when only getting weather. check and verify nas() in views.py works
     # Raw weather sent for preprocessing 
-
-    # Raw weather sent for preprocessing 
-    wp = Weather_parse()            
-    dep_weather = {"datis":dep_datis,"metar":dep_metar,"taf":dep_taf}
-    dep_weather = wp.processed_weather(weather_raw=dep_weather)
     
-    dest_weather = {"datis":dest_datis,"metar":dest_metar,"taf":dest_taf}
-    dest_weather = wp.processed_weather(weather_raw=dest_weather)
+    
+    if dep_metar:
+        wp = Weather_parse()            
 
-    wpp = {"dep_weather":dep_weather,"dest_weather":dest_weather}
+        dep_weather = {"datis":dep_datis,"metar":dep_metar,"taf":dep_taf}
+        dep_weather = wp.processed_weather(weather_raw=dep_weather)
+        
+        dest_weather = {"datis":dest_datis,"metar":dest_metar,"taf":dest_taf}
+        dest_weather = wp.processed_weather(weather_raw=dest_weather)
 
-    wpp = wp.nested_weather_dict_explosion(wpp)     # Doing this to avoid nested weather dictionaries
-    wpp = wp.nested_weather_dict_explosion(wpp)     # Doing this to avoid nested weather dictionaries
+        wpp = {"dep_weather":dep_weather,"dest_weather":dest_weather}
+
+        wpp = wp.nested_weather_dict_explosion(wpp)     # Doing this to avoid nested weather dictionaries
 
 
     if gate_info:
@@ -117,7 +122,17 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
         print('no gate info found')
     
 
-    return {**wpp,**gate_info_return, **nas_data}       # The ** merges dicts in to a single dict
+
+    if nas_data and gate_info_return and wpp:
+        return {**wpp,**gate_info_return, **nas_data}       # The ** merges dicts in to a single dict
+    elif nas_data:
+        return nas_data
+    elif wpp:
+        return wpp
+
+
+
+
 
 
 def response_filter(resp_dict:dict,*args,):
@@ -126,6 +141,8 @@ def response_filter(resp_dict:dict,*args,):
         # if soup then this
         if "json" in args:
             data_return = json.loads(resp)
+        elif "awc" in args:
+            data_return = resp
         else:
             data_return = pc.requests_processing(resp,bs=True)
         # elif json then this dont need this I suppose. account for json processing within views. I guess.

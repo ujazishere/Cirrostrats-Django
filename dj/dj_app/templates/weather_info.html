@@ -1,3 +1,7 @@
+
+<!-- This page is shown when user searches just the airport identifier. -->
+
+
 {% extends "dj_app/base.html" %} {% load static %} {% block content %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'weather_info.css' %}" />
@@ -37,7 +41,7 @@
 </table>
 
 {% else %}
-<p>No weather informamtion found for {{airport}}. Try `w kewr`</p>
+<p>No weather information found for {{airport}}. Try `w kewr`</p>
 
 {% endif %}
 

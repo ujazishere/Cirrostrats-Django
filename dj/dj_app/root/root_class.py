@@ -178,8 +178,24 @@ class Source_links_and_api:
         return f"{base_url}UA/{flight_number}?date={date}&depapt={departure_airport_id[1:]}"
 
 
+    def weather_links(self, dep_airport_id, dest_airport_id, ):
+        # This is used for convinience. Consider separating it all out.
+        # the functions awc_weather and datis within here is an attempt to reduce code duplication.
+        # But that will potentially increate the amount of functions used in views.py/main.py
+        # Consider all posibilites.
+        
+        return {
+        "dep_awc_metar_api": f"https://aviationweather.gov/api/data/metar?ids={dep_airport_id}",
+        "dep_awc_taf_api": f"https://aviationweather.gov/api/data/taf?ids={dep_airport_id}",
+        "dep_datis_api":  f"https://datis.clowd.io/api/{dep_airport_id}",
+        "dest_awc_metar_api": f"https://aviationweather.gov/api/data/metar?ids={dest_airport_id}",
+        "dest_awc_taf_api": f"https://aviationweather.gov/api/data/taf?ids={dest_airport_id}",
+        "dest_datis_api":  f"https://datis.clowd.io/api/{dest_airport_id}",
+        }
+
 
     def awc_weather(self,metar_or_taf,airport_id):
+        # Metar or taf takes in either "metar" or "taf" as required
         return f"https://aviationweather.gov/api/data/{metar_or_taf}?ids={airport_id}"
 
 

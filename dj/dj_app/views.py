@@ -1,6 +1,5 @@
-import pickle
-import json
-import asyncio,aiohttp
+# from dj.dj_app.views import awc_weather
+# await awc_weather(None,"EWR","STL")
 from django.views.decorators.http import require_GET
 # from concurrent.futures import ThreadPoolExecutor, as_completed           # Causing issues on AWS
 from django.shortcuts import render
@@ -183,6 +182,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     else:
         bypass_fa = True        
 
+    bypass_fa = False
 
     bulk_flight_deets = {}
 
@@ -227,10 +227,11 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     # united_dep_dest,flight_stats_arr_dep_time_zone,flight_aware_data,aviation_stack_data = resp_initial
 
     # This will init the flight_view for gate info
-    pc = Pull_class(flight_number_query,united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
-    wl_dict = pc.weather_links(united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
-    # OR get the flightaware data for origin and destination airport ID as primary then united's info.
-    # also get flight-stats data. Compare them all for information.
+    if fa_data['origin']:           # Flightaware data is prefered as source for other data.
+        pc = Pull_class(flight_number_query,fa_data['origin'],fa_data['destination'])
+        wl_dict = pc.weather_links(fa_data['origin'],fa_data['destination'])
+        # OR get the flightaware data for origin and destination airport ID as primary then united's info.
+        # also get flight-stats data. Compare them all for information.
 
         # fetching weather, nas and gate info since those required departure, destination
         # TODO: Probably take out nas_data from here and put it in the initial pulls.
@@ -243,6 +244,8 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
         resp_sec = resp_sec_returns(resp_dict,fa_data['origin'],fa_data['destination']) 
 
         weather_dict = resp_sec
+        
+        # This gate stuff is a not async because async is throwig errors when doing async
         gate_returns = Pull_flight_info().flight_view_gate_info(flt_num=flight_number_query,airport=fa_data['origin'])
         bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
                             **weather_dict, **fa_data, **gate_returns}
@@ -286,7 +289,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
-async def ua_dep_dest_flight_status(request,flight_number):
+async def ua_dep_dest_flight_status(request,flight_number):     # dep and destination id pull
     pc = Pull_class(flt_num=flight_number)
     sl = Source_links_and_api()
     flt_info = Pull_flight_info()
@@ -300,7 +303,7 @@ async def ua_dep_dest_flight_status(request,flight_number):
     return united_dep_dest
 
 
-async def flight_stats_url(request,flight_number):
+async def flight_stats_url(request,flight_number):      # time zone pull
     # sl.flight_stats_url(flight_number_query),])
     pc = Pull_class(flt_num=flight_number)
     sl = Source_links_and_api()
@@ -335,7 +338,61 @@ async def flight_aware_w_auth(request,airline_code,flight_number):
 # TODO: Need to account for aviation stack
 
 
-# async def metar(request, ):
+async def awc_and_nas(request, departure_id,destination_id):
+    # Only for use on fastapi w react. Temporary! read below
+    # this is a temporary fix to not change resp_sec_returns. clean that codebase when able
+    # the separated funcs nas and awc are the ones that need to be done.
+
+    pc = Pull_class()
+    sl = Source_links_and_api()
+    wp = Weather_parse()
+    
+    # This is  to be used if using separate functions. This is an attempt to reduce code duplication.
+    # link = sl.awc_weather(metar_or_taf="metar",airport_id=airport_id)
+    # resp = response_filter(resp_dict,"awc",)
+
+
+    wl_dict = sl.weather_links(departure_id,destination_id)
+
+    resp_dict:dict = await pc.async_pull(list(wl_dict.values()))
+    resp_sec = resp_sec_returns(resp_dict,departure_id,destination_id) 
+    weather_dict = resp_sec
+
+    return weather_dict
+
+async def awc_weather(request, departure_id,destination_id):
+
+    pc = Pull_class()
+    sl = Source_links_and_api()
+    wp = Weather_parse()
+    
+    # This is  to be used if using separate functions. This is an attempt to reduce code duplication.
+    # link = sl.awc_weather(metar_or_taf="metar",airport_id=airport_id)
+    # resp = response_filter(resp_dict,"awc",)
+
+
+    wl_dict = sl.weather_links(departure_id,destination_id)
+
+    resp_dict:dict = await pc.async_pull(list(wl_dict.values()))
+    resp_sec = resp_sec_returns(resp_dict,departure_id,destination_id) 
+    weather_dict = resp_sec
+
+    return weather_dict
+
+
+
+async def nas(request, departure_id,destination_id):
+
+    # Probably wont work. If it doesnt its probably because of the reesp_sec_returns
+    # does not account for just nas instead going whole mile to get and process weather(unnecessary)
+    pc = Pull_class()
+    sl = Source_links_and_api()
+    
+    resp_dict:dict = await pc.async_pull([sl.nas])
+    resp_sec = resp_sec_returns(resp_dict,departure_id,destination_id) 
+    nas_returns = resp_sec
+
+    return nas_returns
 
 
 
@@ -344,6 +401,17 @@ async def flight_aware_w_auth(request,airline_code,flight_number):
 
 
 
+
+
+
+
+
+
+
+# TODO: GET RID OF THIS!! ITS NOT NECESSARY. ITS NOT USING ASYN CAPABILITY. ACCOUNT FOR WEATHER PULL THROUGH ONE FUNCTION
+            # REDUCE CODE DUPLICATION. THIS IS FEEDING INTO ITS OWN WEATHER.HTML FILE
+            # RATHER, HAVE IT SUCH THAT IT wewatherData.js takes this function.
+            # 
 def weather_display(request, weather_query):
 
     # remove leading and trailing spaces. Seems precautionary.

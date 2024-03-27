@@ -259,6 +259,7 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None):
             "terminal_origin": terminal_origin,
             'filed_altitude':filed_altitude, 
             'filed_ete':filed_ete,
+            'route': route,
             'sv': sv,
                     }
                        

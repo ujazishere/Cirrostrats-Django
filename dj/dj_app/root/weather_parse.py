@@ -147,7 +147,8 @@ class Weather_parse:
             metar_raw = raw_return['metar']
             taf_raw = raw_return['taf']
         else:
-            raw_return = self.raw_weather_pull(query=query,datis_arr=datis_arr)     # This will do the datis processing
+            # Pulls raw weather and will also do the datis processing within the function.
+            raw_return = self.raw_weather_pull(query=query,datis_arr=datis_arr)     
             datis_raw = raw_return['datis']
             metar_raw = raw_return['metar']
             taf_raw = raw_return['taf']
