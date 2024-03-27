@@ -182,7 +182,6 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     else:
         bypass_fa = True        
 
-    bypass_fa = False
 
     bulk_flight_deets = {}
 
