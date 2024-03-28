@@ -1,5 +1,11 @@
+
+// ******VVI*******
+// THIS JS IS ASSOCIATED WITH EXTRA_DUMMY FILE. THIS IS AN ATTEMPT TO 
+// RENDER THE FINAL PAGE RIGHT AWAY AND SHOW DATA AS IT BECOMES AVAILABLE.
+// THIS FILE IS USED WHEN SEARCHED `ext d`
+
+
 // This is where the section starts. Seems like the html up above loads then comes down here.
-// Once here
 
 document.addEventListener("DOMContentLoaded", function () {
   // This loads up right away

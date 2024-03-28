@@ -24,7 +24,7 @@ class async_pull:
         asyncio.create_task(session.get(url))
 
 
-    def pulling(self, flt_num, query):
+    async def pulling(self, flt_num, query):
 
         async def get_tasks(session):
             tasks = []

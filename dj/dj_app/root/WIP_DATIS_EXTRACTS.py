@@ -4,8 +4,6 @@ import pickle
 from collections import Counter
 import json
 import requests
-import asyncio
-import aiohttp
 import os
 
 # regex notes:
