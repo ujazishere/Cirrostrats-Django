@@ -1,3 +1,57 @@
+### Backend
+
+1. **Open Terminal:** You'll need to open the terminal via your computer or visual code
+
+2. **Running the Backend:**
+
+   a. **Ensure Python Installation:** Make sure Python is installed on your machine.
+
+   b. **Create an env file inside of backend folder :**
+   right click, backend folder, select create new file and name it '.env'
+   inside of the file create a variable named connection_string=''
+   inside of the quotes add your connection string with username and password.
+
+   c. **Initialize Virtual Environment (venv) in the project's root directory i.e /cirrostrats/:**
+
+   ```bash
+   python -m venv venv
+   ```
+
+   d. **Activate the Virtual Environment in the root directory i.e /cirrostrats/:**
+
+   ```bash
+   source venv/bin/activate
+   ```
+
+   e. **Install Required Packages from the root branch(not the backend directory):**
+
+   ```bash
+   pip install -r req.txt
+   ```
+
+   f. **Navigate/cd into backend directory i.e cirrostrats/backend and Run the Server:**
+
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+   g. **Access the Project:** The project will be running on [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Clone the repo:
 `git clone https://github.com/ujazishere/Cirrostrats.git`
 
@@ -30,47 +84,19 @@ __________________________________________________________________________
 Install packages/dependencies:
 `pip install -r req.txt`
 
-Checkout the dev branch for latest code AND AVOID THE MAIN BRANCH:
-`git chekcout dev`
+Checkout the uj branch for latest code AND AVOID THE MAIN BRANCH:
+`git chekcout uj`
 
-MAKE SURE YOURE IN THE `dev` BRANCH:
+MAKE SURE YOURE IN THE `uj` BRANCH:
 `git branch`
 
-Run the local django server:
-`python dj/manage.py runserver 0.0.0.0:8000`
+Navigate into backend folder:
+`cd backend`
+
+Run the local fastAPI:
+`uvicorn main:app --reload`
 
 Go on browser pull up http://127.0.0.1:8000/
-
-Go crazy!
-
-
-
-
-Access the AWS EC2 test web server from phone/laptop at:
-http://3.132.144.5/
-
-Production ready AWS EC2 at:
-https://cirrostrats.us/
-
-
-Available Queries:
-
-Gate in EWR examples:
-C71, C, A, B, 106, 71X, 71V, etc.
-
-weather queries(have to prepend `w ` for international ICAO identifiers):
-eg- kbos, kewr, kiad, kord, w cyow, etc.
-
-all examples:
-
-"" - Empty query returns all gates
-
-"c71x" - Returns all flights scheduled times from this gate. Gives their scheduled time of departure and actual.
-
-"w kewr" - Returns metar and taf of the airport in question
-
-"4425" - Returns the departure airport, arrival airport, and, weather(D-Atis, METAR, TAF), ground stops, ground delays,route,skyvector route redirect, registration, etc.
-
 
  
 

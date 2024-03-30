@@ -6,16 +6,14 @@ Practice readibility and simplicity. Aviod code duplication. Include description
         mark ETD time as red when STD is past ETD
         
         zulu time dymanic with the weather published times using js instead of the static python way.
-        `ext d` work. Make javascript functions and use functions widely.
         
         Hide datis table when N/A instead of showing N/A
-        WIP - summery box shadow and expand/collapse (fast)animation.  
-        work on script to extract data - aviation_stack_data_pull.py
         Media queries for mobile vs desktop view. use css media queries. Check bootstrap navbar. Target screens(IPAD, smaller, etc)
             make side bar
         
 
 **UV:   
+        Database integration
         delete dummy2.css since its not needed
         Need redundency for dep and destination pull. current one is unstable giving errors during async
         date implementatiton. Current web is error prone

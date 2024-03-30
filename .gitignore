@@ -1,6 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-dj/dj_app/migrations/__pycache__
+dj
 
 *.py[cod]
 *$py.class
