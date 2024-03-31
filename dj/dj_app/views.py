@@ -1,3 +1,4 @@
+import pickle
 # quick code for jupyter
 # from dj.dj_app.views import awc_weather
 # await awc_weather(None,"EWR","STL")
@@ -167,114 +168,7 @@ def gate_info(request, main_query):
 
 
 async def flight_deets(request,airline_code=None, flight_number_query=None, ):
-    
-    
-    # You dont have to turn this off(False) running lengthy scrape will automatically enable fa pull
-    if run_lengthy_web_scrape:
-        # This is to restrict fa api use for local work: Keep it False for local.
-        bypass_fa = False
-    else:
-        bypass_fa = True        
-
-
-    bulk_flight_deets = {}
-
-    # TODO: Priority: Each individual scrape should be separate function. Also separate scrape from api fetch
-    ''' *****VVI******  
-    Logic: resp_dict gets all information fetched from root_class.Pull_class().async_pull(). Look it up and come back.
-    pre-processes it using resp_initial_returns and resp_sec_returns for inclusion in the bulk_flight_deets..
-    first async response returs origin and destination through united's flight-status since their argument only
-    takes in flightnumber and it als, also gets scheduled times in local time zones through flightstats,
-    and the packet from flightaware.
-    This origin and destination is then used to make another async request that requires additional arguments
-    This is the second resp_dict that returns weather and nas in the resp_sec,
-    '''
-
-    sl = Source_links_and_api()
-    pc = Pull_class(airline_code=airline_code,flt_num=flight_number_query)
-    if bypass_fa:
-
-        resp_dict:dict = await pc.async_pull([sl.ua_dep_dest_flight_status(flight_number_query),
-                                              sl.flight_stats_url(flight_number_query),])
-        # """
-        # This is just for testing
-        # fa_test_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\fa_test.pkl"
-        # with open(fa_test_path, 'rb') as f:
-            # resp = pickle.load(f)
-            # fa_resp = json.loads(resp)
-        # resp_dict.update({'https://aeroapi.flightaware.com/aeroapi/flights/UAL4433':fa_resp})
-        # """
-    else:
-        resp_dict:dict = await pc.async_pull([sl.ua_dep_dest_flight_status(flight_number_query),
-                                              sl.flight_stats_url(flight_number_query),
-                                              sl.flight_aware_w_auth(airline_code,flight_number_query),
-                                              ])
-    # /// End of the first async await, next one is for weather and nas ///.
-
-    # flight_deet preprocessing. fetched initial raw data gets fed into their respective pre_processors through this function that iterates through the dict
-    resp_initial = resp_initial_returns(resp_dict=resp_dict,airline_code=airline_code,flight_number_query=flight_number_query)
-    # assigning the resp_initial to their respective variables that will be fed into bulk_flight_deets and..
-    # the departure and destination gets used for weather and nas pulls in the second half of the response pu
-
-    united_dep_dest, flight_stats_arr_dep_time_zone, fa_data= resp_initial
-    # united_dep_dest,flight_stats_arr_dep_time_zone,flight_aware_data,aviation_stack_data = resp_initial
-
-    # This will init the flight_view for gate info
-    if fa_data['origin']:           # Flightaware data is prefered as source for other data.
-        pc = Pull_class(flight_number_query,fa_data['origin'],fa_data['destination'])
-        wl_dict = pc.weather_links(fa_data['origin'],fa_data['destination'])
-        # OR get the flightaware data for origin and destination airport ID as primary then united's info.
-        # also get flight-stats data. Compare them all for information.
-
-        # fetching weather, nas and gate info since those required departure, destination
-        # TODO: Probably take out nas_data from here and put it in the initial pulls.
-        resp_dict:dict = await pc.async_pull(list(wl_dict.values())+[sl.nas(),])
-
-        # /// End of the second and last async await.
-
-        
-        # Weather and nas information processing
-        resp_sec = resp_sec_returns(resp_dict,fa_data['origin'],fa_data['destination']) 
-
-        weather_dict = resp_sec
-        
-        # This gate stuff is a not async because async is throwig errors when doing async
-        gate_returns = Pull_flight_info().flight_view_gate_info(flt_num=flight_number_query,airport=fa_data['origin'])
-        bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
-                            **weather_dict, **fa_data, **gate_returns}
-    elif united_dep_dest['departure_ID']:       # If flightaware data is not available use this scraped data. Very unstable. TODO: Change this. Have 3 sources for redundencies
-        pc = Pull_class(flight_number_query,united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
-        wl_dict = pc.weather_links(united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
-        # OR get the flightaware data for origin and destination airport ID as primary then united's info.
-        # also get flight-stats data. Compare them all for information.
-
-        # fetching weather, nas and gate info since those required departure, destination
-        # TODO: Probably take out nas_data from here and put it in the initial pulls.
-        resp_dict:dict = await pc.async_pull(list(wl_dict.values())+[sl.nas()])
-
-        # /// End of the second and last async await.
-
-        
-        # Weather and nas information processing
-        resp_sec = resp_sec_returns(resp_dict,united_dep_dest['departure_ID'],united_dep_dest['destination_ID']) 
-
-        weather_dict = resp_sec
-        gate_returns = Pull_flight_info().flight_view_gate_info(flt_num=flight_number_query,airport=united_dep_dest['departure_ID'])
-        bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
-                            **weather_dict, **fa_data, **gate_returns}
-
-    else:
-        print('No Departure/Destination ID')
-        bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
-                            **fa_data, }
-    # More streamlined to merge dict than just the typical update method of dict. update wont take multiple dictionaries
-
-
-
-    # If youre looking for without_futures() that was used prior to the async implementation..
-        #  you fan find it in Async milestone on hash dd7ebd0efa3b5a62798c88bcfe77cc43f8c0048c
-        # It was an inefficient fucntion to bypass the futures error on EC2
-
+    bulk_flight_deets = {'departure_ID': 'KORD', 'destination_ID': 'KMEM', 'flight_number': 'UA4399', 'scheduled_departure_time': '14:25 CDT', 'scheduled_arrival_time': '16:14 CDT', 'dep_metar': 'KORD 311751Z 11006KT 10SM SCT090 BKN250 11/03 <span class="box_around_text">A2994</span> RMK AO2 SLP143 T01110028 10111 20039 58017 $\n', 'dep_datis': 'ORD <span class="box_around_text">ATIS INFO E</span> 1751Z. 11006KT 10SM SCT090 BKN250 11/03 <span class="box_around_text">A2994</span> (TWO NINER NINER FOUR) RMK AO2 SLP143 10111 20039 58017. ARR EXP VECTORS <span class="box_around_text">ILS RWY 10C APCH, VISUAL APCH RWY 9L, VISUAL APCH RWY 10R.</span> PILOTS EXP 2 INTCP THE <span class="box_around_text">ILS Y RY 10R FNA CRS. SIMUL APCHS IN USE.</span> READBACK ALL RWY HOLD SHORT INSTRUCTIONS. DEPS EXP RWYS 9C FROM F F 9200 FT AVL, 10L FROM DD. 10,093 FT AVBL. ATTN PILOTS. <span class="box_around_text">SIMUL PARL DEPS IN USE.</span> EXP TO INITIALLY FLY RWY. HDG ON DEP. PILOTS MUST READ BACK DRCTN OF TURNS BY ATC.. RWY 4L, 22R CLSD. PILOTS USE CTN FOR BIRD ACTIVITY IN THE VICINITY OF THE ARPT. USE CAUTION FOR MEN AND EQUIP AT NUMEROUS SITES ON THE FIELD. WHEN READY TO TAXI CONTACT GND METERING ON FREQ 121.67. ...ADVS YOU HAVE INFO E.', 'dep_taf': 'KORD 311720Z 3118/0124 07008KT P6SM FEW020 SCT100 \n  <br>\xa0\xa0\xa0\xa0FM312300 05011KT 6SM -RA SCT015 OVC035 \n  TEMPO 0101/0104 <span class="red_text_color">2SM</span> TSRA BR <span class="red_text_color">BKN007</span> <span class="yellow_highlight">OVC015</span>CB \n  <br>\xa0\xa0\xa0\xa0FM010400 04011G17KT 5SM -SHRA BR <span class="red_text_color">OVC006</span> \n  <br>\xa0\xa0\xa0\xa0FM011100 04012G18KT P6SM SCT008 <span class="yellow_highlight">OVC012</span> \n  <br>\xa0\xa0\xa0\xa0FM011800 04012G18KT 6SM -SHRA <span class="red_text_color">BKN008</span> <span class="yellow_highlight">OVC012</span> \n  PROB30 0120/0124 <span class="red_text_color">2SM</span> TSRA BR <span class="red_text_color">OVC008</span>CB\n', 'dep_metar_zt': '37 mins ago', 'dep_datis_zt': '37 mins ago', 'dep_taf_zt': '68 mins ago', 'dest_datis': 'MEM <span class="box_around_text">ATIS INFO J</span> 1754Z. 21012G21KT 10SM FEW037 BKN050 23/15 <span class="box_around_text">A2995</span> (TWO NINER NINER FIVE) RMK AO2 SLP138 10239 20161 58013. SIMUL VISUAL APCHS IN USE RY 18L, 18R, 27. SIMUL DEPS IN USE RY 18R 18C 18L. 18L. TWY K BTN TERMINAL RAMP AND TWY C CLSD. TWY J NORTH 1000 FOOT CLSD. RY 18L, 36R PAPI OTS. RWY 36C ALS NOT MONITORED. BIRD ACTIVITY RPTD IN THE VC OF THE ARPT. READBACK ALL RWY HOLD SHORT INSTRUCTIONS. CONSOLIDATED WAKE TURBULENCE . STANDARDS IN EFFECT. AT GATES 18, 20, 22, 23, 40 CTC GC FOR PUSHBACK.. ...ADVS YOU HAVE INFO J.', 'dest_metar': 'KMEM 311754Z 21012G21KT 10SM FEW037 BKN050 23/15 <span class="box_around_text">A2995</span> RMK AO2 SLP138 T02280150 10239 20161 58013 $\n', 'dest_taf': 'KMEM 311738Z 3118/0124 21012G22KT P6SM SCT035 BKN060 \n  <br>\xa0\xa0\xa0\xa0FM312300 21010G18KT P6SM BKN060 OVC200 \n  <br>\xa0\xa0\xa0\xa0FM010300 20011G20KT P6SM BKN070 OVC150 WS020/22045KT \n  <br>\xa0\xa0\xa0\xa0FM011300 20012G20KT P6SM FEW015 BKN022 \n  TEMPO 0113/0116 <span class="yellow_highlight">BKN015</span> \n  <br>\xa0\xa0\xa0\xa0FM011800 21013G22KT P6SM BKN035\n', 'dest_datis_zt': '34 mins ago', 'dest_metar_zt': '34 mins ago', 'dest_taf_zt': '50 mins ago', 'departure_gate': '\n2 - F11\n', 'arrival_gate': '\n13\n', 'nas_departure_affected': {}, 'nas_destination_affected': {}, 'origin': 'KORD', 'destination': 'KMEM', 'registration': 'N578GJ', 'scheduled_out': '1925Z', 'estimated_out': '1925Z', 'scheduled_in': '2114Z', 'estimated_in': '2125Z', 'terminal_origin': '2', 'terminal_destination': None, 'gate_origin': 'F11', 'gate_destination': '13', 'filed_altitude': 'FL360', 'filed_ete': 6000, 'route': 'CMSKY CARYN CYBIL PXV WLDER1', 'sv': 'https://skyvector.com/?fpl=%20KORD%20CMSKY%20CARYN%20CYBIL%20PXV%20WLDER1%20KMEM'}
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
