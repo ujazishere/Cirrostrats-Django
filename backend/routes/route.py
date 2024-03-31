@@ -43,6 +43,7 @@ async def get_airports():
 
 @router.get('/airports/{airportId}')
 async def get_airport_data(airportId):
+    
     result = list_serial(collection.find({"_id": ObjectId(airportId)}))
     return result
 # print('airport', airport)
@@ -54,6 +55,30 @@ async def get_airport_data(airportId):
 # airports['id'] = str(airports['_id'])
 # return await airports.to_list(length=None)
 # del [airports['_id']]
+
+@router.get("/weatherDisplay/{airportID}")
+def weather_display(airportID):
+    # remove leading and trailing spaces. Seems precautionary.
+    airportID = airportID
+
+    weather = Weather_parse()
+    # TODO: Need to be able to add the ability to see the departure as well as the arrival datis
+    # weather = weather.scrape(weather_query, datis_arr=True)
+    weather = weather.processed_weather(query=airportID, )
+
+    weather_page_data = {}
+
+    weather_page_data['airport'] = airportID
+
+    weather_page_data['D_ATIS'] = weather['D-ATIS']
+    weather_page_data['METAR'] = weather['METAR']
+    weather_page_data['TAF'] = weather['TAF']
+
+    weather_page_data['datis_zt'] = weather['D-ATIS_zt']
+    weather_page_data['metar_zt'] = weather['METAR_zt']
+    weather_page_data['taf_zt'] = weather['TAF_zt']
+    # weather_page_data['trr'] = weather_page_data
+    return weather_page_data
 
 
 # Section responsible for switching on Gate lengthy scrape and flight aware api fetch.
@@ -414,31 +439,6 @@ async def nas(request, departure_id,destination_id):
             # REDUCE CODE DUPLICATION. THIS IS FEEDING INTO ITS OWN WEATHER.HTML FILE
             # RATHER, HAVE IT SUCH THAT IT wewatherData.js takes this function.
             # 
-def weather_display(weather_query):
-    # remove leading and trailing spaces. Seems precautionary.
-    weather_query = weather_query.strip()
-    airport = weather_query[-4:]
-    print("in precaus")
-
-    weather = Weather_parse()
-    # TODO: Need to be able to add the ability to see the departure as well as the arrival datis
-    # weather = weather.scrape(weather_query, datis_arr=True)
-    weather = weather.processed_weather(query=weather_query, )
-
-    weather_page_data = {}
-
-    weather_page_data['airport'] = airport
-
-    weather_page_data['D_ATIS'] = weather['D-ATIS']
-    weather_page_data['METAR'] = weather['METAR']
-    weather_page_data['TAF'] = weather['TAF']
-
-    weather_page_data['datis_zt'] = weather['D-ATIS_zt']
-    weather_page_data['metar_zt'] = weather['METAR_zt']
-    weather_page_data['taf_zt'] = weather['TAF_zt']
-    # weather_page_data['trr'] = weather_page_data
-    return weather_page_data
-
 
 def dummy():
     dummy_imports_tuple = dummy_imports()
