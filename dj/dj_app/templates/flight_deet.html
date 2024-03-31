@@ -5,7 +5,7 @@
 {% block content %}
 
 <head>
-    <meta content='width=device-width; initial-scale=1;' name='viewport' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="format-detection" content="telephone=no">
 
 </head>
@@ -153,7 +153,9 @@
                         <td>TAF <span class="small-text"> {{ dep_taf_zt |safe}}</span> </td>
                     </tr>
                     <tr>
-                        <td style="text-align: left; font-family: Menlo, monospace;">{{dep_taf |safe}}</td>
+                        <td class="dep_taf" id="dep_taf_cell" style="text-align: left; font-family: Menlo, monospace; white-space: wrap; overflow: hidden; text-overflow: ellipsis; max-height: none; height: auto;" title="{{dep_taf | safe}}">
+                            {{dep_taf | safe}}
+                        </td>
                     </tr>        
                 </tbody>
             </table>
@@ -320,6 +322,15 @@
 
 
 <script type="text/javascript" src="{% static 'flight_deet.js' %}"></script>
+
+
+<script>
+    // Get the table cell element
+    var cell = document.getElementById('dep_taf_cell');
+
+    // Increase the bottom padding of the table cell
+    cell.style.paddingBottom = '20px'; // Adjust the value as needed
+</script>
 
 
 {% endblock %}
