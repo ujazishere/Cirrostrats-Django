@@ -32,7 +32,7 @@ document
       currentTextIndex = nextTextIndex;
   }
 
-  setInterval(rotateText, 5000); // Change text every 3 seconds
+  setInterval(rotateText, 8000); // Change text every 3 seconds
 
 
 

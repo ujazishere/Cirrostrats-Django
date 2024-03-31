@@ -8,7 +8,7 @@ body {
     .scrolling-container {
       position: relative;
       overflow: hidden;
-      width: 100%;
+      width: 90%;
       height: 60px; 
       margin: auto;
   }
@@ -22,7 +22,7 @@ body {
       opacity: 0;
       transition: opacity 0.5s ease;
       font-weight: bold; 
-      font-size: 16px;
+      font-size: 15px;
       text-wrap: wrap;
   }
 
@@ -31,12 +31,15 @@ body {
   }
 
   .scrolling-text.active {
-      opacity: 1;
-      animation-name: fade;
-      animation-fill-mode: both;
-      animation-iteration-count: infinite;
-      animation-duration: 5s;
-      animation-direction: alternate-reverse;  
+    opacity: 1;
+    animation-name: fade;
+    animation-fill-mode: forwards; /* Keep the final state after animation */
+    /* animation-fill-mode: both; */
+    animation-iteration-count: 1; /* Only play once */
+    animation-iteration-count: infinite;
+    animation-duration: 1.5s; /* Fade in duration */
+    animation-delay: 7s; /* Delay before starting the fade-out */
+    animation-direction: alternate-reverse;  
   }
 
   .scrolling-text.hidden {
@@ -44,7 +47,7 @@ body {
         animation-name: fade;
         animation-fill-mode: both;
         animation-iteration-count: infinite;
-        animation-duration: 5s;
+        animation-duration: 3s;
         animation-direction: alternate;
       }
   
