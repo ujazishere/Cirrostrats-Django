@@ -218,7 +218,8 @@ class Bulk_weather_extractor:
                     except:
                         nd.append(str(resp.url)[-14:-10])
                 self.nd, self.done = nd,done
-                print("done/nd: ", done,nd)
+                print("done totals, saved in self.done", len(done))
+                print("Nd totals saved in self.nd",len(nd))
                 return weather_resp
         self.weather = await asyncio.ensure_future(main())
         print('saved raw bulky weather return to self.weather')
@@ -257,7 +258,7 @@ class Bulk_weather_extractor:
         
 """
 
-
+# For use in Jupyter
 we = Bulk_weather_extractor()
 x = we.airport_ID_separator()
 len(we.ids_without_digit_with_no_mets_excluded)
@@ -267,7 +268,7 @@ metar_pull_test = we.scraper(test=True,)
 
 
 
-# shows syntax error but works on jupyter. Pulls bulkt metar for last 15 days
+# shows syntax error but works on jupyter. Pulls bulk metar for last 15 days
 async_pull_metar = await we.parallel_scrape()
 
 # Automatically saves bulk_metar file name with current UTC YYYYMMDDHHMM 
@@ -279,10 +280,6 @@ async_pull_taf = await we.parallel_scrape(taf_pull=True)
 
 # Automatically saves bulk_taf file name with current UTC YYYYMMDDHHMM 
 we.hard_write_dumper("bulk_taf",we.bulky_taf)
-
-
-
-# we.hard_write_dumper(we.export_path,we.bulky_metar)
 
 
 """

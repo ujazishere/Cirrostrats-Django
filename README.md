@@ -47,7 +47,7 @@ Go crazy!
 
 
 Access the AWS EC2 test web server from phone/laptop at:
-http://3.132.144.5/
+https://cirrostrats.onrender.com/
 
 Production ready AWS EC2 at:
 https://cirrostrats.us/
