@@ -5,7 +5,7 @@
 {% block content %}
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=2">
     <meta name="format-detection" content="telephone=no">
 
 </head>
@@ -152,11 +152,11 @@
                     <tr>
                         <td>TAF <span class="small-text"> {{ dep_taf_zt |safe}}</span> </td>
                     </tr>
-                    <tr>
-                        <td class="dep_taf" id="dep_taf_cell" style="text-align: left; font-family: Menlo, monospace; white-space: wrap; overflow: hidden; text-overflow: ellipsis; max-height: none; height: auto;" title="{{dep_taf | safe}}">
-                            {{dep_taf | safe}}
-                        </td>
-                    </tr>        
+                    <tr style="text-overflow: ellipsis;">
+                        <td id="dep_taf_cell" style="text-align: left; font-family: Menlo, monospace; white-space: wrap; text-overflow: ellipsis; max-height: none; height: auto;" title="{{dep_taf | safe}}">
+                        {{dep_taf | safe}}
+                        </td>    
+                    <tr>                
                 </tbody>
             </table>
         </div>

@@ -100,13 +100,11 @@ div.data-warning p {
 /***************** this code is for accordion button *******************/
 
 .accordion-content {
-  max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease;
 }
 
 .accordion-content.active {
-  max-height: 1000px; 
   width: 100%;
 }
 
