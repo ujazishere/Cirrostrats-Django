@@ -11,7 +11,7 @@ hoq
 q
 tatus
 base.ppk
-
+win_local.bat
 
 backend/routes/root/Switch_n_auth.py
 # dj/gate_query_database.pkl
