@@ -8,8 +8,8 @@ from .root.gate_scrape import Gate_scrape_thread
 from .root.weather_parse import Weather_parse
 from .root.dep_des import Pull_flight_info
 from .root.flight_deets_pre_processor import resp_initial_returns,resp_sec_returns,response_filter
+from schema.schemas import individual_serial, list_serial, individual_airport_input_data, serialize_airport_input_data
 from time import sleep
-import os
 
 from fastapi import APIRouter
 from models.model import Flight, Airport
@@ -18,8 +18,6 @@ from schema.schemas import individual_serial, list_serial
 from bson import ObjectId
 
 router = APIRouter()
-
-# get request method
 
 
 # @router.get('/flight')
@@ -33,30 +31,52 @@ router = APIRouter()
 #     response = collection.insert_one(dict(flight))
 #     return {"id": str(response.inserted_id)}
 
-
+# Returns all the airports from the database to the frontend to be displayed in the dropdown
 @router.get('/airports')
 async def get_airports():
 
     result = collection.find({})
-    return list_serial(result)
-
-
-@router.get('/airports/{airportId}')
-async def get_airport_data(airportId):
     
-    result = list_serial(collection.find({"_id": ObjectId(airportId)}))
-    return result
-# print('airport', airport)
-# result = collection.find({})
-# return list_serial(result)
-# airports = []
-# cursor = collection.find({})
-# print("airports", airports)
-# airports['id'] = str(airports['_id'])
-# return await airports.to_list(length=None)
-# del [airports['_id']]
+    serialized_result = list_serial(result)
+    return serialized_result
 
-@router.get("/weatherDisplay/{airportID}")
+
+# airport requested data by id
+# the id can be used to search for a specific airport
+# data returned is a dictionary with the id,name and code of the airport
+@router.get('/airports/{airportId}')
+async def get_airport_data(airportId, search: str = None):
+    # if search == "UA414"
+    # print('HERE WE ARE', search)
+    res = None
+    if (airportId == "airport"):
+        # print("aiprotId is None")
+        # print("inside if statement ")
+        
+
+
+        res = collection.find({
+            "name": {"$regex": search}
+        })
+        return serialize_airport_input_data(res)
+    print("HERE IS MY airportid",airportId)
+    # if search =="KSFO":
+        # resp = weather_stuff(airport_ID=search)
+    # print(resp)
+    res = collection.find_one(
+        {"_id": ObjectId(airportId)})
+    airport_code= "K" + res['code']
+
+    weather_info = weather_display(airport_code)
+    
+    # TODO: Use this to insert data into the database
+    # collection.insert_one()
+    print("HERE IS THE WEATHER",weather_info)
+    
+    return individual_serial(res)
+
+
+# @router.get("/weatherDisplay/{airportID}")
 def weather_display(airportID):
     # remove leading and trailing spaces. Seems precautionary.
     airportID = airportID
