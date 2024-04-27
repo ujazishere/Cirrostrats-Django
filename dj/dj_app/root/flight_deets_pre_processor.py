@@ -46,13 +46,13 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
         elif f"taf?ids={dep_airport_id}" in str(url):
             dep_taf = resp
         elif f"clowd.io/api/{dep_airport_id}" in str(url):          # TODO: Need to account for arrival dep vs arrival datis
-            dep_datis = resp     # Apparently this is being returned within a list is being fed as is. Accounted for.
+            dep_datis = json.loads(resp)     # Apparently this is being returned within a list is being fed as is. Accounted for.
         elif f"metar?ids={dest_airport_id}" in str(url):
             dest_metar = resp
         elif f"taf?ids={dest_airport_id}" in str(url):
             dest_taf = resp
         elif f"clowd.io/api/{dest_airport_id}" in str(url):         # TODO: Need to account for arrival datis vs dep
-            dest_datis = resp         # Apparently this is being returned within a list and is accounted for.
+            dest_datis = json.loads(resp)         # Apparently this is being returned within a list and is accounted for.
 
 
         elif f"flightview.com" in str(url):

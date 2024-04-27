@@ -63,7 +63,7 @@ class Bulk_weather_extractor:
 
     def airport_ID_separator(self, ):
         new_id = []
-        id = self.loader()  # Loads all airport id eg. ['DAB', 'EWR', 'X50', 'AL44']
+        id = self.loader()  # Loads all 20k airport ids eg. ['DAB', 'EWR', 'X50', 'AL44']
 
         # Prepending K to 3 leter codes 
         for i in id:    # Using all airport ID's
