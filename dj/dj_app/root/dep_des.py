@@ -37,6 +37,7 @@ class Pull_flight_info(Root_class):
             soup_fs = self.request(flight_stats_url)
 
         # fs_juice = soup_fs.select('[class*="TicketContainer"]')     # This is the whole packet not needed now
+        
         fs_time_zone = soup_fs.select('[class*="TimeGroupContainer"]')
         if fs_time_zone:
             departure_time_zone = fs_time_zone[0].get_text()        #  format is HH:MM XXX timezone(eg.EST)
@@ -53,7 +54,6 @@ class Pull_flight_info(Root_class):
                             'scheduled_departure_time': departure_time_zone,
                             'scheduled_arrival_time': arrival_time_zone,
                                             }
-
         return bulk_flight_deet
 
 
@@ -71,12 +71,21 @@ class Pull_flight_info(Root_class):
             airport_id = [i.text for i in airport_id if 'ICAO' in i.text]
             departure_ID = airport_id[0].split()[2]
             destination_ID = airport_id[1].split()[2]
+            # TODO: WIP for getting scheduled times since the flight stats one is unreliable
+            # scheduled_times = soup.find_all('div', {'class': 'tb2'})
+            # scheduled_times = [i.text for i in scheduled_times]
+            # scheduled_times = [i for i in scheduled_times if 'Scheduled' in i]
+            # departure_scheduled_time = scheduled_times([0][13:18])
+            # destination_scheduled_time = scheduled_times([1][13:18])
             print('Success at united_flight_stat scrape for dep and des ID')
         except:
             departure_ID, destination_ID = [None]*2
         print('united_flight_stat for departure and destination', departure_ID, destination_ID)
         return {'departure_ID': departure_ID,
-                'destination_ID': destination_ID}
+                'destination_ID': destination_ID,
+                # 'departure_scheduled_time': departure_scheduled_time,
+                # 'destination_scheduled_time': destination_scheduled_time
+                }
 
 
     def nas_final_packet(self,dep_ID, dest_ID):

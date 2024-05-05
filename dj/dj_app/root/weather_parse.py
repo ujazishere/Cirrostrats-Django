@@ -248,7 +248,6 @@ class Weather_parse:
         highlighted_datis = re.sub(self.RW_IN_USE, self.box_around_text,highlighted_datis)
         
         highlighted_metar = re.sub(self.ALTIMETER_PATTERN, self.box_around_text, highlighted_metar)
-
         return dict({ 'D-ATIS': highlighted_datis,
                       'D-ATIS_zt': zulu_extracts(datis_raw,datis=True),
                       

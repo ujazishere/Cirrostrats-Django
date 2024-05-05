@@ -196,6 +196,7 @@ class Bulk_weather_extractor:
             return tasks
 
         async def main():
+            print("Initiaing the fetch now...")
             async with aiohttp.ClientSession() as session:
                 tasks = await get_tasks(session)
                 weather_resp = []

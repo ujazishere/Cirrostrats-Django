@@ -67,6 +67,7 @@
                 <td class="spacer-cell">&nbsp;</td>
             </tr>
 
+            {% if scheduled_departure_time %}
             <tr class="scheduled-row">
                 <td class="scheduled-cell">Scheduled Local</td>
                 <td class="scheduled-cell">Scheduled Local</td>
@@ -76,6 +77,7 @@
                 <td class="scheduled-time-cell">{{ scheduled_departure_time }}</td>
                 <td class="scheduled-time-cell">{{ scheduled_arrival_time }}</td>
             </tr>
+            {% endif %}
 
             <tr class="spacer-row">
                 <td class="spacer-cell">&nbsp;</td>
@@ -84,7 +86,6 @@
 
             <!-- if the flight_aware_data is accessible then use their Zulu time: -->
             {% if scheduled_out %}
-
             <tr class="utc-row">
                 <td class="utc-cell">UTC</td>
                 <td class="utc-cell">UTC</td>
@@ -94,7 +95,6 @@
                 <td class="flight-status-cell">STD {{scheduled_out}}<br>ETD {{estimated_out}}</td>
                 <td class="flight-status-cell">STA {{scheduled_in}}<br>ETA {{estimated_in}}</td>
             </tr>
-
             {% endif %}
         </tbody>
     </table>
@@ -153,7 +153,7 @@
                         <td>TAF <span class="small-text"> {{ dep_taf_zt |safe}}</span> </td>
                     </tr>
                     <tr style="text-overflow: ellipsis;">
-                        <td id="dep_taf_cell" style="text-align: left; font-family: Menlo, monospace; white-space: wrap; text-overflow: ellipsis; max-height: none; height: auto;" title="{{dep_taf | safe}}">
+                        <td id="dep_taf_cell" style="text-align: left; font-family: Menlo, monospace; white-space: wrap; text-overflow: ellipsis; max-height: none; height: auto;" title="TAF bottom extension">
                         {{dep_taf | safe}}
                         </td>    
                     <tr>                
