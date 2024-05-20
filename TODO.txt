@@ -16,6 +16,8 @@ Practice readibility and simplicity. Aviod code duplication. Include description
         
 
 **UV:   
+        Build docker image for react  
+        ***Separate logic and implement simple machine learning technique to detect certain words.
         delete dummy2.css since its not needed
         Need redundency for dep and destination pull. current one is unstable giving errors during async
         date implementatiton. Current web is error prone

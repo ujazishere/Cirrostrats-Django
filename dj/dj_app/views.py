@@ -15,6 +15,7 @@ from .root.flight_deets_pre_processor import resp_initial_returns,resp_sec_retur
 from time import sleep
 from django.shortcuts import render
 from django.http import JsonResponse
+import re
 # This will throw error if the file is not found. Change the EC2 file to this name.
 import os
 
@@ -98,9 +99,14 @@ async def parse_query(request, main_query):
                 if query[0] == 'G':     # if GJS instead of UA: else its UA
                     # Its GJS
                     airline_code, flt_digits = query[:3], query[3:]
-                else:
+                else:           # Its UA
+                    flt_digits = query[2:]
                     airline_code = None
-                    flt_digits = query[2:]       # Its UA
+                    if query[:3] ==  'UAL':
+                        airline_code = 'UAL'
+                        flt_digits = query[3:]
+                    elif query[:2] == 'UA':
+                        airline_code = 'UA'
                 print('\nSearching for:', airline_code, flt_digits)
                 return await flight_deets(request, airline_code=airline_code, flight_number_query=flt_digits)
 
@@ -176,6 +182,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     else:
         bypass_fa = True        
 
+    bypass_fa = False
 
     bulk_flight_deets = {}
 
@@ -214,7 +221,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     # flight_deet preprocessing. fetched initial raw data gets fed into their respective pre_processors through this function that iterates through the dict
     resp_initial = resp_initial_returns(resp_dict=resp_dict,airline_code=airline_code,flight_number_query=flight_number_query)
     # assigning the resp_initial to their respective variables that will be fed into bulk_flight_deets and..
-    # the departure and destination gets used for weather and nas pulls in the second half of the response pu
+    # the departure and destination gets used for weather and nas pulls in the second half of the response returns called resp_sec_returns
 
     united_dep_dest, flight_stats_arr_dep_time_zone, fa_data= resp_initial
     # united_dep_dest,flight_stats_arr_dep_time_zone,flight_aware_data,aviation_stack_data = resp_initial

@@ -8,7 +8,8 @@ except:     # Just so it's easier to import outside of django
 import re
 
 # TODO: Fix wrong flights showing up. One way is to make the flight aware data prominent
-        # But that wwill cause utc and local time clashes. 
+        # But that will cause utc and local time clashes.  redundancies to cross check and verify and use reliable sources.
+        # State it to the user when information maybe unreliable.
         # Maybe crosscheck it with other source as primary rathar than other  way around.
 
 class Flight_aware_pull(Root_class):
@@ -101,15 +102,15 @@ class Flight_aware_pull(Root_class):
         
         # solace_client.disconnect()
 
-def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None):
-
+def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None,pull_dummy=None):
+    """
+    pull_dummy is only to check dummy an example data from flightaware and thats used in jupyter. 
+    """
     # This returns bypass all and return prefabricated None vals
     # return Flight_aware_pull().attrs
     if not airline_code:
         airline_code = 'UAL'
     
-    pull_dummy = False
-
     fa_object = Flight_aware_pull()
     if pull_dummy:
         # Use this to recall a dummy flight packet:
@@ -118,11 +119,12 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None):
             flights = pickle.load(f)
     else:
         if pre_process:
+            print('Received flight aware data as pre_process')
             flights = pre_process
         elif flt_num:
             flights = fa_object.initial_pull(airline_code=airline_code,flt_num=flt_num)
         else:
-            # Reason here to to return none items when no flight aware data is found. it returns fa_object.attrs
+            # Reason here is to return none items when no flight aware data is found. it returns fa_object.attrs
             flights = None
             pass
     
@@ -211,9 +213,14 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None):
                 
                 if current_UTC == date_out:     # zulu time clashes with local time from other source
                     pass
-
+                
+                # TODO: use the Cirrostrats\dj\dummy_flight_aware_packet.pkl to get the `flights` section then do the pre-processing on this.
+                        # Need to highlight estimated out as red if delayed.
+                        # convert to date time object and use if statement to determine if its delayed and inject html through here.
+                print("scheduled out Z: ", scheduled_out_raw_fa)
                 scheduled_out = re.search("T(\d{2}:\d{2})", scheduled_out_raw_fa).group(1).replace(":","") + "Z"
                 estimated_out = flights[i]['estimated_out']     # Rename this to date or time or both 
+                print("estimated out Z: ",estimated_out)
                 estimated_out = re.search("T(\d{2}:\d{2})", estimated_out).group(1).replace(":","") + "Z"
 
                 scheduled_in = flights[i]['scheduled_in']
@@ -235,7 +242,7 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None):
 
                 # sv = f"https://skyvector.comi/api/lchart?fpl=%20{origin}{rh}%20{destination}"     # This is for api
 
-                print('\nSuccessfully completed FlightAware pull')
+                print('\nSuccessfully fetched and processed Flight Aware data')
                 break
 
 

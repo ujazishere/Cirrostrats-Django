@@ -38,7 +38,6 @@ def dummy_imports():
         bulk_flight_deets = pickle.load(open(bulk_flight_deets_path, 'rb'))
 
         # IFR and LIFR weather for departure and destination.
-        # TODO: investigate: Just metars for dep and destination are KIND and KORD others are different. Why?
         ind = dummy_path_to_be_used + r"raw_weather_dummy_dataKIND.pkl"
         ord = dummy_path_to_be_used + r"raw_weather_dummy_dataKORD.pkl"
         with open(ind, 'rb') as f:

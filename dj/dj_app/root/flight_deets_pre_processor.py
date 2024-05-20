@@ -14,7 +14,7 @@ def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
         if "flight-status.com" in str(url):
             soup = pc.requests_processing(resp,bs=True)
             united_dep_dest = flt_info.united_departure_destination_scrape(pre_process=soup)
-            # print(united_dep_dest)
+            print(666,united_dep_dest)
         elif "flightstats.com" in str(url):
             soup = pc.requests_processing(resp,bs=True)
             flight_stats_arr_dep_time_zone = flt_info.fs_dep_arr_timezone_pull(flt_num_query=flight_number_query,pre_process=soup)
@@ -26,7 +26,7 @@ def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
             fa_return = fa_return['flights']
             flight_aware_data = flt_info.fa_data_pull(airline_code=airline_code, flt_num=flight_number_query,pre_process=fa_return)
             # print(flight_aware_data)
-        elif "aviationstack" in str(url):       #TODO: aviation stack needs work
+        elif "aviationstack" in str(url):       #TODO: aviation stack needs work. That is another source to cross-check with flightaware and others. Design the logic to cross-check and verify.
             pass
             # soup = pc.requests_processing(resp,json=True)
             # aviation_stack_data = flt_info.aviation_stack_pull(airline_code=airline_code, flt_num=flight_number_query)
@@ -45,13 +45,13 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
             dep_metar = resp
         elif f"taf?ids={dep_airport_id}" in str(url):
             dep_taf = resp
-        elif f"clowd.io/api/{dep_airport_id}" in str(url):          # TODO: Need to account for arrival dep vs arrival datis
+        elif f"clowd.io/api/{dep_airport_id}" in str(url):          # TODO: Need to account for arrival dep vs arrival datis. Its not been working for Philly
             dep_datis = json.loads(resp)     # Apparently this is being returned within a list is being fed as is. Accounted for.
         elif f"metar?ids={dest_airport_id}" in str(url):
             dest_metar = resp
         elif f"taf?ids={dest_airport_id}" in str(url):
             dest_taf = resp
-        elif f"clowd.io/api/{dest_airport_id}" in str(url):         # TODO: Need to account for arrival datis vs dep
+        elif f"clowd.io/api/{dest_airport_id}" in str(url):         # TODO: Need to account for arrival dep vs arrival datis. Its not been working for Philly
             dest_datis = json.loads(resp)         # Apparently this is being returned within a list and is accounted for.
 
 
