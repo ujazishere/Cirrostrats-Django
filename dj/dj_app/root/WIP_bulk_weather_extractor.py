@@ -175,6 +175,7 @@ class Bulk_weather_extractor:
         async def get_tasks(session):
             # async def classification(session,ids_to_pull, type_of_weather, airport_id, time_in_hours):
             if taf_pull:
+                print('TAF pull in progress...')
                 ids_to_pull = self.loader(taf_positive_airports=True)
                 type_of_weather,time_in_hours="taf","408"
             else:
@@ -258,6 +259,7 @@ class Bulk_weather_extractor:
         print('exported as:', file_name)
         
 """
+from dj.dj_app.root.WIP_bulk_weather_extractor import Bulk_weather_extractor
 
 # For use in Jupyter
 we = Bulk_weather_extractor()
@@ -269,7 +271,7 @@ metar_pull_test = we.scraper(test=True,)
 
 
 
-# shows syntax error but works on jupyter. Pulls bulk metar for last 15 days
+# shows syntax error but works on jupyter. Pulls bulk metar for last 15 days. Takes about 15-20 Seconds
 async_pull_metar = await we.parallel_scrape()
 
 # Automatically saves bulk_metar file name with current UTC YYYYMMDDHHMM 

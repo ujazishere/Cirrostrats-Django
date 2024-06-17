@@ -71,7 +71,7 @@ body {
       bottom: 0;
       left: 0;
       width: 100%;
-      background-color: #f44336;
+      background-color: #804f4c;
       color: white;
       text-align: center;
       padding: 10px;
@@ -80,6 +80,7 @@ body {
       overflow: hidden; /* Hide any overflowing content */
       white-space: wrap; /* Prevent text from wrapping */
       text-overflow: ellipsis; /* Show ellipsis (...) for overflowed text */
+      font-size: 18px;
     }
     
     .banner > * {

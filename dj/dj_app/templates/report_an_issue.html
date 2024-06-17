@@ -8,9 +8,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.1">
   <title>Report An Issue</title>
   <link rel="stylesheet" type="text/css" href="{% static 'report_an_issue.css' %}">
+  <style>
+    header h2 {
+      margin-top: 50px;
+      margin-bottom: 30px;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -19,32 +25,17 @@
 
   <main>
     <section>
-      <p>If you are facing any issue please do report it</p>
-    </section>
-
-    <section>
-      <form action="submit_form.php" method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-          <label for="message">Message:</label>
-          <textarea id="message" name="message" required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="screenshot">Screenshot:</label>
-          <input type="file" id="screenshot" name="screenshot">
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+      <p>If you are facing any issues, please report them to us. You can reach out to us through the following channels:</p>
+      <ul>
+        <li>Email: <a href="mailto:ujasvaghani@yahoo.com">ujasvaghani@yahoo.com</a></li>
+        <li>Phone: <a href="tel:+12015099485">+1 201 509 9485</a></li>
+        <li>WhatsApp: <a href="https://wa.me/12015099485" target="_blank">Chat with us on WhatsApp</a></li>
+      </ul>
+      <p>We appreciate your feedback and will work to resolve any issues as quickly as possible.</p>
     </section>
   </main>
 </body>
 </html>
+
 
 {% endblock %}
