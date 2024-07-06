@@ -1,4 +1,33 @@
-# from dj.dj_app.root.WIP_bulk_weather_extractor import Bulk_weather_extractor
+"""
+from dj.dj_app.root.WIP_bulk_weather_extractor import Bulk_weather_extractor
+
+# For use in Jupyter
+we = Bulk_weather_extractor()
+x = we.airport_ID_separator()
+len(we.ids_without_digit_with_no_mets_excluded)
+
+# Do the test first to init necessary items
+metar_pull_test = we.scraper(test=True,)
+
+
+
+# shows syntax error but works on jupyter. Pulls bulk metar for last 15 days. Takes about 15-20 Seconds
+async_pull_metar = await we.parallel_scrape()
+
+# Automatically saves bulk_metar file name with current UTC YYYYMMDDHHMM 
+we.hard_write_dumper("bulk_metar",we.bulky_metar)
+
+# taf_pull_test = we.scraper(test=True,)
+
+# Pulls taf for last 17 days
+async_pull_taf = await we.parallel_scrape(taf_pull=True)
+
+# Automatically saves bulk_taf file name with current UTC YYYYMMDDHHMM 
+we.hard_write_dumper("bulk_taf",we.bulky_taf)
+
+
+"""
+
 import asyncio
 import aiohttp
 from datetime import datetime
@@ -258,34 +287,6 @@ class Bulk_weather_extractor:
             pickle.dump(bulky_weather, f)
         print('exported as:', file_name)
         
-"""
-from dj.dj_app.root.WIP_bulk_weather_extractor import Bulk_weather_extractor
-
-# For use in Jupyter
-we = Bulk_weather_extractor()
-x = we.airport_ID_separator()
-len(we.ids_without_digit_with_no_mets_excluded)
-
-# Do the test first to init necessary items
-metar_pull_test = we.scraper(test=True,)
-
-
-
-# shows syntax error but works on jupyter. Pulls bulk metar for last 15 days. Takes about 15-20 Seconds
-async_pull_metar = await we.parallel_scrape()
-
-# Automatically saves bulk_metar file name with current UTC YYYYMMDDHHMM 
-we.hard_write_dumper("bulk_metar",we.bulky_metar)
-
-# taf_pull_test = we.scraper(test=True,)
-# Pulls taf for last 17 days
-async_pull_taf = await we.parallel_scrape(taf_pull=True)
-
-# Automatically saves bulk_taf file name with current UTC YYYYMMDDHHMM 
-we.hard_write_dumper("bulk_taf",we.bulky_taf)
-
-
-"""
 
 
 

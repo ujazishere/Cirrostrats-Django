@@ -8,6 +8,7 @@ import pickle
 import smtplib
 import asyncio
 import aiohttp
+from time import sleep
 
 class Root_class():
     
@@ -15,8 +16,7 @@ class Root_class():
             pass
 
 
-    def send_email(self, body_to_send):
-
+    async def send_email(self, body_to_send):
         try: 
             from .Switch_n_auth import EC2_location
             full_email = f"Subject: {EC2_location}\n\n{body_to_send}"
@@ -28,7 +28,10 @@ class Root_class():
         smtp_port = 587  # Use 587 for TLS port
         smtp_user = "publicuj@gmail.com"
         smtp_password = "dsxi rywz jmxn qwiz"
-        to_email = ['ujasvaghani@gmail.com', 'ismailsakhani879@gmail.com']
+        # Test
+        to_email = ['ujasvaghani@gmail.com',]
+        # Actual
+        # to_email = ['ujasvaghani@gmail.com', 'ismailsakhani879@gmail.com']
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             # Start TLS for security
             server.starttls()
@@ -152,7 +155,7 @@ class Source_links_and_api:
         aviation_stack_params = {
                             'access_key': '65dfac89c99477374011de39d27e290a',
                             'flight_icao': f"{airline_code}{flight_number}"}
-        # aviationstack just like flight_aware
+        # aviationstack is just like flight_aware
         av_stack_url_w_auth = {aviation_stack_url:aviation_stack_params}
         return  av_stack_url_w_auth
 

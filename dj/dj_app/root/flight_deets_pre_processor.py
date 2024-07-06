@@ -14,7 +14,7 @@ def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
         if "flight-status.com" in str(url):
             soup = pc.requests_processing(resp,bs=True)
             united_dep_dest = flt_info.united_departure_destination_scrape(pre_process=soup)
-            print(666,united_dep_dest)
+            print("united_dep_dest",united_dep_dest)
         elif "flightstats.com" in str(url):
             soup = pc.requests_processing(resp,bs=True)
             flight_stats_arr_dep_time_zone = flt_info.fs_dep_arr_timezone_pull(flt_num_query=flight_number_query,pre_process=soup)

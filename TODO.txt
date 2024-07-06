@@ -16,13 +16,13 @@ Practice readibility and simplicity. Aviod code duplication. Include description
         
 
 **UV:   
+        Priority: Each individual scrape should be separate function in views. also separate scrape from api fetch.
+        Priority: Integrate frontend into this project as a separate branch and also declutter django include fastapi
         Build docker image for react  
         ***Separate logic and implement simple machine learning technique to detect certain words.
         delete dummy2.css since its not needed
-        Need redundency for dep and destination pull. current one is unstable giving errors during async
-        date implementatiton. Current web is error prone
-        # TODO: Priority: Each individual scrape should be separate function in views. also separate scrape from api fetch.
-        TODO: Priority: Integrate frontend into this project as a separate branch and also declutter django include fastapi
+        Need redundency for dep and destination pull. current one is unstable giving errors during async.
+        date implementatiton. Current web is error prone for flight lookups during evenings since the lookup inquires zulu time search.
         clean up code. clean up the mess: separate scraping, add notes all along
         account for nas alongside weather- in airport lookup query
         weather sources should show aviationweather link on each metar/taf/datis: https://aviationweather.gov/data/metar/?id=KEWR&hours=0

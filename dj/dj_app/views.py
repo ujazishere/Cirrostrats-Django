@@ -57,6 +57,13 @@ async def home(request):
         # You also need to go into the security--> 2factor auth--> app password and generate password for it
         # TODO: start this on a parallel thread so that it doesn't interfere with and add to user wait time
         # Maybe juststore these queries on a separate file and send email of synopsis
+
+        # print(1)
+        # TODO: This await line is for testing locally if the email deal works. get rid of it before you push and incluse ismail's email.com
+        # Canot await this smtp item for send mail. use aiosmtplib library for it
+        # await Root_class().send_email(body_to_send=main_query)
+        # print(3)
+        # actual
         if run_lengthy_web_scrape:
             Root_class().send_email(body_to_send=main_query)
         return await parse_query(request, main_query)
@@ -279,7 +286,6 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     # If youre looking for without_futures() that was used prior to the async implementation..
         #  you fan find it in Async milestone on hash dd7ebd0efa3b5a62798c88bcfe77cc43f8c0048c
         # It was an inefficient fucntion to bypass the futures error on EC2
-
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
@@ -429,6 +435,14 @@ def weather_display(request, weather_query):
     weather_page_data['metar_zt'] = weather['METAR_zt']
     weather_page_data['taf_zt'] = weather['TAF_zt']
     weather_page_data['trr'] = weather_page_data
+
+    weather_and_nas_packet = weather_page_data
+    pfi = Pull_flight_info()
+    nas_affected = pfi.nas_final_packet(dep_ID=airport,dest_ID="")
+
+
+    weather_and_nas_packet['nas'] = nas_affected
+    print(weather_and_nas_packet)
     return render(request, 'weather_info.html', weather_page_data)
 
 

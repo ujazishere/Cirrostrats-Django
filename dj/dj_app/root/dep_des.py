@@ -93,7 +93,7 @@ class Pull_flight_info(Root_class):
                 }
 
 
-    def nas_final_packet(self,dep_ID, dest_ID):
+    def nas_final_packet(self,dep_ID, dest_ID=None):
         # TODO: airport closures remaining. Also, Add NAS to the airport ID lookup on tge homepage.
         departure_ID = dep_ID[1:]       # Stripping off the 'K' since NAS uses 3 letter airport ID
         destination_ID = dest_ID[1:]
