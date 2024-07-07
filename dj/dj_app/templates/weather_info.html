@@ -2,8 +2,6 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'weather_info.css' %}" />
 
-
-
 <h3>Weather for {{airport}}</h3>
 {% if D_ATIS or METAR or TAF %}
 <!-- This is the departure box that contains D-Atis, metar and taf. titles include scheduled time and  -->
@@ -36,9 +34,34 @@
   </tbody>
 </table>
 
+    <!-- NAS (departures only) table in red-->
+    {% if nas_departure_affected %}
+    <pre>{{ nas_departure_affected|safe }}</pre> <!-- Add this line for debugging -->
+    <div class="table-wrapper">
+        <table class="another-table">
+            <thead>
+            </thead>
+            <tbody>
+                {% for d1_key, d1_value in nas_departure_affected.items %}
+                <tr>
+                    <td colspan="2">{{ d1_key }}</td>
+                </tr>
+                    {% for d2_key, d2_value in d1_value.items %}
+                    <tr>
+                        <td>{{ d2_key }}</td>
+                        <td>{{ d2_value }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No NAS departure affected data found.</p>
+    {% endif %}
+
 {% else %}
 <p>No weather information found for {{airport}}. Try `w kewr`</p>
-
 {% endif %}
 
 <form method="post" class="search-form">
@@ -49,8 +72,6 @@
   <div class="loading-spinner" id="loadingSpinner"></div>
 </form>
 
-
 <script type="text/javascript" src="{% static 'weather_info.js' %}"></script>
-
 
 {% endblock %}

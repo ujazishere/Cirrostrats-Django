@@ -35,6 +35,58 @@ body {
 }
 
 
+.dark-mode table.another-table {
+  box-shadow: 0 0 0 1px #ffffff;
+  border-color: #ffffff;
+  border-collapse: collapse;
+}
+
+.dark-mode table.another-table th,
+.dark-mode table.another-table td {
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+}
+
+table.another-table {
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  background-color: #000000;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+table.another-table th,
+table.another-table td {
+  padding: 10px;
+  text-align: center;
+  background-color: #fa6767;
+  border: 1px black
+}
+
+table.another-table thead {
+  background-color: #fa6767;
+  color: #000000;
+}
+
+table.another-table th:first-child,
+table.another-table td:first-child {
+  font-weight: 600;
+}
+
+.table-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 25vh;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+
+
 /************** this code is for comparison table *************/
 
 .comparison-table {
