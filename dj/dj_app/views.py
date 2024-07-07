@@ -1,6 +1,7 @@
 # quick code for jupyter
 # from dj.dj_app.views import awc_weather
 # await awc_weather(None,"EWR","STL")
+import pickle
 from django.views.decorators.http import require_GET
 # from concurrent.futures import ThreadPoolExecutor, as_completed           # Causing issues on AWS
 from django.shortcuts import render
@@ -131,7 +132,7 @@ async def parse_query(request, main_query):
                         weather_query_airport = query
                         # Making query uppercase for it to be compatible
                         weather_query_airport = weather_query_airport.upper()
-                        return weather_display(request, weather_query_airport)
+                        return weather_info(request, weather_query_airport)
                     else:           # tpical gate query with length of 2-4 alphanumerics
                         print('gate query')
                         return gate_info(request, main_query=str(query))
@@ -152,7 +153,7 @@ async def parse_query(request, main_query):
                 weather_query_airport = query_in_list_form[1]
                 # Making query uppercase for it to be compatible
                 weather_query_airport = weather_query_airport.upper()
-                return weather_display(request, weather_query_airport)
+                return weather_info(request, weather_query_airport)
             else:
                 return gate_info(request, main_query=' '.join(query_in_list_form))
 
@@ -412,7 +413,7 @@ async def nas(request, departure_id,destination_id):
             # REDUCE CODE DUPLICATION. THIS IS FEEDING INTO ITS OWN WEATHER.HTML FILE
             # RATHER, HAVE IT SUCH THAT IT wewatherData.js takes this function.
             # 
-def weather_display(request, weather_query):
+def weather_info(request, weather_query):
 
     # remove leading and trailing spaces. Seems precautionary.
     weather_query = weather_query.strip()
@@ -440,9 +441,8 @@ def weather_display(request, weather_query):
     pfi = Pull_flight_info()
     nas_affected = pfi.nas_final_packet(dep_ID=airport,dest_ID="")
 
-
-    weather_and_nas_packet['nas'] = nas_affected
-    print(weather_and_nas_packet)
+    weather_and_nas_packet['nas_departure_affected'] = nas_affected['nas_departure_affected']
+    print("\nWithin weather_display and NAS is ...", weather_and_nas_packet['nas_departure_affected'])
     return render(request, 'weather_info.html', weather_page_data)
 
 
