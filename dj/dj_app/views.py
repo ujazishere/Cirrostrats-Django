@@ -1,6 +1,7 @@
 # quick code for jupyter
 # from dj.dj_app.views import awc_weather
 # await awc_weather(None,"EWR","STL")
+from functools import lru_cache
 import pickle
 from django.views.decorators.http import require_GET
 # from concurrent.futures import ThreadPoolExecutor, as_completed           # Causing issues on AWS
@@ -179,9 +180,8 @@ def gate_info(request, main_query):
     else:       # Returns all gates since query is empty. Maybe this is not necessary. TODO: Try deleting else statement.
         return render(request, 'flight_info.html', {'gate': gate})
 
-
+@lru_cache(maxsize=None)
 async def flight_deets(request,airline_code=None, flight_number_query=None, ):
-    
     
     # You dont have to turn this off(False) running lengthy scrape will automatically enable fa pull
     if run_lengthy_web_scrape:
@@ -190,7 +190,6 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     else:
         bypass_fa = True        
 
-    bypass_fa = True
     bulk_flight_deets = {}
 
     # TODO: Priority: Each individual scrape should be separate function. Also separate scrape from api fetch
@@ -210,6 +209,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     pc = Pull_class(airline_code=airline_code,flt_num=flight_number_query)
     if bypass_fa:
 
+
         resp_dict:dict = await pc.async_pull([sl.ua_dep_dest_flight_status(flight_number_query),
                                               sl.flight_stats_url(flight_number_query),])
         # """
@@ -221,19 +221,21 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
         # resp_dict.update({'https://aeroapi.flightaware.com/aeroapi/flights/UAL4433':fa_resp})
         # """
     else:
+        # sl gathers all the links and asyncpull fetches the data from their associated web and api.
         resp_dict:dict = await pc.async_pull([sl.ua_dep_dest_flight_status(flight_number_query),
                                               sl.flight_stats_url(flight_number_query),
                                               sl.flight_aware_w_auth(airline_code,flight_number_query),
                                               ])
-    # /// End of the first async await, next one is for weather and nas ///.
+    # /// End of the first async await, next async await is for weather and nas ///.
 
-    # flight_deet preprocessing. fetched initial raw data gets fed into their respective pre_processors through this function that iterates through the dict
+    # Raw data gets fed into their respective pre_processors through this function that iterates through the dict
     resp_initial = resp_initial_returns(resp_dict=resp_dict,airline_code=airline_code,flight_number_query=flight_number_query)
     # assigning the resp_initial to their respective variables that will be fed into bulk_flight_deets and..
     # the departure and destination gets used for weather and nas pulls in the second half of the response returns called resp_sec_returns
+    print('DONE WITH RESP RETURNS', resp_initial)
 
     united_dep_dest, flight_stats_arr_dep_time_zone, fa_data = resp_initial
-    # united_dep_dest,flight_stats_arr_dep_time_zone,flight_aware_data,aviation_stack_data = resp_initial
+        # united_dep_dest,flight_stats_arr_dep_time_zone,flight_aware_data,aviation_stack_data = resp_initial
 
     # This will init the flight_view for gate info
     if fa_data['origin']:           # Flightaware data is prefered as source for other data.
@@ -284,7 +286,6 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
         bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
                             **fa_data, }
     # More streamlined to merge dict than just the typical update method of dict. update wont take multiple dictionaries
-
 
 
     # If youre looking for without_futures() that was used prior to the async implementation..

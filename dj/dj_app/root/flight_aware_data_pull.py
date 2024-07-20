@@ -124,7 +124,7 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None,pull
         elif flt_num:
             flights = fa_object.initial_pull(airline_code=airline_code,flt_num=flt_num)
         else:
-            # Reason here is to return none items when no flight aware data is found. it returns fa_object.attrs
+            # Reason here is to return none items when no flight aware data is found. It eventually returns fa_object.attrs that just declares all keys and vals
             flights = None
             pass
     

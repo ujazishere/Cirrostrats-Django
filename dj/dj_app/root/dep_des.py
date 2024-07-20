@@ -81,11 +81,11 @@ class Pull_flight_info(Root_class):
             if scheduled_times: 
                 departure_scheduled_time = scheduled_times[0]
                 destination_scheduled_time = scheduled_times[1]
-                print('Found scheduled times using flight_stats')
+                print('Found scheduled times using flight_stats.')
         except Exception as e:
             departure_ID, destination_ID = [None]*2
-            print('Unable flights_stat', e)
-        print('united_flight_stat for departure and destination', departure_ID, destination_ID)
+            print('Unable united_departure_destination_scrape', e)
+        print('united_departure_destination_scrape for departure and destination: ', departure_ID, destination_ID)
         return {'departure_ID': departure_ID,
                 'destination_ID': destination_ID,
                 'departure_scheduled_time': departure_scheduled_time,
@@ -206,6 +206,7 @@ class Pull_flight_info(Root_class):
         response = requests.get(nas)
         xml_data = response.content
         return xml_data
+
 
     def nas_pre_processing(self):
 
@@ -330,6 +331,7 @@ class Pull_flight_info(Root_class):
     def fa_data_pull(self, airline_code=None,flt_num=None,pre_process=None):
         fa_returns = flight_aware_data_pull(airline_code=airline_code, flt_num=flt_num, pre_process=pre_process)
         return fa_returns
+
 
     def aviation_stack_pull(self,):
         return None
