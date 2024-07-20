@@ -10,10 +10,13 @@ def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
     # see use of this function in view.py for document
     pc = Pull_class(flight_number_query)
     flight_aware_data = flt_info.fa_data_pull()
+    united_dep_dest,flight_stats_arr_dep_time_zone,flight_aware_data, = [None]*3
     for url,resp in resp_dict.items():
         if "flight-status.com" in str(url):
             soup = pc.requests_processing(resp,bs=True)
             united_dep_dest = flt_info.united_departure_destination_scrape(pre_process=soup)
+            if not united_dep_dest:
+                united_dep_dest = None
             print("united_dep_dest",united_dep_dest)
         elif "flightstats.com" in str(url):
             soup = pc.requests_processing(resp,bs=True)
@@ -27,10 +30,11 @@ def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
             flight_aware_data = flt_info.fa_data_pull(airline_code=airline_code, flt_num=flight_number_query,pre_process=fa_return)
             # print(flight_aware_data)
         elif "aviationstack" in str(url):       #TODO: aviation stack needs work. That is another source to cross-check with flightaware and others. Design the logic to cross-check and verify.
-            pass
+            # pass
+            print('Aviaion stack data',resp)
+            av_stack = json.loads(resp)
             # soup = pc.requests_processing(resp,json=True)
             # aviation_stack_data = flt_info.aviation_stack_pull(airline_code=airline_code, flt_num=flight_number_query)
-            # print(aviation_stack_data)
     
 
     return united_dep_dest, flight_stats_arr_dep_time_zone, flight_aware_data,
@@ -63,7 +67,7 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
             #     resp = pickle.dump(resp,f)
             # gate_info = pc.requests_processing(resp,bs=True)
             pass    # This is just not working. async return is way different than organic requests return.
-            # Both are html but different data. Tried different likes, different soup type, bs4.prettify and still no joy!
+            # Both are html but different data. Tried different likes, different soup type, bs4.prettify and still no joy! Move on find another way.
 
             
         elif f"faa.gov/api/airport-status-information" in str(url):

@@ -129,7 +129,7 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None,pull
             pass
     
     current_UTC = Flight_aware_pull().current_utc
-    route = None        # Declaring not available unless available throught flights
+    route = None        # Declaring not available unless available through flights
     filed_altitude, filed_ete,  = None, None
     
     # Use this to dump a dummy flight packet:

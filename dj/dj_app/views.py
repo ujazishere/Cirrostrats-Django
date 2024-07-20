@@ -190,10 +190,13 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     else:
         bypass_fa = True        
 
+    bypass_fa = True
     bulk_flight_deets = {}
 
     # TODO: Priority: Each individual scrape should be separate function. Also separate scrape from api fetch
     ''' *****VVI******  
+    To get quick jupyter access use the jupyter_interactive_code(self,) func from root_class.py
+    It also contains the logic of this conplicated flight_deets func.
     Logic: resp_dict gets all information fetched from root_class.Pull_class().async_pull(). Look it up and come back.
     pre-processes it using resp_initial_returns and resp_sec_returns for inclusion in the bulk_flight_deets..
     first async response returs origin and destination through united's flight-status since their argument only
@@ -229,7 +232,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     # assigning the resp_initial to their respective variables that will be fed into bulk_flight_deets and..
     # the departure and destination gets used for weather and nas pulls in the second half of the response returns called resp_sec_returns
 
-    united_dep_dest, flight_stats_arr_dep_time_zone, fa_data= resp_initial
+    united_dep_dest, flight_stats_arr_dep_time_zone, fa_data = resp_initial
     # united_dep_dest,flight_stats_arr_dep_time_zone,flight_aware_data,aviation_stack_data = resp_initial
 
     # This will init the flight_view for gate info

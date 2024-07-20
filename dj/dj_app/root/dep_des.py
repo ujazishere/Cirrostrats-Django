@@ -330,3 +330,6 @@ class Pull_flight_info(Root_class):
     def fa_data_pull(self, airline_code=None,flt_num=None,pre_process=None):
         fa_returns = flight_aware_data_pull(airline_code=airline_code, flt_num=flt_num, pre_process=pre_process)
         return fa_returns
+
+    def aviation_stack_pull(self,):
+        return None

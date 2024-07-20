@@ -151,6 +151,7 @@ class Source_links_and_api:
     def aviation_stack(self,airline_code, flight_number):
         # TODO: Fix airline code issue. This is not used yet. Find use case.
         # Aviation Stack api call. 3000 requests per month
+        """
         aviation_stack_url = 'http://api.aviationstack.com/v1/flights'
         aviation_stack_params = {
                             'access_key': '65dfac89c99477374011de39d27e290a',
@@ -158,6 +159,15 @@ class Source_links_and_api:
         # aviationstack is just like flight_aware
         av_stack_url_w_auth = {aviation_stack_url:aviation_stack_params}
         return  av_stack_url_w_auth
+        """
+        print('Within av stack sl')
+        base_url = "http://api.aviationstack.com/v1/flights"
+        access_key = "65dfac89c99477374011de39d27e290a"
+        flight_icao = f"{airline_code}{flight_number}"
+        
+        url = f"{base_url}?access_key={access_key}&flight_icao={flight_icao}"
+        
+        return {url: {}}  
 
 
     def flight_aware_w_auth(self,airline_code, flight_number):
@@ -276,16 +286,32 @@ class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
     def jupyter_interactive_code(self,):
 
         """
+        from dj.dj_app.root.root_class import Root_class, Pull_class,Source_links_and_api
+        from dj.dj_app.root.flight_deets_pre_processor import resp_initial_returns,resp_sec_returns,response_filter
+        from dj.dj_app.root.dep_des import Pull_flight_info
 
-        # copy paste these lines within comment to jupyter and it will work
-        import requests,asyncio, aiohttp
-        from dj.dj_app.root.root_class import Root_class, Pull_class
-        pc = Pull_class('4416')
+        flight_number_query = 4595
+        airline_code = 'UA'
+
         r = Root_class()
+        pc = Pull_class(flight_number_query)
+        sl = Source_links_and_api()
+
         all_links = [
-        pc.ua_dep_dest,
-        pc.flight_stats_url,
+        sl.ua_dep_dest_flight_status(flight_number_query),
+        sl.flight_stats_url(flight_number_query),
+        sl.aviation_stack(airline_code, flight_number_query),
+        # LIMIT THE USE FOR THIS FLIGHTAWARE DATA API. YOURE ONLY ALLOWED 1000 REQUESTS A MONTH
+        # sl.flight_aware_w_auth(airline_code,flight_number_query),
+
         ]
+        
+        resp_dict:dict = await pc.async_pull(all_links)
+        resp_initial = resp_initial_returns(resp_dict=resp_dict,airline_code='UA',flight_number_query=flight_number_query)
+        fa_data = resp_initial[2]
+        gate_returns = Pull_flight_info().flight_view_gate_info(flt_num=flight_number_query,airport=fa_data['origin'])
+
+
         
         
         task = asyncio.ensure_future(pc.async_pull(all_links))
@@ -302,11 +328,11 @@ class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
         pass
 
 
-    async def async_pull(self, link_list:list):
+    async def async_pull(self, list_of_links:list):
 
         async def get_tasks(session):
             tasks = []
-            for url in link_list:
+            for url in list_of_links:
                 if type(url)==dict:
                     url,auth_headers = list(url.keys())[0], list(url.values())[0]
                     tasks.append(asyncio.create_task(session.get(url, headers=auth_headers)))
