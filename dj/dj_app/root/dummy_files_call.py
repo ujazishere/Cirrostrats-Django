@@ -7,7 +7,7 @@ def getting_the_path_right():
     currentWorking = os.getcwd()
     print("currentWorking through dummy_files_call.py",currentWorking)
     luis_trailing_path = "Cirrostrats"
-    uj_trailing_path = "Cirrostrats\dj"
+    uj_trailing_path = r"Cirrostrats\dj"
     ismail_trailing_path = "Cirrostrats/dj/"
 
     if currentWorking[-11:] == luis_trailing_path:

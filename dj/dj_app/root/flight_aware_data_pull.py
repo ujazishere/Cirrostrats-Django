@@ -218,15 +218,15 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None,pull
                         # Need to highlight estimated out as red if delayed.
                         # convert to date time object and use if statement to determine if its delayed and inject html through here.
                 print("scheduled out Z: ", scheduled_out_raw_fa)
-                scheduled_out = re.search("T(\d{2}:\d{2})", scheduled_out_raw_fa).group(1).replace(":","") + "Z"
+                scheduled_out = re.search(r"T(\d{2}:\d{2})", scheduled_out_raw_fa).group(1).replace(":","") + "Z"
                 estimated_out = flights[i]['estimated_out']     # Rename this to date or time or both 
                 print("estimated out Z: ",estimated_out)
-                estimated_out = re.search("T(\d{2}:\d{2})", estimated_out).group(1).replace(":","") + "Z"
+                estimated_out = re.search(r"T(\d{2}:\d{2})", estimated_out).group(1).replace(":","") + "Z"
 
                 scheduled_in = flights[i]['scheduled_in']
-                scheduled_in = re.search("T(\d{2}:\d{2})", scheduled_in).group(1).replace(":","") + "Z"
+                scheduled_in = re.search(r"T(\d{2}:\d{2})", scheduled_in).group(1).replace(":","") + "Z"
                 estimated_in = flights[i]['estimated_in']
-                estimated_in = re.search("T(\d{2}:\d{2})", estimated_in).group(1).replace(":","") + "Z"
+                estimated_in = re.search(r"T(\d{2}:\d{2})", estimated_in).group(1).replace(":","") + "Z"
 
                 route = flights[i]['route']
                 filed_altitude =  "FL" + str(flights[i]['filed_altitude'])

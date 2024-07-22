@@ -16,22 +16,22 @@ class Root_class():
             pass
 
 
-    async def send_email(self, body_to_send):
+    def send_email(self, body_to_send):
         try: 
             from .Switch_n_auth import EC2_location
             full_email = f"Subject: {EC2_location}\n\n{body_to_send}"
         except Exception as e:
             print("error in Switch_n_auth",e)
-            print('EC2_location within dj\dj_app\root\Switch_n_auth.py was not found. Need the file and the variable as string.')
+            print(r'EC2_location within dj\dj_app\root\Switch_n_auth.py was not found. Need the file and the variable as string.')
             full_email = f"Subject: UNKNOWN Local\n\n{body_to_send}"
         smtp_server = "smtp.gmail.com"
         smtp_port = 587  # Use 587 for TLS port
         smtp_user = "publicuj@gmail.com"
         smtp_password = "dsxi rywz jmxn qwiz"
         # Test
-        to_email = ['ujasvaghani@gmail.com',]
+        # to_email = ['ujasvaghani@gmail.com',]
         # Actual
-        # to_email = ['ujasvaghani@gmail.com', 'ismailsakhani879@gmail.com']
+        to_email = ['ujasvaghani@gmail.com', 'ismailsakhani879@gmail.com']
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             # Start TLS for security
             server.starttls()

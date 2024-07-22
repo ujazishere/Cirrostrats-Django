@@ -1,5 +1,5 @@
 """
-from dj.dj_app.root.WIP_bulk_weather_extractor import Bulk_weather_extractor
+from dj.dj_app.root.WIP.WIP_bulk_weather_extractor import Bulk_weather_extractor
 
 # For use in Jupyter
 we = Bulk_weather_extractor()

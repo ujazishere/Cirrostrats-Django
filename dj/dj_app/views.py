@@ -1,7 +1,6 @@
 # quick code for jupyter
 # from dj.dj_app.views import awc_weather
 # await awc_weather(None,"EWR","STL")
-from functools import lru_cache
 import pickle
 from django.views.decorators.http import require_GET
 # from concurrent.futures import ThreadPoolExecutor, as_completed           # Causing issues on AWS
@@ -17,6 +16,7 @@ from .root.flight_deets_pre_processor import resp_initial_returns,resp_sec_retur
 from time import sleep
 from django.shortcuts import render
 from django.http import JsonResponse
+import asyncio
 import re
 # This will throw error if the file is not found. Change the EC2 file to this name.
 import os
@@ -180,16 +180,12 @@ def gate_info(request, main_query):
     else:       # Returns all gates since query is empty. Maybe this is not necessary. TODO: Try deleting else statement.
         return render(request, 'flight_info.html', {'gate': gate})
 
-@lru_cache(maxsize=None)
 async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     
     # You dont have to turn this off(False) running lengthy scrape will automatically enable fa pull
-    if run_lengthy_web_scrape:
-        # This is to restrict fa api use for local work: Keep it False for local.
-        bypass_fa = False
-    else:
-        bypass_fa = True        
-
+    # Restricting fa api use for local work: Keep it False for local. if run_lengthy_web_scrape is False bypass_fa will be True
+    bypass_fa = not run_lengthy_web_scrape
+    bypass_fa = True
     bulk_flight_deets = {}
 
     # TODO: Priority: Each individual scrape should be separate function. Also separate scrape from api fetch
@@ -207,35 +203,51 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
     sl = Source_links_and_api()
     pc = Pull_class(airline_code=airline_code,flt_num=flight_number_query)
-    if bypass_fa:
-
-
-        resp_dict:dict = await pc.async_pull([sl.ua_dep_dest_flight_status(flight_number_query),
-                                              sl.flight_stats_url(flight_number_query),])
-        # """
-        # This is just for testing
-        # fa_test_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\fa_test.pkl"
-        # with open(fa_test_path, 'rb') as f:
-            # resp = pickle.load(f)
-            # fa_resp = json.loads(resp)
-        # resp_dict.update({'https://aeroapi.flightaware.com/aeroapi/flights/UAL4433':fa_resp})
-        # """
-    else:
-        # sl gathers all the links and asyncpull fetches the data from their associated web and api.
-        resp_dict:dict = await pc.async_pull([sl.ua_dep_dest_flight_status(flight_number_query),
-                                              sl.flight_stats_url(flight_number_query),
-                                              sl.flight_aware_w_auth(airline_code,flight_number_query),
-                                              ])
-    # /// End of the first async await, next async await is for weather and nas ///.
+    
+    # If flightaware is to be bypassed this code will remove the flightaware link
+    links = [sl.ua_dep_dest_flight_status(flight_number_query), sl.flight_stats_url(flight_number_query)]
+    if not bypass_fa:
+        links.append(sl.flight_aware_w_auth(airline_code, flight_number_query))
+    
+    resp_dict = await pc.async_pull(links)          # Actual fetching happens here.
+# /// End of the first async await, next async await is for weather and nas ///.
 
     # Raw data gets fed into their respective pre_processors through this function that iterates through the dict
-    resp_initial = resp_initial_returns(resp_dict=resp_dict,airline_code=airline_code,flight_number_query=flight_number_query)
+    # Reasoning behind awaiting this is so that hopefully it wont execute multiple times and run synchronously.
+    resp_initial = await asyncio.to_thread(resp_initial_returns, resp_dict=resp_dict, airline_code=airline_code, flight_number_query=flight_number_query)
     # assigning the resp_initial to their respective variables that will be fed into bulk_flight_deets and..
     # the departure and destination gets used for weather and nas pulls in the second half of the response returns called resp_sec_returns
-    print('DONE WITH RESP RETURNS', resp_initial)
+    print('DONE WITH resp_initial_returns: ', resp_initial)
 
     united_dep_dest, flight_stats_arr_dep_time_zone, fa_data = resp_initial
         # united_dep_dest,flight_stats_arr_dep_time_zone,flight_aware_data,aviation_stack_data = resp_initial
+
+# Second async pull and processing
+    if fa_data['origin']:
+        origin, destination = fa_data['origin'], fa_data['destination']
+    elif united_dep_dest and united_dep_dest.get('departure_ID'):
+        origin, destination = united_dep_dest['departure_ID'], united_dep_dest['destination_ID']
+    else:
+        print('No Departure/Destination ID')
+        bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, **fa_data}
+        return render(request, 'flight_deet.html', bulk_flight_deets)
+
+    pc = Pull_class(flight_number_query, origin, destination)
+    wl_dict = pc.weather_links(origin, destination)
+    resp_dict = await pc.async_pull(list(wl_dict.values()) + [sl.nas()])
+
+    # Process weather and NAS info synchronously
+    resp_sec = await asyncio.to_thread(resp_sec_returns, resp_dict, origin, destination)
+    weather_dict = resp_sec
+
+    # Get gate info synchronously
+    gate_returns = await asyncio.to_thread(Pull_flight_info().flight_view_gate_info, flt_num=flight_number_query, airport=origin)
+
+    bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
+                        **weather_dict, **fa_data, **gate_returns}
+
+    return render(request, 'flight_deet.html', bulk_flight_deets)
+
 
     # This will init the flight_view for gate info
     if fa_data['origin']:           # Flightaware data is prefered as source for other data.

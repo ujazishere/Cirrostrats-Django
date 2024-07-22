@@ -77,7 +77,7 @@ class Pull_flight_info(Root_class):
             scheduled_times = soup.find_all('div', {'class': 'tb2'})
             scheduled_times = [i.text for i in scheduled_times]
             scheduled_times = [i for i in scheduled_times if 'Scheduled' in i]
-            scheduled_times = [match.group() for i in scheduled_times if (match := re.search('\d\d:\d\d',i))]
+            scheduled_times = [match.group() for i in scheduled_times if (match := re.search(r'\d\d:\d\d',i))]
             if scheduled_times: 
                 departure_scheduled_time = scheduled_times[0]
                 destination_scheduled_time = scheduled_times[1]
@@ -329,6 +329,14 @@ class Pull_flight_info(Root_class):
 
     
     def fa_data_pull(self, airline_code=None,flt_num=None,pre_process=None):
+        # """
+        # This is just for testing
+        # fa_test_path = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\fa_test.pkl"
+        # with open(fa_test_path, 'rb') as f:
+            # resp = pickle.load(f)
+            # fa_resp = json.loads(resp)
+        # resp_dict.update({'https://aeroapi.flightaware.com/aeroapi/flights/UAL4433':fa_resp})
+        # """
         fa_returns = flight_aware_data_pull(airline_code=airline_code, flt_num=flt_num, pre_process=pre_process)
         return fa_returns
 
