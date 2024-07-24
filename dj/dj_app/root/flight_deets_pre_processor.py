@@ -1,5 +1,6 @@
 from .weather_parse import Weather_parse
 from .root_class import Root_class, Pull_class
+from .flight_aware_data_pull import Flight_aware_pull as null_flightaware_return
 from .dep_des import Pull_flight_info
 import json
 import json
@@ -9,29 +10,30 @@ flt_info = Pull_flight_info()
 def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
     # response from the async pull is fed here for cleaning. This function will split all the associated data and return it back to the views.py flight_deet function
     pc = Pull_class(flight_number_query)
-    flight_aware_data = flt_info.fa_data_pull()     # This is to declare empty values for keys in flightaware i.e fa_object.attrs
+    flight_aware_data = null_flightaware_return().attrs     # This is to declare empty values for keys in flightaware i.e fa_object.attrs
     united_dep_dest,flight_stats_arr_dep_time_zone = [None]*2       # declaring so it doesn't throw error
     for url,resp in resp_dict.items():
         if "flight-status.com" in str(url):
-            print("1.resp_intitial_return flight-status")
+            print("11.resp_intitial_return flight-status")
             soup = pc.requests_processing(resp,bs=True)
-            print("Sending raw data to unuted_departure_destination_scrape for cleaning")
+            print("11Sending raw data to unuted_departure_destination_scrape for cleaning")
             united_dep_dest = flt_info.united_departure_destination_scrape(pre_process=soup)
             if not united_dep_dest:
                 united_dep_dest = None
-            print("united_dep_dest",united_dep_dest)
+            print("11.united_dep_dest",united_dep_dest)
         elif "flightstats.com" in str(url):
-            print("2.resp_intitial_return flightstats.com")
+            print("22.resp_intitial_return flightstats.com")
             soup = pc.requests_processing(resp,bs=True)
+            print("22Sending raw data to fs_dep_arr_timezone_pull for timezone data cleaning")
             flight_stats_arr_dep_time_zone = flt_info.fs_dep_arr_timezone_pull(flt_num_query=flight_number_query,pre_process=soup)
             # print(flight_stats_arr_dep_time_zone)
 
 
         elif "flightaware" in str(url):
-            print("3.resp_intitial_return flightaware")
+            print("33.resp_intitial_return flightaware")
             fa_return = json.loads(resp)
             fa_return = fa_return['flights']
-            print("Sending data to fa_data_pull for cleaning.")
+            print("33Sending data to fa_data_pull for cleaning.")
             flight_aware_data = flt_info.fa_data_pull(airline_code=airline_code, flt_num=flight_number_query,pre_process=fa_return)
         elif "aviationstack" in str(url):       #TODO: aviation stack needs work. That is another source to cross-check with flightaware and others. Design the logic to cross-check and verify.
             print("resp_intitial_return aviationstack:", resp)
@@ -104,7 +106,7 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
     else:
         gate_info_return = {'departure_gate': None,
                             'arrival_gate': None, }
-        print('no gate info found')
+        print('resp_sec_returns: no gate info found')
     
 
     if nas_data and gate_info_return and wpp:

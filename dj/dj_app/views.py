@@ -1,6 +1,7 @@
 # quick code for jupyter
 # from dj.dj_app.views import awc_weather
 # await awc_weather(None,"EWR","STL")
+from .root.flight_aware_data_pull import flight_aware_data_pull
 import pickle
 from django.views.decorators.http import require_GET
 # from concurrent.futures import ThreadPoolExecutor, as_completed           # Causing issues on AWS
@@ -17,6 +18,7 @@ from time import sleep
 from django.shortcuts import render
 from django.http import JsonResponse
 import asyncio
+
 import re
 # This will throw error if the file is not found. Change the EC2 file to this name.
 import os
@@ -127,6 +129,7 @@ async def parse_query(request, main_query):
                     if 1 <= query <= 35 or 40 <= query <= 136:              # Accounting for EWR gates for gate query
                         return gate_info(request, main_query=str(query))
                     else:                                                   # Accounting for fligh number
+                        print("INITIATING flight_deets FUNCTION.")
                         return await flight_deets(request, airline_code=None, flight_number_query=query)
                 else:
                     if len(query) == 4 and query[0] == 'K':
@@ -180,26 +183,12 @@ def gate_info(request, main_query):
     else:       # Returns all gates since query is empty. Maybe this is not necessary. TODO: Try deleting else statement.
         return render(request, 'flight_info.html', {'gate': gate})
 
-async def flight_deets(request,airline_code=None, flight_number_query=None, ):
-    
-    # You dont have to turn this off(False) running lengthy scrape will automatically enable fa pull
-    # Restricting fa api use for local work: Keep it False for local. if run_lengthy_web_scrape is False bypass_fa will be True
-    bypass_fa = not run_lengthy_web_scrape
-    bypass_fa = True
-    bulk_flight_deets = {}
 
-    # TODO: Priority: Each individual scrape should be separate function. Also separate scrape from api fetch
-    ''' *****VVI******  
-    To get quick jupyter access use the jupyter_interactive_code(self,) func from root_class.py
-    It also contains the logic of this conplicated flight_deets func.
-    Logic: resp_dict gets all information fetched from root_class.Pull_class().async_pull(). Look it up and come back.
-    pre-processes it using resp_initial_returns and resp_sec_returns for inclusion in the bulk_flight_deets..
-    first async response returs origin and destination through united's flight-status since their argument only
-    takes in flightnumber and it als, also gets scheduled times in local time zones through flightstats,
-    and the packet from flightaware.
-    This origin and destination is then used to make another async request that requires additional arguments
-    This is the second resp_dict that returns weather and nas in the resp_sec,
-    '''
+async def flight_deets(request,airline_code=None, flight_number_query=None, ):
+    # TODO COMMIT   DELETE bypass_fa LINE WHEN MAKING THE COMMIT
+    bypass_fa = not run_lengthy_web_scrape
+    # bypass_fa = False        # To fetch and use flight_aware_data uncomment this. API intensive.
+    bulk_flight_deets = {}
 
     sl = Source_links_and_api()
     pc = Pull_class(airline_code=airline_code,flt_num=flight_number_query)
@@ -209,26 +198,22 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     if not bypass_fa:
         links.append(sl.flight_aware_w_auth(airline_code, flight_number_query))
     
+    # First async pull and processing.
     resp_dict = await pc.async_pull(links)          # Actual fetching happens here.
-# /// End of the first async await, next async await is for weather and nas ///.
+    resp_initial = resp_initial_returns(resp_dict=resp_dict, airline_code=airline_code, flight_number_query=flight_number_query)
 
-    # Raw data gets fed into their respective pre_processors through this function that iterates through the dict
-    # Reasoning behind awaiting this is so that hopefully it wont execute multiple times and run synchronously.
-    resp_initial = await asyncio.to_thread(resp_initial_returns, resp_dict=resp_dict, airline_code=airline_code, flight_number_query=flight_number_query)
-    # assigning the resp_initial to their respective variables that will be fed into bulk_flight_deets and..
-    # the departure and destination gets used for weather and nas pulls in the second half of the response returns called resp_sec_returns
     print('DONE WITH resp_initial_returns: ', resp_initial)
-
     united_dep_dest, flight_stats_arr_dep_time_zone, fa_data = resp_initial
-        # united_dep_dest,flight_stats_arr_dep_time_zone,flight_aware_data,aviation_stack_data = resp_initial
 
-# Second async pull and processing
+    # Second async pull and processing
     if fa_data['origin']:
+        print(555,"Yes flightaware data")
         origin, destination = fa_data['origin'], fa_data['destination']
     elif united_dep_dest and united_dep_dest.get('departure_ID'):
+        print(555,"No flightaware data")
         origin, destination = united_dep_dest['departure_ID'], united_dep_dest['destination_ID']
     else:
-        print('No Departure/Destination ID')
+        print(555, 'No Departure/Destination ID')
         bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, **fa_data}
         return render(request, 'flight_deet.html', bulk_flight_deets)
 
@@ -237,7 +222,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     resp_dict = await pc.async_pull(list(wl_dict.values()) + [sl.nas()])
 
     # Process weather and NAS info synchronously
-    resp_sec = await asyncio.to_thread(resp_sec_returns, resp_dict, origin, destination)
+    resp_sec = resp_sec_returns(resp_dict, origin, destination)
     weather_dict = resp_sec
 
     # Get gate info synchronously
@@ -246,63 +231,6 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
                         **weather_dict, **fa_data, **gate_returns}
 
-    return render(request, 'flight_deet.html', bulk_flight_deets)
-
-
-    # This will init the flight_view for gate info
-    if fa_data['origin']:           # Flightaware data is prefered as source for other data.
-        pc = Pull_class(flight_number_query,fa_data['origin'],fa_data['destination'])
-        wl_dict = pc.weather_links(fa_data['origin'],fa_data['destination'])
-        # OR get the flightaware data for origin and destination airport ID as primary then united's info.
-        # also get flight-stats data. Compare them all for information.
-
-        # fetching weather, nas and gate info since those required departure, destination
-        # TODO: Probably take out nas_data from here and put it in the initial pulls.
-        resp_dict:dict = await pc.async_pull(list(wl_dict.values())+[sl.nas(),])
-
-        # /// End of the second and last async await.
-
-        
-        # Weather and nas information processing
-        resp_sec = resp_sec_returns(resp_dict,fa_data['origin'],fa_data['destination']) 
-
-        weather_dict = resp_sec
-        
-        # This gate stuff is a not async because async is throwig errors when doing async
-        gate_returns = Pull_flight_info().flight_view_gate_info(flt_num=flight_number_query,airport=fa_data['origin'])
-        bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
-                            **weather_dict, **fa_data, **gate_returns}
-    elif united_dep_dest['departure_ID']:       # If flightaware data is not available use this scraped data. Very unstable. TODO: Change this. Have 3 sources for redundencies
-        pc = Pull_class(flight_number_query,united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
-        wl_dict = pc.weather_links(united_dep_dest['departure_ID'],united_dep_dest['destination_ID'])
-        # OR get the flightaware data for origin and destination airport ID as primary then united's info.
-        # also get flight-stats data. Compare them all for information.
-
-        # fetching weather, nas and gate info since those required departure, destination
-        # TODO: Probably take out nas_data from here and put it in the initial pulls.
-        resp_dict:dict = await pc.async_pull(list(wl_dict.values())+[sl.nas()])
-
-        # /// End of the second and last async await.
-
-        
-        # Weather and nas information processing
-        resp_sec = resp_sec_returns(resp_dict,united_dep_dest['departure_ID'],united_dep_dest['destination_ID']) 
-
-        weather_dict = resp_sec
-        gate_returns = Pull_flight_info().flight_view_gate_info(flt_num=flight_number_query,airport=united_dep_dest['departure_ID'])
-        bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
-                            **weather_dict, **fa_data, **gate_returns}
-
-    else:
-        print('No Departure/Destination ID')
-        bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
-                            **fa_data, }
-    # More streamlined to merge dict than just the typical update method of dict. update wont take multiple dictionaries
-
-
-    # If youre looking for without_futures() that was used prior to the async implementation..
-        #  you fan find it in Async milestone on hash dd7ebd0efa3b5a62798c88bcfe77cc43f8c0048c
-        # It was an inefficient fucntion to bypass the futures error on EC2
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 

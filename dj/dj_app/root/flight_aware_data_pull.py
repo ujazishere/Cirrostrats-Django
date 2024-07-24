@@ -1,5 +1,6 @@
 import requests
 import pickle
+from time import sleep
 try:
     from .root_class import Root_class
 except:     # Just so it's easier to import outside of django
@@ -21,6 +22,7 @@ class Flight_aware_pull(Root_class):
         self.attrs = dict(zip(attrs,[None]*len(attrs)))
         
         self.current_utc = self.date_time(raw_utc=True)
+        print("null_flightaware_attrs")
 
     def initial_pull(self, airline_code=None, flt_num=None):
         apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # New Key from Ismail
@@ -102,9 +104,10 @@ class Flight_aware_pull(Root_class):
         
         # solace_client.disconnect()
 
-def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None,pull_dummy=None):
+def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None, return_example=None):
     """
-    pull_dummy is only to check dummy an example data from flightaware and thats used in jupyter. 
+    return_example is only to check dummy an example data from flightaware and thats used in jupyter. 
+    pre_process data is the raw flightaware data through their api thats delivered from the async function.
     """
     # This returns bypass all and return prefabricated None vals
     # return Flight_aware_pull().attrs
@@ -112,8 +115,10 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None,pull
         airline_code = 'UAL'
     
     fa_object = Flight_aware_pull()
-    if pull_dummy:
+    if return_example:
         # Use this to recall a dummy flight packet:
+        print('sleeping 4 secs for flight_aware data fetch lag simulation')
+        sleep(4)
         print('\n CALLING DUMMY FILE IN flight_aware_data_pull \n')
         with open ('dummy_flight_aware_packet.pkl', 'rb') as f:
             flights = pickle.load(f)
@@ -125,6 +130,7 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None,pull
             flights = fa_object.initial_pull(airline_code=airline_code,flt_num=flt_num)
         else:
             # Reason here is to return none items when no flight aware data is found. It eventually returns fa_object.attrs that just declares all keys and vals
+            print('returning null flight_aware_data')
             flights = None
             pass
     
@@ -208,8 +214,8 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None,pull
 
                 scheduled_out_raw_fa = flights[i]['scheduled_out']
                 date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time
-                print('Current_UTC', current_UTC)
-                print('Date_out', date_out)
+                # print('Current_UTC', current_UTC)
+                # print('Date_out', date_out)
                 
                 if current_UTC == date_out:     # zulu time clashes with local time from other source
                     pass
@@ -217,10 +223,10 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None,pull
                 # TODO: use the Cirrostrats\dj\dummy_flight_aware_packet.pkl to get the `flights` section then do the pre-processing on this.
                         # Need to highlight estimated out as red if delayed.
                         # convert to date time object and use if statement to determine if its delayed and inject html through here.
-                print("scheduled out Z: ", scheduled_out_raw_fa)
+                # print("scheduled out Z: ", scheduled_out_raw_fa)
                 scheduled_out = re.search(r"T(\d{2}:\d{2})", scheduled_out_raw_fa).group(1).replace(":","") + "Z"
                 estimated_out = flights[i]['estimated_out']     # Rename this to date or time or both 
-                print("estimated out Z: ",estimated_out)
+                # print("estimated out Z: ",estimated_out)
                 estimated_out = re.search(r"T(\d{2}:\d{2})", estimated_out).group(1).replace(":","") + "Z"
 
                 scheduled_in = flights[i]['scheduled_in']
@@ -247,7 +253,7 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None,pull
 
 
     else:
-        print('FLIGHT_AWARE_DATA UNSUCCESSFUL, Couldnt find flights')
+        print('flight_aware_data_pull.pull FLIGHT_AWARE_DATA UNSUCCESSFUL, no `flights` available')
         return fa_object.attrs
 
 

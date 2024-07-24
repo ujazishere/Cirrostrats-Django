@@ -17,6 +17,7 @@ Practice readibility and simplicity. Aviod code duplication. Include description
 
 **UV:   
         ***VVI*** clean your shit its too messy! Need to separate out and organize code efficiently.
+            clean up dummy file calls. Code is too complex and intimidating and hard to decode.
             Need redundency for dep and destination pull. current one is unstable giving errors during async.
             Priority: Each individual scrape should be separate function in views. also separate scrape from api fetch.
             Declutter django include fastapi

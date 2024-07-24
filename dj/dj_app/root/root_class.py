@@ -329,7 +329,7 @@ class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
 
 
     async def async_pull(self, list_of_links:list):
-
+        print('***** async_pull in progress...')
         async def get_tasks(session):
             tasks = []
             for url in list_of_links:
@@ -358,6 +358,7 @@ class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
                     resp_return_list[resp.url] = response_output
                 return resp_return_list
 
+        print("*** async pull completion")
         #1 Temporary. Works when function calling within jupyter.
         return await main()         
 

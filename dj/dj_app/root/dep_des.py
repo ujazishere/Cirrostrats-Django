@@ -49,7 +49,7 @@ class Pull_flight_info(Root_class):
         else:
             departure_time_zone,arrival_time_zone = [None]*2
 
-        print('Success at flightstats.com for scheduled_dep and arr local time stating what time zone it is.')
+        print('dep_des.py fs_dep_arr_timezone_pull - SUCCESS at flightstats.com for scheduled_dep and arr local time stating what time zone it is.')
         # TODO: If this is unavailable, which has been the case latey- May 2024, use the other source for determining scheduled and actual departure and arriavl times
         bulk_flight_deet = {'flight_number': f'UA{flt_num}',            # This flt_num is probably misleading since the UA attached manually. Try pulling it from the flightstats web
                             'scheduled_departure_time': departure_time_zone,
@@ -81,11 +81,11 @@ class Pull_flight_info(Root_class):
             if scheduled_times: 
                 departure_scheduled_time = scheduled_times[0]
                 destination_scheduled_time = scheduled_times[1]
-                print('Found scheduled times using flight_stats.')
+                print('dep_des.py united_departure_destination_scrape. Found scheduled times using flight_stats.')
         except Exception as e:
             departure_ID, destination_ID = [None]*2
-            print('Unable united_departure_destination_scrape', e)
-        print('united_departure_destination_scrape for departure and destination: ', departure_ID, destination_ID)
+            print('dep_des.py Unable united_departure_destination_scrape', e)
+        print('dep_des.py united_departure_destination_scrape for departure and destination: ', departure_ID, destination_ID)
         return {'departure_ID': departure_ID,
                 'destination_ID': destination_ID,
                 'departure_scheduled_time': departure_scheduled_time,
@@ -196,7 +196,7 @@ class Pull_flight_info(Root_class):
                                                 'Maximum': max_delay,
                                                 'Trend': trend}})
 
-        print('Providing NAS final packet dict through nas_final_packet')
+        print('dep_des.py nas_final_packer. Providing NAS final packet dict.')
         return {'nas_departure_affected': departure_affected,
                 'nas_destination_affected': destination_affected}
 
@@ -218,7 +218,7 @@ class Pull_flight_info(Root_class):
         affected_airports = [i.text for i in root.iter('ARPT')]
         affected_airports = list(set(affected_airports))
         affected_airports.sort()
-        print('NAS affected airports:', affected_airports)
+        print('dep_des.py nas_pre_processing. NAS affected airports:', affected_airports)
 
         airport_closures = []
         closure = root.iter('Airport_Closure_List')
@@ -252,7 +252,7 @@ class Pull_flight_info(Root_class):
                     for a in x:
                         arr_dep_del_list.append([a.tag, a.text])
         
-        print('Done NAS pull through nas_packet_pull')
+        print('dep_des.py Done NAS pull through nas_packet_pull')
         return {'update_time': update_time,
                 'affected_airports': affected_airports,
                 'ground_stop_packet': ground_stop_packet, 
@@ -274,12 +274,12 @@ class Pull_flight_info(Root_class):
                 date = 20230505
             else:
                 date = str(self.date_time(raw=True))     # Root_class inheritance format yyyymmdd
-            print(flt_num,airport,date)
+            print("dep_des.py flight_view_gate_info",flt_num,airport,date)
             try:        # the airport coming in initially wouldnt take airport as arg since it lacks the initial info, hence sec rep info will have this airport ID
                 flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport[1:]}"
             except:
                 pass
-            print('Standard synchronoys fetch for gate info from:', flight_view)
+            print('dep_des.py flight_view_gate_info. Standard synchronoys fetch for gate info from:', flight_view)
             
             self.soup = self.request(flight_view)
             soup = self.soup
@@ -311,7 +311,7 @@ class Pull_flight_info(Root_class):
                 departure_gate = None
             if 'min' in arrival_gate:
                 arrival_gate = None
-            print('Success at pull_dep_des for gate info')
+            print('dep_des.py SUCCESS at pull_dep_des for gate info')
             return {'departure_gate': departure_gate,
                     'arrival_gate': arrival_gate,
                     }
@@ -319,7 +319,7 @@ class Pull_flight_info(Root_class):
         except Exception as e:
             empty_soup = {'departure_gate': 'None',
                           'arrival_gate': 'None'} 
-            print('!!!UNSUCCESSFUL at flight_view_gate_info for gate info, Error:',e)
+            print('dep_des !!!UNSUCCESSFUL at flight_view_gate_info for gate info, Error:',e)
             return empty_soup
 
         # typically 9th index of scripts is where departure and destination is.
