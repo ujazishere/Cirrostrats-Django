@@ -126,7 +126,7 @@ async def parse_query(request, main_query):
                     query = int(query)
                     if 1 <= query <= 35 or 40 <= query <= 136:              # Accounting for EWR gates for gate query
                         return gate_info(request, main_query=str(query))
-                    else:                                                   # Accounting for fligh number
+                    else:                                                 # Accounting for fligh number
                         return await flight_deets(request, airline_code=None, flight_number_query=query)
                 else:
                     if len(query) == 4 and query[0] == 'K':
