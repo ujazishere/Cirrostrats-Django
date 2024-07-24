@@ -43,8 +43,13 @@
         </thead>
         <tbody>
             <tr>
+                {% if departure_ID%}
                 <td class="table-cell">{{departure_ID}}</td>
                 <td class="table-cell text-align-right">{{destination_ID}}</td>
+                {% else%}
+                <td class="table-cell">{{origin}}</td>
+                <td class="table-cell text-align-right">{{destination}}</td>
+                {% endif %}
             </tr>
             
             <tr class="spacer-row">
@@ -58,8 +63,13 @@
             </tr>
 
             <tr class="gate-row">
+                {% if departure_gate %}
                 <td class="gate-cell">{{ departure_gate }}</td>
                 <td class="gate-cell">{{ arrival_gate }}</td>
+                {% else%}
+                <td class="gate-cell">{{ gate_origin }}</td>
+                <td class="gate-cell">{{ gate_destination }}</td>
+                {% endif %}
             </tr>
             
             <tr class="spacer-row">
@@ -122,8 +132,16 @@
 
                     <td style="width: 100%; text-align: left;">
                         <span style="float: left; width: 33%;">{{ scheduled_departure_time }}</span>
+                        {% if departure_ID %}
                         <span style="float: left; width: 33%; text-align: center;">{{ departure_ID }}</span>
+                        {% else%}
+                        <span style="float: left; width: 33%; text-align: center;">{{ origin }}</span>
+                        {% endif %}
+                        {% if departure_gate %}
                         <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }}</span>
+                        {% else%}
+                        <span style="float: right; width: 33%; text-align: right;">{{ gate_origin }}</span>
+                        {% endif %}
                     </td>
                     
 
@@ -233,8 +251,16 @@
                             <tr>
                                 <td style="width: 100%; text-align: left;">
                                     <span style="float: left; width: 33%;">{{scheduled_arrival_time}}</span>
+                                    
+                                    {% if destination_ID%}
                                     <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
+                                    {% else%}
+                                    <span style="float: left; width: 33%; text-align: center;">{{ destination }}</span>
+                                    {% if arrival_gate %}
                                     <span style="float: right; width: 33%; text-align: right;">{{ arrival_gate }}</span>
+                                    {% else%}
+                                    <span style="float: right; width: 33%; text-align: right;">{{ gate_destination }}</span>
+                                    {% endif %}
                                 </td>
                             
 

@@ -187,7 +187,7 @@ def gate_info(request, main_query):
 async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     # TODO COMMIT   DELETE bypass_fa LINE WHEN MAKING THE COMMIT
     bypass_fa = not run_lengthy_web_scrape
-    # bypass_fa = False        # To fetch and use flight_aware_data uncomment this. API intensive.
+    # bypass_fa = False        # To fetch and use flight_aware_data make this False. API intensive.
     bulk_flight_deets = {}
 
     sl = Source_links_and_api()
