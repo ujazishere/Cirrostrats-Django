@@ -63,7 +63,7 @@
             </tr>
 
             <tr class="gate-row">
-                {% if departure_gate %}
+                {% if departure_gate or arrival_gate %}
                 <td class="gate-cell">{{ departure_gate }}</td>
                 <td class="gate-cell">{{ arrival_gate }}</td>
                 {% else%}
@@ -256,6 +256,7 @@
                                     <span style="float: left; width: 33%; text-align: center;">{{ destination_ID }}</span>
                                     {% else%}
                                     <span style="float: left; width: 33%; text-align: center;">{{ destination }}</span>
+                                    {% endif %}
                                     {% if arrival_gate %}
                                     <span style="float: right; width: 33%; text-align: right;">{{ arrival_gate }}</span>
                                     {% else%}
