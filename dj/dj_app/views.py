@@ -7,7 +7,7 @@ from django.views.decorators.http import require_GET
 # from concurrent.futures import ThreadPoolExecutor, as_completed           # Causing issues on AWS
 from django.shortcuts import render
 from django.http import HttpResponse
-from .root.dummy_files_call import dummy_imports
+from .root.test_data_imports import test_data_imports
 from .root.gate_checker import Gate_checker
 from .root.root_class import Root_class, Pull_class, Source_links_and_api
 from .root.gate_scrape import Gate_scrape_thread
@@ -432,9 +432,9 @@ def live_map(request):
 
 
 def dummy(request):
-    dummy_imports_tuple = dummy_imports()
+    test_data_imports_tuple = test_data_imports()
 
-    bulk_flight_deets = dummy_imports_tuple[0]
+    bulk_flight_deets = test_data_imports_tuple[0]
     print(bulk_flight_deets.keys())
 
     # within dummy
@@ -458,8 +458,8 @@ def nas_data(request, airport):
     airport = 'KEWR'        # declaring it regardless
     sleep(0.5)
 
-    dummy_imports_tuple = dummy_imports()
-    bulk_flight_deets = dummy_imports_tuple[0]
+    test_data_imports_tuple = test_data_imports()
+    bulk_flight_deets = test_data_imports_tuple[0]
 
     data_return = bulk_flight_deets['nas_departure_affected']
     # print(data_return.keys())
@@ -475,8 +475,8 @@ def weather_data(request, airport):
     airport = 'KEWR'        # declaring it regardless
     sleep(1)
     
-    dummy_imports_tuple = dummy_imports()
-    bulk_flight_deets = dummy_imports_tuple[0]
+    test_data_imports_tuple = test_data_imports()
+    bulk_flight_deets = test_data_imports_tuple[0]
 
     weather_extracts = {}
     weather_extracts['dep_weather'] = {
@@ -522,8 +522,8 @@ def summary_box(request, airport):
     airport = 'KEWR'        # declaring it regardless
     sleep(1.5)
 
-    dummy_imports_tuple = dummy_imports()
-    bulk_flight_deets = dummy_imports_tuple[0]
+    test_data_imports_tuple = test_data_imports()
+    bulk_flight_deets = test_data_imports_tuple[0]
 
     data_return = bulk_flight_deets['nas_departure_affected']
     # print(data_return.keys())
@@ -541,7 +541,7 @@ def data_v(request, airport):
     print('data_v called')
     print('within data_v', request, airport)
     airport = 'KEWR'        # declaring it regardless
-    bulk_flight_deets = dummy_imports()
+    bulk_flight_deets = test_data_imports()
 
     # return render(request, 'weather_info.html')
     return JsonResponse(bulk_flight_deets)

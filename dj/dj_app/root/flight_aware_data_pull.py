@@ -198,12 +198,83 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None, ret
         filed_ete = flights[i]['filed_ete']
         filed_altitude = flights[i]['filed_altitude']
     """
-    
+    """
+        Keys and vals provided by flightaware
+        [{'ident': 'UAL1411',
+        'ident_icao': 'UAL1411',
+        'ident_iata': 'UA1411',
+        'actual_runway_off': None,
+        'actual_runway_on': None,
+        'fa_flight_id': 'UAL1411-1722246510-fa-1082p',
+        'operator': 'UAL',
+        'operator_icao': 'UAL',
+        'operator_iata': 'UA',
+        'flight_number': '1411',
+        'registration': 'N37554',
+        'atc_ident': None,
+        'inbound_fa_flight_id': 'UAL2729-1722246555-fa-990p',
+        'codeshares': ['ACA3128', 'DLH7805'],
+        'codeshares_iata': ['AC3128', 'LH7805'],
+        'blocked': False,
+        'diverted': False,
+        'cancelled': False,
+        'position_only': False,
+        'origin': {'code': 'KCLE',
+        'code_icao': 'KCLE',
+        'code_iata': 'CLE',
+        'code_lid': 'CLE',
+        'timezone': 'America/New_York',
+        'name': 'Cleveland-Hopkins Intl',
+        'city': 'Cleveland',
+        'airport_info_url': '/airports/KCLE'},
+        'destination': {'code': 'KEWR',
+        'code_icao': 'KEWR',
+        'code_iata': 'EWR',
+        'code_lid': 'EWR',
+        'timezone': 'America/New_York',
+        'name': 'Newark Liberty Intl',
+        'city': 'Newark',
+        'airport_info_url': '/airports/KEWR'},
+        'departure_delay': 0,
+        'arrival_delay': 0,
+        'filed_ete': 4740,
+        'foresight_predictions_available': False,
+        'scheduled_out': '2024-07-31T21:20:00Z',
+        'estimated_out': '2024-07-31T21:20:00Z',
+        'actual_out': None,
+        'scheduled_off': '2024-07-31T21:30:00Z',
+        'estimated_off': '2024-07-31T21:30:00Z',
+        'actual_off': None,
+        'scheduled_on': '2024-07-31T22:49:00Z',
+        'estimated_on': '2024-07-31T22:49:00Z',
+        'actual_on': None,
+        'scheduled_in': '2024-07-31T22:59:00Z',
+        'estimated_in': '2024-07-31T22:59:00Z',
+        'actual_in': None,
+        'progress_percent': 0,
+        'status': 'Scheduled',
+        'aircraft_type': 'B39M',
+        'route_distance': 404,
+        'filed_airspeed': 267,
+        'filed_altitude': None,
+        'route': None,
+        'baggage_claim': None,
+        'seats_cabin_business': None,
+        'seats_cabin_coach': None,
+        'seats_cabin_first': None,
+        'gate_origin': 'C24',
+        'gate_destination': None,
+        'terminal_origin': None,
+        'terminal_destination': 'A',
+        'type': 'Airline'},
+    """
+
     if flights:     # sometimes flights returns empty list.
         for i in range(len(flights)):      # There are typically 15 of these for multiple dates
             scheduled_out_raw_fa = flights[i]['scheduled_out']
             date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time
             if flights[i]['route']:
+                ident_icao = flights[i]['ident_icao']
                 origin = flights[i]['origin']['code_icao']
                 destination = flights[i]['destination']['code_icao']
                 registration = flights[i]['registration']
@@ -258,9 +329,11 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None, ret
 
 
     return {
+            'ident_icao': ident_icao,
             'origin':origin, 
             'destination':destination, 
             'registration':registration, 
+            'date_out': date_out,
             'scheduled_out':scheduled_out, 
             'estimated_out':estimated_out, 
             'scheduled_in':scheduled_in, 
