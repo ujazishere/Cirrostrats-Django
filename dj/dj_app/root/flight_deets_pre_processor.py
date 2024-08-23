@@ -6,6 +6,40 @@ import json
 import json
 flt_info = Pull_flight_info()
 
+# Jupyter Code
+"""
+from dj.dj_app.root.root_class import Root_class, Pull_class, Source_links_and_api
+from dj.dj_app.root.flight_deets_pre_processor import resp_initial_returns,resp_sec_returns,response_filter
+from dj.dj_app.root.dep_des import Pull_flight_info
+flight_number_query = "414"
+flight_number = "414"
+airline_code = "UA"
+sl = Source_links_and_api()
+pc = Pull_class(airline_code=airline_code,flt_num=flight_number_query)
+flt_info = Pull_flight_info()
+
+links = [sl.ua_dep_dest_flight_status(flight_number_query), sl.flight_stats_url(flight_number_query)]
+resp_dict = await pc.async_pull(links)          # Actual fetching happens here.
+resp_initial = resp_initial_returns(resp_dict=resp_dict, airline_code=airline_code, flight_number_query=flight_number_query)
+
+for url,resp in resp_dict.items():
+    if "flight-status.com" in str(url):
+        print("11.resp_intitial_return flight-status")
+        soup = pc.requests_processing(resp,bs=True)
+        print("11Sending raw data to unuted_departure_destination_scrape for cleaning")
+        united_dep_dest = flt_info.united_departure_destination_scrape(pre_process=soup)
+        if not united_dep_dest:
+            united_dep_dest = None
+        print("11.united_dep_dest",united_dep_dest)
+    elif "flightstats.com" in str(url):
+        print("22.resp_intitial_return flightstats.com")
+        soup = pc.requests_processing(resp,bs=True)
+        print("22Sending raw data to fs_dep_arr_timezone_pull for timezone data cleaning")
+        flight_stats_arr_dep_time_zone = flt_info.fs_dep_arr_timezone_pull(flt_num_query=flight_number_query,pre_process=soup)
+        # print(flight_stats_arr_dep_time_zone)
+
+
+"""
 
 def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
     # response from the async pull is fed here for cleaning. This function will split all the associated data and return it back to the views.py flight_deet function
@@ -15,10 +49,11 @@ def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
     for url,resp in resp_dict.items():
         if "flight-status.com" in str(url):
             print("11.resp_intitial_return flight-status")
-            soup = pc.requests_processing(resp,bs=True)
+            soup_fs = pc.requests_processing(resp,bs=True)
             print("11Sending raw data to unuted_departure_destination_scrape for cleaning")
-            united_dep_dest = flt_info.united_departure_destination_scrape(pre_process=soup)
+            united_dep_dest = flt_info.united_departure_destination_scrape(pre_process=soup_fs)
             if not united_dep_dest:
+                # TODO: This None was causing issues earlier since it cannot be mapped as a dictionary. need a dictionary none here. Found a temp fix anyhow.
                 united_dep_dest = None
             print("11.united_dep_dest",united_dep_dest)
         elif "flightstats.com" in str(url):
@@ -64,15 +99,16 @@ def resp_sec_returns(resp_dict,dep_airport_id,dest_airport_id):
             dest_datis = json.loads(resp)         # Apparently this is being returned within a list and is accounted for.
 
 
-        elif f"flightview.com" in str(url):
-            # Gate fetch
+        elif f"flightview.com" in str(url):        # Gate fetch
+            # This is just not working. async return is way different than organic requests return.
+            # Both are html but different data. Tried different likes, different soup type, bs4.prettify and still no joy! Move on find another way.
+
             # This is just for testing
             # fv_test = r"C:\Users\ujasv\OneDrive\Desktop\codes\Cirrostrats\dj\fv_test.pkl"
             # with open(fv_test, 'wb') as f:
             #     resp = pickle.dump(resp,f)
             # gate_info = pc.requests_processing(resp,bs=True)
-            pass    # This is just not working. async return is way different than organic requests return.
-            # Both are html but different data. Tried different likes, different soup type, bs4.prettify and still no joy! Move on find another way.
+            pass
 
             
         elif f"faa.gov/api/airport-status-information" in str(url):

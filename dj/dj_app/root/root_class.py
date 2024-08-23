@@ -2,7 +2,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 from bs4 import BeautifulSoup as bs4
-from datetime import datetime
+import datetime as dt
 import pytz
 import pickle
 import smtplib
@@ -46,14 +46,15 @@ class Root_class():
         
     def date_time(self, raw=None, viewable=None, raw_utc=None):
         eastern = pytz.timezone('US/eastern')
-        now = datetime.now(eastern)
+        now = dt.datetime.now(eastern)
         latest_time = now.strftime("%#I:%M%p, %b %d.")
         if raw_utc:
             if raw_utc == 'HM':
-                return datetime.utcnow().strftime('%Y%m%d%H%M')
+                yyyymmddhhmm = dt.datetime.now(dt.UTC).strftime("%Y%m%d%H%M")
+                return yyyymmddhhmm
             else:
-                raw_UTC_instant = str(datetime.utcnow())[:10].replace('-','')  # Format is YYYYMMDD
-                return raw_UTC_instant
+                yyyymmdd = dt.datetime.now(dt.UTC).strftime("%Y%m%d")
+                return yyyymmdd
         elif raw:         # format yyyymmdd
             return now.strftime('%Y%m%d')       # date format yyyymmdd
         elif viewable:
@@ -81,7 +82,7 @@ class Root_class():
 
     def dt_conversion(self, data):
         # converts date and time string into a class object 
-        return datetime.strptime(data, "%I:%M%p, %b%d")
+        return dt.datetime.strptime(data, "%I:%M%p, %b%d")
 
 
     def exec(self, input1, multithreader):

@@ -128,7 +128,7 @@ async def parse_query(request, main_query):
                     query = int(query)
                     if 1 <= query <= 35 or 40 <= query <= 136:              # Accounting for EWR gates for gate query
                         return gate_info(request, main_query=str(query))
-                    else:                                                   # Accounting for fligh number
+                    else:                                                   # Accounting for flight number
                         print("INITIATING flight_deets FUNCTION.")
                         return await flight_deets(request, airline_code=None, flight_number_query=query)
                 else:
@@ -185,8 +185,8 @@ def gate_info(request, main_query):
 
 
 async def flight_deets(request,airline_code=None, flight_number_query=None, ):
-    # TODO COMMIT   DELETE bypass_fa LINE WHEN MAKING THE COMMIT
-    bypass_fa = not run_lengthy_web_scrape
+    # TODO COMMENT OUT OR DELETE bypass_fa LINE WHEN MAKING THE COMMIT
+    bypass_fa = not run_lengthy_web_scrape      # when run_lengthy_web_scrape is on this is False activating flight_aware fetch.
     # bypass_fa = False        # To fetch and use flight_aware_data make this False. API intensive.
     bulk_flight_deets = {}
 
@@ -203,17 +203,23 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     resp_initial = resp_initial_returns(resp_dict=resp_dict, airline_code=airline_code, flight_number_query=flight_number_query)
 
     print('DONE WITH resp_initial_returns: ', resp_initial)
+    # TODO: fix a better fix here. This was just a quick fix.
+    # This origin and destination is from flight_stats since it was not found through flight_aware or united_dep_dest. This is just a temperory fix.
     united_dep_dest, flight_stats_arr_dep_time_zone, fa_data = resp_initial
+    if not united_dep_dest:
+        united_dep_dest = {}
+        united_dep_dest['departure_ID'], united_dep_dest['destination_ID'] = "K"+flight_stats_arr_dep_time_zone['origin_fs'], "K"+flight_stats_arr_dep_time_zone['destination_fs']
+        print("No united_dep_des! Making fs origin and destination as United_dep_des",united_dep_dest)
 
     # Second async pull and processing
     if fa_data['origin']:
-        print(555,"Yes flightaware data")
         origin, destination = fa_data['origin'], fa_data['destination']
+        print(555,"Yes flightaware data", origin,destination)
     elif united_dep_dest and united_dep_dest.get('departure_ID'):
-        print(555,"No flightaware data")
         origin, destination = united_dep_dest['departure_ID'], united_dep_dest['destination_ID']
+        print(555,"No flightaware data, Using united_dep_dest",origin,destination)
     else:
-        print(555, 'No Departure/Destination ID')
+        print(666, 'No Departure/Destination ID',)
         bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, **fa_data}
         return render(request, 'flight_deet.html', bulk_flight_deets)
 
