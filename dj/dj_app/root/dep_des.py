@@ -45,9 +45,9 @@ class Pull_flight_info(Root_class):
         fs_time_zone = soup_fs.select('[class*="TimeGroupContainer"]')
         if fs_time_zone and Ticket_Card:
             origin_fs = Ticket_Card[0]
-            origin_fs = origin_fs.select('[class*="Airport"]')[0].text
+            origin_fs = "K"+origin_fs.select('[class*="Airport"]')[0].text
             destination_fs = Ticket_Card[1]
-            destination_fs = destination_fs.select('[class*="Airport"]')[0].text
+            destination_fs = "K"+destination_fs.select('[class*="Airport"]')[0].text
             
             departure_time_zone = fs_time_zone[0].get_text()        #  format is HH:MM XXX timezone(eg.EST)
             departure_time_zone = departure_time_zone[9:18]

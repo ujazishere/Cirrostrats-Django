@@ -208,7 +208,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     united_dep_dest, flight_stats_arr_dep_time_zone, fa_data = resp_initial
     if not united_dep_dest:
         united_dep_dest = {}
-        united_dep_dest['departure_ID'], united_dep_dest['destination_ID'] = "K"+flight_stats_arr_dep_time_zone['origin_fs'], "K"+flight_stats_arr_dep_time_zone['destination_fs']
+        united_dep_dest['departure_ID'], united_dep_dest['destination_ID'] = flight_stats_arr_dep_time_zone['origin_fs'], flight_stats_arr_dep_time_zone['destination_fs']
         print("No united_dep_des! Making fs origin and destination as United_dep_des",united_dep_dest)
 
     # Second async pull and processing

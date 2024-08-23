@@ -55,6 +55,7 @@ def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
             if not united_dep_dest:
                 # TODO: This None was causing issues earlier since it cannot be mapped as a dictionary. need a dictionary none here. Found a temp fix anyhow.
                 united_dep_dest = None
+                print('united_dep_dest will be None')
             print("11.united_dep_dest",united_dep_dest)
         elif "flightstats.com" in str(url):
             print("22.resp_intitial_return flightstats.com")
