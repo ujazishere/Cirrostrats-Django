@@ -2,7 +2,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 from bs4 import BeautifulSoup as bs4
-from datetime import datetime
+import datetime as dt
 import pytz
 import pickle
 import smtplib
@@ -16,22 +16,22 @@ class Root_class():
             pass
 
 
-    async def send_email(self, body_to_send):
+    def send_email(self, body_to_send):
         try: 
             from .Switch_n_auth import EC2_location
             full_email = f"Subject: {EC2_location}\n\n{body_to_send}"
         except Exception as e:
             print("error in Switch_n_auth",e)
-            print('EC2_location within dj\dj_app\root\Switch_n_auth.py was not found. Need the file and the variable as string.')
+            print(r'EC2_location within dj\dj_app\root\Switch_n_auth.py was not found. Need the file and the variable as string.')
             full_email = f"Subject: UNKNOWN Local\n\n{body_to_send}"
         smtp_server = "smtp.gmail.com"
         smtp_port = 587  # Use 587 for TLS port
         smtp_user = "publicuj@gmail.com"
         smtp_password = "dsxi rywz jmxn qwiz"
         # Test
-        to_email = ['ujasvaghani@gmail.com',]
+        # to_email = ['ujasvaghani@gmail.com',]
         # Actual
-        # to_email = ['ujasvaghani@gmail.com', 'ismailsakhani879@gmail.com']
+        to_email = ['ujasvaghani@gmail.com', 'ismailsakhani879@gmail.com']
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             # Start TLS for security
             server.starttls()
@@ -46,14 +46,15 @@ class Root_class():
         
     def date_time(self, raw=None, viewable=None, raw_utc=None):
         eastern = pytz.timezone('US/eastern')
-        now = datetime.now(eastern)
+        now = dt.datetime.now(eastern)
         latest_time = now.strftime("%#I:%M%p, %b %d.")
         if raw_utc:
             if raw_utc == 'HM':
-                return datetime.utcnow().strftime('%Y%m%d%H%M')
+                yyyymmddhhmm = dt.datetime.now(dt.UTC).strftime("%Y%m%d%H%M")
+                return yyyymmddhhmm
             else:
-                raw_UTC_instant = str(datetime.utcnow())[:10].replace('-','')  # Format is YYYYMMDD
-                return raw_UTC_instant
+                yyyymmdd = dt.datetime.now(dt.UTC).strftime("%Y%m%d")
+                return yyyymmdd
         elif raw:         # format yyyymmdd
             return now.strftime('%Y%m%d')       # date format yyyymmdd
         elif viewable:
@@ -81,7 +82,7 @@ class Root_class():
 
     def dt_conversion(self, data):
         # converts date and time string into a class object 
-        return datetime.strptime(data, "%I:%M%p, %b%d")
+        return dt.datetime.strptime(data, "%I:%M%p, %b%d")
 
 
     def exec(self, input1, multithreader):
@@ -329,7 +330,7 @@ class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
 
 
     async def async_pull(self, list_of_links:list):
-
+        print('***** async_pull in progress...')
         async def get_tasks(session):
             tasks = []
             for url in list_of_links:
@@ -358,6 +359,7 @@ class Pull_class(Root_class):           # TODO: Change this name to Fetch_class
                     resp_return_list[resp.url] = response_output
                 return resp_return_list
 
+        print("*** async pull completion")
         #1 Temporary. Works when function calling within jupyter.
         return await main()         
 

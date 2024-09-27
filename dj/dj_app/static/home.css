@@ -3,6 +3,44 @@ body {
   padding: 0;
 }
 
+
+
+.changelog-animated {
+  animation: pulse 2s infinite;
+  position: fixed;
+  bottom: 40px;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  overflow: hidden; /* Hide any overflowing content */
+  white-space: wrap; /* Prevent text from wrapping */
+  text-overflow: ellipsis; /* Show ellipsis (...) for overflowed text */
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px #804f4c;
+  }
+  50% {
+    box-shadow: 0 0 20px #804f4c;
+  }
+}
+
+.changelog-animated h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #804f4c;
+}
+
+
+
+
+
+
+
 /* this is a styling for random text spinner */
 
     .scrolling-container {

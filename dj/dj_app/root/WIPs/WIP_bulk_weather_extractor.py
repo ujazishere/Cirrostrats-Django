@@ -1,5 +1,7 @@
 """
-from dj.dj_app.root.WIP_bulk_weather_extractor import Bulk_weather_extractor
+Safe to copy all this commented code and paste for bullk metar, taf and datis fetch and save
+
+from dj.dj_app.root.WIPs.WIP_bulk_weather_extractor import Bulk_weather_extractor
 
 # For use in Jupyter
 we = Bulk_weather_extractor()
@@ -25,12 +27,15 @@ async_pull_taf = await we.parallel_scrape(taf_pull=True)
 # Automatically saves bulk_taf file name with current UTC YYYYMMDDHHMM 
 we.hard_write_dumper("bulk_taf",we.bulky_taf)
 
+# DATIS Extractor: Use in jupyter interactive. For use in terminal just change it to False 
+a = await we.datis_extractor(jupyter=True)
+
 
 """
 
 import asyncio
 import aiohttp
-from datetime import datetime
+import datetime as dt
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pickle
@@ -226,7 +231,7 @@ class Bulk_weather_extractor:
             return tasks
 
         async def main():
-            print("Initiaing the fetch now...")
+            print("Initiating the fetch now...")
             async with aiohttp.ClientSession() as session:
                 tasks = await get_tasks(session)
                 weather_resp = []
@@ -288,6 +293,59 @@ class Bulk_weather_extractor:
         print('exported as:', file_name)
         
 
+    async def datis_extractor(self, jupyter):
+        print('Initiating DATIS extractor')
+        all_datis_airports_path = r'c:\users\ujasv\onedrive\desktop\codes\cirrostrats\all_datis_airports.pkl'
+        with open(all_datis_airports_path, 'rb') as f:
+            all_datis_airports = pickle.load(f)
+        
+        # Read this for async chat https://chat.openai.com/share/24a00dc6-1293-4263-9c11-0c2b188c0f7a
+        async def get_tasks(session):
+            tasks = []
+            for airport_id in all_datis_airports:
+                url = f"https://datis.clowd.io/api/{airport_id}"
+                tasks.append(asyncio.create_task(session.get(url)))
+            return tasks
+        
+        async def main():
+            async with aiohttp.ClientSession() as session:
+                tasks = await get_tasks(session)
+                # Upto here the tasks are created which is very light.
+        
+                # Actual pull work is done using as_completed 
+                datis_resp = []
+                for resp in asyncio.as_completed(tasks):        # use .gather() instead of .as_completed for background completion
+                    resp = await resp           # Necessary operation. Have to await it to get results.
+                    jj = await resp.json()
+                    datis_raw = 'n/a'
+                    if type(jj) == list and 'datis' in jj[0].keys():
+                        datis_raw = jj[0]['datis']
+                    datis_resp.append(datis_raw)
+                return datis_resp
+        
+        if jupyter:
+            # This will work on jupyter interactive. Use .ensure_future instead of .run and await it:
+            all_76_datis = await asyncio.ensure_future(main()) 
+        elif __name__ == "__main__":
+            # This .run() works when calling the file from terminal but wont work in jupyter interactive. 
+            all_76_datis = asyncio.run(main())
+
+        
+        
+        
+        # extract datis with dates in the filename
+        yyyymmddhhmm = dt.datetime.now(dt.UTC).strftime("%Y%m%d%H%M")
+        path = rf'c:\users\ujasv\onedrive\desktop\pickles\datis_info_stack_{yyyymmddhhmm}.pkl'
+        print('Total extracted:', len(all_76_datis),)
+        print('Saved:', path,)
+        print('Example at index 0:', all_76_datis[0])
+        
+        # **********CAUTION!!! HARD WRITE***************
+        with open(path, 'wb') as f:
+            pickle.dump(all_76_datis,f)
+        
+        # return all_76_datis
+        
 
 
 """

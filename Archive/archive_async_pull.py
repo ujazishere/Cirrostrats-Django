@@ -1,7 +1,7 @@
 import asyncio, aiohttp
 # from dj.dj_app.root.root_class import Root_class
 import requests
-from .root_class import Root_class
+from ..dj.dj_app.root.root_class import Root_class
 
 class pull_stack:
     def __init__(self, ) -> None:
