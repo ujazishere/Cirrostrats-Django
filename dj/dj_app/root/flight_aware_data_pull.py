@@ -301,9 +301,15 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None, ret
                 estimated_out = re.search(r"T(\d{2}:\d{2})", estimated_out).group(1).replace(":","") + "Z"
 
                 scheduled_in = flights[i]['scheduled_in']
-                scheduled_in = re.search(r"T(\d{2}:\d{2})", scheduled_in).group(1).replace(":","") + "Z"
+                if scheduled_in:
+                    scheduled_in = re.search(r"T(\d{2}:\d{2})", scheduled_in).group(1).replace(":","") + "Z"
+                else:
+                    scheduled_in = None
                 estimated_in = flights[i]['estimated_in']
-                estimated_in = re.search(r"T(\d{2}:\d{2})", estimated_in).group(1).replace(":","") + "Z"
+                if estimated_in:
+                    estimated_in = re.search(r"T(\d{2}:\d{2})", estimated_in).group(1).replace(":","") + "Z"
+                else:
+                    estimated_in = None
 
                 route = flights[i]['route']
                 filed_altitude =  "FL" + str(flights[i]['filed_altitude'])
