@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <h1>Check Weather, Gate And Flight Information.</h1>
@@ -39,13 +40,25 @@
         <h4>We're actively working on restoring full functionality.</h4>
         <h4>Last updated: Sept 27th 2024</h4>
       </div>             
-      <div id="banner" class="banner">
-        <small class="text-white">Spot issues? Report them to improve the site.</small>
-    </div>
+<!--
+<div id="banner" class="banner">
+    <small class="text-white">Spot issues? Report them to improve the site.</small>
+</div>
+-->
 
-    <div class="support">
-        <h4><a href="tel:+12015099485" style="color: inherit; text-decoration: none;">Click here for Support</a></h4>        
+
+    <div class="support" style="text-align: center;">
+        <h4 style="font-size: 18px;">
+            <a href="tel:+12015099485" style="color: inherit; text-decoration: none; margin-right: 15px;">
+                <i class="fas fa-phone-alt" style="margin-right: 8px;"></i>Call for Support
+            </a> 
+            or 
+            <a href="sms:+12015099485" style="color: inherit; text-decoration: none; margin-left: 15px;">
+                <i class="fas fa-comment-alt" style="margin-right: 8px;"></i>Text for Support
+            </a>
+        </h4>
     </div>
+    
 </body>
 </html>
 <script type="text/javascript" src="{% static 'home.js' %}"></script>
