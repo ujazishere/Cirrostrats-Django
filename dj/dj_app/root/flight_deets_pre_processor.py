@@ -69,8 +69,8 @@ def resp_initial_returns(resp_dict: dict, airline_code, flight_number_query,):
             print("33.resp_intitial_return flightaware")
             fa_return = json.loads(resp)
             fa_return = fa_return['flights']
-            print("33Sending data to fa_data_pull for cleaning.")
-            flight_aware_data = flt_info.fa_data_pull(airline_code=airline_code, flt_num=flight_number_query,pre_process=fa_return)
+            print("33Sending raw flightAware data to fa_data_pull, flightAware returns:",fa_return)
+            flight_aware_data = flt_info.fa_data_pull(airline_code=airline_code, flt_num=flight_number_query, pre_process=fa_return)
         elif "aviationstack" in str(url):       #TODO: aviation stack needs work. That is another source to cross-check with flightaware and others. Design the logic to cross-check and verify.
             print("resp_intitial_return aviationstack:", resp)
             av_stack = json.loads(resp)

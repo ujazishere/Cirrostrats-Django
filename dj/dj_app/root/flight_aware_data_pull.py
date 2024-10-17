@@ -15,17 +15,18 @@ import re
 
 class Flight_aware_pull(Root_class):
     def __init__(self) -> None:
-        attrs = ['origin','destination','registration',
+        attrs = ['ident_icao','origin','destination','registration',
                  'scheduled_out','estimated_out','scheduled_in',
                  'estimated_in','route','filed_altitude','filed_ete','sv',]
         
         self.attrs = dict(zip(attrs,[None]*len(attrs)))
         
         self.current_utc = self.date_time(raw_utc=True)
-        print("null_flightaware_attrs")
+        print("initialized null_flightaware_attrs")
 
     def initial_pull(self, airline_code=None, flt_num=None):
-        apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # New Key from Ismail
+        # apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # New Key from Ismail
+        apiKey = "mAcMRTxklbWPhTciyaUD9FtCz88klfxk"         # ujasvaghani
         apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
         auth_header = {'x-apikey':apiKey}
         # TODO: Instead of getting all data make specific data requests.(optimize queries). Cache updates.
@@ -47,7 +48,9 @@ class Flight_aware_pull(Root_class):
         response = requests.get(apiUrl + f"flights/{airline_code}{flt_num}", headers=auth_header) 
         
         if response.status_code == 200:
-            return response.json()['flights']
+            results = response.json()['flights']
+            print("FLIGHT_AWARE RESPONSE STATUS CODE 200!!!", results)
+            return results 
         else:
             print('FLIGHT_AWARE RESPONSE STATUS CODE NOT 200!!!', response.status_code)
             return None    
@@ -271,17 +274,27 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None, ret
 
     if flights:     # sometimes flights returns empty list.
         for i in range(len(flights)):      # There are typically 15 of these for multiple dates
-            scheduled_out_raw_fa = flights[i]['scheduled_out']
-            date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time
             if flights[i]['route']:
-                ident_icao = flights[i]['ident_icao']
-                origin = flights[i]['origin']['code_icao']
-                destination = flights[i]['destination']['code_icao']
-                registration = flights[i]['registration']
-                terminal_origin = flights[i]["terminal_origin"]
-                terminal_destination = flights[i]["terminal_destination"]
-                gate_origin = flights[i]["gate_origin"]
-                gate_destination = flights[i]["gate_destination"]
+                scheduled_out_raw_fa = flights[i]['scheduled_out']
+                date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time
+                ident_icao = flights[i].get('ident_icao', 'Unknown')
+                origin = flights[i].get('origin', {}).get('code_icao', 'Unknown')
+                destination = flights[i].get('destination', {}).get('code_icao', 'Unknown')
+                registration = flights[i].get('registration', 'Unknown')
+                terminal_origin = flights[i].get('terminal_origin', 'Unknown')
+                terminal_destination = flights[i].get('terminal_destination', 'Unknown')
+                gate_origin = flights[i].get('gate_origin', 'Unknown')
+                gate_destination = flights[i].get('gate_destination', 'Unknown')
+               
+            #    Old way of doing it which throws error.
+                # ident_icao = flights[i]['ident_icao']
+                # origin = flights[i]['origin']['code_icao']
+                # destination = flights[i]['destination']['code_icao']
+                # registration = flights[i]['registration']
+                # terminal_origin = flights[i]["terminal_origin"]
+                # terminal_destination = flights[i]["terminal_destination"]
+                # gate_origin = flights[i]["gate_origin"]
+                # gate_destination = flights[i]["gate_destination"]
 
                 scheduled_out_raw_fa = flights[i]['scheduled_out']
                 date_out = scheduled_out_raw_fa[:10].replace('-', '')       # This needs to be checked with current UTC time
@@ -327,33 +340,35 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None, ret
 
                 print('\nSuccessfully fetched and processed Flight Aware data')
                 break
-
-
     else:
         print('flight_aware_data_pull.pull FLIGHT_AWARE_DATA UNSUCCESSFUL, no `flights` available')
         return fa_object.attrs
 
-
-    return {
-            'ident_icao': ident_icao,
-            'origin':origin, 
-            'destination':destination, 
-            'registration':registration, 
-            'date_out': date_out,
-            'scheduled_out':scheduled_out, 
-            'estimated_out':estimated_out, 
-            'scheduled_in':scheduled_in, 
-            'estimated_in':estimated_in, 
-            "terminal_origin": terminal_origin,
-            "terminal_destination": terminal_destination,
-            "gate_origin": gate_origin,
-            "gate_destination": gate_destination,
-            "terminal_origin": terminal_origin,
-            'filed_altitude':filed_altitude, 
-            'filed_ete':filed_ete,
-            'route': route,
-            'sv': sv,
-                    }
-                       
-    
+    try:
+        return {
+                'ident_icao': ident_icao,
+                'origin':origin, 
+                'destination':destination, 
+                'registration':registration, 
+                'date_out': date_out,
+                'scheduled_out':scheduled_out, 
+                'estimated_out':estimated_out, 
+                'scheduled_in':scheduled_in, 
+                'estimated_in':estimated_in, 
+                "terminal_origin": terminal_origin,
+                "terminal_destination": terminal_destination,
+                "gate_origin": gate_origin,
+                "gate_destination": gate_destination,
+                "terminal_origin": terminal_origin,
+                'filed_altitude':filed_altitude, 
+                'filed_ete':filed_ete,
+                'route': route,
+                'sv': sv,
+                        }
+    except Exception as e:
+        print('flight_aware_data_pull.pull FLIGHT_AWARE_DATA UNSUCCESSFUL, no `flights` available')
+        print(e)
+        return fa_object.attrs
+                        
+        
 

@@ -146,7 +146,8 @@ class Source_links_and_api:
         date = Root_class().date_time(raw=True)
         
         base_url = "https://www.flightstats.com/v2/flight-tracker/"
-        return f"{base_url}UA/{flight_number}?year={date[:4]}&month={date[4:6]}&date={date[-2:]}"
+        url = f"{base_url}UA/{flight_number}?year={date[:4]}&month={date[4:6]}&date={date[-2:]}"
+        return url
 
 
     def aviation_stack(self,airline_code, flight_number):
@@ -168,13 +169,14 @@ class Source_links_and_api:
         
         url = f"{base_url}?access_key={access_key}&flight_icao={flight_icao}"
         
-        return {url: {}}  
+        return url
 
 
     def flight_aware_w_auth(self,airline_code, flight_number):
         if not airline_code:
             airline_code = "UA"
-        fa_apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # New Key from Ismail
+        # fa_apiKey = "mAcMRTxklbWPhTciyaUD9FtCz88klfxk"      # ujasvaghani@yahoo.com on flight
+        fa_apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # Ismail key
         fa_auth_header = {'x-apikey':fa_apiKey}
         fa_base_apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
         fa_url = fa_base_apiUrl + f"flights/{airline_code}{flight_number}"
