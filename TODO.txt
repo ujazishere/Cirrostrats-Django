@@ -17,6 +17,8 @@ Practice readibility and simplicity. Aviod code duplication. Include description
 
 **UV:   
         ***VVI*** clean your shit its too messy! Need to separate out and organize code efficiently.
+            crawl for all flight numbers and their associated information from flight-stats.com
+            
             clean up dummy file calls. Code is too complex and intimidating and hard to decode.
             Need redundency for dep and destination pull. current one is unstable giving errors during async.
             Priority: Each individual scrape should be separate function in views. also separate scrape from api fetch.
@@ -31,7 +33,19 @@ Practice readibility and simplicity. Aviod code duplication. Include description
             Fix bug that takes in 2 flight routes for singular flight number.
                 Add option to scroll left and right for dates.
                 Load data incrementally so as to avoid waiting for all data to be fetched.
-            
+
+        Add these query words and functionality to chat :
+        weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf', 'weather', 'metar', 'metar ']
+
+        "{gate} for {partial/complete airport ID/name}" = "{gate} {airport}"
+        "{gate} for {partial/complete airport name}" = "{gate} {airport}"   
+        "weather for {partial/complete airport} = "{metar} {airport}"
+        "{airport_id} {gate}" = "{gate} {airport}"
+        "{flight number} weather" = "{metar} {departure airport} {destination airport}"
+        "{flight number} destination" = return destination or destination
+        "{flight number} not, notam, notams" = return notams for departure and destination. include ability to return just pertinant information.
+
+
         ***Separate logic and implement simple machine learning techniques to detect certain words.
         clean up code. clean up the mess: separate scraping, add notes all along
         weather sources should show aviationweather link on each metar/taf/datis: https://aviationweather.gov/data/metar/?id=KEWR&hours=0
@@ -143,16 +157,6 @@ Big bug when extracting info from other sources. the data can be messy and unrei
 airport name, gate and flight # can be partial/absolute.
     Essentially a functionality to predict in dropdown in search similar to google - indexing.
     search should initiate right away for flight num, airport or gate
-
-Add these query words and functionality to chat :
-weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf', 'weather', 'metar', 'metar ']
-
-"{gate} for {partial/complete airport ID/name}" = "{gate} {airport}"
-"{gate} for {partial/complete airport name}" = "{gate} {airport}"   
-"weather for {partial/complete airport} = "{metar} {airport}"
-"{flight number} weather" = "{metar} {departure airport} {destination airport}"
-"{flight number} destination" = return destination or destination
-"{flight number} not, notam, notams" = return notams for departure and destination. include ability to return just pertinant information.
 
         DONE! fix and cleanup description in examples on homepage.
         DONE! TAF can be out of index. remove TAF if unavailable. Redirect to no found page if no weather found.

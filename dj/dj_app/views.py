@@ -1,6 +1,7 @@
 # quick code for jupyter
 # from dj.dj_app.views import awc_weather
 # await awc_weather(None,"EWR","STL")
+from .root.process_query import airlineCodeQueryParse
 from .root.flight_aware_data_pull import flight_aware_data_pull
 import pickle
 from django.views.decorators.http import require_GET
@@ -14,7 +15,7 @@ from .root.gate_scrape import Gate_scrape_thread
 from .root.weather_parse import Weather_parse
 from .root.dep_des import Pull_flight_info
 from .root.flight_deets_pre_processor import resp_initial_returns,resp_sec_returns,response_filter
-from time import sleep
+from time import sleep, time
 from django.shortcuts import render
 from django.http import JsonResponse
 import asyncio
@@ -70,13 +71,13 @@ async def home(request):
         # actual
         if run_lengthy_web_scrape:
             Root_class().send_email(body_to_send=main_query)
-        return await parse_query(request, main_query)
+        return await QueryParser(request, main_query)
 
     else:
         return render(request, 'home.html')
 
 
-async def parse_query(request, main_query):
+async def QueryParser(request, main_query):
     """
     Checkout note `unit testing seems crucial.txt` for the parsing logic
     """
@@ -85,75 +86,68 @@ async def parse_query(request, main_query):
     query_in_list_form = []
     # if .split() method is used outside here it can return since empty strings cannot be split.
 
-    if main_query == '':        # query is empty then return all gates
+    if 'DUMM' in main_query.upper():
+        print('returning dummy')
+        return dummy(request)
+    
+    if main_query == '':        #TODO 10/19/2024: Empty query should not be possible. It shouldn't be clicked.
         print('Empty query')
         return gate_info(request, main_query='')
-    if 'DUMM' in main_query.upper():
-        return dummy(request)
-    if 'ext d' in main_query:
-        airport = main_query.split()[-1]
-        return extra_dummy(request, airport)
-
-    if main_query != '':
+    elif main_query != '':
         # splits query. Necessary operation to avoid complexity. Its a quick fix for a deeper more wider issue.
         query_in_list_form = main_query.split()
 
         # TODO: Log the extent of query reach deep within this code, also log its occurrances to find impossible statements and frequent searches.
         # If query is only one word or item. else statement for more than 1 is outside of this indent. bring it in as an elif statement to this if.
         if len(query_in_list_form) == 1:
-
+            
             # this is string form instead of list
-            query = query_in_list_form[0].upper()
-            # TODO: find a better way to handle this. Maybe regex. Need a system that classifies the query and assigns it a dedicated function like flight_deet or gate query.
+            one_word_query = query_in_list_form[0].upper()
             # Accounting for flight number query with leading alphabets
-            if query[:2] == 'UA' or query[:3] == 'GJS':
-                if query[0] == 'G':     # if GJS instead of UA: else its UA
-                    # Its GJS
-                    airline_code, flt_digits = query[:3], query[3:]
-                else:           # Its UA
-                    flt_digits = query[2:]
-                    airline_code = None
-                    if query[:3] ==  'UAL':
-                        airline_code = 'UAL'
-                        flt_digits = query[3:]
-                    elif query[:2] == 'UA':
-                        airline_code = 'UA'
+            if one_word_query.startswith(('UA', 'UAL', 'GJS')):
+                airline_code, flt_digits = airlineCodeQueryParse(one_word_query)
                 print('\nSearching for:', airline_code, flt_digits)
                 return await flight_deets(request, airline_code=airline_code, flight_number_query=flt_digits)
 
             # flight or gate info page returns
-            elif len(query) == 4 or len(query) == 3 or len(query) == 2:
-
-                if query.isdigit():
-                    query = int(query)
-                    if 1 <= query <= 35 or 40 <= query <= 136:              # Accounting for EWR gates for gate query
-                        return gate_info(request, main_query=str(query))
-                    else:                                                   # Accounting for flight number
-                        print("INITIATING flight_deets FUNCTION.")
-                        return await flight_deets(request, airline_code=None, flight_number_query=query)
+            elif len(one_word_query) in (2,3,4):
+                if one_word_query.isdigit():
+                    digit_query = int(one_word_query)
+                    # TODO 10/29/24: Following needs to be depricated. search and drop down should exist for this in react.
+                    if 1 <= digit_query <= 35 or 40 <= digit_query <= 136:      # Accounting for EWR gates for gate query
+                        print('Newark gate query')
+                        return gate_info(request, main_query=str(digit_query))
+                    else:   # if this digit is not an EWR gate it is a all digit flight number query
+                        airline_code, flt_digits = airlineCodeQueryParse("UA" + one_word_query)
+                        print('\nSearching digits only:', airline_code, flt_digits)
+                        return await flight_deets(request, airline_code=airline_code, flight_number_query=flt_digits)
                 else:
-                    if len(query) == 4 and query[0] == 'K':
-                        weather_query_airport = query
+                    if len(one_word_query) == 4 and one_word_query[0] == 'K':
+                        weather_query_airport = one_word_query
                         # Making query uppercase for it to be compatible
                         weather_query_airport = weather_query_airport.upper()
+                        print('weather query')
                         return weather_info(request, weather_query_airport)
                     else:           # tpical gate query with length of 2-4 alphanumerics
                         print('gate query')
-                        return gate_info(request, main_query=str(query))
+                        return gate_info(request, main_query=str(one_word_query))
             # Accounting for 1 letter only. Gate query.
-            elif 'A' in query or 'B' in query or 'C' in query or len(query) == 1:
+            elif 'A' in one_word_query or 'B' in one_word_query or 'C' in one_word_query or len(one_word_query) == 1:
                 # When the length of query_in_list_form is only 1 it returns gates table for that particular query.
-                gate_query = query
+                gate_query = one_word_query
+                print('terminal query with either A,B,C or length of 1')
                 return gate_info(request, main_query=gate_query)
             else:   # return gate
-                gate_query = query
-                return gate_info(request, main_query=gate_query)
+                gate_query = one_word_query
+                print('returning gate query final')
+                # return gate_info(request, main_query=gate_query)
 
         # its really an else statement but stated >1 here for situational awareness. This is more than one word query.
         elif len(query_in_list_form) > 1:
+            # Account for "w kewr" lookups. The archived w switch for weather
             # Making it uppercase for compatibility issues and error handling
-            first_letter = query_in_list_form[0].upper()
-            if first_letter == 'W':
+            first_word = query_in_list_form[0].upper()
+            if first_word == 'W':
                 weather_query_airport = query_in_list_form[1]
                 # Making query uppercase for it to be compatible
                 weather_query_airport = weather_query_airport.upper()
@@ -221,6 +215,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     else:
         print(666, 'No Departure/Destination ID',)
         bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, **fa_data}
+        print(bulk_flight_deets)
         return render(request, 'flight_deet.html', bulk_flight_deets)
 
     pc = Pull_class(flight_number_query, origin, destination)
@@ -236,7 +231,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
     bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
                         **weather_dict, **fa_data, **gate_returns}
-
+    print(bulk_flight_deets)
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
