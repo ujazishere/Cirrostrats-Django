@@ -181,7 +181,7 @@ def gate_info(request, main_query):
 async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     # TODO COMMENT OUT OR DELETE bypass_fa LINE WHEN MAKING THE COMMIT
     bypass_fa = not run_lengthy_web_scrape      # when run_lengthy_web_scrape is on this is False activating flight_aware fetch.
-    # bypass_fa = False        # To fetch and use flight_aware_data make this False. API intensive.
+    bypass_fa = False        # To fetch and use flight_aware_data make this False. API intensive.
     bulk_flight_deets = {}
 
     sl = Source_links_and_api()
@@ -204,6 +204,9 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
         united_dep_dest = {}
         united_dep_dest['departure_ID'], united_dep_dest['destination_ID'] = flight_stats_arr_dep_time_zone['origin_fs'], flight_stats_arr_dep_time_zone['destination_fs']
         print("No united_dep_des! Making fs origin and destination as United_dep_des",united_dep_dest)
+    elif united_dep_dest['departure_ID'] == None:
+        print('No Departure ID')
+        united_dep_dest['departure_ID'], united_dep_dest['destination_ID'] = flight_stats_arr_dep_time_zone['origin_fs'], flight_stats_arr_dep_time_zone['destination_fs']
 
     # Second async pull and processing
     if fa_data['origin']:
@@ -231,7 +234,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
     bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
                         **weather_dict, **fa_data, **gate_returns}
-    print(bulk_flight_deets)
+    print('bulk_flight_deets = ', bulk_flight_deets)
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 

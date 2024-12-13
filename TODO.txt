@@ -1,56 +1,14 @@
 Practice readibility and simplicity. Aviod code duplication. Include description and documentation every step of the way. Keep upgrading and evolving.
 
 
-**IS:   use command shift f to find targetted tasks - "TODO: is"
-        
-        mark ETD time as red when STD is past ETD
-        
-        zulu time dymanic with the weather published times using js instead of the static python way.
+**IS:   
         `ext d` work. Make javascript functions and use functions widely.
-        
-        Hide datis table when N/A instead of showing N/A
-        WIP - summery box shadow and expand/collapse (fast)animation.  
-        work on script to extract data - aviation_stack_data_pull.py
-        Media queries for mobile vs desktop view. use css media queries. Check bootstrap navbar. Target screens(IPAD, smaller, etc)
-            make side bar
-        
 
 **UV:   
         ***VVI*** clean your shit its too messy! Need to separate out and organize code efficiently.
-            crawl for all flight numbers and their associated information from flight-stats.com
             
-            clean up dummy file calls. Code is too complex and intimidating and hard to decode.
-            Need redundency for dep and destination pull. current one is unstable giving errors during async.
-            Priority: Each individual scrape should be separate function in views. also separate scrape from api fetch.
-            Declutter django include fastapi
-            delete dummy2.css since its not needed
             date implementatiton. Current web is error prone for flight lookups during evenings since the lookup inquires zulu time search.
-            fix massive bug on flight_aware route date time conflict with real scheduled_time.
-                maybe include search with date, time or display info with date as zulu time
-                currently it senses the most recent route that is not None type probs giving future date
-                use: if scheduled_out is current_utc and route is not none:
-                    but current utc date_time has source latency.   
-            Fix bug that takes in 2 flight routes for singular flight number.
-                Add option to scroll left and right for dates.
-                Load data incrementally so as to avoid waiting for all data to be fetched.
 
-        Add these query words and functionality to chat :
-        weather_range = ['met ', ' met', ' met ', 'met', 'taf ', ' taf', ' taf ', 'taf', 'weather', 'metar', 'metar ']
-
-        "{gate} for {partial/complete airport ID/name}" = "{gate} {airport}"
-        "{gate} for {partial/complete airport name}" = "{gate} {airport}"   
-        "weather for {partial/complete airport} = "{metar} {airport}"
-        "{airport_id} {gate}" = "{gate} {airport}"
-        "{flight number} weather" = "{metar} {departure airport} {destination airport}"
-        "{flight number} destination" = return destination or destination
-        "{flight number} not, notam, notams" = return notams for departure and destination. include ability to return just pertinant information.
-
-
-        ***Separate logic and implement simple machine learning techniques to detect certain words.
-        clean up code. clean up the mess: separate scraping, add notes all along
-        weather sources should show aviationweather link on each metar/taf/datis: https://aviationweather.gov/data/metar/?id=KEWR&hours=0
-        Have software engineers proofread the code and logic.
-        Ask pilot's what would they search to get gate information. store these searches and use that for parsing.
         Put in 'TAF(Ammended)', 'METAR(SPECI)' and D-ATIS(SPECIAL) in their title for special weather published times.
         make -ve temps turquoise
         
@@ -151,8 +109,6 @@ Deploy the ability to chat. Store all queries with time stamp for later analyses
         **option** Add Feedback to go with it
 
 add ability to see raw metar or simplified one with only pertinant information.
-
-Big bug when extracting info from other sources. the data can be messy and unreiable. Create redundency
 
 airport name, gate and flight # can be partial/absolute.
     Essentially a functionality to predict in dropdown in search similar to google - indexing.
