@@ -71,6 +71,7 @@ class Pull_flight_info(Root_class):
 
     def united_departure_destination_scrape(self, flt_num=None,pre_process=None):
         departure_scheduled_time,destination_scheduled_time = [None]*2
+        departure_ID, destination_ID = [None]*2
         if pre_process:
             soup = pre_process
         else:
@@ -79,6 +80,7 @@ class Pull_flight_info(Root_class):
         # Airport distance and duration can be misleading. Be careful with using these. 
 
         # table = soup.find('div', {'class': 'a2'})
+        print('Were here')
         try: 
             # TODO: This is prone to throwing list index out of range errors. add if statement on airport_id befor processing departure_ID and destination_ID since airport_ID can be None.
             airport_id = soup.find_all('div', {'class': 'a2_ak'})
@@ -96,7 +98,7 @@ class Pull_flight_info(Root_class):
                     destination_scheduled_time = scheduled_times[1]
                 print('dep_des.py united_departure_destination_scrape. Found scheduled times using flight_stats.')
         except Exception as e:
-            departure_ID, destination_ID = [None]*2
+            # departure_ID, destination_ID = [None]*2
             print('dep_des.py Unable united_departure_destination_scrape', e)
         print('dep_des.py united_departure_destination_scrape for departure and destination: ', departure_ID, destination_ID)
         return {'departure_ID': departure_ID,

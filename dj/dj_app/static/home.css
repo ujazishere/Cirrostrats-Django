@@ -3,12 +3,31 @@ body {
   padding: 0;
 }
 
+.support {
+  position: fixed;
+  bottom: 50px; /* Space from bottom */
+  left: 0;
+  width: 100%;
+  background-color: #2d333b; /* Your original color code */
+  color: white;
+  text-align: center;
+  z-index: 999;
+  font-size: 16px; /* Slightly larger font for better readability */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+  transition: background-color 0.3s; /* Smooth transition on hover */
+}
+
+.support:hover {
+  background-color: #010101; /* A slightly lighter shade for hover effect */
+}
+
+
 
 
 .changelog-animated {
   animation: pulse 2s infinite;
   position: fixed;
-  bottom: 40px;
+  bottom: 0px;
   left: 0;
   width: 100%;
   background-color: #ffffff;
@@ -20,19 +39,21 @@ body {
   text-overflow: ellipsis; /* Show ellipsis (...) for overflowed text */
 }
 
+
+
 @keyframes pulse {
   0%, 100% {
-    box-shadow: 0 0 10px #804f4c;
+    box-shadow: 0 0 10px #2d333b;
   }
   50% {
-    box-shadow: 0 0 20px #804f4c;
+    box-shadow: 0 0 20px #2d333b;
   }
 }
 
 .changelog-animated h4 {
   margin: 0;
   font-size: 16px;
-  color: #804f4c;
+  color: #24292e;
 }
 
 
@@ -109,7 +130,7 @@ body {
       bottom: 0;
       left: 0;
       width: 100%;
-      background-color: #804f4c;
+      background-color: #2d333b;
       color: white;
       text-align: center;
       padding: 10px;

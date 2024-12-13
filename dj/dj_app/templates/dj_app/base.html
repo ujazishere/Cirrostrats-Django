@@ -10,15 +10,13 @@
 </head>
 <body>
 
-    <div class = "loading">
-
-    <div class="gmt-clock">
-        UTC: <span id="gmt-time"></span>
-    </div>  
-
+    <div class="loading">
+        <div class="gmt-clock">
+            UTC: <span id="gmt-time"></span>
+        </div>  
+    </div>
 
     <header class="sticky-header">
-        
         <!-- Add burger menu -->
         <div class="burger-menu">
             <span></span>
@@ -28,17 +26,12 @@
 
         <!-- Add text on the right side of the header -->
         <div class="header-text">
-            <a href="{% url 'home' %}" style="color: white; text-decoration: none; position: absolute;">Cirrostrats</a> 
+            <a href="{% url 'home' %}" style="color: white; text-decoration: none;">Cirrostrats</a> 
         </div>
 
         <div class="dark-mode-switch">
-            <button id="modeButton" onclick="toggleDarkMode()">
-            </button>
+            <button id="modeButton" onclick="toggleDarkMode()"></button>
         </div>
-
-
-
-
           
         <!-- Add sidebar -->
         <div class="sidebar">
@@ -53,12 +46,10 @@
         </div>
     </header>
 
+
+    {% block content %}
+    {% endblock %}
+
+    <script type="text/javascript" src="{% static 'base.js' %}"></script>
 </body>
 </html>
-
-<script type="text/javascript" src="{% static 'base.js' %}"></script>
-
-
-{% block content %}
-{% endblock %}
-
