@@ -341,7 +341,8 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None, ret
                 print('\nSuccessfully fetched and processed Flight Aware data')
                 break
     else:
-        print('flight_aware_data_pull.pull FLIGHT_AWARE_DATA UNSUCCESSFUL, no `flights` available')
+        print(flights, type(flights))
+        print('flights is either None or not a list')
         return fa_object.attrs
 
     try:
