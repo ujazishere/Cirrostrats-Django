@@ -272,7 +272,7 @@ def flight_aware_data_pull(airline_code=None, flt_num=None,pre_process=None, ret
         'type': 'Airline'},
     """
 
-    if flights:     # sometimes flights returns empty list.
+    if flights and type(flights) == list:     # sometimes flights returns empty list.
         for i in range(len(flights)):      # There are typically 15 of these for multiple dates
             if flights[i]['route']:
                 scheduled_out_raw_fa = flights[i]['scheduled_out']
