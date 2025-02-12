@@ -51,7 +51,6 @@ async def home(request):
     # Homepage first skips a "POST", goes to else and returns home.html since the query is not submitted yet.
     if request.method == "POST":
         main_query = request.POST.get('query', '')
-
         # This one adds similar queries to the admin panel in SearchQuerys.
         # Make it such that the duplicates are grouped using maybe unique occourances.
         # search_query = SearchQuery(query=main_query)      # Adds search queries to the database
@@ -154,6 +153,8 @@ async def QueryParser(request, main_query):
                 return weather_info(request, weather_query_airport)
             else:
                 return gate_info(request, main_query=' '.join(query_in_list_form))
+        else:
+            return gate_info(request, main_query='')
 
 
 def gate_info(request, main_query):
