@@ -1,3 +1,7 @@
+from datetime import datetime
+import datetime as dt
+
+import pytz
 from .root_class import Root_class
 
 
@@ -8,6 +12,34 @@ class Gate_checker(Root_class):
 
         # super method inherits all of the instance variables of the Gate_root class.
         super().__init__()
+
+        self.old_data_detected = False
+
+
+    def old_data_detection(self, master):
+        ''' Detects old data in gate returns and sends an email to UJ if any is found. '''
+        # Account for EST time zone since date data is in EST - UTC Failsafe.
+        eastern = pytz.timezone('US/Eastern')
+        yesterday = datetime.now(eastern).date()+dt.timedelta(days=-1)
+
+        # Reason for this mmdd format is that date in data doesn't have a year in it.
+        yesterday_mmdd = yesterday.strftime("%m%d")
+        # print('astime',eastern)
+        print('currently ',datetime.now(eastern), '\nyesterday', yesterday, '\nyesterday_mmdd', yesterday_mmdd)
+
+        old_data_collection = []
+        for i in master.keys():
+            data_mmdd = master[i][1].strftime("%m%d")
+            # print('yesterday_mmdd', yesterday_mmdd,data_mmdd )
+            if data_mmdd <= yesterday_mmdd:         # if data is older than or equal to yesterday's date
+                old_data = (i, master[i][0])        # get flight number and gate and append it to collection
+                old_data_collection.append(old_data)
+        if old_data_collection:
+            # Root_class().send_email(body_to_send=f'!!! Detected old data in gate returns when user made gate query--. {old_data_collection}')
+            self.old_data_detected = True
+        else:
+            self.old_data_detected = False
+        
 
 
     def ewr_UA_gate(self, query=None):
@@ -44,6 +76,13 @@ class Gate_checker(Root_class):
             dictionries['scheduled'] = dictionries['scheduled'].strftime("%#H:%M, %b%d")
             dictionries['actual'] = dictionries['actual'].strftime("%#H:%M, %b%d")
         
+        
+        # This is failsafe to detect old data since implementing this feature within
+            # concurrent threads would address the actual isse of thread itself not working
+        self.old_data_detection(master)
+        if self.old_data_detected:
+            return {'old_data': self.old_data_detected, 'flights': flights}
+
         return flights
     
     

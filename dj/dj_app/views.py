@@ -167,9 +167,14 @@ def gate_info(request, main_query):
     # Each dictionary has 4 key value pair.eg. gate:c10,flight_number:UA4433,scheduled:20:34 and so on
     gate_data_table = Gate_checker().ewr_UA_gate(gate)
     
+    data_out = {'gate_data_table': gate_data_table, 'gate': gate, 'current_time': current_time}
+    if type(gate_data_table) == dict:
+        data_out['old_data'] = gate_data_table['old_data']
+        data_out['gate_data_table'] = gate_data_table['flights']
+    
+
 
     # This can be a json to be delivered to the frontend
-    data_out = {'gate_data_table': gate_data_table, 'gate': gate, 'current_time': current_time}
 
     # showing info if the info is found else it falls back to `No flights found for {{gate}}`on flight_info.html
     if gate_data_table:

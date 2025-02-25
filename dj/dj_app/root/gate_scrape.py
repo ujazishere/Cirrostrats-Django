@@ -20,7 +20,6 @@ class Gate_Scrape(Root_class):
     
     def pick_flight_data(self, flt_num):
         # refer to activator()
-        
         # This function returns a dict with value of list that contains 3 items. Refer to the `return` item
         airline_code = flt_num[:2]      # first 2 characters of airline code eg. UA, DL
         flight_number_without_airline_code = flt_num[2:]
@@ -40,6 +39,7 @@ class Gate_Scrape(Root_class):
 
         scheduled = scd[2].replace('\xa0', '')
         actual = scd[3].replace('\xa0', '')
+        print(scheduled, actual)
         
         gate = scd[4]
         
@@ -55,7 +55,7 @@ class Gate_Scrape(Root_class):
                 
                 return {flt_num: [gate, scheduled, actual]}
             else:
-                print('g',gate, 'f', flt_num)
+                print("Not reliable: gate- ", gate, 'flight_number-', flt_num)
                 # TODO: Have to deal with these outlaws and feed it back into the system.
                     # Sometimes gate goes into scheduled or actual. Beware of that kind of data.
                 self.outlaws_reliable.update({
@@ -64,6 +64,8 @@ class Gate_Scrape(Root_class):
                     'scheduled': scheduled,
                     'actual': actual,
                 })
+        else:
+            print("Not reliable: gate- ", gate, 'flight_number-', flt_num)
 
         # This is a format that resembles more to the format in the final output.
         # return {'flight_num': flt_num, 'gate': gate, 'scheduled': scheduled, 'actual': actual}

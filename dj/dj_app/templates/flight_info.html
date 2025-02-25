@@ -37,9 +37,14 @@
     </div>
   </div>
 
-  
 
   {% if gate_data_table %}
+    {% if old_data %}
+    <div class="old-data-alert">
+      <span class="alert-icon">⚠️</span>
+      Old data detected. Check scheduled date and times and use the information cautiously.
+    </div>
+    {% endif %}
     <div class="table-wrapper">
       <table>
         <thead>
