@@ -39,7 +39,6 @@ class Gate_Scrape(Root_class):
 
         scheduled = scd[2].replace('\xa0', '')
         actual = scd[3].replace('\xa0', '')
-        print(scheduled, actual)
         
         gate = scd[4]
         
