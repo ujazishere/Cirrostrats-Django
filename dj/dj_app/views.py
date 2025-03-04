@@ -194,12 +194,13 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     pc = Pull_class(airline_code=airline_code,flt_num=flight_number_query)
     
     # If flightaware is to be bypassed this code will remove the flightaware link
-    links = [sl.ua_dep_dest_flight_status(flight_number_query), sl.flight_stats_url(flight_number_query)]
+    links = [ sl.flight_stats_url(flight_number_query)]
     if not bypass_fa:
         links.append(sl.flight_aware_w_auth(airline_code, flight_number_query))
     
     # First async pull and processing.
     resp_dict = await pc.async_pull(links)          # Actual fetching happens here.
+    print('here')
     resp_initial = resp_initial_returns(resp_dict=resp_dict, airline_code=airline_code, flight_number_query=flight_number_query)
 
     print('DONE WITH resp_initial_returns: ', resp_initial)
