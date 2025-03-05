@@ -187,20 +187,23 @@ def gate_info(request, main_query):
 async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     # TODO COMMENT OUT OR DELETE bypass_fa LINE WHEN MAKING THE COMMIT
     bypass_fa = not run_lengthy_web_scrape      # when run_lengthy_web_scrape is on this is False activating flight_aware fetch.
-    bypass_fa = False        # To fetch and use flight_aware_data make this False. API intensive.
+    # bypass_fa = False        # To fetch and use flight_aware_data make this False. API intensive.
     bulk_flight_deets = {}
 
     sl = Source_links_and_api()
     pc = Pull_class(airline_code=airline_code,flt_num=flight_number_query)
     
     # If flightaware is to be bypassed this code will remove the flightaware link
-    links = [ sl.flight_stats_url(flight_number_query)]
+    links = [sl.flight_stats_url(flight_number_query)]
     if not bypass_fa:
         links.append(sl.flight_aware_w_auth(airline_code, flight_number_query))
     
     # First async pull and processing.
-    resp_dict = await pc.async_pull(links)          # Actual fetching happens here.
-    print('here')
+    try: 
+        resp_dict = await pc.async_pull(links)          # Actual fetching happens here.
+    except Exception as e:
+        Root_class.send_email(body_to_send=str(f' Error in Django async_pull: {e}'))
+        resp_dict = None
     resp_initial = resp_initial_returns(resp_dict=resp_dict, airline_code=airline_code, flight_number_query=flight_number_query)
 
     print('DONE WITH resp_initial_returns: ', resp_initial)
@@ -230,14 +233,21 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
     pc = Pull_class(flight_number_query, origin, destination)
     wl_dict = pc.weather_links(origin, destination)
-    resp_dict = await pc.async_pull(list(wl_dict.values()) + [sl.nas()])
+    try:
+        resp_dict = await pc.async_pull(list(wl_dict.values()) + [sl.nas()])
+    except Exception as e:
+        Root_class.send_email(body_to_send=str(f' Error in Django secondary async_pull: {e}'))
+        resp_dict = None
 
     # Process weather and NAS info synchronously
     resp_sec = resp_sec_returns(resp_dict, origin, destination)
     weather_dict = resp_sec
 
     # Get gate info synchronously
-    gate_returns = await asyncio.to_thread(Pull_flight_info().flight_view_gate_info, flt_num=flight_number_query, airport=origin)
+    try:
+        gate_returns = await asyncio.to_thread(Pull_flight_info().flight_view_gate_info, flt_num=flight_number_query, airport=origin)
+    except Exception as e:
+        Root_class.send_email(body_to_send=str(f' Error in Django flight_view_gate_info: {e}'))
 
     bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
                         **weather_dict, **fa_data, **gate_returns}
