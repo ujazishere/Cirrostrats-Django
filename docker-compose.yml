@@ -13,6 +13,13 @@ services:
       - DJANGO_SETTINGS_MODULE=dj.settings
     networks:
       - mynet
+    deploy:
+      resources:
+        limits:   # check parser - Theres a two day limit on keys
+          cpus: '1'  # Limit to 0.5 CPU cores
+          # Keys limit of 2days exists at source of creation. This memory limit is arbitrary.
+          memory: '800m'
+    restart: unless-stopped
 
   nginx:
     image: nginx
@@ -24,6 +31,13 @@ services:
       - dj
     networks:
       - mynet
+    deploy:
+      resources:
+        limits:   # check parser - Theres a two day limit on keys
+          cpus: '0.5'  # Limit to 0.5 CPU cores
+          # Keys limit of 2days exists at source of creation. This memory limit is arbitrary.
+          memory: '64m'
+    restart: unless-stopped
 
   # db:
   #   image: postgres:latest
