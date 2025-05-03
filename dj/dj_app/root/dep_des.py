@@ -301,9 +301,7 @@ class Pull_flight_info(Root_class):
         try :
             leg_data = soup.find_all('div', class_='leg')   # Has all the departure and destination data
             departure_gate = leg_data[0].find_all('tr', class_='even')[1].text[17:]
-            # departure_gate = departure_gate[26:-1]
-            arrival_gate = leg_data[0].find_all('tr', class_='even')[4].text[17:]
-            # arrival_gate = arrival_gate[26:-1]
+            arrival_gate = leg_data[0].find_all('tr', class_='odd')[4].text[17:]
             if 'Terminal' in departure_gate:
                 departure_gate = departure_gate.replace('Terminal', '')
             if 'Terminal' in arrival_gate:
