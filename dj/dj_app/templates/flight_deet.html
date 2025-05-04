@@ -43,12 +43,13 @@
         </thead>
         <tbody>
             <tr>
-                {% if departure_ID%}
-                <td class="table-cell">{{departure_ID}}</td>
-                <td class="table-cell text-align-right">{{destination_ID}}</td>
-                {% else%}
+                {% if origin%}
                 <td class="table-cell">{{origin}}</td>
                 <td class="table-cell text-align-right">{{destination}}</td>
+                {% else%}
+                <td class="table-cell">{{departure_ID}}</td>
+                <td class="table-cell text-align-right">{{destination_ID}}</td>
+                
                 {% endif %}
             </tr>
             

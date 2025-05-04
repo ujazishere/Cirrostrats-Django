@@ -121,14 +121,15 @@ async def QueryParser(request, main_query):
                         print('\nSearching digits only:', airline_code, flt_digits)
                         return await flight_deets(request, airline_code=airline_code, flight_number_query=flt_digits)
                 else:
-                    if len(one_word_query) == 4 and one_word_query[0] == 'K':
-                        weather_query_airport = one_word_query
-                        # Making query uppercase for it to be compatible
-                        weather_query_airport = weather_query_airport.upper()
-                        print('weather query')
-                        return weather_info(request, weather_query_airport)
+                    if len(one_word_query) == 4 and one_word_query.isalpha():       # TODO: Dangerous. wont show airport with digits in it.
+                        if one_word_query[0] == 'K' or one_word_query[0] == 'C':
+                            weather_query_airport = one_word_query
+                            # Making query uppercase for it to be compatible
+                            weather_query_airport = weather_query_airport.upper()
+                            return weather_info(request, weather_query_airport)
+                        else:
+                            return gate_info(request, main_query=str(one_word_query))
                     else:           # tpical gate query with length of 2-4 alphanumerics
-                        print('gate query')
                         return gate_info(request, main_query=str(one_word_query))
             # Accounting for 1 letter only. Gate query.
             elif 'A' in one_word_query or 'B' in one_word_query or 'C' in one_word_query or len(one_word_query) == 1:
@@ -140,19 +141,6 @@ async def QueryParser(request, main_query):
                 gate_query = one_word_query
                 print('returning gate query final')
                 # return gate_info(request, main_query=gate_query)
-
-        # its really an else statement but stated >1 here for situational awareness. This is more than one word query.
-        elif len(query_in_list_form) > 1:
-            # Account for "w kewr" lookups. The archived w switch for weather
-            # Making it uppercase for compatibility issues and error handling
-            first_word = query_in_list_form[0].upper()
-            if first_word == 'W':
-                weather_query_airport = query_in_list_form[1]
-                # Making query uppercase for it to be compatible
-                weather_query_airport = weather_query_airport.upper()
-                return weather_info(request, weather_query_airport)
-            else:
-                return gate_info(request, main_query=' '.join(query_in_list_form))
         else:
             return gate_info(request, main_query='')
 
@@ -221,12 +209,9 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     # Second async pull and processing
     if fa_data['origin']:
         origin, destination = fa_data['origin'], fa_data['destination']
-        print(555,"Yes flightaware data", origin,destination)
     elif united_dep_dest and united_dep_dest.get('departure_ID'):
         origin, destination = united_dep_dest['departure_ID'], united_dep_dest['destination_ID']
-        print(555,"No flightaware data, Using united_dep_dest",origin,destination)
     else:
-        print(666, 'No Departure/Destination ID',)
         bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, **fa_data}
         print(bulk_flight_deets)
         return render(request, 'flight_deet.html', bulk_flight_deets)
@@ -245,7 +230,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
     # Get gate info synchronously
     try:
-        gate_returns = await asyncio.to_thread(Pull_flight_info().flight_view_gate_info, flt_num=flight_number_query, airport=origin)
+        gate_returns = await asyncio.to_thread(Pull_flight_info().flight_view_gate_info, flt_num=flight_number_query, departure_airport=origin)
     except Exception as e:
         Root_class.send_email(body_to_send=str(f' Error in Django flight_view_gate_info: {e}'))
 

@@ -15,6 +15,12 @@ class Pull_flight_info(Root_class):
     def __init__(self) -> None:
         # Super method inherits the init method of the superclass. In this case`Root_class`.
         super().__init__()
+        self.fv_attrs = {
+            'flightViewDeparture': "None",
+            'flightViewDestination': "None",
+            'flightViewDepartureGate': "None",
+            'flightViewArrivalGate': "None",
+        }
 
 
     def fs_dep_arr_timezone_pull(self, flt_num_query=None, pre_process=None):
@@ -277,8 +283,21 @@ class Pull_flight_info(Root_class):
                 }
 
 
-    def flight_view_gate_info(self, flt_num=None, airport=None, pre_process=None):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
-
+    def flight_view_gate_info(self, airline_code='UA', flt_num=None, departure_airport=None, pre_process=None):             # not used yet. Plan on using it such that only reliable and useful information is pulled.
+        """
+        Retrieves flight gate information from FlightView website.
+        
+        Args:
+            airline_code: Airline code (e.g., 'UA')
+            flt_num: Flight number
+            airport: Airport code (optional)
+            pre_process: Pre-parsed BeautifulSoup object (optional)
+            
+        Returns:
+            Dictionary with departure and arrival and associated gate information, or 'None' values if unsuccessful
+        """
+        # TODO: flightview can give reliable origin and destination info. It's what google uses. Repo flights still dont show up tho - Use flightstats instead for repo flights.
+            # flightview format  https://www.flightview.com/flight-tracker/UA/4437
         # date format in the url is YYYYMMDD. For testing, you can find flt_nums on https://www.airport-ewr.com/newark-departures
         if pre_process:     # it doesn't feed in the pre-process if it cannt find the
             soup = pre_process
@@ -289,24 +308,46 @@ class Pull_flight_info(Root_class):
                 date = 20230505
             else:
                 date = str(self.date_time(raw=True))     # Root_class inheritance format yyyymmdd
-            print("dep_des.py flight_view_gate_info",flt_num,airport,date)
-            try:        # the airport coming in initially wouldnt take airport as arg since it lacks the initial info, hence sec rep info will have this airport ID
-                flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={airport[1:]}"
-            except:
-                pass
-            print('dep_des.py flight_view_gate_info. Standard synchronoys fetch for gate info from:', flight_view)
-            
-            self.soup = self.request(flight_view)
-            soup = self.soup
-        try :
-            leg_data = soup.find_all('div', class_='leg')   # Has all the departure and destination data
-            departure_gate = leg_data[0].find_all('tr', class_='even')[1].text[17:]
-            arrival_gate = leg_data[0].find_all('tr', class_='odd')[4].text[17:]
-            if 'Terminal' in departure_gate:
-                departure_gate = departure_gate.replace('Terminal', '')
-            if 'Terminal' in arrival_gate:
-                arrival_gate = arrival_gate.replace('Terminal', '')
 
+            if not departure_airport:
+                flight_view = f"https://www.flightview.com/flight-tracker/{airline_code}/{flt_num}"
+            else:           # Can take airport as arg since for multiple data for singular flight number
+                if len(departure_airport) == 4:       # fv takes 3 letter airport codes. strippinng of leading K or C in case of 4 letter codes.
+                    departure_airport = departure_airport[1:]
+                flight_view = f"https://www.flightview.com/flight-tracker/UA/{flt_num}?date={date}&depapt={departure_airport}"
+
+            soup = requests.get(flight_view)
+            soup = bs4(soup.content, 'html.parser')
+            leg_data = soup.find_all('div', class_='leg')   # Has all the departure and destination data
+
+        try :
+            # Section to get departure and arrival gates
+            if leg_data != []:
+                departure_div = leg_data[0].find(attrs={'id': 'ffDepartureAll'})
+                arrival_div = leg_data[0].find(attrs={'id': 'ffArrivalAll'})
+                try:
+                    for i in departure_div.find_all('tr'):
+                        if 'Terminal' in i.text:
+                            self.fv_attrs['flightViewDepartureGate'] = i.text[17:]      #magic number to strip of `Terminal` and titles.
+                    for i in arrival_div.find_all('tr'):
+                        if 'Terminal' in i.text:
+                            self.fv_attrs['flightViewArrivalGate'] = i.text[17:]
+                    if 'Terminal' in self.fv_attrs['flightViewDepartureGate']:      # Strippinng `Terminal` from returned data
+                        self.fv_attrs['flightViewDepartureGate'] = self.fv_attrs['flightViewDepartureGate'].replace('Terminal', '')
+                    if 'Terminal' in self.fv_attrs['flightViewArrivalGate']:
+                        self.fv_attrs['flightViewArrivalGate'] = self.fv_attrs['flightViewArrivalGate'].replace('Terminal', '')
+                    
+                    if 'min' in self.fv_attrs['flightViewDepartureGate']:      # This acocunts for faulty hrs and mins in gate returns. This has happened before.
+                        self.fv_attrs['flightViewDepartureGate'] = 'None'
+                    if 'min' in self.fv_attrs['flightViewArrivalGate']:
+                        self.fv_attrs['flightViewArrivalGate'] = 'None'
+
+                except Exception as e:
+                    print('dep_des.py flight_view_gate_info !!!UNSUCCESSFUL!!!, Error:',e)
+            else:
+                print('No leg data found in dep_des flight_view_gate_info')
+
+            # Section to get departure and destination codes
             scripts = soup.find_all('script')       # scripts is a section in the html that contains departure and destination airports 
             for script in scripts:
                 # looks up text 'var sdepapt' which is associated with departure airport.
@@ -320,14 +361,11 @@ class Pull_flight_info(Root_class):
                     # departure_time = 
             # return dict({flt_num: [departure, destination]})
             
-            if 'min' in departure_gate:      # This acocunts for faulty hrs and mins in string
-                departure_gate = None
-            if 'min' in arrival_gate:
-                arrival_gate = None
             print('dep_des.py SUCCESS at pull_dep_des for gate info')
-            return {'departure_gate': departure_gate,
-                    'arrival_gate': arrival_gate,
-                    }
+            return {
+                'departure_gate': self.fv_attrs['flightViewDepartureGate'],
+                'arrival_gate': self.fv_attrs['flightViewArrivalGate'],
+            }
 
         except Exception as e:
             empty_soup = {'departure_gate': 'None',
