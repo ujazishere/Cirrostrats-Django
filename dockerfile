@@ -8,10 +8,10 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /dj
 
 # Copy the requirements file into the container
-COPY req.txt /dj/
+COPY requirements.txt /dj/
 
 # Install the dependencies
-RUN pip install --no-cache-dir -r req.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the project files into the container
 COPY dj /dj/

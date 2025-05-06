@@ -9,6 +9,7 @@ import smtplib
 import asyncio
 import aiohttp
 from time import sleep
+from decouple import config
 
 class Root_class():
     
@@ -175,8 +176,7 @@ class Source_links_and_api:
     def flight_aware_w_auth(self,airline_code, flight_number):
         if not airline_code:
             airline_code = "UA"
-        fa_apiKey = "mAcMRTxklbWPhTciyaUD9FtCz88klfxk"      # ujasvaghani@yahoo.com on flight
-        # fa_apiKey = "G43B7Izssvrs8RYeLozyJj2uQyyH4lbU"         # Ismail key
+        fa_apiKey = config("ujazzzmay0525api")      # apple login 
         fa_auth_header = {'x-apikey':fa_apiKey}
         fa_base_apiUrl = "https://aeroapi.flightaware.com/aeroapi/"
         fa_url = fa_base_apiUrl + f"flights/{airline_code}{flight_number}"

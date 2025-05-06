@@ -194,7 +194,7 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
         resp_dict = None
     resp_initial = resp_initial_returns(resp_dict=resp_dict, airline_code=airline_code, flight_number_query=flight_number_query)
 
-    print('DONE WITH resp_initial_returns: ', resp_initial)
+    print('DONE WITH resp_initial_returns: ')
     # TODO: fix a better fix here. This was just a quick fix.
     # This origin and destination is from flight_stats since it was not found through flight_aware or united_dep_dest. This is just a temperory fix.
     united_dep_dest, flight_stats_arr_dep_time_zone, fa_data = resp_initial
@@ -236,7 +236,6 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
 
     bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, 
                         **weather_dict, **fa_data, **gate_returns}
-    print('bulk_flight_deets = ', bulk_flight_deets)
     return render(request, 'flight_deet.html', bulk_flight_deets)
 
 
