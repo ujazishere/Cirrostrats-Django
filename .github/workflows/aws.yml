@@ -20,7 +20,7 @@ jobs:
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
         ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
-          
+          cd Cirrostrats-Django
           # Pull latest changes
           git pull origin main &&
           
