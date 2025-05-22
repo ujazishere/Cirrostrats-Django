@@ -3,7 +3,7 @@ name: Django ECS Deployment
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -20,6 +20,12 @@ jobs:
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
         ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} '
-          git pull origin dev &&
-          docker-compose up -d --build
+          
+          # Pull latest changes
+          git pull origin main &&
+          
+          # Cleanup <none> type danging images, unused volues and builder cache
+          docker image prune -af &&
+          docker volume prune -af &&
+          docker builder prune -f
         '
