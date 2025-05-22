@@ -16,6 +16,7 @@ from .root.weather_parse import Weather_parse
 from .root.dep_des import Pull_flight_info
 from .root.flight_deets_pre_processor import resp_initial_returns,resp_sec_returns,response_filter
 from time import sleep, time
+from decouple import config
 from django.shortcuts import render
 from django.http import JsonResponse
 import asyncio
@@ -34,11 +35,7 @@ It will then run
 # Caution. If this file doesn't exist make one that contains this variable and make it a bool. 
 # Keep it false to avoid errors with from sending email errors as it is attached to UJ's personal email creds.
 # Before you remove this make sure you account for its use: Used for sending email notifications. Email creds are in Switches_n_auth.
-try:        # TODO: Find a better way other than try and except
-    from .root.Switch_n_auth import run_lengthy_web_scrape
-except Exception as e:
-    print('Couldnt find swithc_n_auth! ERROR:',e)
-    run_lengthy_web_scrape = False
+run_lengthy_web_scrape = True if config("run_lengthy_web_scrape") == '1' else False
 if run_lengthy_web_scrape:
     print('Running Lengthy web scrape')
     gc_thread = Gate_scrape_thread()
