@@ -1,76 +1,23 @@
-Clone the repo:
+## Clone the repo:
 `git clone https://github.com/ujazishere/Cirrostrats.git`
 
-Creating and activating virtual environment on mac/win:
+## Create .env file and include following contents -- mind the api key
+```
+ujazzzmay0525api="<api_key>"
+ismail_fa_apiKey="<api_key>"         # Ismail key
 
+# Gmail auth for email notification
+smtp_password="dsxi rywz jmxn qwiz"
 
-win:
+# fire email on lookup and incude this as subject
+EC2_location="Local"
+# EC2_location="Production"
 
-Navigate into the Cirrostrats directory and make virtual environment:
-`python3 -m venv c_venv`
+# Runnign gate scrape -- 0 for local, 1 for production 
+# run_lengthy_web_scrape=0
+run_lengthy_web_scrape=1
+```
 
-Activate it:
-`c_venv\Scripts\activate`
-
-
-mac:
-
-Navigate into Cirrostrats directory then run:
-`sudo pip3 install virtualenv`
-
-Make virtual environment using:
-`virtualenv c_venv`
-
-Activate it:
-`source c_venv/bin/activate`
-
-
-__________________________________________________________________________
-
-Install packages/dependencies:
-`pip install -r req.txt`
-
-Checkout the dev branch for latest code AND AVOID THE MAIN BRANCH:
-`git chekcout dev`
-
-MAKE SURE YOURE IN THE `dev` BRANCH:
-`git branch`
-
-Run the local django server:
-`python dj/manage.py runserver 0.0.0.0:8000`
-
-Go on browser pull up http://127.0.0.1:8000/
-
-Go crazy!
-
-
-
-
-Access the AWS EC2 test web server from phone/laptop at:
-https://cirrostrats.onrender.com/
-
-Production ready AWS EC2 at:
-https://cirrostrats.us/
-
-
-Available Queries:
-
-Gate in EWR examples:
-C71, C, A, B, 106, 71X, 71V, etc.
-
-weather queries(have to prepend `w ` for international ICAO identifiers):
-eg- kbos, kewr, kiad, kord, w cyow, etc.
-
-all examples:
-
-"" - Empty query returns all gates
-
-"c71x" - Returns all flights scheduled times from this gate. Gives their scheduled time of departure and actual.
-
-"w kewr" - Returns metar and taf of the airport in question
-
-"4425" - Returns the departure airport, arrival airport, and, weather(D-Atis, METAR, TAF), ground stops, ground delays,route,skyvector route redirect, registration, etc.
-
-
- 
+## Using Docker:
+`docker compose up`
 
