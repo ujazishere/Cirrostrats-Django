@@ -23,8 +23,8 @@ class Root_class():
         smtp_server = "smtp.gmail.com"
         smtp_port = 587  # Use 587 for TLS port
         smtp_user = "publicuj@gmail.com"
-        EC2_location = config('smtp_password')
-        smtp_password = "dsxi rywz jmxn qwiz"
+        smtp_password = config('smtp_password')
+        # smtp_password = "dsxi rywz jmxn qwiz"
         # Test
         # to_email = ['ujasvaghani@gmail.com',]
         # Actual
