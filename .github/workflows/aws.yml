@@ -27,5 +27,6 @@ jobs:
           # Cleanup <none> type danging images, unused volues and builder cache
           docker image prune -af &&
           docker volume prune -af &&
-          docker builder prune -f
+          docker builder prune -f &&
+          docker compose restart
         '
