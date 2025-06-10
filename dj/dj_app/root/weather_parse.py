@@ -127,7 +127,8 @@ class Weather_parse:
                           weather_raw=None,
                           ):
         if dummy:
-            
+            # TODO: These labels(D-ATIS,METAR,TAF) on dummy should be deprecated as they dont integrate well. has been changed on react.
+                    # instead use 'datis', 'metar' and 'taf' for simplicity and ease of integration.
             datis_raw = dummy['D-ATIS']
             metar_raw = dummy['METAR']
             taf_raw = dummy['TAF']
