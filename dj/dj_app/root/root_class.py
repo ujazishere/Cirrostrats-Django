@@ -95,8 +95,8 @@ class Root_class():
         # this will take in all the flight numbers at once and perform web scrape(`pick_flight_data()`) on all of them simultaneously
         # Multithreading
     
-        completed = {}
-        troubled = set()
+        self.completed = {}
+        self.troubled = set()
             # VVI!!! The dictionary `futures` .value is the flight number and  key is the the memory location of return from pick_flight_data
             # Used in list comprehension for loop with multiple keys and values in the dictionary. for example:
             # {<Future at 0x7f08f203ec10 state=running>: 'UA123',
@@ -114,10 +114,10 @@ class Root_class():
                 flt_num = futures[future]
                 try:
                     result = future.result()        # result is the output of the task at that memory location 
-                    completed.update(result)
+                    self.completed.update(result)
                 except Exception as e:
                     # print(f"Error scraping {flt_num}: {e}")
-                    troubled.add(flt_num)
+                    self.troubled.add(flt_num)
                 
         # reading outlaws and dumping them
         with open('outlaws.pkl', 'rb') as f:
@@ -126,7 +126,7 @@ class Root_class():
         with open('outlaws.pkl', 'wb') as f:
             pickle.dump(outlaws, f)
             
-        return dict({'completed':  completed, 'troubled': troubled})
+        return dict({'completed':  self.completed, 'troubled': self.troubled})
         
 class Source_links_and_api:
     def __init__(self,):
