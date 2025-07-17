@@ -164,9 +164,11 @@ def gate_info(request, main_query):
     # showing info if the info is found else it falls back to `No flights found for {{gate}}`on flight_info.html
     if gate_data_table:
         # print(gate_data_table)
+        data_out['server_down'] = True
         return render(request, 'flight_info.html', data_out)
     else:       # Returns all gates since query is empty. Maybe this is not necessary. TODO: Try deleting else statement.
-        return render(request, 'flight_info.html', {'gate': gate})
+        data_out = {'gate': gate, 'server_down': True}
+        return render(request, 'flight_info.html', data_out)
 
 
 async def flight_deets(request,airline_code=None, flight_number_query=None, ):

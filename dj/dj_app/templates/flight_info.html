@@ -38,6 +38,12 @@
   </div>
 
 
+  {% if server_down %}
+  <div class="old-data-alert">
+    <span class="alert-icon">⚠️</span>
+    Sorry, our Gate Lookup Service is experiencing issues. We're working hard to fix it. Come back a little later to check again?
+  </div>
+  {% endif %}
   {% if gate_data_table %}
     {% if old_data %}
     <div class="old-data-alert">

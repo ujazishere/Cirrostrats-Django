@@ -21,6 +21,26 @@ body {
   background-color: #010101; /* A slightly lighter shade for hover effect */
 }
 
+/************** this code is for service interruption caution*************/
+
+.old-data-alert {
+  background-color: #fff3cd; /* Light yellow background */
+  color: #856404; /* Dark yellow text */
+  padding: 10px 15px;
+  border-radius: 4px;
+  border: 1px solid #ffeeba;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.alert-icon {
+  margin-right: 10px;
+  font-size: 16px;
+}
+
 
 
 
