@@ -197,11 +197,13 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     united_dep_dest, flight_stats_arr_dep_time_zone, fa_data = resp_initial
     if not united_dep_dest:
         united_dep_dest = {}
-        united_dep_dest['departure_ID'], united_dep_dest['destination_ID'] = flight_stats_arr_dep_time_zone['origin_fs'], flight_stats_arr_dep_time_zone['destination_fs']
+        if flight_stats_arr_dep_time_zone:
+            united_dep_dest['departure_ID'], united_dep_dest['destination_ID'] = flight_stats_arr_dep_time_zone.get('flightStatsOrigin'), flight_stats_arr_dep_time_zone.get('flightStatsDestination')
         print("No united_dep_des! Making fs origin and destination as United_dep_des",united_dep_dest)
     elif united_dep_dest['departure_ID'] == None:
         print('No Departure ID')
-        united_dep_dest['departure_ID'], united_dep_dest['destination_ID'] = flight_stats_arr_dep_time_zone['origin_fs'], flight_stats_arr_dep_time_zone['destination_fs']
+        if flight_stats_arr_dep_time_zone:
+            united_dep_dest['departure_ID'], united_dep_dest['destination_ID'] = flight_stats_arr_dep_time_zone.get('flightStatsOrigin'), flight_stats_arr_dep_time_zone.get('flightStatsDestination')
 
     # Second async pull and processing
     if fa_data['origin']:
@@ -209,8 +211,9 @@ async def flight_deets(request,airline_code=None, flight_number_query=None, ):
     elif united_dep_dest and united_dep_dest.get('departure_ID'):
         origin, destination = united_dep_dest['departure_ID'], united_dep_dest['destination_ID']
     else:
-        bulk_flight_deets = {**united_dep_dest, **flight_stats_arr_dep_time_zone, **fa_data}
-        print(bulk_flight_deets)
+        bulk_flight_deets = {**united_dep_dest, **fa_data}
+        if flight_stats_arr_dep_time_zone:
+            bulk_flight_deets.update(flight_stats_arr_dep_time_zone)
         return render(request, 'flight_deet.html', bulk_flight_deets)
 
     pc = Pull_class(flight_number_query, origin, destination)

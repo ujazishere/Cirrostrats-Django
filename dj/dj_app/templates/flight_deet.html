@@ -19,7 +19,7 @@
 
 <h3>United Flight Information</h3>
 
-{% if flight_number %}
+{% if flightStatsFlightID %}
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
@@ -32,12 +32,12 @@
             <tr>
                 <!-- if registration is available through flight_aware then add it -->
                 {% if registration %}
-                <th colspan="2">{{ flight_number }} 
+                <th colspan="2">{{ flightStatsFlightID }} 
                     <span class="small-text">{{ registration }}</span>
                 </th>
-                <!-- if its not available then just use flight_number without registration -->
+                <!-- if its not available then just use flightStatsFlightID without registration -->
                 {% else %}
-                <th colspan="2">{{ flight_number }} </th>
+                <th colspan="2">{{ flightStatsFlightID }} </th>
                 {% endif %}
             </tr>
         </thead>
@@ -64,9 +64,9 @@
             </tr>
 
             <tr class="gate-row">
-                {% if departure_gate or arrival_gate %}
-                <td class="gate-cell">{{ departure_gate }}</td>
-                <td class="gate-cell">{{ arrival_gate }}</td>
+                {% if flightStatsOriginGate or flightStatsDestinationGate %}
+                <td class="gate-cell">{{ flightStatsOriginGate }}</td>
+                <td class="gate-cell">{{ flightStatsDestinationGate }}</td>
                 {% else%}
                 <td class="gate-cell">{{ gate_origin }}</td>
                 <td class="gate-cell">{{ gate_destination }}</td>
@@ -78,15 +78,15 @@
                 <td class="spacer-cell">&nbsp;</td>
             </tr>
 
-            {% if scheduled_departure_time %}
+            {% if flightStatsScheduledDepartureTime %}
             <tr class="scheduled-row">
                 <td class="scheduled-cell">Scheduled Local</td>
                 <td class="scheduled-cell">Scheduled Local</td>
             </tr>
             
             <tr class="scheduled-time-row">
-                <td class="scheduled-time-cell">{{ scheduled_departure_time }}</td>
-                <td class="scheduled-time-cell">{{ scheduled_arrival_time }}</td>
+                <td class="scheduled-time-cell">{{ flightStatsScheduledDepartureTime }}</td>
+                <td class="scheduled-time-cell">{{ flightStatsScheduledArrivalTime }}</td>
             </tr>
             {% endif %}
 
@@ -139,7 +139,7 @@
                         <span style="float: left; width: 33%; text-align: center;">{{ origin }}</span>
                         {% endif %}
                         {% if departure_gate %}
-                        <span style="float: right; width: 33%; text-align: right;">{{ departure_gate }}</span>
+                        <span style="float: right; width: 33%; text-align: right;">{{ flightStatsOriginGate }}</span>
                         {% else%}
                         <span style="float: right; width: 33%; text-align: right;">{{ gate_origin }}</span>
                         {% endif %}
@@ -258,8 +258,8 @@
                                     {% else%}
                                     <span style="float: left; width: 33%; text-align: center;">{{ destination }}</span>
                                     {% endif %}
-                                    {% if arrival_gate %}
-                                    <span style="float: right; width: 33%; text-align: right;">{{ arrival_gate }}</span>
+                                    {% if flightStatsDestinationGate %}
+                                    <span style="float: right; width: 33%; text-align: right;">{{ flightStatsDestinationGate }}</span>
                                     {% else%}
                                     <span style="float: right; width: 33%; text-align: right;">{{ gate_destination }}</span>
                                     {% endif %}
