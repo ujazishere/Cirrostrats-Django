@@ -143,9 +143,10 @@ def gate_info(request, main_query):
     gate = main_query.upper()
     flight_rows = gc.ewr_gate_query(gate=gate)
     # Assuming flight_rows is a list of dictionaries
-    for flight in flight_rows:
-        scheduled = datetime.strptime(flight['Scheduled'], '%B %d, %Y %H:%M')
-        flight['Scheduled'] = scheduled.strftime('%B %d %H:%M')
+    if flight_rows:
+        for flight in flight_rows:
+            scheduled = datetime.strptime(flight['Scheduled'], '%B %d, %Y %H:%M')
+            flight['Scheduled'] = scheduled.strftime('%B %d %H:%M')
     return render(request, 'flight_info.html', {'gate_data_table': flight_rows, 'gate': gate})
 
 
