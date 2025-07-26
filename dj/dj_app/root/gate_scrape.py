@@ -8,6 +8,7 @@ import pytz
 import re
 # from models import Flight       # This doesnt work because models is in the upper directory
 
+""" This Gate Scrape is Depricated. It has been replaced with Newark_departures_scrape.py in backend"""
 
 class Gate_Scrape(Root_class):
     def __init__(self) -> None:

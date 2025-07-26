@@ -3,6 +3,7 @@ import datetime as dt
 
 import pytz
 from .root_class import Root_class
+from .database import db_UJ
 
 
 # this class subclassess Root_class that creates instance variables of the subclass and inherits its methods
@@ -43,6 +44,8 @@ class Gate_checker(Root_class):
 
 
     def ewr_UA_gate(self, query=None):
+        """ *** Function Depricated *** """
+
         # This function loads the gate_query_database.pkl pickle file that is a dictionary with keys as 
             # flight numbers out of newark and values as their gate and times.
             # It filters per users query, sorts by date then returns as list. A list of dicts.
@@ -86,3 +89,16 @@ class Gate_checker(Root_class):
         return flights
     
     
+     
+    def ewr_gate_query(self, gate):
+        gate_rows_collection = db_UJ['ewrGates']   # create/get a collection
+        
+        return_crit = {'_id':0}
+        find_crit = {'Gate':{'$regex':gate}}
+        res = gate_rows_collection.find(find_crit, return_crit).sort('Scheduled', -1)
+        # res = gate_rows_collection.find(find_crit, return_crit)
+
+        flight_rows = list(res)
+
+        if flight_rows:
+            return flight_rows

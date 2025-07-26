@@ -25,8 +25,11 @@ class FlightStatsExtractor:
             # Save soup, flight number, datetime, etca  log error. Investigate later.
             print('flight not found')
             return
+
         tc_code, tc_city, tc_airport_name = extracts[0], extracts[1], extracts[2]
+        # TODO VHP Validate all these returns. trigger log if not valid.
         returns.update({'Code': tc_code, 'City': tc_city, 'AirportName': tc_airport_name})
+
         if extracts[3] == "Flight Departure Times" or extracts[3] == "Flight Arrival Times":
             returns.update({'ScheduledDate': extracts[4]})  # This is the title of the section, either departure or arrival
         if extracts[5] == "Scheduled":
@@ -42,7 +45,12 @@ class FlightStatsExtractor:
         if extracts[11] == "Gate":
             gate = extracts[12]
         if terminal and gate:
-            returns.update({'TerminalGate': terminal + '-' + gate})
+            if terminal != "N/A" and gate != "N/A":
+                returns.update({'TerminalGate': terminal + '-' + gate})
+            elif gate == "N/A":
+                returns.update({'TerminalGate': terminal})
+            elif terminal == "N/A":
+                returns.update({'TerminalGate': gate})
             # gate = extracts[12]
         return returns
                

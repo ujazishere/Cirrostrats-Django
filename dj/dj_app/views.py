@@ -2,7 +2,6 @@
 # from dj.dj_app.views import awc_weather
 # await awc_weather(None,"EWR","STL")
 from .root.process_query import airlineCodeQueryParse
-from .root.flight_aware_data_pull import flight_aware_data_pull
 import pickle
 from django.views.decorators.http import require_GET
 # from concurrent.futures import ThreadPoolExecutor, as_completed           # Causing issues on AWS
@@ -11,12 +10,12 @@ from django.http import HttpResponse
 from .root.test_data_imports import test_data_imports
 from .root.gate_checker import Gate_checker
 from .root.root_class import Root_class, Pull_class, Source_links_and_api
-from .root.gate_scrape import Gate_scrape_thread
 from .root.weather_parse import Weather_parse
 from .root.dep_des import Pull_flight_info
 from .root.flight_deets_pre_processor import resp_initial_returns,resp_sec_returns,response_filter
 from time import sleep, time
 from decouple import config
+from datetime import datetime
 from django.shortcuts import render
 from django.http import JsonResponse
 import asyncio
@@ -36,10 +35,6 @@ It will then run
 # Keep it false to avoid errors with from sending email errors as it is attached to UJ's personal email creds.
 # Before you remove this make sure you account for its use: Used for sending email notifications. Email creds are in Switches_n_auth.
 run_lengthy_web_scrape = True if config("run_lengthy_web_scrape") == '1' else False
-if run_lengthy_web_scrape:
-    print('Running Lengthy web scrape')
-    gc_thread = Gate_scrape_thread()
-    gc_thread.start()
 
 current_time = Gate_checker().date_time()
 
@@ -143,32 +138,15 @@ async def QueryParser(request, main_query):
 
 
 def gate_info(request, main_query):
-    gate = main_query
-    # In the database all the gates are uppercase so making the query uppercase
-    gate = gate.upper()
-    current_time = Root_class().date_time()
-
-    # This is a list full of dictionararies returned by err_UA_gate depending on what user requested..
-    # Each dictionary has 4 key value pair.eg. gate:c10,flight_number:UA4433,scheduled:20:34 and so on
-    gate_data_table = Gate_checker().ewr_UA_gate(gate)
     
-    data_out = {'gate_data_table': gate_data_table, 'gate': gate, 'current_time': current_time}
-    if type(gate_data_table) == dict:
-        data_out['old_data'] = gate_data_table['old_data']
-        data_out['gate_data_table'] = gate_data_table['flights']
-    
-
-
-    # This can be a json to be delivered to the frontend
-
-    # showing info if the info is found else it falls back to `No flights found for {{gate}}`on flight_info.html
-    if gate_data_table:
-        # print(gate_data_table)
-        data_out['server_down'] = True
-        return render(request, 'flight_info.html', data_out)
-    else:       # Returns all gates since query is empty. Maybe this is not necessary. TODO: Try deleting else statement.
-        data_out = {'gate': gate, 'server_down': True}
-        return render(request, 'flight_info.html', data_out)
+    gc = Gate_checker()
+    gate = main_query.upper()
+    flight_rows = gc.ewr_gate_query(gate=gate)
+    # Assuming flight_rows is a list of dictionaries
+    for flight in flight_rows:
+        scheduled = datetime.strptime(flight['Scheduled'], '%B %d, %Y %H:%M')
+        flight['Scheduled'] = scheduled.strftime('%B %d %H:%M')
+    return render(request, 'flight_info.html', {'gate_data_table': flight_rows, 'gate': gate})
 
 
 async def flight_deets(request,airline_code=None, flight_number_query=None, ):

@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-  <h2>Flight Gate Information</h2>
+  <h2>Newark Gate Departures</h2>
   <link rel="stylesheet" type="text/css" href="{% static 'flight_info.css' %}">
 
       <style>
@@ -45,29 +45,26 @@
   </div>
   {% endif %}
   {% if gate_data_table %}
-    {% if old_data %}
-    <div class="old-data-alert">
-      <span class="alert-icon">⚠️</span>
-      Old data detected. Check scheduled date and times and use the information cautiously.
-    </div>
-    {% endif %}
     <div class="table-wrapper">
+      <h2>Search results for: {{ gate }}</h2>
       <table>
         <thead>
           <tr>
-            <th>Gate</th>
-            <th>Flight</th>
+            <th>Flight ID</th>
             <th>Scheduled</th>
-            <th>Actual</th>
+            <th>Gate</th>
           </tr>
         </thead>
         <tbody>
           {% for flight in gate_data_table %}
             <tr>
-              <td>{{ flight.gate }}</td>
-              <td>{{ flight.flight_number }}</td>
-              <td>{{ flight.scheduled }}</td>
-              <td>{{ flight.actual }}</td>
+              <td>
+                <a href="https://www.google.com/search?q={{ flight.FlightID }}" target="_blank" style="text-decoration: none; color: inherit; border-bottom: 1px dotted #ccc;">
+                    {{ flight.FlightID }} <i class="fas fa-external-link-alt" style="font-size: 12px;"></i>
+                  </a>
+              </td>
+              <td>{{ flight.Scheduled }}</td>
+              <td>{{ flight.Gate }}</td>
             </tr>
           {% endfor %}
         </tbody>
