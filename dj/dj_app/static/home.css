@@ -105,7 +105,19 @@ body {
       text-wrap: wrap;
   }
 
-  
+  .legacy-button {
+      display: block; /* Changed to block to use margin: auto */
+      width: fit-content; /* Fit the width to the content */
+      margin: 10px auto; /* Center horizontally */
+      padding: 16px 32px; /* Increased padding for bigger button */
+      background-color: #24292f;
+      color: white;
+      border-radius: 3px;
+      text-decoration: none;
+      font-size: 18px; /* Increased font size */
+      font-weight: 500;
+      font-family: system-ui, sans-serif;
+  }
 
   .dark-mode .scrolling-text {
     color: #adbac7;
